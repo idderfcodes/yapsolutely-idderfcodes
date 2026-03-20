@@ -305,6 +305,17 @@ async function persistCallEvent(payload) {
   });
 }
 
+function logRuntimeWarning(message, context = {}) {
+  const hasContext = context && Object.keys(context).length > 0;
+
+  if (hasContext) {
+    console.warn(`[yapsolutely-runtime] ${message}`, context);
+    return;
+  }
+
+  console.warn(`[yapsolutely-runtime] ${message}`);
+}
+
 function escapeXml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -413,8 +424,13 @@ async function recordStreamEvent(session, role, text, payload = {}) {
       text,
       payload,
     });
-  } catch {
-    // Stream event persistence is best-effort during scaffold phase.
+  } catch (error) {
+    logRuntimeWarning("Failed to persist stream event.", {
+      externalCallId: session.externalCallId,
+      role,
+      sequence: session.sequence,
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 }
 
@@ -537,8 +553,12 @@ websocketServer.on("connection", (socket) => {
               language: session.language,
             },
           });
-        } catch {
-          // The stream path should stay alive even if answer-state persistence fails.
+        } catch (error) {
+          logRuntimeWarning("Failed to persist call answer-state update.", {
+            externalCallId: session.externalCallId,
+            streamSid,
+            error: error instanceof Error ? error.message : String(error),
+          });
         }
       }
 
@@ -699,6 +719,11 @@ const server = http.createServer((req, res) => {
       try {
         resolvedAgent = await resolveAgentForNumber(inboundCall.to);
       } catch (error) {
+        logRuntimeWarning("Failed to resolve agent for inbound number; using fallback agent.", {
+          callSid: inboundCall.callSid,
+          toNumber: inboundCall.to,
+          error: error instanceof Error ? error.message : String(error),
+        });
         resolvedAgent = null;
       }
 
@@ -732,8 +757,13 @@ const server = http.createServer((req, res) => {
               initialCallStatus: inboundCall.callStatus,
             },
           });
-        } catch {
-          // Keep the call path alive even if persistence is unavailable.
+        } catch (error) {
+          logRuntimeWarning("Failed to persist inbound call start.", {
+            callSid: inboundCall.callSid,
+            agentId: resolvedAgent.agent.id,
+            phoneNumberId: resolvedAgent.phoneNumber.id,
+            error: error instanceof Error ? error.message : String(error),
+          });
         }
       }
 
@@ -773,8 +803,12 @@ const server = http.createServer((req, res) => {
               agentId: resolvedAgent.agent.id,
             },
           });
-        } catch {
-          // Transcript persistence should not block TwiML.
+        } catch (error) {
+          logRuntimeWarning("Failed to persist initial transcript events.", {
+            callSid: inboundCall.callSid,
+            agentId: resolvedAgent.agent.id,
+            error: error instanceof Error ? error.message : String(error),
+          });
         }
       }
 
@@ -806,8 +840,12 @@ const server = http.createServer((req, res) => {
             finalCallStatus: update.callStatus,
           },
         });
-      } catch {
-        // Keep webhook responses resilient while the runtime is still being scaffolded.
+      } catch (error) {
+        logRuntimeWarning("Failed to persist Twilio status completion update.", {
+          callSid: update.callSid,
+          finalCallStatus: update.callStatus,
+          error: error instanceof Error ? error.message : String(error),
+        });
       }
 
       sendJson(res, 200, { ok: true });
