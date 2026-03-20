@@ -6,7 +6,7 @@ COPY package.json package-lock.json ./
 COPY apps/web/package.json apps/web/package.json
 COPY apps/voice/package.json apps/voice/package.json
 
-RUN npm ci
+RUN npm ci --workspaces --include-workspace-root
 
 COPY . .
 
