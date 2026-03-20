@@ -15,12 +15,31 @@ The repo can already verify these items without a human call:
 - secret-gated web readiness
 - secret-gated voice readiness
 - runtime number-to-agent resolution for the seeded production number
+- simulated inbound/status webhook persistence into production Postgres
 
 Run this first from the repo root:
 
 - `YAPS_RUNTIME_SECRET=... npm run preflight:prod`
+- `npm run smoke:prod`
 
 If that passes, the remaining work is **human validation**, not infrastructure guessing.
+
+---
+
+## Execution guardrail
+
+Until the real-call proof and Loom are complete, do **not** spend time on lower-impact work like:
+
+- browser test UI
+- flow builder
+- major visual redesign
+- broader Phase 2 platform features
+
+The highest-value remaining work is still:
+
+1. real handset validation
+2. dashboard proof after the call
+3. Loom capture
 
 ---
 
@@ -147,8 +166,9 @@ Keep the Loom to roughly 2–3 minutes.
 Check these in order:
 
 1. `npm run preflight:prod`
-2. `docs/live-validation-checklist.md`
-3. `docs/deployment-runbook.md`
+2. `npm run smoke:prod`
+3. `docs/live-validation-checklist.md`
+4. `docs/deployment-runbook.md`
 
 Common interpretations:
 
