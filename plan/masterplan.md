@@ -202,8 +202,7 @@ The current execution baseline for Milestone A is:
 - **UI scaffold:** `shadcn/ui`-style component approach, treated as temporary scaffold
 - **Voice runtime direction:** Node.js runtime prepared for adaptation from `call-gpt` concepts/base
 - **Database direction:** Supabase Postgres with Prisma planned for the MVP data layer
-- **Web hosting target:** Vercel
-- **Voice hosting target:** Railway or comparable always-on runtime host
+- **Deployment target:** single Ubuntu VPS running Docker Compose + Caddy, serving both web and voice services with public HTTPS hosts
 - **Source of truth for sequencing:** this master plan
 
 This baseline is now the active default unless explicitly revised.
@@ -830,7 +829,7 @@ Includes:
 | 11. Browser-based test experience | not started | intentionally later |
 | 12. Flow builder | not started | key differentiator, later after core works |
 | 13. Visual design evolution | not started | shadcn-first, custom later |
-| 14. Deployment and demo readiness | in progress | deployment and live-validation runbooks now exist, the web app exposes health/readiness endpoints, the voice runtime exposes a readiness endpoint with web-app probes, and the settings page now surfaces that runtime readiness data in-app, but real deployment, provider wiring, and live call proof are still pending |
+| 14. Deployment and demo readiness | in progress | web + voice are now deployed to the VPS behind Caddy with public HTTPS hosts, the live Twilio voice webhook is configured, and both health endpoints respond publicly; remaining blockers are production DB connectivity plus final end-to-end call/transcript proof |
 | 15. Phase 2 roadmap | planning complete | known at high level |
 
 ---

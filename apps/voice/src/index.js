@@ -18,6 +18,20 @@ const streamWebSocketUrl =
   process.env.VOICE_STREAM_WSS_URL ||
   `ws${streamBaseUrl.startsWith("https") ? "s" : ""}://${streamBaseUrl.replace(/^https?:\/\//, "")}/twilio/stream`;
 const streamSessions = createSessionStore();
+const fallbackAgentName = process.env.DEFAULT_AGENT_NAME || "Yapsolutely Front Desk";
+const fallbackAgentDescription =
+  process.env.DEFAULT_AGENT_DESCRIPTION ||
+  "Handles inbound demo calls when dashboard-backed number routing is unavailable.";
+const fallbackAgentFirstMessage =
+  process.env.DEFAULT_AGENT_FIRST_MESSAGE ||
+  "Hi, this is Yapsolutely Front Desk. How can I help you today?";
+const fallbackAgentSystemPrompt =
+  process.env.DEFAULT_AGENT_SYSTEM_PROMPT ||
+  "You are Yapsolutely Front Desk, a concise and friendly inbound phone agent. Greet callers warmly, ask what they need, collect their name when helpful, answer briefly, and keep replies natural for a phone call.";
+const fallbackAgentVoiceProvider = process.env.DEFAULT_AGENT_VOICE_PROVIDER || "deepgram";
+const fallbackAgentVoiceModel =
+  process.env.DEFAULT_AGENT_VOICE_MODEL || process.env.VOICE_MODEL || process.env.DEEPGRAM_TTS_MODEL || "aura-2-thalia-en";
+const fallbackAgentLanguage = process.env.DEFAULT_AGENT_LANGUAGE || "en-US";
 
 function hasRealValue(value) {
   if (!value) {
@@ -340,6 +354,26 @@ ${parameters}
 </Response>`;
 }
 
+function buildFallbackAgentContext(inboundCall) {
+  return {
+    id: "fallback-demo-agent",
+    name: fallbackAgentName,
+    description: fallbackAgentDescription,
+    status: "ACTIVE",
+    isActive: true,
+    systemPrompt: fallbackAgentSystemPrompt,
+    firstMessage: fallbackAgentFirstMessage,
+    voiceProvider: fallbackAgentVoiceProvider,
+    voiceModel: fallbackAgentVoiceModel,
+    language: fallbackAgentLanguage,
+    config: {
+      source: "runtime-fallback",
+    },
+    callerNumber: inboundCall.from,
+    toNumber: inboundCall.to,
+  };
+}
+
 async function recordStreamEvent(session, role, text, payload = {}) {
   if (!session?.externalCallId) {
     return;
@@ -636,6 +670,18 @@ const server = http.createServer((req, res) => {
         resolvedAgent = null;
       }
 
+      const activeAgent = resolvedAgent?.agent
+        ? {
+            ...resolvedAgent.agent,
+            userId: resolvedAgent.user.id,
+            phoneNumberId: resolvedAgent.phoneNumber.id,
+            phoneNumber: resolvedAgent.phoneNumber.value,
+            phoneNumberFriendlyName: resolvedAgent.phoneNumber.friendlyName,
+            callerNumber: inboundCall.from,
+            toNumber: inboundCall.to,
+          }
+        : buildFallbackAgentContext(inboundCall);
+
       if (resolvedAgent?.agent) {
         try {
           await persistCallStart({
@@ -659,27 +705,16 @@ const server = http.createServer((req, res) => {
         }
       }
 
-      const greeting = resolvedAgent?.agent?.firstMessage || "Welcome to Yapsolutely. Your agent is getting ready.";
-      const agentName = resolvedAgent?.agent?.name;
-      const introLine = agentName
-        ? `You have reached ${agentName}.`
-        : "This number is not fully configured yet, but the runtime wiring is active.";
+      const greeting = activeAgent.firstMessage || "Welcome to Yapsolutely. Your agent is getting ready.";
+      const introLine = activeAgent.name
+        ? `You have reached ${activeAgent.name}.`
+        : "Welcome to Yapsolutely.";
 
       const twiml = buildStreamTwiml({
         introLine,
         greeting,
         callSid: inboundCall.callSid,
-        agent: resolvedAgent?.agent
-          ? {
-              ...resolvedAgent.agent,
-              userId: resolvedAgent.user.id,
-              phoneNumberId: resolvedAgent.phoneNumber.id,
-              phoneNumber: resolvedAgent.phoneNumber.value,
-              phoneNumberFriendlyName: resolvedAgent.phoneNumber.friendlyName,
-              callerNumber: inboundCall.from,
-              toNumber: inboundCall.to,
-            }
-          : null,
+        agent: activeAgent,
       });
 
       if (resolvedAgent?.agent) {
