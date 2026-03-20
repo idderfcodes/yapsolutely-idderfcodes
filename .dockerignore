@@ -7,4 +7,13 @@ apps/web/.next
 credentials
 ~
 .env
+.env.*
 npm-debug.log
+docs
+plan
+scripts
+README.md
+LICENSE
+deploy/.env
+deploy/.env.web
+deploy/.env.voice
