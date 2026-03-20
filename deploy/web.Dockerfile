@@ -10,7 +10,7 @@ RUN npm ci --workspaces --include-workspace-root
 
 COPY . .
 
-RUN npx prisma generate --schema=apps/web/prisma/schema.prisma
+RUN npm run db:generate -w apps/web
 RUN npm run build -w apps/web
 
 EXPOSE 3000
