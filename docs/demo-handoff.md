@@ -167,8 +167,9 @@ Check these in order:
 
 1. `npm run preflight:prod`
 2. `npm run smoke:prod`
-3. `docs/live-validation-checklist.md`
-4. `docs/deployment-runbook.md`
+3. `npm run warnings:prod`
+4. `docs/live-validation-checklist.md`
+5. `docs/deployment-runbook.md`
 
 Common interpretations:
 

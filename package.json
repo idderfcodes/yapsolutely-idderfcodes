@@ -12,6 +12,7 @@
     "lint:web": "npm run lint -w apps/web",
     "preflight:prod": "node scripts/production-preflight.mjs",
     "smoke:prod": "node scripts/production-smoke.mjs",
+    "warnings:prod": "node scripts/production-runtime-warnings.mjs",
     "build": "npm run build:web",
     "lint": "npm run lint:web",
     "check": "npm run lint && npm run build"

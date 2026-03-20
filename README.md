@@ -52,6 +52,10 @@ For a webhook-and-persistence smoke test against production:
 
 - `npm run smoke:prod`
 
+For recent production `voice` runtime warnings during live-call troubleshooting:
+
+- `npm run warnings:prod`
+
 Optional overrides:
 
 - `YAPS_WEB_URL`
@@ -60,6 +64,7 @@ Optional overrides:
 - `YAPS_CALLER_NUMBER`
 - `YAPS_SSH_SCRIPT`
 - `YAPS_REMOTE_REPO_PATH`
+- `YAPS_LOG_TAIL_LINES`
 
 By default the script targets the current live MVP hosts and seeded number.
 
