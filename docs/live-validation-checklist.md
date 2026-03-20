@@ -1,6 +1,6 @@
 # Yapsolutely live validation checklist
 
-Use this after deployment and credential insertion.
+Use this after deployment and seed/setup are complete.
 
 ---
 
@@ -21,16 +21,19 @@ Prove the MVP finish line end to end:
 
 Before placing a live call, confirm:
 
-- an agent exists in the dashboard
-- the agent has:
+- the production seed exists or equivalent dashboard records exist
+- the target agent has:
   - system prompt
   - first message
   - voice model
-  - active status if required by your workflow
-- a Twilio number is registered in `/numbers`
-- that number is assigned to the intended agent
+  - `status=ACTIVE`
+  - `isActive=true`
+- the Twilio number exists in production Postgres
+- that number resolves to the intended agent
 - settings page shows no critical missing env values
 - voice runtime `/health` is passing publicly
+- voice runtime `/readiness` passes with `x-yapsolutely-runtime-secret`
+- web `/api/readiness` passes with `x-yapsolutely-runtime-secret`
 - `VOICE_PIPELINE_MODE=live`
 
 ---
@@ -38,6 +41,10 @@ Before placing a live call, confirm:
 ## 2) Inbound call test
 
 Place a real call to the purchased Twilio number.
+
+Current seeded production number:
+
+- `+13186108198`
 
 ### Expected behavior
 
@@ -49,6 +56,7 @@ Place a real call to the purchased Twilio number.
 - Deepgram TTS audio is returned
 - caller hears the response
 - barge-in/interruption does not completely break the flow
+- call start + status + event records land in production Postgres
 
 ---
 
@@ -124,6 +132,7 @@ Check:
 - runtime can reach web app
 - `RUNTIME_SHARED_SECRET` matches
 - web envs are correct
+- `postgres` container is healthy
 
 ### Call record created but no transcript
 
@@ -158,6 +167,15 @@ Check:
 - prompt/tool routing
 - Twilio SMS config
 - runtime event logs
+
+### Runtime resolves wrong agent or fallback path only
+
+Check:
+
+- `GET /api/runtime/resolve-agent?phoneNumber=...` with the runtime secret
+- seeded phone number row exists
+- agent is both `ACTIVE` and `isActive=true`
+- Twilio is sending the expected destination number in the inbound webhook
 
 ---
 

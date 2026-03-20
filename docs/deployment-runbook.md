@@ -1,230 +1,232 @@
 # Yapsolutely deployment runbook
 
-Use this runbook once credentials are ready and the repo is ready for real deployment wiring.
+This is the **current production runbook** for the live MVP stack.
 
 ---
 
 ## Goal
 
-Deploy:
+Run the full product on a single Ubuntu VPS using Docker Compose:
 
-- `apps/web` to Vercel
-- `apps/voice` to Railway
+- `web` — Next.js dashboard
+- `voice` — Twilio/media runtime
+- `postgres` — production Postgres for the demo stack
+- `caddy` — public HTTPS and reverse proxy
 
-Then wire:
+Public hosts currently used:
 
-- web environment variables
-- voice runtime environment variables
-- Twilio webhook URLs
-- live provider mode
+- `https://web.84.247.176.111.sslip.io`
+- `https://voice.84.247.176.111.sslip.io`
 
 ---
 
-## 1) Deploy the web app on Vercel
+## 1) Production architecture
 
-### Create the project
+The live stack no longer depends on Vercel, Railway, or Supabase for the active demo path.
 
-1. Open Vercel
-2. Import the repository
-3. Configure the project root so the deployed app is `apps/web`
-4. Confirm the framework is Next.js
+It now runs as:
 
-### Add web environment variables
+- VPS host
+   - Docker Compose
+   - Caddy for TLS + routing
+   - internal Postgres container
+   - `web` container
+   - `voice` container
 
-Add these in Vercel before or during deployment:
+Reason for the DB change:
 
-- `NEXT_PUBLIC_APP_NAME`
+- the prior Supabase direct-connect Postgres host was unreachable from the VPS because the host resolved IPv6-only there
+- the current production demo therefore uses VPS-local Postgres for reliable runtime/data connectivity
+
+---
+
+## 2) Required files in `deploy/`
+
+Production uses:
+
+- `deploy/docker-compose.yml`
+- `deploy/Caddyfile`
+- `deploy/web.Dockerfile`
+- `deploy/voice.Dockerfile`
+- `deploy/.env`
+- `deploy/.env.web`
+- `deploy/.env.voice`
+
+`deploy/.env` holds host-level Compose values such as:
+
+- `WEB_HOST`
+- `VOICE_HOST`
+- `POSTGRES_DB`
+- `POSTGRES_USER`
+- `POSTGRES_PASSWORD`
+
+---
+
+## 3) Required runtime env values
+
+### `deploy/.env.web`
+
+Must contain real values for the web app, including:
+
 - `NEXT_PUBLIC_APP_URL`
 - `AUTH_SECRET`
-- `DEMO_AUTH_ENABLED`
 - `RUNTIME_SHARED_SECRET`
-- `DATABASE_URL`
-- `DIRECT_URL`
-- `SUPABASE_URL`
-- `SUPABASE_ANON_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
 - `ANTHROPIC_API_KEY`
 - `DEEPGRAM_API_KEY`
 - `TWILIO_ACCOUNT_SID`
 - `TWILIO_AUTH_TOKEN`
 - `TWILIO_PHONE_NUMBER`
-- `TWILIO_SMS_FROM_NUMBER`
-- `TRANSFER_NUMBER`
-- `VOICE_PIPELINE_MODE`
-- `VOICE_MODEL`
-- `RECORDING_ENABLED`
+- `VOICE_PIPELINE_MODE=live`
+- `VOICE_STREAM_BASE_URL`
+- `VOICE_STREAM_WSS_URL`
 
-### After deploy
+Notes:
 
-1. Copy the deployed web URL
-2. Set `NEXT_PUBLIC_APP_URL` to that real production URL
-3. Redeploy if needed so all generated URLs match production
+- `DATABASE_URL` and `DIRECT_URL` are overridden by Compose to point at the internal `postgres` service
+- Supabase keys are no longer required for the current production demo path
 
----
+### `deploy/.env.voice`
 
-## 2) Deploy the voice runtime on Railway
+Must contain real values for the voice runtime, including:
 
-### Create the project
-
-1. Open Railway
-2. Create a new project from the same repository
-3. Configure the service to run from `apps/voice`
-4. Set the start command to run the Node runtime if Railway does not detect it automatically
-
-### Add voice runtime environment variables
-
-Add these in Railway:
-
-- `PORT`
 - `NEXT_PUBLIC_APP_URL`
 - `RUNTIME_SHARED_SECRET`
-- `VOICE_PIPELINE_MODE`
+- `VOICE_PIPELINE_MODE=live`
 - `DEEPGRAM_API_KEY`
-- `DEEPGRAM_STT_MODEL`
-- `DEEPGRAM_STT_ENDPOINTING_MS`
-- `DEEPGRAM_UTTERANCE_END_MS`
-- `DEEPGRAM_TTS_MODEL`
 - `ANTHROPIC_API_KEY`
-- `ANTHROPIC_MODEL`
-- `ANTHROPIC_MAX_TOKENS`
 - `TWILIO_ACCOUNT_SID`
 - `TWILIO_AUTH_TOKEN`
 - `TWILIO_PHONE_NUMBER`
-- `TWILIO_SMS_FROM_NUMBER`
-- `TRANSFER_NUMBER`
 - `VOICE_STREAM_BASE_URL`
 - `VOICE_STREAM_WSS_URL`
 - `VOICE_MODEL`
 
-### After deploy
+---
 
-1. Copy the public Railway runtime URL
-2. Set:
-   - `VOICE_STREAM_BASE_URL` to that host
-   - `VOICE_STREAM_WSS_URL` to `wss://<your-runtime-host>/twilio/stream`
-3. Redeploy if needed
-4. Verify `GET /health` works on the public runtime URL
-5. Verify `GET /readiness` works on the public runtime URL when sent with `x-yapsolutely-runtime-secret`
+## 4) Deploy or redeploy
+
+From the VPS repo checkout:
+
+1. update the repo
+2. confirm `deploy/.env`, `.env.web`, and `.env.voice`
+3. run Docker Compose rebuild
+
+Operationally, the stack is brought up with:
+
+- `docker compose up -d --build`
+
+The `web` service automatically runs:
+
+- `npm run db:push -w apps/web`
+
+before starting Next.js, so the schema is applied to the internal Postgres service during boot.
 
 ---
 
-## 3) Production value alignment
+## 5) Seed the live demo data
 
-Once both apps are deployed, make sure these values line up correctly:
+The production seed script is:
 
-### Web app
+- `apps/web/scripts/seed-production.mjs`
 
-- `NEXT_PUBLIC_APP_URL=https://<your-vercel-url>`
+The scripted production prompt is:
 
-### Voice runtime
+- `apps/web/prompts/yapsolutely-front-desk.md`
 
-- `NEXT_PUBLIC_APP_URL=https://<your-vercel-url>`
-- `VOICE_STREAM_BASE_URL=https://<your-railway-url>` or host form expected by your runtime config
-- `VOICE_STREAM_WSS_URL=wss://<your-railway-url>/twilio/stream`
-- `VOICE_PIPELINE_MODE=live`
+The seed creates or updates:
 
-### Shared secret
+- demo user
+- active agent
+- assigned Twilio phone number
+- production system prompt
 
-- `RUNTIME_SHARED_SECRET` must be identical in web and voice runtime environments
+The current seeded defaults are:
+
+- user email: `karim@yapsolutely.ai`
+- agent name: `Yapsolutely Front Desk`
+- phone number: `+13186108198`
+
+Useful seed envs:
+
+- `SEED_USER_EMAIL`
+- `SEED_USER_NAME`
+- `SEED_PHONE_NUMBER`
+- `SEED_TWILIO_SID`
+- `SEED_AGENT_NAME`
 
 ---
 
-## 4) Twilio configuration
+## 6) Twilio configuration
 
-Once the voice runtime is live, configure the Twilio phone number:
+The current live number should point at:
 
 ### Voice webhook
 
-Set the inbound voice webhook to:
-
-- `https://<your-runtime-host>/twilio/inbound`
+- `https://voice.84.247.176.111.sslip.io/twilio/inbound`
 
 ### Status callback
 
-Set call status callbacks to:
-
-- `https://<your-runtime-host>/twilio/status`
-
-### Number capabilities
-
-Make sure the number supports:
-
-- voice
-- SMS if you want to validate the SMS tool
+- `https://voice.84.247.176.111.sslip.io/twilio/status`
 
 ---
 
-## 5) First post-deploy checks
+## 7) Health and readiness checks
 
-### Web app
+### Public health endpoints
 
-Verify:
+- `GET /api/health` on web
+- `GET /health` on voice
 
-- `/api/health` returns success
-- `/api/readiness` returns success when you are signed in or when you send `x-yapsolutely-runtime-secret`
-- dashboard loads
-- settings page loads
-- readiness shows production values instead of placeholders
-- agents page works
-- numbers page works
-- calls page works
+### Secret-gated readiness endpoints
 
-### Voice runtime
+- `GET /api/readiness` with `x-yapsolutely-runtime-secret`
+- `GET /readiness` with `x-yapsolutely-runtime-secret`
 
-Verify:
+Success means:
 
-- `/health` returns success
-- `/readiness` returns success with `x-yapsolutely-runtime-secret`
-- runtime shows correct pipeline mode
-- runtime can resolve the web app URL
-- no startup crashes in logs
+- public web health returns `ok`
+- public voice health returns `ok`
+- runtime readiness can reach the web app
+- web readiness reports no critical missing runtime/deployment values
 
 ---
 
-## 6) Before live Twilio testing
+## 8) Expected live behavior
 
-Confirm all of these are true:
+For the seeded production path:
 
-- Supabase DB values are real
-- Anthropic key is real
-- Deepgram key is real
-- Twilio creds are real
-- Twilio number is purchased
-- web app is deployed
-- voice runtime is deployed
-- `RUNTIME_SHARED_SECRET` matches in both places
-- `VOICE_PIPELINE_MODE=live`
-- voice websocket URL is public and correct
+1. Twilio hits `/twilio/inbound`
+2. runtime resolves `+13186108198` to the seeded agent
+3. the TwiML uses `Yapsolutely Front Desk`
+4. Twilio stream connects to `/twilio/stream`
+5. call start / completion / event records persist into production Postgres
+
+The runtime now keeps the **full agent context server-side** between inbound webhook and media stream start, so Twilio stream parameters stay small while the live session still receives the full prompt/config.
 
 ---
 
-## 7) What success looks like
+## 9) Failure order
 
-The deployment phase is considered successful when:
+If something breaks, check in this order:
 
-1. web app is reachable publicly
-2. voice runtime is reachable publicly
-3. Twilio webhooks point to the real runtime
-4. a real inbound call can hit the runtime
-5. that call appears in the dashboard with transcript/log output
-
-Operational endpoints available after this slice:
-
-- `GET /api/health` for a fast public web-app health check
-- `GET /api/readiness` for a detailed readiness snapshot (requires dashboard session or `x-yapsolutely-runtime-secret`)
-- `GET /health` for a fast public voice-runtime health check
-- `GET /readiness` for a detailed voice-runtime readiness snapshot (requires `x-yapsolutely-runtime-secret` when configured)
+1. `docker compose ps`
+2. `postgres` healthy state
+3. `web` boot logs
+4. `voice` boot logs
+5. `RUNTIME_SHARED_SECRET` match between web and voice envs
+6. Twilio webhook URLs
+7. seeded phone number / agent mapping
+8. Anthropic / Deepgram / Twilio credential validity
 
 ---
 
-## 8) If something fails
+## 10) Current definition of deployment success
 
-Check in this order:
+Production deployment is considered successful when:
 
-1. wrong env value
-2. wrong deployment URL
-3. `RUNTIME_SHARED_SECRET` mismatch
-4. Twilio webhook pointing to wrong host/path
-5. runtime not in `live` mode
-6. Deepgram/Anthropic key not enabled or invalid
-7. Twilio number missing voice capability
+1. web health passes publicly
+2. voice health passes publicly
+3. readiness endpoints work with the runtime secret
+4. `+13186108198` resolves to the seeded active agent
+5. inbound and status webhooks persist call records/events in production Postgres
+6. a real live phone call can be placed and reviewed in the dashboard

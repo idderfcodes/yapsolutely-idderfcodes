@@ -79,9 +79,16 @@ Implementation has moved well past the initial scaffold and now includes:
 
 ## Deployment target
 
-Current preferred MVP hosting:
+Current live MVP hosting:
 
-- `apps/web` → Vercel
-- `apps/voice` → Railway
+- single Ubuntu VPS
+- Docker Compose
+- Caddy for HTTPS
+- internal Postgres for the live demo database
 
-That keeps the dashboard simple while giving the realtime voice runtime an always-on home.
+Current public hosts:
+
+- `https://web.84.247.176.111.sslip.io`
+- `https://voice.84.247.176.111.sslip.io`
+
+The active production path no longer depends on Vercel/Railway/Supabase for the live demo stack.
