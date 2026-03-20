@@ -1,0 +1,146 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum AgentStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  ARCHIVED
+}
+
+enum CallDirection {
+  INBOUND
+  OUTBOUND
+}
+
+enum CallEventRole {
+  SYSTEM
+  USER
+  AGENT
+  TOOL
+}
+
+enum CallStatus {
+  QUEUED
+  RINGING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  NO_ANSWER
+  BUSY
+  CANCELED
+}
+
+enum PhoneNumberProvider {
+  TWILIO
+}
+
+model User {
+  id                String        @id @default(cuid())
+  email             String        @unique
+  name              String?
+  workspaceSettings Json?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  agents            Agent[]
+  calls             Call[]        @relation("UserCalls")
+  phoneNumbers      PhoneNumber[]
+}
+
+model Agent {
+  id             String        @id @default(cuid())
+  userId         String
+  name           String
+  slug           String?       @unique
+  description    String?
+  systemPrompt   String        @db.Text
+  firstMessage   String?
+  voiceProvider  String        @default("deepgram")
+  voiceModel     String?
+  language       String        @default("en-US")
+  status         AgentStatus   @default(DRAFT)
+  isActive       Boolean       @default(false)
+  transferNumber String?
+  config         Json?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  phoneNumbers   PhoneNumber[]
+  calls          Call[]
+
+  @@index([userId, status])
+}
+
+model PhoneNumber {
+  id           String              @id @default(cuid())
+  userId       String
+  agentId      String?
+  provider     PhoneNumberProvider @default(TWILIO)
+  phoneNumber  String              @unique
+  friendlyName String?
+  twilioSid    String?             @unique
+  capabilities Json?
+  purchasedAt  DateTime?
+  releasedAt   DateTime?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  agent        Agent?              @relation(fields: [agentId], references: [id], onDelete: SetNull)
+  calls        Call[]
+
+  @@index([userId])
+  @@index([agentId])
+}
+
+model Call {
+  id              String        @id @default(cuid())
+  userId          String?
+  agentId         String?
+  phoneNumberId   String?
+  externalCallId  String?       @unique
+  direction       CallDirection @default(INBOUND)
+  status          CallStatus    @default(QUEUED)
+  callerNumber    String?
+  toNumber        String?
+  durationSeconds Int?
+  recordingUrl    String?
+  summary         String?       @db.Text
+  transcriptText  String?       @db.Text
+  metadata        Json?
+  startedAt       DateTime?
+  answeredAt      DateTime?
+  endedAt         DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  user            User?         @relation("UserCalls", fields: [userId], references: [id], onDelete: SetNull)
+  agent           Agent?        @relation(fields: [agentId], references: [id], onDelete: SetNull)
+  phoneNumber     PhoneNumber?  @relation(fields: [phoneNumberId], references: [id], onDelete: SetNull)
+  events          CallEvent[]
+
+  @@index([agentId, startedAt])
+  @@index([phoneNumberId, startedAt])
+  @@index([status, startedAt])
+}
+
+model CallEvent {
+  id        String        @id @default(cuid())
+  callId    String
+  role      CallEventRole
+  sequence  Int
+  text      String?       @db.Text
+  payload   Json?
+  startedAt DateTime?
+  endedAt   DateTime?
+  createdAt DateTime      @default(now())
+  call      Call          @relation(fields: [callId], references: [id], onDelete: Cascade)
+
+  @@unique([callId, sequence])
+  @@index([callId, createdAt])
+}
