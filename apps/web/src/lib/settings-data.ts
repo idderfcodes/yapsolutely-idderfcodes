@@ -286,16 +286,11 @@ export async function getSettingsReadiness(): Promise<SettingsReadiness> {
     },
     {
       title: "Telephony",
-      description: "Twilio credentials and sending numbers needed for real calls and SMS tool actions.",
+      description: "Twilio credentials and inbound numbers needed for real call handling.",
       checks: [
         buildCheck("TWILIO_ACCOUNT_SID", "Twilio account SID", "Required for webhook and call control operations."),
         buildCheck("TWILIO_AUTH_TOKEN", "Twilio auth token", "Required for Twilio API requests."),
         buildCheck("TWILIO_PHONE_NUMBER", "Twilio phone number", "Inbound number for live call testing."),
-        buildCheck(
-          "TWILIO_SMS_FROM_NUMBER",
-          "Twilio SMS from number",
-          "Sender used for SMS confirmation tool actions.",
-        ),
       ],
     },
     {

@@ -92,12 +92,6 @@ function runtimeConfigChecks() {
       detail: "Inbound number used for live call validation.",
     },
     {
-      key: "TWILIO_SMS_FROM_NUMBER",
-      label: "Twilio SMS from number",
-      configured: hasRealValue(process.env.TWILIO_SMS_FROM_NUMBER),
-      detail: "Used by SMS confirmation tool actions.",
-    },
-    {
       key: "DEEPGRAM_API_KEY",
       label: "Deepgram API key",
       configured: hasRealValue(process.env.DEEPGRAM_API_KEY),

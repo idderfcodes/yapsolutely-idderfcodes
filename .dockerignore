@@ -1,0 +1,10 @@
+node_modules
+apps/web/node_modules
+apps/voice/node_modules
+apps/web/.next
+.git
+.github
+credentials
+~
+.env
+npm-debug.log

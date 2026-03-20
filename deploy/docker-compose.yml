@@ -1,0 +1,37 @@
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/web.Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env.web
+
+  voice:
+    build:
+      context: ..
+      dockerfile: deploy/voice.Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env.voice
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      WEB_HOST: ${WEB_HOST}
+      VOICE_HOST: ${VOICE_HOST}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - web
+      - voice
+
+volumes:
+  caddy_data:
+  caddy_config:

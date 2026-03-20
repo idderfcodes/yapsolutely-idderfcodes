@@ -1,0 +1,9 @@
+{$WEB_HOST} {
+  encode gzip zstd
+  reverse_proxy web:3000
+}
+
+{$VOICE_HOST} {
+  encode gzip zstd
+  reverse_proxy voice:3001
+}
