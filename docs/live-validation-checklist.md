@@ -66,6 +66,8 @@ Current seeded production number:
 
 Immediately after or during the call, verify:
 
+- `npm run latest-call:prod` shows the new persisted call and recent events for `+13186108198`
+
 ### Calls list
 
 - a new call record appears

@@ -118,6 +118,8 @@ Pass signals:
 
 ## Dashboard verification immediately after each call
 
+Before or while checking the dashboard, you can also run `npm run latest-call:prod` to confirm production persistence and inspect the first few transcript events directly from Postgres.
+
 In `Calls`:
 
 - confirm a new call row appears

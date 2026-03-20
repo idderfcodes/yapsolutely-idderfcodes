@@ -56,6 +56,10 @@ For recent production `voice` runtime warnings during live-call troubleshooting:
 
 - `npm run warnings:prod`
 
+For the latest persisted production call plus recent transcript events:
+
+- `npm run latest-call:prod`
+
 Optional overrides:
 
 - `YAPS_WEB_URL`
@@ -65,6 +69,8 @@ Optional overrides:
 - `YAPS_SSH_SCRIPT`
 - `YAPS_REMOTE_REPO_PATH`
 - `YAPS_LOG_TAIL_LINES`
+- `YAPS_EXTERNAL_CALL_ID`
+- `YAPS_EVENT_LIMIT`
 
 By default the script targets the current live MVP hosts and seeded number.
 
