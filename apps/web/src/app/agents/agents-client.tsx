@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, Suspense } from "react";
-import { Search, SlidersHorizontal, Plus, Download, Bot } from "lucide-react";
+import { useState, useMemo, Suspense } from "react";
+import { Search, Plus, Download, Bot } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
@@ -10,9 +10,9 @@ import EmptyState from "@/components/dashboard/EmptyState";
 import type { AgentListItem } from "@/lib/agent-data";
 
 const templates = [
-  { name: "Sales qualifier", description: "Pre-qualify inbound leads before routing to a rep." },
-  { name: "Support triage", description: "Categorize and route support requests by urgency." },
-  { name: "Appointment setter", description: "Book meetings from inbound calls with calendar sync." },
+  { name: "Front Desk", description: "Greets callers, routes to the right department, and takes messages." },
+  { name: "Lead Qualifier", description: "Qualifies inbound leads by asking discovery questions and booking demos." },
+  { name: "Appointment Booking", description: "Helps callers schedule, reschedule, or cancel appointments." },
 ];
 
 const statusLabel = (status: string) => {
@@ -55,6 +55,25 @@ function AgentsClientInner({ agents }: { agents: AgentListItem[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showOnboarding, setShowOnboarding] = useState(searchParams.get("onboarding") === "true");
+  const [query, setQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+
+  const filtered = useMemo(() => {
+    let result = agents;
+    if (statusFilter !== "all") {
+      result = result.filter((a) => a.status === statusFilter);
+    }
+    if (query.trim()) {
+      const q = query.toLowerCase();
+      result = result.filter(
+        (a) =>
+          a.name.toLowerCase().includes(q) ||
+          a.phoneNumber?.includes(q) ||
+          a.voiceModel?.toLowerCase().includes(q),
+      );
+    }
+    return result;
+  }, [agents, query, statusFilter]);
 
   const handleOnboardingComplete = () => {
     setShowOnboarding(false);
@@ -96,13 +115,36 @@ function AgentsClientInner({ agents }: { agents: AgentListItem[] }) {
             <div className="flex items-center gap-3 mb-5">
               <div className="relative flex-1 max-w-xs">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-subtle" />
-                <input type="text" placeholder="Search agents..." className="w-full h-9 pl-9 pr-3 rounded-lg border border-border-soft bg-surface-panel font-body text-[0.8rem] text-text-strong placeholder:text-text-subtle/50 focus:outline-none focus:ring-1 focus:ring-text-strong/10 transition-shadow" />
+                <input
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search agents..."
+                  className="w-full h-9 pl-9 pr-3 rounded-lg border border-border-soft bg-surface-panel font-body text-[0.8rem] text-text-strong placeholder:text-text-subtle/50 focus:outline-none focus:ring-1 focus:ring-text-strong/10 transition-shadow"
+                />
               </div>
-              <button className="flex items-center gap-1.5 h-9 px-3 rounded-lg border border-border-soft bg-surface-panel font-body text-[0.78rem] text-text-subtle hover:text-text-body transition-colors">
-                <SlidersHorizontal className="w-3.5 h-3.5" />Filters
-              </button>
+              <div className="flex items-center gap-1.5">
+                {["all", "ACTIVE", "PAUSED", "DRAFT"].map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setStatusFilter(s)}
+                    className={`h-9 px-3 rounded-lg border font-body text-[0.78rem] transition-all ${
+                      statusFilter === s
+                        ? "border-foreground bg-foreground text-background"
+                        : "border-border-soft bg-surface-panel text-text-subtle hover:text-text-body hover:border-foreground/15"
+                    }`}
+                  >
+                    {s === "all" ? "All" : statusLabel(s)}
+                  </button>
+                ))}
+              </div>
             </div>
 
+            {filtered.length === 0 ? (
+              <div className="bg-surface-panel rounded-card border border-border-soft p-8 text-center mb-6">
+                <p className="font-body text-[0.85rem] text-text-subtle">No agents match your search.</p>
+              </div>
+            ) : (
             <div className="bg-surface-panel rounded-card border border-border-soft overflow-hidden mb-6">
               <div className="overflow-x-auto">
                 <table className="w-full">
@@ -117,7 +159,7 @@ function AgentsClientInner({ agents }: { agents: AgentListItem[] }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {agents.map((agent) => (
+                    {filtered.map((agent) => (
                       <tr key={agent.id} onClick={() => router.push(`/agents/${agent.slug ?? agent.id}`)} className="border-b border-border-soft last:border-0 hover:bg-surface-subtle/40 transition-colors cursor-pointer group">
                         <td className="px-5 py-3.5">
                           <div className="flex items-center gap-3">
@@ -138,17 +180,18 @@ function AgentsClientInner({ agents }: { agents: AgentListItem[] }) {
                 </table>
               </div>
             </div>
+            )}
           </>
         )}
 
         <div className="bg-surface-panel rounded-card border border-border-soft">
           <div className="px-5 py-4 border-b border-border-soft flex items-center justify-between">
             <h3 className="font-display text-sm font-medium text-text-strong">Templates</h3>
-            <button className="font-body text-[0.72rem] text-text-subtle hover:text-text-body transition-colors">Browse all →</button>
+            <button onClick={() => router.push("/agents/new")} className="font-body text-[0.72rem] text-text-subtle hover:text-text-body transition-colors">Browse all &rarr;</button>
           </div>
           <div className="p-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
             {templates.map((t) => (
-              <div key={t.name} className="p-4 rounded-lg border border-border-soft hover:bg-surface-subtle/40 transition-colors cursor-pointer">
+              <div key={t.name} onClick={() => router.push("/agents/new")} className="p-4 rounded-lg border border-border-soft hover:bg-surface-subtle/40 hover:border-foreground/15 transition-all cursor-pointer">
                 <div className="font-body text-[0.8rem] font-medium text-text-strong mb-1">{t.name}</div>
                 <p className="font-body text-[0.72rem] text-text-subtle leading-relaxed">{t.description}</p>
               </div>

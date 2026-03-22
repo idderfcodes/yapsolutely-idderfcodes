@@ -376,6 +376,60 @@ export async function toggleAgentStatusAction(formData: FormData) {
   }
 }
 
+export async function duplicateAgentAction(formData: FormData) {
+  const session = await getSession();
+
+  if (!session) {
+    redirect("/sign-in");
+  }
+
+  const agentId = readText(formData, "agentId");
+
+  if (!agentId) {
+    redirect("/agents?error=missing-fields");
+  }
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email: session.email },
+      select: { id: true },
+    });
+
+    if (!user) {
+      redirect("/sign-in");
+    }
+
+    const source = await prisma.agent.findFirst({
+      where: { id: agentId, userId: user.id },
+    });
+
+    if (!source) {
+      redirect("/agents?error=not-found");
+    }
+
+    const slug = await createUniqueAgentSlug(prisma, `${source.name} Copy`);
+
+    const duplicate = await prisma.agent.create({
+      data: {
+        userId: user.id,
+        name: `${source.name} (Copy)`,
+        slug,
+        description: source.description,
+        systemPrompt: source.systemPrompt,
+        firstMessage: source.firstMessage,
+        voiceModel: source.voiceModel,
+        transferNumber: source.transferNumber,
+        status: AgentStatus.DRAFT,
+        config: source.config ?? undefined,
+      },
+    });
+
+    redirect(`/agents/${duplicate.slug ?? duplicate.id}`);
+  } catch {
+    redirect(`/agents/${agentId}?error=database-unavailable`);
+  }
+}
+
 export async function saveFlowAction(formData: FormData) {
   const session = await getSession();
 

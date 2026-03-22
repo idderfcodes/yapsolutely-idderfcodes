@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, Suspense } from "react";
-import { Search, SlidersHorizontal, Phone, PhoneIncoming } from "lucide-react";
+import { Search, Phone, PhoneIncoming, Download } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import EmptyState from "@/components/dashboard/EmptyState";
 
@@ -66,22 +67,61 @@ function CallsInner({ calls }: { calls: CallItem[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
 
-  const filtered = query.trim()
-    ? calls.filter(
-        (c) =>
-          c.callerNumber?.includes(query) ||
-          c.agentName?.toLowerCase().includes(query.toLowerCase()) ||
-          c.id.includes(query),
-      )
-    : calls;
+  const filtered = (() => {
+    let result = query.trim()
+      ? calls.filter(
+          (c) =>
+            c.callerNumber?.includes(query) ||
+            c.agentName?.toLowerCase().includes(query.toLowerCase()) ||
+            c.id.includes(query),
+        )
+      : calls;
+    if (statusFilter !== "all") {
+      result = result.filter((c) => c.status === statusFilter);
+    }
+    return result;
+  })();
+
+  const handleExportCsv = () => {
+    const headers = ["ID", "Caller", "To", "Agent", "Status", "Duration (s)", "Date", "Transcript Preview"];
+    const rows = filtered.map((c) => [
+      c.id,
+      c.callerNumber ?? "",
+      c.toNumber ?? "",
+      c.agentName ?? "",
+      c.status,
+      c.durationSeconds?.toString() ?? "",
+      c.createdAt,
+      (c.transcriptPreview ?? "").replace(/"/g, '""'),
+    ]);
+    const csv = [headers, ...rows]
+      .map((row) => row.map((v) => `"${v}"`).join(","))
+      .join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `yapsolutely-calls-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <DashboardLayout>
       <div className="p-5 sm:p-8 max-w-[1200px]">
-        <div className="mb-8">
-          <h1 className="font-display text-[1.5rem] font-semibold tracking-[-0.025em] text-text-strong mb-1">Calls</h1>
-          <p className="font-body text-[0.82rem] text-text-subtle">Review conversations, outcomes, and transcripts across all agents.</p>
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
+          <div>
+            <h1 className="font-display text-[1.5rem] font-semibold tracking-[-0.025em] text-text-strong mb-1">Calls</h1>
+            <p className="font-body text-[0.82rem] text-text-subtle">Review conversations, outcomes, and transcripts across all agents.</p>
+          </div>
+          {calls.length > 0 && (
+            <Button onClick={handleExportCsv} variant="outline" size="sm" className="font-body text-[0.78rem] gap-1.5 rounded-lg border-border-soft shrink-0">
+              <Download className="w-3.5 h-3.5" />
+              Export CSV
+            </Button>
+          )}
         </div>
 
         {calls.length === 0 ? (
@@ -107,9 +147,21 @@ function CallsInner({ calls }: { calls: CallItem[] }) {
                   className="w-full h-9 pl-9 pr-3 rounded-lg border border-border-soft bg-surface-panel font-body text-[0.8rem] text-text-strong placeholder:text-text-subtle/50 focus:outline-none focus:ring-1 focus:ring-text-strong/10 transition-shadow"
                 />
               </div>
-              <button className="flex items-center gap-1.5 h-9 px-3 rounded-lg border border-border-soft bg-surface-panel font-body text-[0.78rem] text-text-subtle hover:text-text-body transition-colors">
-                <SlidersHorizontal className="w-3.5 h-3.5" />Filters
-              </button>
+              <div className="flex items-center gap-1.5">
+                {["all", "COMPLETED", "IN_PROGRESS", "FAILED"].map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setStatusFilter(s)}
+                    className={`h-9 px-3 rounded-lg border font-body text-[0.78rem] transition-all ${
+                      statusFilter === s
+                        ? "border-foreground bg-foreground text-background"
+                        : "border-border-soft bg-surface-panel text-text-subtle hover:text-text-body hover:border-foreground/15"
+                    }`}
+                  >
+                    {s === "all" ? "All" : statusLabel(s)}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import { toggleAgentStatusAction } from "@/app/_actions/agents";
+import { toggleAgentStatusAction, duplicateAgentAction } from "@/app/_actions/agents";
 
 type AgentCall = {
   id: string;
@@ -129,10 +129,13 @@ export default function AgentDetailClient({ agent }: { agent: AgentDetail }) {
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <Button variant="ghost" size="sm" className="font-body text-text-subtle text-[0.78rem] gap-1.5">
-              <Copy className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Duplicate</span>
-            </Button>
+            <form action={duplicateAgentAction}>
+              <input type="hidden" name="agentId" value={agent.id} />
+              <Button type="submit" variant="ghost" size="sm" className="font-body text-text-subtle text-[0.78rem] gap-1.5">
+                <Copy className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Duplicate</span>
+              </Button>
+            </form>
             <form action={toggleAgentStatusAction}>
               <input type="hidden" name="agentId" value={agent.id} />
               <input type="hidden" name="newStatus" value={agent.status === "ACTIVE" ? "PAUSED" : "ACTIVE"} />
