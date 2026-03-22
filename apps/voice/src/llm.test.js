@@ -50,8 +50,9 @@ function mockAnthropicErrorResponse(status) {
 
 describe("isLlmConfigured", () => {
   it("returns true when ANTHROPIC_API_KEY is set", () => {
-    // The env var is set beforeEach below
+    process.env.ANTHROPIC_API_KEY = "test-key-for-tests";
     expect(isLlmConfigured()).toBe(true);
+    delete process.env.ANTHROPIC_API_KEY;
   });
 });
 

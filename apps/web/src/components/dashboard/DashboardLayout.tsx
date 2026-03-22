@@ -1,6 +1,7 @@
 "use client";
 
 import AppNavRail from "./AppNavRail";
+import SectionContextPane from "./SectionContextPane";
 import { useUser } from "@/components/user-context";
 
 interface DashboardLayoutProps {
@@ -15,6 +16,7 @@ const DashboardLayout = ({ children, user: userProp }: DashboardLayoutProps) => 
   return (
     <div className="flex min-h-screen bg-canvas">
       <AppNavRail user={user ?? undefined} />
+      <SectionContextPane />
       <main className="flex-1 min-w-0 overflow-auto pt-14 md:pt-0">
         {children}
       </main>

@@ -5,7 +5,7 @@ const anthropicModel = process.env.ANTHROPIC_MODEL || "claude-3-5-haiku-latest";
 const anthropicMaxTokens = Number(process.env.ANTHROPIC_MAX_TOKENS || 220);
 
 export function isLlmConfigured() {
-  return Boolean(anthropicApiKey);
+  return Boolean(process.env.ANTHROPIC_API_KEY);
 }
 
 function buildSystemPrompt(session) {
