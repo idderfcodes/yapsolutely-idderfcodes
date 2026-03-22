@@ -100,6 +100,40 @@ const speakerStyle = (role: string) => {
 export default function CallDetailClient({ call }: { call: CallDetail }) {
   const toolEvents = call.events.filter((e) => e.role === "TOOL");
 
+  const handleExport = () => {
+    const lines: string[] = [
+      `Call ${call.id}`,
+      `Date: ${formatDate(call.createdAt)}`,
+      `Status: ${statusLabel(call.status)}`,
+      `Duration: ${formatDuration(call.durationSeconds)}`,
+      `Caller: ${call.callerNumber ?? "Unknown"}`,
+      `Agent: ${call.agentName ?? "—"}`,
+      "",
+      "--- Transcript ---",
+      "",
+    ];
+    if (call.events.length > 0) {
+      for (const e of call.events) {
+        const style = speakerStyle(e.role);
+        lines.push(`[${style.label}] ${e.text ?? ""}`);
+      }
+    } else if (call.transcriptText) {
+      lines.push(call.transcriptText);
+    } else {
+      lines.push("No transcript available.");
+    }
+    if (call.summary) {
+      lines.push("", "--- Summary ---", "", call.summary);
+    }
+    const blob = new Blob([lines.join("\n")], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `call-${call.id.slice(0, 8)}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <DashboardLayout>
       <div className="p-5 sm:p-8 max-w-[1100px]">
@@ -117,7 +151,7 @@ export default function CallDetailClient({ call }: { call: CallDetail }) {
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <Button variant="ghost" size="sm" className="font-body text-text-subtle text-[0.78rem] gap-1.5">
+            <Button onClick={handleExport} variant="ghost" size="sm" className="font-body text-text-subtle text-[0.78rem] gap-1.5">
               <Download className="w-3.5 h-3.5" /><span className="hidden sm:inline">Export</span>
             </Button>
           </div>
