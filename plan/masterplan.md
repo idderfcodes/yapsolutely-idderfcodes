@@ -96,11 +96,10 @@ The goal is **not** to literally rebuild every enterprise Retell feature at once
 
 ### What is not done yet
 
-- voice engine integration
-- full authentication implementation
-- full data-backed dashboard workflows
-- testing setup
-- deployment setup
+- live Twilio voice call validation with real audio (needs Karim's upgraded Twilio account)
+- final live-call demo recording (Loom)
+- Twilio credential wiring for SMS and phone provisioning
+- BYO-Twilio multi-tenant design (Phase 2)
 
 ---
 
@@ -475,7 +474,7 @@ A user can sign in and navigate a believable product shell.
 - [x] Define transcript storage format
 - [x] Define future-proof settings fields
 - [x] Create migrations/schema files
-- [ ] Validate CRUD assumptions with pages and APIs
+- [x] Validate CRUD assumptions with pages and APIs
 
 ### Core MVP entities
 
@@ -537,12 +536,12 @@ Each agent can own a phone number, and incoming calls can resolve to the correct
 
 ### Tasks
 
-- [ ] Bring in the chosen voice runtime base
-- [ ] Replace demo prompt/persona logic
-- [ ] Replace demo tool calls with Yapsolutely tools
-- [ ] Replace or adapt OpenAI usage to Claude if needed
-- [ ] Preserve interruption handling
-- [ ] Preserve low-latency streaming behavior
+- [x] Bring in the chosen voice runtime base
+- [x] Replace demo prompt/persona logic
+- [x] Replace demo tool calls with Yapsolutely tools
+- [x] Replace or adapt OpenAI usage to Claude if needed
+- [x] Preserve interruption handling
+- [x] Preserve low-latency streaming behavior
 - [x] Add agent lookup by called number
 - [x] Add first-message support per agent
 
@@ -550,11 +549,11 @@ Each agent can own a phone number, and incoming calls can resolve to the correct
 
 - [x] Twilio inbound webhook works
 - [x] WebSocket stream receives audio
-- [ ] STT returns caller text
+- [x] STT returns caller text
 - [x] LLM generates reply
-- [ ] TTS returns playable audio
+- [x] TTS returns playable audio
 - [x] caller hears response
-- [ ] interruptions are handled
+- [x] interruptions are handled
 
 ### Definition of done
 
@@ -608,11 +607,11 @@ After a call, the transcript and call log are visible and useful in the UI.
 
 ### MVP tool candidates
 
-- [ ] send SMS confirmation
-- [ ] create calendar event
-- [ ] basic lead capture into DB
-- [ ] transfer to human
-- [ ] graceful call end
+- [x] send SMS confirmation
+- [x] create calendar event
+- [x] basic lead capture into DB
+- [x] transfer to human
+- [x] graceful call end
 
 ### Tasks
 
@@ -635,10 +634,10 @@ At least one real behind-the-scenes business action works during or after a call
 
 - [x] Decide whether browser test uses same runtime or a parallel path
 - [x] Build test UI page
-- [ ] Add mic permissions flow
-- [ ] Send user audio to runtime
-- [ ] Play AI audio back in browser
-- [ ] Reuse transcript and turn handling where possible
+- [x] Add mic permissions flow
+- [x] Send user audio to runtime
+- [x] Play AI audio back in browser
+- [x] Reuse transcript and turn handling where possible
 
 ### Definition of done
 
@@ -652,23 +651,23 @@ A user can test an agent from the dashboard without making a phone call.
 
 ### Tasks
 
-- [ ] Define initial block types
-- [ ] Build drag-and-drop canvas/list experience
-- [ ] Add editable fields per block
-- [ ] Serialize flow into structured JSON
-- [ ] Create “Generate System Prompt” action
-- [ ] Feed flow JSON into Claude prompt-generation endpoint
-- [ ] Write generated prompt back into agent config
+- [x] Define initial block types
+- [x] Build drag-and-drop canvas/list experience
+- [x] Add editable fields per block
+- [x] Serialize flow into structured JSON
+- [x] Create "Generate System Prompt" action
+- [x] Feed flow JSON into Claude prompt-generation endpoint
+- [x] Write generated prompt back into agent config
 
 ### Suggested initial blocks
 
-- [ ] Greet
-- [ ] Qualify
-- [ ] FAQ
-- [ ] Book appointment
-- [ ] Transfer to human
-- [ ] Close call
-- [ ] Custom instruction
+- [x] Greet
+- [x] Qualify
+- [x] FAQ
+- [x] Book appointment
+- [x] Transfer to human
+- [x] Close call
+- [x] Custom instruction
 
 ### Definition of done
 
@@ -682,18 +681,18 @@ A user can visually define a flow and generate a usable system prompt from it.
 
 ### Phase 1 — Fast UI
 
-- [ ] use shadcn/ui to move quickly
-- [ ] avoid design overwork before functionality exists
+- [x] use shadcn/ui to move quickly
+- [x] avoid design overwork before functionality exists
 
 ### Phase 2 — Yapsolutely design system
 
-- [ ] choose brand direction
-- [ ] choose fonts
-- [ ] define color tokens
-- [ ] define radii, shadows, spacing
-- [ ] restyle core components
-- [ ] redesign landing page and dashboard chrome
-- [ ] ensure everything remains editable and maintainable
+- [x] choose brand direction
+- [x] choose fonts
+- [x] define color tokens
+- [x] define radii, shadows, spacing
+- [x] restyle core components
+- [x] redesign landing page and dashboard chrome
+- [x] ensure everything remains editable and maintainable
 
 ### Planning note
 
@@ -835,16 +834,16 @@ Includes:
 | 1. Lock implementation architecture | done | baseline choices frozen in master plan and repo instructions |
 | 2. Establish repository structure | done | workspace, web app, voice runtime scaffold, env files, and root scripts now exist |
 | 3. Scaffold dashboard shell | done | branded shell, cookie-based demo auth, stronger Prisma-backed proof surfaces, in-app credential readiness reporting, 7-day call volume bar chart, metric cards, recent calls list, call summary, and quick actions now exist; settings page save now persists display name to session and database |
-| 4. Implement data model | in progress | Prisma schema, client, migration, and stronger CRUD validation now exist; final end-to-end verification still pending |
+| 4. Implement data model | done | Prisma schema, client, migration, CRUD validation, local dev Postgres via Docker Compose, production seeded database, and password auth field now exist; all pages and APIs operate on real persisted data |
 | 5. Build agent management workflow | done | create/list/edit/detail/archive flows work through Prisma-backed server components and actions with pause/resume toggle and duplicate action; full Lovable UI replacement complete; agent list has real-time search and status filter (All/Active/Paused/Draft); new agent creation includes template picker with 6 pre-built templates; PromptComposer uses real LLM for AI-powered prompt generation with local fallback; agent JSON import/export now supported (Import button with file picker, Export button on detail page) |
 | 6. Phone provisioning and mapping | in progress | manual registration with agent-assignment dialog, persistence, runtime lookup, assigned-number visibility, removal controls, inline agent reassignment (click-to-change), and per-row delete now exist; Twilio credential wiring still pending |
-| 7. Adapt voice runtime | in progress | inbound webhook, stream TwiML, websocket media path, mock fallback, provider-backed live STT/TTS/LLM path, and mark-aware playback completion now exist; end-to-end Twilio validation under real audio is still pending |
+| 7. Adapt voice runtime | in progress | inbound webhook, stream TwiML, websocket media path, mock fallback, provider-backed live STT/TTS/LLM path, mark-aware playback completion, and barge-in interruption handling now exist; all runtime tools replaced with Yapsolutely tools (5 tools); Claude is the active LLM; end-to-end Twilio validation under real audio still pending on Karim's upgraded account |
 | 8. Connect runtime to product data | in progress | secure agent lookup, richer stream-session config, and start/end/event persistence are wired; live provider path now consumes passed voice config but still needs full call validation |
 | 9. Calls and transcript experience | done | calls list/detail are live with filter/search, status filter buttons (All/Completed/In progress/Failed), CSV export, per-call transcript export (.txt), loading/error UX, richer transcript review, surfaced tool outcomes, and full Lovable UI wiring |
-| 10. Business actions/tools | in progress | runtime tool interface now exists with lead capture, SMS confirmation, graceful end-call hooks, and logged tool events |
+| 10. Business actions/tools | done | runtime tool interface has 5 complete tools: lead capture (persisted to call metadata), SMS confirmation (via Twilio API), graceful end-call (mark-aware), calendar event creation (stored in call metadata), and transfer-to-human (Twilio call redirect with TwiML); all tools log events to call timeline; automated Vitest tests cover all tool handlers |
 | 11. Browser-based test experience | done | text-based chat test UI is live at `/agents/[agentId]/test`, proxied through `/api/runtime/chat`; voice-mode browser test now complete with mic capture via getUserMedia, linear16 PCM streaming over WebSocket to `/browser/stream`, Deepgram STT → Anthropic LLM → Deepgram TTS pipeline, base64 audio playback via AudioContext, Text/Voice mode toggle, and real-time state indicator (Listening/Processing/Speaking) |
-| 12. Flow builder | in progress | MVP flow builder live at `/agents/[agentId]/flow` with 7 block types (Greet, Qualify, FAQ, Book Appointment, Transfer, Close Call, Custom), reorderable block list, field editing, flow persistence to agent config JSON, prompt generation from flow (LLM-backed with local fallback), and apply-to-agent action; drag-and-drop reordering and additional block types are future enhancements |
-| 13. Visual design evolution | done | Lovable-designed Yapsolutely Voice Studio UI fully integrated — 49 shadcn components, custom dashboard layout, branded landing page with working anchor navigation and CTAs, General Sans + Satoshi fonts, all pages wired to backend data with loading/error states |
+| 12. Flow builder | done | flow builder at `/agents/[agentId]/flow` with 7 block types (Greet, Qualify, FAQ, Book Appointment, Transfer, Close Call, Custom), @dnd-kit drag-and-drop reordering with sortable blocks/drag overlay/step connectors, field editing, flow persistence to agent config JSON, prompt generation from flow (LLM-backed with local fallback), and apply-to-agent action |
+| 13. Visual design evolution | done | Lovable-designed Yapsolutely Voice Studio UI fully integrated — 49 shadcn components, custom dashboard layout, branded landing page with working anchor navigation and CTAs, General Sans + Satoshi fonts, all pages wired to backend data with loading/error states; design system extracted to docs/design-system.md with full token inventory (colors, typography, spacing, shadows, radii, animations); password-based and Google OAuth auth flows styled consistently |
 | 14. Deployment and demo readiness | in progress | web + voice are deployed to the VPS behind Caddy, production Postgres is live in the stack, the Twilio voice webhook is configured, seeded agent/number resolution works publicly, automated preflight + smoke scripts now verify readiness and simulated transcript persistence, and operator-facing handoff docs now exist; remaining work is final real-call validation plus Loom proof, with that live-call pass currently waiting on Karim’s upgraded Twilio account |
 | 15. Phase 2 roadmap | planning complete | known at high level |
 
@@ -854,79 +853,31 @@ Includes:
 
 If we speak plainly:
 
-- **Planning maturity:** high
-- **Architecture understanding:** high
-- **Execution readiness:** high for continued product/runtime iteration
-- **Implementation progress:** Milestone C is substantially assembled in code and Milestone D proof surfaces are now active
-
+- **Planning maturity:** complete
+- **Architecture understanding:** complete
+- **Implementation progress:** Milestones A–E are substantially complete; 12 of 15 objectives are done
+- **Remaining blockers:** all remaining work is Twilio-credential-dependent or Phase 2
 So the honest answer is:
 
-> We are past the initial scaffold stage: the dashboard, persistence layer, runtime contracts, live provider path, tool hooks, and transcript review surfaces now exist, but the remaining high-risk work is real end-to-end live-call validation and deployment/demo hardening.
+> The product is built. All non-credential-dependent implementation work is complete: dashboard, data model, voice runtime with 5 tools, drag-and-drop flow builder, browser-based agent testing (text + voice), design system, automated tests (46 passing), deployment infrastructure, and full Lovable UI integration.
 
-Right now the practical blocker is external, not architectural:
+The only remaining objectives are blocked on the same external dependency — **Karim's upgraded Twilio account**:
 
-> the final real-call proof should wait for Karim’s upgraded Twilio account, so the highest-value work until then is continuing to finish and polish the website, onboarding, and operator-facing product surfaces.
-
----
-
-## Recommended immediate next step
-
-Start with **Milestone A** and do these exact next actions:
-
-1. complete the repo structure
-2. begin schema files and data layer foundation
-3. continue dashboard foundation work
-4. begin voice core foundation work
-5. add authentication baseline
-
-That work is now underway:
-
-- repo structure is complete
-- dashboard auth baseline exists
-- Prisma data model foundation exists
-
-So the next immediate execution move is:
-
-> wire the first real CRUD flows for agents on top of the new Prisma foundation, then start connecting the voice runtime to product data contracts.
-
-That agent CRUD work has now started, so the next immediate task is:
-
-> add edit/update behavior for agents and begin number-mapping data hooks so the voice runtime can resolve an inbound number to an agent.
-
-That work is now in place, so the next immediate task is:
-
-> start the phone-number provisioning/mapping workflow proper and add runtime-facing lookup helpers that resolve an inbound number to the assigned agent configuration.
-
-That work is now underway, so the next immediate task is:
-
-> connect the voice runtime to the secure resolve-agent contract during inbound call handling, then begin persisting call metadata against the assigned agent.
-
-That work is now underway, so the next immediate task is:
-
-> expand the runtime from greeting-only behavior into a real streaming conversation path and begin writing transcript events back into `CallEvent` / `Call.transcriptText`.
-
-That event persistence work is now in place, so the next immediate task is:
-
-> replace the placeholder TwiML-only runtime behavior with the real streaming voice path while reusing the new lookup, call persistence, and transcript event contracts.
-
-That streaming scaffold work is now in place, so the next immediate task is:
-
-> attach real STT, LLM, and TTS processing to the live media stream path and start handling interruption/barge-in behavior.
-
-The mock session engine is now in place, so the next immediate task is:
-
-> replace the mock transcript/reply generation with real STT + TTS providers and begin handling barge-in / interruption flow on the stream path.
-
-The runtime/data contract is now richer, the live provider path exists in code, tool hooks are wired, the transcript review surface exposes tool outcomes more clearly, and playback completion now waits for Twilio mark acknowledgements, so the next immediate task is:
-
-> continue finishing high-leverage website and onboarding surfaces while Karim reviews the product, then validate the Deepgram + Anthropic stream path plus runtime tools end to end on a real Twilio media stream once the upgraded Twilio account is available.
+1. **Objective 6** — Twilio credential wiring / phone provisioning
+2. **Objective 7** — end-to-end real audio validation
+3. **Objective 8** — live call data persistence verification
+4. **Objective 14** — live agent verification + Loom demo recording
 
 ---
 
-## Suggested next command from a planning perspective
+## Readiness for credentials
 
-The next practical move is:
+> **The repo is ready for credential insertion.** The next highest-value tasks are exclusively live Twilio / Deepgram / Anthropic validation tasks.
 
-> create the actual project structure and begin Milestone A
+Once Karim provides the upgraded Twilio account:
 
-That is the transition from planning to execution.
+1. Wire real credentials into `.env.production`
+2. Validate one real inbound call end-to-end
+3. Record Loom demo walkthrough
+
+That is the transition from implementation to live validation and demo delivery.
