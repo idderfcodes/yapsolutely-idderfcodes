@@ -29,8 +29,8 @@ export default function KnowledgeBaseClient() {
 
         {/* ── Metrics strip ── */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
-          {metrics.map((m) => (
-            <div key={m.label} className="bg-surface-panel rounded-lg border border-border-soft/60 px-4 py-3">
+          {metrics.map((m, i) => (
+            <div key={m.label} className="bg-surface-panel rounded-lg border border-border-soft/60 px-4 py-3 stagger-item" style={{ animationDelay: `${i * 0.06}s` }}>
               <div className="font-body text-[0.67rem] text-text-subtle/70 uppercase tracking-[0.1em] mb-0.5">{m.label}</div>
               <div className="font-mono text-[1rem] font-semibold text-text-strong">{m.value}</div>
               <div className="font-body text-[0.67rem] text-text-subtle/50 mt-0.5">{m.sub}</div>
@@ -43,6 +43,7 @@ export default function KnowledgeBaseClient() {
           <div className="px-4 py-3 border-b border-border-soft/60">
             <h3 className="font-display text-[0.89rem] font-medium text-text-strong">Sources</h3>
           </div>
+          <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b border-border-soft/40">
@@ -62,6 +63,7 @@ export default function KnowledgeBaseClient() {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
 
         {/* ── Empty state ── */}

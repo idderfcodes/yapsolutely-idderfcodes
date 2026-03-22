@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { UserProvider } from "@/components/user-context";
 import { getSession } from "@/lib/auth";
 import "./globals.css";
@@ -94,7 +95,9 @@ export default async function RootLayout({
     >
       <body className="min-h-full bg-[var(--background)] text-[var(--foreground)]">
         <UserProvider user={session}>
-          {children}
+          <TooltipProvider delayDuration={300}>
+            {children}
+          </TooltipProvider>
         </UserProvider>
         <Toaster />
       </body>

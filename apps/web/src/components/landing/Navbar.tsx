@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
@@ -17,9 +17,16 @@ const navLinks = [
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/40">
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-background/90 backdrop-blur-xl border-b border-border/40 shadow-surface-xs" : "bg-transparent"}`}>
       <div className="max-w-7xl mx-auto px-5 sm:px-6 h-[4.25rem] flex items-center justify-between">
         <div className="flex items-center gap-10">
           <Link href="/" className="font-display text-[1.25rem] font-semibold tracking-[-0.025em] text-foreground hover:opacity-80 transition-opacity">
@@ -30,7 +37,7 @@ const Navbar = () => {
               <Link
                 key={link.href}
                 href={link.href}
-                className="font-body text-[0.95rem] text-text-subtle hover:text-foreground transition-colors"
+                className="font-body text-[0.95rem] text-text-subtle hover:text-foreground transition-colors link-slide"
               >
                 {link.label}
               </Link>
@@ -41,7 +48,7 @@ const Navbar = () => {
           <Button variant="ghost" size="default" className="font-body text-[0.95rem] text-text-subtle" asChild>
             <Link href="/sign-in">Sign in</Link>
           </Button>
-          <Button variant="hero" size="lg" className="rounded-full font-display text-[0.95rem]" asChild>
+          <Button variant="hero" size="lg" className="rounded-full font-display text-[0.95rem] btn-press" asChild>
             <Link href="/sign-up">Get started</Link>
           </Button>
         </div>
@@ -55,7 +62,7 @@ const Navbar = () => {
       </div>
 
       {mobileOpen && (
-        <div className="lg:hidden bg-background border-b border-border/40 px-5 pb-5 pt-2">
+        <div className="lg:hidden bg-background/95 backdrop-blur-xl border-b border-border/40 px-5 pb-5 pt-2 animate-slide-down">
           <div className="flex flex-col gap-3 mb-4">
             {navLinks.map((link) => (
               <Link

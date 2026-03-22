@@ -4,6 +4,7 @@ import { useState, useMemo, Suspense } from "react";
 import { Search, Phone, PhoneIncoming, Download } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import EmptyState from "@/components/dashboard/EmptyState";
 
@@ -145,15 +146,20 @@ function CallsInner({ calls }: { calls: CallItem[] }) {
             </span>
           </div>
           {calls.length > 0 && (
-            <Button
-              onClick={handleExportCsv}
-              variant="ghost"
-              size="sm"
-              className="font-body text-text-subtle text-[0.84rem] gap-1.5 h-8"
-            >
-              <Download className="w-3.5 h-3.5" />
-              Export CSV
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={handleExportCsv}
+                  variant="ghost"
+                  size="sm"
+                  className="font-body text-text-subtle text-[0.84rem] gap-1.5 h-8"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Export CSV</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Download call log as CSV</TooltipContent>
+            </Tooltip>
           )}
         </div>
 
@@ -162,8 +168,8 @@ function CallsInner({ calls }: { calls: CallItem[] }) {
             <EmptyState
               icon={PhoneIncoming}
               title="No calls yet"
-              description="Calls will appear here once your agents are live and handling conversations."
-              actionLabel="Go to Agents"
+              description="When your agents take their first call, it will show up here with a full transcript."
+              actionLabel="Set up an agent"
               onAction={() => router.push("/agents")}
             />
           </div>
@@ -176,8 +182,8 @@ function CallsInner({ calls }: { calls: CallItem[] }) {
                 { label: "Completed", value: counts.completed.toString() },
                 { label: "Active", value: counts.inProgress.toString() },
                 { label: "Failed", value: counts.failed.toString() },
-              ].map((stat) => (
-                <div key={stat.label} className="bg-surface-panel rounded-lg border border-border-soft/60 px-4 py-3">
+              ].map((stat, i) => (
+                <div key={stat.label} className="bg-surface-panel rounded-lg border border-border-soft/60 px-4 py-3 stagger-item" style={{ animationDelay: `${i * 0.06}s` }}>
                   <div className="font-body text-[0.67rem] text-text-subtle/70 uppercase tracking-[0.1em] mb-0.5">{stat.label}</div>
                   <div className="font-mono text-[1rem] font-semibold text-text-strong">{stat.value}</div>
                 </div>
@@ -185,13 +191,13 @@ function CallsInner({ calls }: { calls: CallItem[] }) {
             </div>
 
             {/* ── Control row ── */}
-            <div className="flex items-center justify-between gap-3 mb-4">
-              <div className="flex items-center gap-1">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+              <div className="flex items-center gap-1 overflow-x-auto">
                 {filterTabs.map((tab) => (
                   <button
                     key={tab.key}
                     onClick={() => setStatusFilter(tab.key)}
-                    className={`h-7 px-2.5 rounded-md font-body text-[0.89rem] transition-all flex items-center gap-1.5 focus-ring ${
+                    className={`h-7 px-2.5 rounded-md font-body text-[0.89rem] transition-all flex items-center gap-1.5 focus-ring shrink-0 ${
                       statusFilter === tab.key
                         ? "bg-foreground text-primary-foreground font-medium"
                         : "text-text-subtle hover:text-text-body hover:bg-surface-subtle"
@@ -206,7 +212,7 @@ function CallsInner({ calls }: { calls: CallItem[] }) {
                   </button>
                 ))}
               </div>
-              <div className="relative w-56">
+              <div className="relative w-full sm:w-56">
                 <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-subtle/50" />
                 <input
                   type="text"

@@ -45,7 +45,7 @@ export default function SettingsClient({
         {/* ── Header ── */}
         <div className="mb-5">
           <h1 className="font-display text-[1.38rem] font-semibold tracking-[-0.02em] text-text-strong">Settings</h1>
-          <p className="font-body text-[0.89rem] text-text-subtle mt-0.5">Workspace configuration, readiness, and security.</p>
+          <p className="font-body text-[0.89rem] text-text-subtle mt-0.5">Profile, integrations, and system readiness at a glance.</p>
         </div>
 
         {/* ── Workspace ── */}

@@ -117,7 +117,7 @@ export default function SignUpPage() {
                 type="submit"
                 size="lg"
                 disabled={isLoading}
-                className="w-full font-display font-medium tracking-[-0.01em] text-body-md h-11 rounded-xl transition-all duration-200"
+                className="w-full font-display font-medium tracking-[-0.01em] text-body-md h-11 rounded-xl transition-all duration-200 btn-press"
               >
                 {isLoading ? (
                   <span className="flex items-center gap-2">

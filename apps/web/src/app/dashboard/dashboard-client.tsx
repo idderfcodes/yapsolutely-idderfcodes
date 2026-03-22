@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Bot, Phone, PhoneIncoming, Settings, ArrowRight, Zap } from "lucide-react";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 
 type RecentCall = {
@@ -116,10 +117,10 @@ function CallVolumeChart({ data }: { data: DailyCallVolume[] }) {
 
 export default function DashboardHome({ metrics }: DashboardProps) {
   const cards = [
-    { label: "Active agents", value: metrics.activeAgents, icon: Bot, href: "/agents", sub: "Deployed" },
-    { label: "Assigned numbers", value: metrics.assignedNumbers, icon: Phone, href: "/numbers", sub: "Mapped" },
-    { label: "Calls today", value: metrics.callsToday, icon: PhoneIncoming, href: "/calls", sub: "Inbound" },
-    { label: "Tool actions", value: metrics.toolActionsToday, icon: Zap, href: "/calls", sub: "Today" },
+    { label: "Active agents", value: metrics.activeAgents, icon: Bot, href: "/agents", sub: "Deployed", tip: "Agents currently handling calls" },
+    { label: "Assigned numbers", value: metrics.assignedNumbers, icon: Phone, href: "/numbers", sub: "Mapped", tip: "Phone numbers linked to agents" },
+    { label: "Calls today", value: metrics.callsToday, icon: PhoneIncoming, href: "/calls", sub: "Inbound", tip: "Total inbound calls received today" },
+    { label: "Tool actions", value: metrics.toolActionsToday, icon: Zap, href: "/calls", sub: "Today", tip: "Agent tool invocations today" },
   ];
 
   return (
@@ -128,17 +129,22 @@ export default function DashboardHome({ metrics }: DashboardProps) {
         {/* ── Header ── */}
         <div className="mb-5">
           <h1 className="font-display text-[1.38rem] font-semibold tracking-[-0.02em] text-text-strong">Dashboard</h1>
-          <p className="font-body text-[0.89rem] text-text-subtle mt-0.5">Overview of your workspace activity.</p>
+          <p className="font-body text-[0.89rem] text-text-subtle mt-0.5">Your workspace at a glance — agents, calls, and activity.</p>
         </div>
 
         {/* ── Metrics strip ── */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
-          {cards.map((card) => (
-            <Link key={card.label} href={card.href} className="bg-surface-panel rounded-lg border border-border-soft/60 px-4 py-3 card-lift hover:bg-surface-subtle/40 group focus-ring">
-              <div className="font-body text-[0.67rem] text-text-subtle/70 uppercase tracking-[0.1em] mb-0.5">{card.label}</div>
-              <div className="font-mono text-[1rem] font-semibold text-text-strong">{card.value}</div>
-              <div className="font-body text-[0.67rem] text-text-subtle/50 mt-0.5">{card.sub}</div>
-            </Link>
+          {cards.map((card, i) => (
+            <Tooltip key={card.label}>
+              <TooltipTrigger asChild>
+                <Link href={card.href} className="bg-surface-panel rounded-lg border border-border-soft/60 px-4 py-3 card-lift hover:bg-surface-subtle/40 group focus-ring stagger-item" style={{ animationDelay: `${i * 0.06}s` }}>
+                  <div className="font-body text-[0.67rem] text-text-subtle/70 uppercase tracking-[0.1em] mb-0.5">{card.label}</div>
+                  <div className="font-mono text-[1rem] font-semibold text-text-strong">{card.value}</div>
+                  <div className="font-body text-[0.67rem] text-text-subtle/50 mt-0.5">{card.sub}</div>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">{card.tip}</TooltipContent>
+            </Tooltip>
           ))}
         </div>
 

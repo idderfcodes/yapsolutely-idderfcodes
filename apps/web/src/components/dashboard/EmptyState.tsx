@@ -20,21 +20,21 @@ const EmptyState = ({
   secondaryLabel,
   onSecondary,
 }: EmptyStateProps) => (
-  <div className="flex flex-col items-center justify-center py-14 text-center">
+  <div className="flex flex-col items-center justify-center py-14 text-center animate-fade-in">
     <div className="w-10 h-10 rounded-xl bg-foreground/[0.04] flex items-center justify-center mb-4">
       <Icon className="w-5 h-5 text-text-subtle" />
     </div>
     <h3 className="font-display text-[1.02rem] font-semibold text-text-strong tracking-[-0.01em] mb-1">
       {title}
     </h3>
-    <p className="font-body text-[0.87rem] text-text-subtle leading-relaxed max-w-[300px] mb-5">
+    <p className="font-body text-[0.87rem] text-text-subtle leading-relaxed max-w-[320px] mb-5">
       {description}
     </p>
     <div className="flex items-center gap-2.5">
       {actionLabel && onAction && (
         <Button
           onClick={onAction}
-          className="bg-foreground text-primary-foreground hover:bg-foreground/90 font-display font-medium tracking-[-0.01em] text-[0.87rem] h-8 rounded-lg px-4 gap-1.5"
+          className="bg-foreground text-primary-foreground hover:bg-foreground/90 font-display font-medium tracking-[-0.01em] text-[0.87rem] h-8 rounded-lg px-4 gap-1.5 btn-press"
         >
           {actionLabel}
         </Button>

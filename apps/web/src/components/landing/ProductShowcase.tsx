@@ -20,7 +20,7 @@ const ProductShowcase = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
           {/* Left — large featured capability */}
           <div className="lg:col-span-7">
-            <div className="bg-surface-elevated rounded-[1.5rem] p-8 sm:p-10 border border-border-soft/20 h-full">
+            <div className="bg-surface-elevated rounded-[1.5rem] p-8 sm:p-10 border border-border-soft/20 h-full transition-all duration-200 hover:border-border-soft/50 hover:shadow-surface-sm">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-9 h-9 rounded-xl bg-surface-dark flex items-center justify-center">
                   <Phone className="w-4 h-4 text-surface-dark-foreground/60" />
@@ -56,7 +56,7 @@ const ProductShowcase = () => {
 
           {/* Right — stacked secondary capabilities */}
           <div className="lg:col-span-5 flex flex-col gap-5">
-            <div className="bg-surface-elevated rounded-[1.25rem] p-7 sm:p-8 border border-border-soft/20 flex-1">
+            <div className="bg-surface-elevated rounded-[1.25rem] p-7 sm:p-8 border border-border-soft/20 flex-1 transition-all duration-200 hover:border-border-soft/50 hover:shadow-surface-sm">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center">
                   <Shield className="w-3.5 h-3.5 text-text-body" />
@@ -68,7 +68,7 @@ const ProductShowcase = () => {
               </p>
             </div>
 
-            <div className="bg-surface-elevated rounded-[1.25rem] p-7 sm:p-8 border border-border-soft/20 flex-1">
+            <div className="bg-surface-elevated rounded-[1.25rem] p-7 sm:p-8 border border-border-soft/20 flex-1 transition-all duration-200 hover:border-border-soft/50 hover:shadow-surface-sm">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center">
                   <BarChart3 className="w-3.5 h-3.5 text-text-body" />

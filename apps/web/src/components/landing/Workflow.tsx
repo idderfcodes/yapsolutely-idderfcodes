@@ -20,7 +20,7 @@ const Workflow = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
           {/* Build — dominant hero block */}
-          <div className="lg:col-span-7 bg-surface-dark rounded-[1.5rem] p-8 sm:p-12 flex flex-col justify-between min-h-[340px]">
+          <div className="lg:col-span-7 bg-surface-dark rounded-[1.5rem] p-8 sm:p-12 flex flex-col justify-between min-h-[340px] transition-shadow duration-300 hover:shadow-surface-xl">
             <div>
               <span className="font-mono text-xs text-surface-dark-foreground/20 block mb-6">01</span>
               <h3 className="font-display text-[1.5rem] sm:text-[2rem] font-semibold tracking-[-0.025em] text-surface-dark-foreground mb-4 leading-[1.12]">
@@ -43,7 +43,7 @@ const Workflow = () => {
 
           {/* Deploy + Monitor stacked */}
           <div className="lg:col-span-5 flex flex-col gap-5">
-            <div className="bg-surface-elevated rounded-[1.25rem] p-7 sm:p-8 flex-1 border border-border-soft/20">
+            <div className="bg-surface-elevated rounded-[1.25rem] p-7 sm:p-8 flex-1 border border-border-soft/20 transition-all duration-200 hover:border-border-soft/50 hover:shadow-surface-sm">
               <span className="font-mono text-xs text-text-subtle/40 block mb-4">02</span>
               <h3 className="font-display text-lg font-semibold tracking-[-0.02em] text-foreground mb-2 leading-snug">
                 Assign a number and go live
@@ -54,7 +54,7 @@ const Workflow = () => {
               <div className="mt-6 font-body text-[0.6rem] text-text-subtle/25 uppercase tracking-[0.2em]">Deploy</div>
             </div>
 
-            <div className="bg-surface-elevated rounded-[1.25rem] p-7 sm:p-8 flex-1 border border-border-soft/20">
+            <div className="bg-surface-elevated rounded-[1.25rem] p-7 sm:p-8 flex-1 border border-border-soft/20 transition-all duration-200 hover:border-border-soft/50 hover:shadow-surface-sm">
               <span className="font-mono text-xs text-text-subtle/40 block mb-4">03</span>
               <h3 className="font-display text-lg font-semibold tracking-[-0.02em] text-foreground mb-2 leading-snug">
                 Review every call in detail

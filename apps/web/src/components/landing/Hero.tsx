@@ -22,13 +22,13 @@ const Hero = () => {
               Build voice agents, assign them real phone numbers, and let them handle inbound calls. Review every transcript and monitor every conversation from one workspace.
             </p>
             <div className="flex flex-col sm:flex-row items-start gap-3">
-              <Button variant="hero" size="xl" asChild>
+              <Button variant="hero" size="xl" className="btn-press" asChild>
                 <Link href="/sign-up">
                   Start building
-                  <ArrowRight className="w-4 h-4 ml-1.5" />
+                  <ArrowRight className="w-4 h-4 ml-1.5 transition-transform group-hover:translate-x-0.5" />
                 </Link>
               </Button>
-              <Button variant="hero-outline" size="xl" asChild>
+              <Button variant="hero-outline" size="xl" className="btn-press" asChild>
                 <a href="#workflow">See how it works</a>
               </Button>
             </div>
@@ -42,8 +42,8 @@ const Hero = () => {
                 { value: "24/7", label: "Availability", sub: "no downtime" },
                 { value: "100%", label: "Transcribed", sub: "every call" },
                 { value: "Real", label: "Phone numbers", sub: "dedicated lines" },
-              ].map((stat) => (
-                <div key={stat.label} className="bg-surface-elevated rounded-2xl p-4 sm:p-5 border border-border-soft/30">
+              ].map((stat, i) => (
+                <div key={stat.label} className="bg-surface-elevated rounded-2xl p-4 sm:p-5 border border-border-soft/30 stagger-item hover:border-border-soft/60 transition-colors" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>
                   <div className="font-display text-lg sm:text-xl font-semibold text-foreground tracking-[-0.02em]">{stat.value}</div>
                   <div className="font-body text-[0.75rem] text-text-body mt-1">{stat.label}</div>
                   <div className="font-body text-[0.65rem] text-text-subtle mt-0.5">{stat.sub}</div>

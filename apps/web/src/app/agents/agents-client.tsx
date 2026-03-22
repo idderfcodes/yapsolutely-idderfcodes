@@ -4,6 +4,7 @@ import { useState, useMemo, useRef, Suspense } from "react";
 import { Search, Plus, Upload, Bot } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import OnboardingModal from "@/components/dashboard/OnboardingModal";
 import EmptyState from "@/components/dashboard/EmptyState";
@@ -135,20 +136,25 @@ function AgentsClientInner({ agents }: { agents: AgentListItem[] }) {
               onChange={handleImportFile}
               className="hidden"
             />
-            <Button
-              onClick={() => fileInputRef.current?.click()}
-              variant="ghost"
-              size="sm"
-              className="font-body text-text-subtle text-[0.84rem] gap-1.5 h-8"
-            >
-              <Upload className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Import</span>
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={() => fileInputRef.current?.click()}
+                  variant="ghost"
+                  size="sm"
+                  className="font-body text-text-subtle text-[0.84rem] gap-1.5 h-8"
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Import</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Import agent from JSON file</TooltipContent>
+            </Tooltip>
             <Button
               onClick={() => router.push("/agents/new")}
               variant="hero"
               size="sm"
-              className="rounded-lg gap-1.5 text-[0.87rem] h-8"
+              className="rounded-lg gap-1.5 text-[0.87rem] h-8 btn-press"
             >
               <Plus className="w-3.5 h-3.5" />
               Create agent
@@ -170,8 +176,8 @@ function AgentsClientInner({ agents }: { agents: AgentListItem[] }) {
         ) : (
           <>
             {/* ── Control row ── */}
-            <div className="flex items-center justify-between gap-3 mb-4">
-              <div className="flex items-center gap-1">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+              <div className="flex items-center gap-1 overflow-x-auto">
                 {filterTabs.map((tab) => (
                   <button
                     key={tab.key}
@@ -191,7 +197,7 @@ function AgentsClientInner({ agents }: { agents: AgentListItem[] }) {
                   </button>
                 ))}
               </div>
-              <div className="relative w-56">
+              <div className="relative w-full sm:w-56">
                 <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-subtle/50" />
                 <input
                   type="text"

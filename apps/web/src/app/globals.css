@@ -243,6 +243,22 @@
     from { opacity: 0; transform: scale(0.95); }
     to { opacity: 1; transform: scale(1); }
   }
+  @keyframes stagger-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slide-in-right {
+    from { opacity: 0; transform: translateX(-8px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes count-up {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  --animate-stagger-up: stagger-up 0.4s ease-out both;
+  --animate-slide-in-right: slide-in-right 0.3s ease-out both;
+  --animate-count-up: count-up 0.35s ease-out both;
 }
 
 /* ── Base resets ──────────────────────────────── */
@@ -288,6 +304,18 @@
   .card-lift {
     @apply transition-all duration-200 ease-out;
     &:hover { box-shadow: 0 2px 8px -2px hsl(0 0% 0% / 0.06), 0 1px 3px -1px hsl(0 0% 0% / 0.04); transform: translateY(-1px); }
+  }
+  .btn-press {
+    @apply transition-transform duration-100 ease-out;
+    &:active { transform: scale(0.97); }
+  }
+  .link-slide {
+    @apply relative;
+    &::after { content: ''; @apply absolute bottom-0 left-0 w-0 h-px bg-current transition-all duration-200; }
+    &:hover::after { @apply w-full; }
+  }
+  .stagger-item {
+    animation: stagger-up 0.4s ease-out both;
   }
   .focus-ring { @apply focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground/20 focus-visible:ring-offset-1 focus-visible:ring-offset-background; }
   .prose-yap h2 { @apply font-display text-[1rem] font-semibold text-text-strong tracking-[-0.01em] mt-8 mb-3 first:mt-0; }

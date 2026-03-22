@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import EmptyState from "@/components/dashboard/EmptyState";
 import { registerPhoneNumberAction, reassignPhoneNumberAction, deletePhoneNumberAction } from "@/app/_actions/phone-numbers";
@@ -82,9 +83,9 @@ function NumbersInner({ numbers, agents }: { numbers: NumberItem[]; agents: Agen
               Numbers
               {totalNumbers > 0 && <span className="ml-2 font-body text-[0.89rem] text-text-subtle font-normal">{totalNumbers}</span>}
             </h1>
-            <p className="font-body text-[0.89rem] text-text-subtle mt-0.5">Assign phone numbers to agents and manage routing.</p>
+            <p className="font-body text-[0.89rem] text-text-subtle mt-0.5">Manage phone numbers and route calls to your agents.</p>
           </div>
-          <Button onClick={() => setShowAddDialog(true)} variant="hero" size="sm" className="rounded-lg gap-1 text-[0.89rem] h-7 px-3">
+          <Button onClick={() => setShowAddDialog(true)} variant="hero" size="sm" className="rounded-lg gap-1 text-[0.89rem] h-7 px-3 btn-press">
             <Plus className="w-3 h-3" />Add number
           </Button>
         </div>
@@ -94,7 +95,7 @@ function NumbersInner({ numbers, agents }: { numbers: NumberItem[]; agents: Agen
             <EmptyState
               icon={Hash}
               title="No numbers yet"
-              description="Add a phone number to route inbound calls to your agents."
+              description="Add a phone number so callers can reach your agents. You can assign it to any active agent."
               actionLabel="Add your first number"
               onAction={() => setShowAddDialog(true)}
             />
@@ -108,8 +109,8 @@ function NumbersInner({ numbers, agents }: { numbers: NumberItem[]; agents: Agen
                 { label: "Assigned", value: String(assigned) },
                 { label: "Unassigned", value: String(unassigned) },
                 { label: "Needs Setup", value: String(needsSetup) },
-              ].map((stat) => (
-                <div key={stat.label} className="bg-surface-panel rounded-lg border border-border-soft/60 px-4 py-3">
+              ].map((stat, i) => (
+                <div key={stat.label} className="bg-surface-panel rounded-lg border border-border-soft/60 px-4 py-3 stagger-item" style={{ animationDelay: `${i * 0.06}s` }}>
                   <div className="font-body text-[0.67rem] text-text-subtle/70 uppercase tracking-[0.1em] mb-0.5">{stat.label}</div>
                   <div className="font-mono text-[1rem] font-semibold text-text-strong">{stat.value}</div>
                 </div>
@@ -185,13 +186,17 @@ function NumbersInner({ numbers, agents }: { numbers: NumberItem[]; agents: Agen
                             <span className="font-body text-[0.89rem] text-text-subtle">{formatDate(n.createdAt)}</span>
                             <form action={deletePhoneNumberAction}>
                               <input type="hidden" name="phoneNumberId" value={n.id} />
-                              <button
-                                type="submit"
-                                className="p-0.5 rounded text-text-subtle/0 group-hover:text-text-subtle hover:!text-red-500 hover:bg-red-50 transition-all"
-                                title="Delete number"
-                              >
-                                <Trash2 className="w-3 h-3" />
-                              </button>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <button
+                                    type="submit"
+                                    className="p-0.5 rounded text-text-subtle/0 group-hover:text-text-subtle hover:!text-red-500 hover:bg-red-50 transition-all"
+                                  >
+                                    <Trash2 className="w-3 h-3" />
+                                  </button>
+                                </TooltipTrigger>
+                                <TooltipContent>Remove this number</TooltipContent>
+                              </Tooltip>
                             </form>
                           </div>
                         </td>
