@@ -78,7 +78,7 @@ const BLOCK_DEFINITIONS: BlockDefinition[] = [
     label: "Greet",
     description: "Open the call with a warm greeting",
     icon: MessageSquare,
-    color: "text-emerald-600 bg-emerald-50",
+    color: "text-emerald-600 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-950",
     defaultFields: { greeting: "", agentIntro: "" },
     fieldConfig: [
       { key: "greeting", label: "Greeting line", placeholder: "Hi, thanks for calling! How can I help you today?" },
@@ -90,7 +90,7 @@ const BLOCK_DEFINITIONS: BlockDefinition[] = [
     label: "Qualify",
     description: "Ask qualifying questions to understand the caller",
     icon: ClipboardList,
-    color: "text-blue-600 bg-blue-50",
+    color: "text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-950",
     defaultFields: { questions: "", collectInfo: "" },
     fieldConfig: [
       { key: "questions", label: "Questions to ask", placeholder: "What service are you interested in?\nIs this your first time?", multiline: true },
@@ -102,7 +102,7 @@ const BLOCK_DEFINITIONS: BlockDefinition[] = [
     label: "FAQ",
     description: "Handle common questions with prepared answers",
     icon: HelpCircle,
-    color: "text-purple-600 bg-purple-50",
+    color: "text-purple-600 bg-purple-50 dark:text-purple-400 dark:bg-purple-950",
     defaultFields: { topics: "", fallback: "" },
     fieldConfig: [
       { key: "topics", label: "FAQ topics and answers", placeholder: "Hours: Mon-Fri 9am-5pm\nPricing: Starting at $99/month\nLocation: 123 Main St", multiline: true },
@@ -114,7 +114,7 @@ const BLOCK_DEFINITIONS: BlockDefinition[] = [
     label: "Book appointment",
     description: "Capture booking or appointment details",
     icon: CalendarDays,
-    color: "text-amber-600 bg-amber-50",
+    color: "text-amber-600 bg-amber-50 dark:text-amber-400 dark:bg-amber-950",
     defaultFields: { services: "", availability: "", confirmation: "" },
     fieldConfig: [
       { key: "services", label: "Available services", placeholder: "Consultation, Follow-up, New patient visit" },
@@ -127,7 +127,7 @@ const BLOCK_DEFINITIONS: BlockDefinition[] = [
     label: "Transfer to human",
     description: "Escalate the call to a live person",
     icon: PhoneForwarded,
-    color: "text-orange-600 bg-orange-50",
+    color: "text-orange-600 bg-orange-50 dark:text-orange-400 dark:bg-orange-950",
     defaultFields: { condition: "", message: "" },
     fieldConfig: [
       { key: "condition", label: "When to transfer", placeholder: "If the caller asks for a manager or the issue is complex" },
@@ -139,7 +139,7 @@ const BLOCK_DEFINITIONS: BlockDefinition[] = [
     label: "Close call",
     description: "Wrap up and end the conversation",
     icon: PhoneOff,
-    color: "text-rose-600 bg-rose-50",
+    color: "text-rose-600 bg-rose-50 dark:text-rose-400 dark:bg-rose-950",
     defaultFields: { summary: "", signoff: "" },
     fieldConfig: [
       { key: "summary", label: "Summary behavior", placeholder: "Recap the key points discussed and any next steps." },
@@ -151,7 +151,7 @@ const BLOCK_DEFINITIONS: BlockDefinition[] = [
     label: "Custom instruction",
     description: "Add any custom behavior or instruction",
     icon: FileText,
-    color: "text-slate-600 bg-slate-50",
+    color: "text-slate-600 bg-slate-50 dark:text-slate-400 dark:bg-slate-900",
     defaultFields: { instruction: "" },
     fieldConfig: [
       { key: "instruction", label: "Custom instruction", placeholder: "Describe what the agent should do in this step…", multiline: true },
