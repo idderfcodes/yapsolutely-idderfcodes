@@ -1,56 +1,66 @@
 "use client";
 
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import PageHeader from "@/components/dashboard/PageHeader";
-import { CreditCard, Zap, Phone } from "lucide-react";
+import { CreditCard } from "lucide-react";
 
-const usage = [
-  { icon: Phone, label: "Call minutes", value: "0", limit: "Unlimited (beta)" },
-  { icon: Zap, label: "Agent slots", value: "0", limit: "Unlimited (beta)" },
+const metrics = [
+  { label: "Plan", value: "Beta", sub: "Full access" },
+  { label: "Call Minutes", value: "0", sub: "Unlimited" },
+  { label: "Agent Slots", value: "0", sub: "Unlimited" },
+  { label: "Next Invoice", value: "—", sub: "No billing" },
+];
+
+const drivers = [
+  { label: "Telephony (Twilio)", value: "—", detail: "Per-minute call charges" },
+  { label: "Transcription (Deepgram)", value: "—", detail: "Per-minute STT charges" },
+  { label: "AI (Anthropic)", value: "—", detail: "Token-based LLM charges" },
 ];
 
 export default function BillingClient() {
   return (
     <DashboardLayout>
-      <div className="p-6 sm:p-8 max-w-content-wide mx-auto">
-        <PageHeader
-          title="Billing"
-          description="Plan details, usage tracking, and payment settings."
-        />
+      <div className="p-5 sm:p-6 lg:p-8 max-w-[1100px]">
+        {/* ── Header ── */}
+        <div className="mb-5">
+          <h1 className="font-display text-[1.12rem] font-semibold tracking-[-0.02em] text-text-strong">Billing</h1>
+          <p className="font-body text-[0.72rem] text-text-subtle mt-0.5">Plan details, usage tracking, and cost drivers.</p>
+        </div>
 
-        <div className="bg-surface-panel rounded-2xl p-6 shadow-surface-xs border border-border-soft/30 mb-6">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-surface-dark flex items-center justify-center">
-              <CreditCard className="w-4.5 h-4.5 text-surface-dark-foreground" />
+        {/* ── Metrics strip ── */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+          {metrics.map((m) => (
+            <div key={m.label} className="bg-surface-panel rounded-lg border border-border-soft/60 px-4 py-3">
+              <div className="font-body text-[0.58rem] text-text-subtle/70 uppercase tracking-[0.1em] mb-0.5">{m.label}</div>
+              <div className="font-mono text-[1rem] font-semibold text-text-strong">{m.value}</div>
+              <div className="font-body text-[0.58rem] text-text-subtle/50 mt-0.5">{m.sub}</div>
             </div>
-            <div>
-              <div className="font-display text-[0.92rem] font-semibold text-text-strong">Beta Plan</div>
-              <div className="font-body text-[0.75rem] text-text-subtle">Full access during early access period</div>
-            </div>
+          ))}
+        </div>
+
+        {/* ── Cost drivers ── */}
+        <div className="bg-surface-panel rounded-card border border-border-soft overflow-hidden mb-5">
+          <div className="px-4 py-3 border-b border-border-soft/60">
+            <h3 className="font-display text-[0.8rem] font-medium text-text-strong">Cost Drivers</h3>
           </div>
-          <div className="h-px bg-border-soft/40 mb-4" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {usage.map((u) => (
-              <div key={u.label} className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-canvas flex items-center justify-center">
-                  <u.icon className="w-3.5 h-3.5 text-text-subtle" />
-                </div>
+          <div className="divide-y divide-border-soft/30">
+            {drivers.map((d) => (
+              <div key={d.label} className="flex items-center justify-between px-4 py-3">
                 <div>
-                  <div className="font-body text-[0.78rem] font-medium text-text-strong">
-                    {u.value} <span className="text-text-subtle font-normal">/ {u.limit}</span>
-                  </div>
-                  <div className="font-body text-[0.68rem] text-text-subtle">{u.label}</div>
+                  <div className="font-body text-[0.78rem] text-text-body">{d.label}</div>
+                  <div className="font-body text-[0.62rem] text-text-subtle/60">{d.detail}</div>
                 </div>
+                <span className="font-mono text-[0.78rem] text-text-strong">{d.value}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="bg-surface-panel rounded-2xl p-8 shadow-surface-xs border border-border-soft/30 text-center">
-          <CreditCard className="w-8 h-8 text-text-subtle/40 mx-auto mb-3" />
-          <h3 className="font-display text-[0.92rem] font-semibold text-text-strong mb-1">No payment method</h3>
-          <p className="font-body text-[0.78rem] text-text-subtle max-w-sm mx-auto">
-            A payment method will be required when the beta program transitions to paid plans.
+        {/* ── Payment method ── */}
+        <div className="bg-surface-panel rounded-card border border-border-soft px-6 py-10 text-center">
+          <CreditCard className="w-5 h-5 text-text-subtle/30 mx-auto mb-2" />
+          <h3 className="font-display text-[0.82rem] font-medium text-text-strong mb-0.5">No payment method</h3>
+          <p className="font-body text-[0.72rem] text-text-subtle max-w-xs mx-auto">
+            A payment method will be required when the beta transitions to paid plans.
           </p>
         </div>
       </div>

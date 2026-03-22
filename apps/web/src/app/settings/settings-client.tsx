@@ -41,36 +41,39 @@ export default function SettingsClient({
 
   return (
     <DashboardLayout>
-      <div className="p-5 sm:p-8 max-w-content-narrow">
-        <div className="mb-8 sm:mb-10">
-          <h1 className="font-display text-page-title text-text-strong mb-1">Settings</h1>
-          <p className="font-body text-body-md text-text-subtle">Configure your workspace, review system readiness, and manage security.</p>
+      <div className="p-5 sm:p-6 lg:p-8 max-w-[800px]">
+        {/* ── Header ── */}
+        <div className="mb-5">
+          <h1 className="font-display text-[1.12rem] font-semibold tracking-[-0.02em] text-text-strong">Settings</h1>
+          <p className="font-body text-[0.72rem] text-text-subtle mt-0.5">Workspace configuration, readiness, and security.</p>
         </div>
 
-        <section className="bg-surface-panel border border-border-soft rounded-card p-5 sm:p-6 mb-5">
-          <h2 className="font-display text-section-head text-text-strong mb-1">Workspace</h2>
-          <p className="font-body text-body-sm text-text-subtle mb-6">General workspace identity and account details.</p>
-          <form action={updateProfileAction} onSubmit={() => setIsSaving(true)}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
-              <div className="space-y-1.5">
-                <Label htmlFor="name" className="font-body text-label text-text-subtle">Display name</Label>
-                <Input id="name" name="name" defaultValue={userName} className="h-10 rounded-lg" required />
+        {/* ── Workspace ── */}
+        <section className="bg-surface-panel border border-border-soft rounded-card overflow-hidden mb-4">
+          <div className="px-4 py-3 border-b border-border-soft/60">
+            <h2 className="font-display text-[0.8rem] font-medium text-text-strong">Workspace</h2>
+          </div>
+          <form action={updateProfileAction} onSubmit={() => setIsSaving(true)} className="p-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+              <div className="space-y-1">
+                <Label htmlFor="name" className="font-body text-[0.68rem] text-text-subtle">Display name</Label>
+                <Input id="name" name="name" defaultValue={userName} className="h-8 rounded-md text-[0.78rem]" required />
               </div>
-              <div className="space-y-1.5">
-                <Label className="font-body text-label text-text-subtle">Email</Label>
-                <Input defaultValue={userEmail} readOnly className="h-10 rounded-lg bg-surface-subtle font-mono text-text-subtle" />
+              <div className="space-y-1">
+                <Label className="font-body text-[0.68rem] text-text-subtle">Email</Label>
+                <Input defaultValue={userEmail} readOnly className="h-8 rounded-md bg-surface-subtle font-mono text-[0.72rem] text-text-subtle" />
               </div>
             </div>
             <div className="flex justify-end">
-              <Button type="submit" disabled={isSaving} className="gap-2">
+              <Button type="submit" disabled={isSaving} size="sm" className="gap-1.5 h-7 text-[0.72rem]">
                 {isSaving ? (
                   <>
-                    <span className="w-3.5 h-3.5 border-2 border-background/30 border-t-background rounded-full animate-spin" />
+                    <span className="w-3 h-3 border-2 border-background/30 border-t-background rounded-full animate-spin" />
                     Saving&hellip;
                   </>
                 ) : (
                   <>
-                    <Save className="w-3.5 h-3.5" />
+                    <Save className="w-3 h-3" />
                     Save changes
                   </>
                 )}
@@ -79,75 +82,82 @@ export default function SettingsClient({
           </form>
         </section>
 
-        <section className="bg-surface-panel border border-border-soft rounded-card p-5 sm:p-6 mb-5">
-          <h2 className="font-display text-section-head text-text-strong mb-1">Readiness</h2>
-          <p className="font-body text-body-sm text-text-subtle mb-5">
-            System configuration status: {configuredCount}/{totalCount} checks passing.
-          </p>
-          {sections.map((section) => (
-            <div key={section.title} className="mb-4 last:mb-0">
-              <h3 className="font-body text-body-sm font-medium text-text-body mb-2">{section.title}</h3>
-              <div className="space-y-1">
-                {section.checks.map((item) => (
-                  <div key={item.key} className="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-surface-subtle/40 transition-colors">
-                    <div>
-                      <span className="font-body text-body-md text-text-body">{item.label}</span>
-                      <p className="font-body text-[0.7rem] text-text-subtle">{item.detail}</p>
+        {/* ── Readiness ── */}
+        <section className="bg-surface-panel border border-border-soft rounded-card overflow-hidden mb-4">
+          <div className="px-4 py-3 border-b border-border-soft/60 flex items-center justify-between">
+            <h2 className="font-display text-[0.8rem] font-medium text-text-strong">Readiness</h2>
+            <span className="font-mono text-[0.64rem] text-text-subtle">{configuredCount}/{totalCount}</span>
+          </div>
+          <div className="p-4">
+            {sections.map((section) => (
+              <div key={section.title} className="mb-3 last:mb-0">
+                <h3 className="font-body text-[0.68rem] font-medium text-text-body mb-1.5">{section.title}</h3>
+                <div className="space-y-0.5">
+                  {section.checks.map((item) => (
+                    <div key={item.key} className="flex items-center justify-between py-1.5 px-2 rounded hover:bg-surface-subtle/40 transition-colors">
+                      <div>
+                        <span className="font-body text-[0.75rem] text-text-body">{item.label}</span>
+                        <p className="font-body text-[0.62rem] text-text-subtle">{item.detail}</p>
+                      </div>
+                      {item.status === "configured" ? (
+                        <span className="flex items-center gap-1 font-body text-[0.64rem] text-emerald-600"><Check className="w-3 h-3" />Ready</span>
+                      ) : (
+                        <span className="flex items-center gap-1 font-body text-[0.64rem] text-accent-warm-dim"><AlertCircle className="w-3 h-3" />Missing</span>
+                      )}
                     </div>
-                    {item.status === "configured" ? (
-                      <span className="flex items-center gap-1.5 font-body text-body-sm text-emerald-600"><Check className="w-3.5 h-3.5" />Ready</span>
-                    ) : (
-                      <span className="flex items-center gap-1.5 font-body text-body-sm text-accent-warm-dim"><AlertCircle className="w-3.5 h-3.5" />Missing</span>
-                    )}
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </section>
 
-        <section className="bg-surface-panel border border-border-soft rounded-card p-5 sm:p-6 mb-5">
-          <h2 className="font-display text-section-head text-text-strong mb-1">Security</h2>
-          <p className="font-body text-body-sm text-text-subtle mb-5">Authentication and access settings for your workspace.</p>
-          <div className="space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-2 gap-2">
+        {/* ── Security ── */}
+        <section className="bg-surface-panel border border-border-soft rounded-card overflow-hidden mb-4">
+          <div className="px-4 py-3 border-b border-border-soft/60">
+            <h2 className="font-display text-[0.8rem] font-medium text-text-strong">Security</h2>
+          </div>
+          <div className="p-4 space-y-0.5">
+            <div className="flex items-center justify-between py-1.5 px-2 rounded hover:bg-surface-subtle/40 transition-colors">
               <div>
-                <p className="font-body text-body-md text-text-body font-medium">Sign-in method</p>
-                <p className="font-body text-body-sm text-text-subtle">Email-based session</p>
+                <p className="font-body text-[0.75rem] text-text-body font-medium">Sign-in method</p>
+                <p className="font-body text-[0.62rem] text-text-subtle">Email-based session</p>
               </div>
-              <span className="font-body text-[0.72rem] text-emerald-600 bg-emerald-400/10 px-2.5 py-1 rounded-md self-start font-medium">Active</span>
+              <span className="font-body text-[0.62rem] text-emerald-600 bg-emerald-400/10 px-1.5 py-0.5 rounded font-medium">Active</span>
             </div>
-            <Separator className="bg-border-soft" />
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-2 gap-2">
+            <Separator className="bg-border-soft/40" />
+            <div className="flex items-center justify-between py-1.5 px-2 rounded hover:bg-surface-subtle/40 transition-colors">
               <div>
-                <p className="font-body text-body-md text-text-body font-medium">Session</p>
-                <p className="font-body text-body-sm text-text-subtle">Signed in as {userEmail}</p>
+                <p className="font-body text-[0.75rem] text-text-body font-medium">Session</p>
+                <p className="font-body text-[0.62rem] text-text-subtle">Signed in as {userEmail}</p>
               </div>
               <form action="/sign-in">
-                <Button variant="outline" size="sm" type="submit" className="self-start">Sign out</Button>
+                <Button variant="outline" size="sm" type="submit" className="h-6 text-[0.64rem] px-2">Sign out</Button>
               </form>
             </div>
           </div>
         </section>
 
-        <section className="bg-surface-panel border border-border-soft rounded-card p-5 sm:p-6">
-          <h2 className="font-display text-section-head text-text-strong mb-1">Integrations</h2>
-          <p className="font-body text-body-sm text-text-subtle mb-5">Connect external services to extend your workspace.</p>
-          <div className="space-y-3">
+        {/* ── Integrations ── */}
+        <section className="bg-surface-panel border border-border-soft rounded-card overflow-hidden">
+          <div className="px-4 py-3 border-b border-border-soft/60">
+            <h2 className="font-display text-[0.8rem] font-medium text-text-strong">Integrations</h2>
+          </div>
+          <div className="p-4 space-y-1.5">
             {[
               { name: "Twilio", description: "Phone number provisioning and call routing", connected: true },
               { name: "Deepgram", description: "Speech-to-text transcription", connected: true },
               { name: "Anthropic", description: "AI conversation engine", connected: true },
             ].map((integration) => (
-              <div key={integration.name} className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3 px-3 rounded-lg border border-border-soft bg-canvas/50 gap-2 hover:bg-surface-subtle/30 transition-colors">
+              <div key={integration.name} className="flex items-center justify-between px-3 py-2.5 rounded-lg border border-border-soft/40 hover:bg-surface-subtle/30 transition-colors">
                 <div>
-                  <p className="font-body text-body-md text-text-body font-medium">{integration.name}</p>
-                  <p className="font-body text-label text-text-subtle">{integration.description}</p>
+                  <p className="font-body text-[0.75rem] text-text-body font-medium">{integration.name}</p>
+                  <p className="font-body text-[0.62rem] text-text-subtle">{integration.description}</p>
                 </div>
                 {integration.connected ? (
-                  <span className="font-body text-label text-emerald-600 bg-emerald-400/10 px-2.5 py-1 rounded-md self-start font-medium">Connected</span>
+                  <span className="font-body text-[0.62rem] text-emerald-600 bg-emerald-400/10 px-1.5 py-0.5 rounded font-medium">Connected</span>
                 ) : (
-                  <Button variant="outline" size="sm" className="self-start">Connect</Button>
+                  <Button variant="outline" size="sm" className="h-6 text-[0.64rem] px-2">Connect</Button>
                 )}
               </div>
             ))}
