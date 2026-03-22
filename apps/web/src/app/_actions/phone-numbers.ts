@@ -5,6 +5,11 @@ import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { normalizePhoneNumber } from "@/lib/phone-number-data";
+import {
+  registerPhoneNumberSchema,
+  deletePhoneNumberSchema,
+  reassignPhoneNumberSchema,
+} from "@/lib/validations";
 
 function readText(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -18,11 +23,19 @@ export async function registerPhoneNumberAction(formData: FormData) {
     redirect("/sign-in");
   }
 
-  const rawPhoneNumber = readText(formData, "phoneNumber");
-  const phoneNumber = normalizePhoneNumber(rawPhoneNumber);
-  const friendlyName = readText(formData, "friendlyName");
-  const twilioSid = readText(formData, "twilioSid");
-  const agentId = readText(formData, "agentId");
+  const parsed = registerPhoneNumberSchema.safeParse({
+    phoneNumber: readText(formData, "phoneNumber"),
+    friendlyName: readText(formData, "friendlyName"),
+    twilioSid: readText(formData, "twilioSid"),
+    agentId: readText(formData, "agentId"),
+  });
+
+  if (!parsed.success) {
+    redirect("/numbers?error=missing-phone-number");
+  }
+
+  const phoneNumber = normalizePhoneNumber(parsed.data.phoneNumber);
+  const { friendlyName, twilioSid, agentId } = parsed.data;
 
   if (!phoneNumber) {
     redirect("/numbers?error=missing-phone-number");
@@ -111,11 +124,15 @@ export async function deletePhoneNumberAction(formData: FormData) {
     redirect("/sign-in");
   }
 
-  const phoneNumberId = readText(formData, "phoneNumberId");
+  const parsed = deletePhoneNumberSchema.safeParse({
+    phoneNumberId: readText(formData, "phoneNumberId"),
+  });
 
-  if (!phoneNumberId) {
+  if (!parsed.success) {
     redirect("/numbers?error=missing-phone-number-id");
   }
+
+  const { phoneNumberId } = parsed.data;
 
   try {
     const user = await prisma.user.findUnique({
@@ -165,12 +182,16 @@ export async function reassignPhoneNumberAction(formData: FormData) {
     redirect("/sign-in");
   }
 
-  const phoneNumberId = readText(formData, "phoneNumberId");
-  const agentId = readText(formData, "agentId");
+  const parsed = reassignPhoneNumberSchema.safeParse({
+    phoneNumberId: readText(formData, "phoneNumberId"),
+    agentId: readText(formData, "agentId"),
+  });
 
-  if (!phoneNumberId) {
+  if (!parsed.success) {
     redirect("/numbers?error=missing-phone-number-id");
   }
+
+  const { phoneNumberId, agentId } = parsed.data;
 
   try {
     const user = await prisma.user.findUnique({

@@ -4,6 +4,16 @@ import { AgentStatus, Prisma } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import {
+  createAgentSchema,
+  updateAgentSchema,
+  archiveAgentSchema,
+  toggleAgentStatusSchema,
+  duplicateAgentSchema,
+  saveFlowSchema,
+  generatePromptFromFlowSchema,
+  importAgentSchema,
+} from "@/lib/validations";
 
 function readText(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -99,16 +109,20 @@ export async function createAgentAction(formData: FormData) {
     redirect("/sign-in");
   }
 
-  const name = readText(formData, "name");
-  const description = readText(formData, "description");
-  const systemPrompt = readText(formData, "systemPrompt");
-  const firstMessage = readText(formData, "firstMessage");
-  const voiceModel = readText(formData, "voiceModel");
-  const transferNumber = readText(formData, "transferNumber");
+  const parsed = createAgentSchema.safeParse({
+    name: readText(formData, "name"),
+    description: readText(formData, "description"),
+    systemPrompt: readText(formData, "systemPrompt"),
+    firstMessage: readText(formData, "firstMessage"),
+    voiceModel: readText(formData, "voiceModel"),
+    transferNumber: readText(formData, "transferNumber"),
+  });
 
-  if (!name || !systemPrompt) {
+  if (!parsed.success) {
     redirect("/agents/new?error=missing-required-fields");
   }
+
+  const { name, description, systemPrompt, firstMessage, voiceModel, transferNumber } = parsed.data;
 
   try {
     const user = await prisma.user.upsert({
@@ -157,21 +171,27 @@ export async function updateAgentAction(formData: FormData) {
     redirect("/sign-in");
   }
 
-  const agentId = readText(formData, "agentId");
-  const name = readText(formData, "name");
-  const description = readText(formData, "description");
-  const systemPrompt = readText(formData, "systemPrompt");
-  const firstMessage = readText(formData, "firstMessage");
-  const voiceModel = readText(formData, "voiceModel");
-  const transferNumber = readText(formData, "transferNumber");
-  const status = readText(formData, "status");
-  const phoneNumberId = readText(formData, "phoneNumberId");
+  const rawAgentId = readText(formData, "agentId");
   const isActive = readCheckbox(formData, "isActive");
-  const returnTo = readReturnTo(formData, agentId);
+  const returnTo = readReturnTo(formData, rawAgentId);
 
-  if (!agentId || !name || !systemPrompt) {
+  const parsed = updateAgentSchema.safeParse({
+    agentId: rawAgentId,
+    name: readText(formData, "name"),
+    description: readText(formData, "description"),
+    systemPrompt: readText(formData, "systemPrompt"),
+    firstMessage: readText(formData, "firstMessage"),
+    voiceModel: readText(formData, "voiceModel"),
+    transferNumber: readText(formData, "transferNumber"),
+    status: readText(formData, "status"),
+    phoneNumberId: readText(formData, "phoneNumberId"),
+  });
+
+  if (!parsed.success) {
     redirect(`${returnTo}?error=missing-required-fields`);
   }
+
+  const { agentId, name, description, systemPrompt, firstMessage, voiceModel, transferNumber, status, phoneNumberId } = parsed.data;
 
   try {
     const user = await prisma.user.findUnique({
@@ -264,11 +284,15 @@ export async function archiveAgentAction(formData: FormData) {
     redirect("/sign-in");
   }
 
-  const agentId = readText(formData, "agentId");
+  const parsed = archiveAgentSchema.safeParse({
+    agentId: readText(formData, "agentId"),
+  });
 
-  if (!agentId) {
+  if (!parsed.success) {
     redirect("/agents?error=missing-agent-id");
   }
+
+  const { agentId } = parsed.data;
 
   try {
     const user = await prisma.user.findUnique({
@@ -337,13 +361,16 @@ export async function toggleAgentStatusAction(formData: FormData) {
     redirect("/sign-in");
   }
 
-  const agentId = readText(formData, "agentId");
-  const newStatus = readText(formData, "newStatus");
+  const parsed = toggleAgentStatusSchema.safeParse({
+    agentId: readText(formData, "agentId"),
+    newStatus: readText(formData, "newStatus"),
+  });
 
-  if (!agentId || !newStatus) {
+  if (!parsed.success) {
     redirect("/agents?error=missing-fields");
   }
 
+  const { agentId, newStatus } = parsed.data;
   const normalizedStatus = normalizeAgentStatus(newStatus);
 
   try {
@@ -387,11 +414,15 @@ export async function duplicateAgentAction(formData: FormData) {
     redirect("/sign-in");
   }
 
-  const agentId = readText(formData, "agentId");
+  const parsed = duplicateAgentSchema.safeParse({
+    agentId: readText(formData, "agentId"),
+  });
 
-  if (!agentId) {
+  if (!parsed.success) {
     redirect("/agents?error=missing-fields");
   }
+
+  const { agentId } = parsed.data;
 
   try {
     const user = await prisma.user.findUnique({
@@ -442,16 +473,20 @@ export async function saveFlowAction(formData: FormData) {
     redirect("/sign-in");
   }
 
-  const agentId = readText(formData, "agentId");
-  const flowJson = readText(formData, "flow");
+  const parsed = saveFlowSchema.safeParse({
+    agentId: readText(formData, "agentId"),
+    flow: readText(formData, "flow"),
+  });
 
-  if (!agentId || !flowJson) {
+  if (!parsed.success) {
     redirect("/agents?error=missing-fields");
   }
 
+  const { agentId } = parsed.data;
+
   let flow: unknown[];
   try {
-    flow = JSON.parse(flowJson);
+    flow = JSON.parse(parsed.data.flow);
     if (!Array.isArray(flow)) throw new Error("not array");
   } catch {
     redirect(`/agents/${agentId}/flow?error=invalid-flow`);
@@ -500,17 +535,21 @@ export async function generatePromptFromFlowAction(formData: FormData) {
     redirect("/sign-in");
   }
 
-  const agentId = readText(formData, "agentId");
-  const flowJson = readText(formData, "flow");
-  const generatedPrompt = readText(formData, "generatedPrompt");
+  const parsed = generatePromptFromFlowSchema.safeParse({
+    agentId: readText(formData, "agentId"),
+    flow: readText(formData, "flow"),
+    generatedPrompt: readText(formData, "generatedPrompt"),
+  });
 
-  if (!agentId || !generatedPrompt) {
+  if (!parsed.success) {
     redirect("/agents?error=missing-fields");
   }
 
+  const { agentId, generatedPrompt } = parsed.data;
+
   let flow: unknown[] = [];
   try {
-    flow = JSON.parse(flowJson);
+    flow = JSON.parse(parsed.data.flow);
     if (!Array.isArray(flow)) flow = [];
   } catch {
     flow = [];
@@ -567,11 +606,15 @@ export async function importAgentAction(formData: FormData) {
     redirect("/sign-in");
   }
 
-  const jsonStr = readText(formData, "agentJson");
+  const importParsed = importAgentSchema.safeParse({
+    agentJson: readText(formData, "agentJson"),
+  });
 
-  if (!jsonStr) {
+  if (!importParsed.success) {
     redirect("/agents?error=missing-import-data");
   }
+
+  const jsonStr = importParsed.data.agentJson;
 
   let parsed: Record<string, unknown>;
   try {

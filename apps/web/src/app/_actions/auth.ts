@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { ensureWorkspaceUser, SESSION_COOKIE_NAME } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import bcrypt from "bcryptjs";
+import { signInSchema, signUpSchema, updateProfileSchema } from "@/lib/validations";
 
 function normalizeEmail(value: FormDataEntryValue | null) {
   return typeof value === "string" ? value.trim().toLowerCase() : "";
@@ -27,12 +28,16 @@ async function setSessionCookie(email: string, name?: string) {
 }
 
 export async function signInAction(formData: FormData) {
-  const email = normalizeEmail(formData.get("email"));
-  const password = typeof formData.get("password") === "string" ? (formData.get("password") as string) : "";
+  const parsed = signInSchema.safeParse({
+    email: normalizeEmail(formData.get("email")),
+    password: typeof formData.get("password") === "string" ? (formData.get("password") as string) : "",
+  });
 
-  if (!email) {
+  if (!parsed.success) {
     redirect("/sign-in?error=missing-email");
   }
+
+  const { email, password } = parsed.data;
 
   // If password provided, verify it
   if (password) {
@@ -62,13 +67,17 @@ export async function signInAction(formData: FormData) {
 }
 
 export async function signUpAction(formData: FormData) {
-  const email = normalizeEmail(formData.get("email"));
-  const name = normalizeName(formData.get("name"));
-  const password = typeof formData.get("password") === "string" ? (formData.get("password") as string) : "";
+  const parsed = signUpSchema.safeParse({
+    email: normalizeEmail(formData.get("email")),
+    name: normalizeName(formData.get("name")),
+    password: typeof formData.get("password") === "string" ? (formData.get("password") as string) : "",
+  });
 
-  if (!email) {
+  if (!parsed.success) {
     redirect("/sign-up?error=missing-email");
   }
+
+  const { email, name, password } = parsed.data;
 
   // If password provided, hash and store
   if (password) {
@@ -105,11 +114,15 @@ export async function signOutAction() {
 }
 
 export async function updateProfileAction(formData: FormData) {
-  const name = normalizeName(formData.get("name"));
+  const parsed = updateProfileSchema.safeParse({
+    name: normalizeName(formData.get("name")),
+  });
 
-  if (!name) {
+  if (!parsed.success) {
     redirect("/settings?error=missing-name");
   }
+
+  const { name } = parsed.data;
 
   const cookieStore = await cookies();
   const raw = cookieStore.get(SESSION_COOKIE_NAME)?.value;
