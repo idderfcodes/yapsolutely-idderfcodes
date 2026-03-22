@@ -282,6 +282,7 @@ export default function AgentEditorClient({ agent, isNew }: { agent: AgentEditDa
             <PromptComposer
               currentPrompt={prompt}
               agentName={name}
+              agentId={agent.id || undefined}
               onApply={(generated) => {
                 setPrompt(generated);
                 setShowComposer(false);

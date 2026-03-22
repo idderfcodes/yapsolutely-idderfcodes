@@ -9,18 +9,18 @@ interface PromptComposerProps {
   onApply: (prompt: string) => void;
   onClose: () => void;
   agentName?: string;
+  agentId?: string;
 }
 
 const toneOptions = ["Professional", "Warm", "Direct", "Empathetic", "Casual", "Formal"];
 
 const refinementActions = [
-  { label: "Make it shorter", instruction: "shorter" },
-  { label: "More detailed", instruction: "detailed" },
-  { label: "Sound more natural", instruction: "natural" },
+  { label: "Make it shorter", instruction: "Rewrite the following system prompt to be more concise while keeping the same intent and instructions. Remove redundancy." },
+  { label: "More detailed", instruction: "Expand the following system prompt with more specific instructions, edge cases, and example phrasing where appropriate." },
+  { label: "Sound more natural", instruction: "Rewrite the following system prompt to use more natural, conversational language while keeping the same instructions." },
 ];
 
-// Simulated prompt generation for prototype
-const generatePrompt = (inputs: {
+function buildPromptGenerationInstruction(inputs: {
   name: string;
   purpose: string;
   tone: string;
@@ -29,7 +29,43 @@ const generatePrompt = (inputs: {
   avoid: string;
   escalation: string;
   notes: string;
-}) => {
+  existingPrompt?: string;
+}) {
+  const parts = [
+    "Generate a complete system prompt for an AI phone voice agent with the following specifications.",
+    "Output ONLY the system prompt text, no explanation or commentary.",
+    "",
+    `Agent name: ${inputs.name || "Voice Agent"}`,
+    inputs.purpose ? `Purpose: ${inputs.purpose}` : "",
+    inputs.tone ? `Tone: ${inputs.tone}` : "",
+    inputs.goal ? `Primary goal: ${inputs.goal}` : "",
+    inputs.mustDo ? `Must-do instructions:\n${inputs.mustDo}` : "",
+    inputs.avoid ? `Things to avoid:\n${inputs.avoid}` : "",
+    inputs.escalation ? `Escalation/transfer rules: ${inputs.escalation}` : "",
+    inputs.notes ? `Additional context: ${inputs.notes}` : "",
+    "",
+    "The prompt should:",
+    "- Define the agent's identity and role clearly",
+    "- Include conversation flow guidance",
+    "- Specify how to handle common scenarios",
+    "- Include rules for ending calls gracefully",
+    "- Be written in second person (\"You are...\")",
+    inputs.existingPrompt ? `\nHere is the existing prompt to improve upon:\n${inputs.existingPrompt}` : "",
+  ];
+  return parts.filter(Boolean).join("\n");
+}
+
+// Local fallback when LLM is not available
+function generatePromptLocally(inputs: {
+  name: string;
+  purpose: string;
+  tone: string;
+  goal: string;
+  mustDo: string;
+  avoid: string;
+  escalation: string;
+  notes: string;
+}) {
   const parts = [
     `You are ${inputs.name || "a voice agent"}${inputs.purpose ? `, responsible for ${inputs.purpose.toLowerCase()}` : ""}.`,
     inputs.goal ? `\nYour primary goal is to ${inputs.goal.toLowerCase()}.` : "",
@@ -41,14 +77,33 @@ const generatePrompt = (inputs: {
     "\nAlways confirm next steps before ending the call. If you're unsure about something, acknowledge the caller's question and offer to connect them with the appropriate team.",
   ];
   return parts.filter(Boolean).join("");
-};
+}
 
-const PromptComposer = ({ currentPrompt, onApply, onClose, agentName = "" }: PromptComposerProps) => {
+async function callLlmForPrompt(agentId: string, instruction: string): Promise<string | null> {
+  try {
+    const res = await fetch("/api/runtime/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        agentId,
+        messages: [{ role: "user", content: instruction }],
+      }),
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.reply || data.content || null;
+  } catch {
+    return null;
+  }
+}
+
+const PromptComposer = ({ currentPrompt, onApply, onClose, agentName = "", agentId }: PromptComposerProps) => {
   const isExpanding = currentPrompt.trim().length > 0;
   const [phase, setPhase] = useState<"input" | "result">("input");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedPrompt, setGeneratedPrompt] = useState("");
   const [expanded, setExpanded] = useState(false);
+  const [aiPowered, setAiPowered] = useState(false);
 
   // Structured inputs
   const [name, setName] = useState(agentName);
@@ -60,49 +115,91 @@ const PromptComposer = ({ currentPrompt, onApply, onClose, agentName = "" }: Pro
   const [escalation, setEscalation] = useState("");
   const [notes, setNotes] = useState("");
 
-  const handleGenerate = () => {
-    setIsGenerating(true);
-    // Simulate AI generation delay
-    setTimeout(() => {
-      const base = generatePrompt({ name, purpose, tone, goal, mustDo, avoid, escalation, notes });
-      const result = isExpanding
-        ? `${currentPrompt}\n\n--- Expanded ---\n\n${base}`
-        : base;
-      setGeneratedPrompt(result);
-      setIsGenerating(false);
-      setPhase("result");
-    }, 1200);
-  };
+  const inputState = { name, purpose, tone, goal, mustDo, avoid, escalation, notes };
 
-  const handleRegenerate = () => {
+  const handleGenerate = async () => {
     setIsGenerating(true);
-    setTimeout(() => {
-      const base = generatePrompt({ name, purpose, tone, goal, mustDo, avoid, escalation, notes });
-      setGeneratedPrompt(isExpanding ? `${currentPrompt}\n\n${base}` : base);
-      setIsGenerating(false);
-    }, 900);
-  };
+    setAiPowered(false);
 
-  const handleRefinement = (type: string) => {
-    setIsGenerating(true);
-    setTimeout(() => {
-      let refined = generatedPrompt;
-      if (type === "shorter") {
-        // Simulate shortening by taking first ~60% of sentences
-        const sentences = refined.split(". ");
-        refined = sentences.slice(0, Math.ceil(sentences.length * 0.6)).join(". ");
-        if (!refined.endsWith(".")) refined += ".";
-      } else if (type === "detailed") {
-        refined += "\n\nBe specific when discussing features and pricing. Reference the caller's industry when possible. Ask clarifying questions to better understand their use case before making recommendations.";
-      } else if (type === "natural") {
-        refined = refined
-          .replace(/Maintain a /g, "Keep a ")
-          .replace(/Your primary goal is to /g, "Focus on ")
-          .replace(/responsible for /g, "helping with ");
+    if (agentId) {
+      const instruction = buildPromptGenerationInstruction({
+        ...inputState,
+        existingPrompt: isExpanding ? currentPrompt : undefined,
+      });
+      const llmResult = await callLlmForPrompt(agentId, instruction);
+      if (llmResult) {
+        setGeneratedPrompt(llmResult);
+        setIsGenerating(false);
+        setAiPowered(true);
+        setPhase("result");
+        return;
       }
-      setGeneratedPrompt(refined);
-      setIsGenerating(false);
-    }, 800);
+    }
+
+    // Fallback to local generation
+    const base = generatePromptLocally(inputState);
+    const result = isExpanding
+      ? `${currentPrompt}\n\n--- Expanded ---\n\n${base}`
+      : base;
+    setGeneratedPrompt(result);
+    setIsGenerating(false);
+    setPhase("result");
+  };
+
+  const handleRegenerate = async () => {
+    setIsGenerating(true);
+
+    if (agentId) {
+      const instruction = buildPromptGenerationInstruction({
+        ...inputState,
+        existingPrompt: isExpanding ? currentPrompt : undefined,
+      });
+      const llmResult = await callLlmForPrompt(agentId, instruction);
+      if (llmResult) {
+        setGeneratedPrompt(llmResult);
+        setIsGenerating(false);
+        setAiPowered(true);
+        return;
+      }
+    }
+
+    const base = generatePromptLocally(inputState);
+    setGeneratedPrompt(isExpanding ? `${currentPrompt}\n\n${base}` : base);
+    setAiPowered(false);
+    setIsGenerating(false);
+  };
+
+  const handleRefinement = async (instruction: string) => {
+    setIsGenerating(true);
+
+    if (agentId) {
+      const prompt = `${instruction}\n\nSystem prompt to refine:\n${generatedPrompt}`;
+      const llmResult = await callLlmForPrompt(agentId, prompt);
+      if (llmResult) {
+        setGeneratedPrompt(llmResult);
+        setIsGenerating(false);
+        setAiPowered(true);
+        return;
+      }
+    }
+
+    // Fallback: apply simple local transformations
+    let refined = generatedPrompt;
+    if (instruction.includes("concise")) {
+      const sentences = refined.split(". ");
+      refined = sentences.slice(0, Math.ceil(sentences.length * 0.6)).join(". ");
+      if (!refined.endsWith(".")) refined += ".";
+    } else if (instruction.includes("Expand")) {
+      refined += "\n\nBe specific when discussing features and pricing. Reference the caller's industry when possible. Ask clarifying questions to better understand their use case before making recommendations.";
+    } else if (instruction.includes("natural")) {
+      refined = refined
+        .replace(/Maintain a /g, "Keep a ")
+        .replace(/Your primary goal is to /g, "Focus on ")
+        .replace(/responsible for /g, "helping with ");
+    }
+    setGeneratedPrompt(refined);
+    setAiPowered(false);
+    setIsGenerating(false);
   };
 
   return (
@@ -265,6 +362,15 @@ const PromptComposer = ({ currentPrompt, onApply, onClose, agentName = "" }: Pro
       ) : (
         /* Result phase */
         <div className={`px-6 py-5 ${expanded ? "max-h-none" : "max-h-[520px] overflow-y-auto"}`}>
+          {/* AI badge */}
+          {aiPowered && (
+            <div className="flex items-center gap-1.5 mb-3">
+              <div className="inline-flex items-center gap-1 rounded-full bg-emerald-400/10 px-2.5 py-0.5">
+                <Sparkles className="w-3 h-3 text-emerald-600" />
+                <span className="font-body text-[0.65rem] font-medium text-emerald-700">AI-generated</span>
+              </div>
+            </div>
+          )}
           {/* Refinement chips */}
           <div className="flex items-center gap-2 mb-4">
             <span className="font-body text-[0.65rem] text-text-subtle uppercase tracking-[0.1em]">Refine</span>
