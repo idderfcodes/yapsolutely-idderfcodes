@@ -1,5 +1,5 @@
 import http from "node:http";
-import { WebSocketServer } from "ws";
+import { WebSocket, WebSocketServer } from "ws";
 import {
   buildMockAgentReply,
   buildMockCallerTranscript,
@@ -957,7 +957,7 @@ const server = http.createServer((req, res) => {
         twilioStatus: "/twilio/status",
         twilioStream: "/twilio/stream (WebSocket)",
       },
-      nextStep: "Replace the mock conversation engine with real STT, LLM, TTS, and interruption handling on top of the live Twilio media stream path.",
+      nextStep: "Insert real Twilio credentials and validate one live inbound call end-to-end.",
     });
     return;
   }

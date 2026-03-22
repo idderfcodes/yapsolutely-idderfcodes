@@ -98,7 +98,8 @@ export async function registerPhoneNumberAction(formData: FormData) {
     });
 
     redirect("/numbers?created=1");
-  } catch {
+  } catch (error) {
+    if (error && typeof error === "object" && "digest" in error) throw error;
     redirect("/numbers?error=database-unavailable");
   }
 }
@@ -151,7 +152,8 @@ export async function deletePhoneNumberAction(formData: FormData) {
     });
 
     redirect("/numbers?deleted=1");
-  } catch {
+  } catch (error) {
+    if (error && typeof error === "object" && "digest" in error) throw error;
     redirect("/numbers?error=database-unavailable");
   }
 }
@@ -205,7 +207,8 @@ export async function reassignPhoneNumberAction(formData: FormData) {
     });
 
     redirect("/numbers?updated=1");
-  } catch {
+  } catch (error) {
+    if (error && typeof error === "object" && "digest" in error) throw error;
     redirect("/numbers?error=database-unavailable");
   }
 }

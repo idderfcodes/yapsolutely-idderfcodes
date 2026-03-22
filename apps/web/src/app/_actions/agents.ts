@@ -144,7 +144,8 @@ export async function createAgentAction(formData: FormData) {
     });
 
     redirect(`/agents/${agent.id}`);
-  } catch {
+  } catch (error) {
+    if (error && typeof error === "object" && "digest" in error) throw error;
     redirect("/agents/new?error=database-unavailable");
   }
 }
@@ -250,7 +251,8 @@ export async function updateAgentAction(formData: FormData) {
     });
 
     redirect(`${returnTo}?updated=1`);
-  } catch {
+  } catch (error) {
+    if (error && typeof error === "object" && "digest" in error) throw error;
     redirect(`${returnTo}?error=database-unavailable`);
   }
 }
@@ -322,7 +324,8 @@ export async function archiveAgentAction(formData: FormData) {
     });
 
     redirect(`/agents/${agentId}?archived=1`);
-  } catch {
+  } catch (error) {
+    if (error && typeof error === "object" && "digest" in error) throw error;
     redirect(`/agents/${agentId}?error=database-unavailable`);
   }
 }
@@ -371,7 +374,8 @@ export async function toggleAgentStatusAction(formData: FormData) {
     });
 
     redirect(`/agents/${agentId}?updated=1`);
-  } catch {
+  } catch (error) {
+    if (error && typeof error === "object" && "digest" in error) throw error;
     redirect(`/agents/${agentId}?error=database-unavailable`);
   }
 }
@@ -425,7 +429,8 @@ export async function duplicateAgentAction(formData: FormData) {
     });
 
     redirect(`/agents/${duplicate.slug ?? duplicate.id}`);
-  } catch {
+  } catch (error) {
+    if (error && typeof error === "object" && "digest" in error) throw error;
     redirect(`/agents/${agentId}?error=database-unavailable`);
   }
 }
@@ -450,7 +455,6 @@ export async function saveFlowAction(formData: FormData) {
     if (!Array.isArray(flow)) throw new Error("not array");
   } catch {
     redirect(`/agents/${agentId}/flow?error=invalid-flow`);
-    return;
   }
 
   try {
@@ -483,7 +487,8 @@ export async function saveFlowAction(formData: FormData) {
         config: { ...existingConfig, flow: flow as Prisma.JsonArray, flowUpdatedAt: new Date().toISOString() },
       },
     });
-  } catch {
+  } catch (error) {
+    if (error && typeof error === "object" && "digest" in error) throw error;
     redirect(`/agents/${agentId}/flow?error=database-unavailable`);
   }
 }
@@ -549,7 +554,8 @@ export async function generatePromptFromFlowAction(formData: FormData) {
     });
 
     redirect(`/agents/${agentId}?updated=1`);
-  } catch {
+  } catch (error) {
+    if (error && typeof error === "object" && "digest" in error) throw error;
     redirect(`/agents/${agentId}?error=database-unavailable`);
   }
 }
@@ -620,7 +626,8 @@ export async function importAgentAction(formData: FormData) {
     });
 
     redirect(`/agents/${agent.slug ?? agent.id}`);
-  } catch {
+  } catch (error) {
+    if (error && typeof error === "object" && "digest" in error) throw error;
     redirect("/agents?error=database-unavailable");
   }
 }
