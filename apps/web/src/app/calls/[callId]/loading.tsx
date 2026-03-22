@@ -1,33 +1,37 @@
-import { ConsoleShell } from "@/components/console-shell";
+import DashboardLayout from "@/components/dashboard/DashboardLayout";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CallDetailLoading() {
   return (
-    <ConsoleShell
-      section="calls"
-      eyebrow="Call detail"
-      title="Loading transcript review..."
-      description="Pulling the call timeline, metadata, and transcript text into the review surface."
-      userEmail="Loading session..."
-    >
-      <div className="space-y-5">
-        <article className="rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[var(--surface-panel)] p-5 shadow-[var(--shadow-sm)]">
-          <div className="h-6 w-48 animate-pulse rounded bg-[var(--surface-subtle)]" />
-          <div className="mt-4 space-y-3">
-            {Array.from({ length: 4 }).map((_, index) => (
-              <div key={index} className="h-20 animate-pulse rounded-[18px] bg-[var(--surface-subtle)]/85" />
+    <DashboardLayout>
+      <div className="p-5 sm:p-8 max-w-[900px]">
+        <div className="flex items-center gap-3 mb-6">
+          <Skeleton className="h-4 w-20" />
+          <Skeleton className="h-8 w-40" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="bg-surface-panel rounded-card border border-border-soft p-5">
+              <Skeleton className="h-4 w-20 mb-2" />
+              <Skeleton className="h-6 w-28" />
+            </div>
+          ))}
+        </div>
+        <div className="bg-surface-panel rounded-card border border-border-soft p-6">
+          <Skeleton className="h-5 w-28 mb-5" />
+          <div className="space-y-4">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="flex gap-3">
+                <Skeleton className="w-8 h-8 rounded-full shrink-0" />
+                <div className="flex-1">
+                  <Skeleton className="h-3 w-16 mb-2" />
+                  <Skeleton className="h-4 w-full" />
+                </div>
+              </div>
             ))}
           </div>
-        </article>
-
-        <article className="rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[var(--surface-panel)] p-5 shadow-[var(--shadow-sm)]">
-          <div className="h-6 w-40 animate-pulse rounded bg-[var(--surface-subtle)]" />
-          <div className="mt-4 grid gap-3 md:grid-cols-2">
-            {Array.from({ length: 6 }).map((_, index) => (
-              <div key={index} className="h-5 animate-pulse rounded bg-[var(--surface-subtle)]/85" />
-            ))}
-          </div>
-        </article>
+        </div>
       </div>
-    </ConsoleShell>
+    </DashboardLayout>
   );
 }

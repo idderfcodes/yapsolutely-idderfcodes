@@ -46,7 +46,7 @@ export async function signUpAction(formData: FormData) {
 
   await setSessionCookie(email, name || undefined);
   await ensureWorkspaceUser({ email, name: name || undefined });
-  redirect("/secure-account");
+  redirect("/agents?onboarding=true");
 }
 
 export async function signOutAction() {

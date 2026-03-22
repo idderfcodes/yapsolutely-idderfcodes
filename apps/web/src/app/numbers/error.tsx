@@ -1,27 +1,37 @@
 "use client";
 
-import { OperatorWorkspaceErrorState } from "@/components/operator-workspace-state";
+import { useEffect } from "react";
+import DashboardLayout from "@/components/dashboard/DashboardLayout";
+import { Button } from "@/components/ui/button";
+import { AlertCircle } from "lucide-react";
 
-type NumbersErrorProps = {
+export default function NumbersError({
+  error,
+  reset,
+}: {
   error: Error & { digest?: string };
   reset: () => void;
-};
+}) {
+  useEffect(() => {
+    console.error("numbers error:", error);
+  }, [error]);
 
-export default function NumbersError({ error, reset }: NumbersErrorProps) {
   return (
-    <OperatorWorkspaceErrorState
-      section="numbers"
-      eyebrow="Numbers"
-      title="The number routing workspace hit a snag."
-      description="Something interrupted the deploy surface before it could finish loading number inventory, assignment state, or runtime mapping details."
-      error={error}
-      reset={reset}
-      variant="deploy"
-      cardTitle="Unable to load numbers right now"
-      message="Retry the route first. If it keeps failing, the issue is probably temporary database or readiness trouble rather than missing routing UI."
-      retryLabel="Retry numbers view"
-      fallbackHref="/agents"
-      fallbackLabel="Review agents"
-    />
+    <DashboardLayout>
+      <div className="p-5 sm:p-8 max-w-[1200px]">
+        <div className="bg-surface-panel rounded-card border border-border-soft p-8 text-center">
+          <AlertCircle className="w-10 h-10 text-text-subtle/40 mx-auto mb-4" />
+          <h2 className="font-display text-lg font-semibold text-text-strong mb-2">
+            Something went wrong
+          </h2>
+          <p className="font-body text-[0.82rem] text-text-subtle mb-6 max-w-md mx-auto">
+            We couldn&apos;t load your phone numbers. This is usually a temporary issue.
+          </p>
+          <Button onClick={reset} variant="outline" size="sm">
+            Try again
+          </Button>
+        </div>
+      </div>
+    </DashboardLayout>
   );
 }

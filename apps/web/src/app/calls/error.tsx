@@ -1,27 +1,37 @@
 "use client";
 
-import { OperatorWorkspaceErrorState } from "@/components/operator-workspace-state";
+import { useEffect } from "react";
+import DashboardLayout from "@/components/dashboard/DashboardLayout";
+import { Button } from "@/components/ui/button";
+import { AlertCircle } from "lucide-react";
 
-type CallsErrorProps = {
+export default function CallsError({
+  error,
+  reset,
+}: {
   error: Error & { digest?: string };
   reset: () => void;
-};
+}) {
+  useEffect(() => {
+    console.error("calls error:", error);
+  }, [error]);
 
-export default function CallsError({ error, reset }: CallsErrorProps) {
   return (
-    <OperatorWorkspaceErrorState
-      section="calls"
-      eyebrow="Calls"
-      title="The calls workspace hit a snag."
-      description="Something interrupted the call log view before it could finish loading the latest records."
-      error={error}
-      reset={reset}
-      variant="monitor"
-      cardTitle="Unable to load calls right now"
-      message="Try reloading the route. If the problem persists, it is likely a temporary database or runtime connectivity issue rather than missing UI wiring."
-      retryLabel="Retry calls view"
-      fallbackHref="/dashboard"
-      fallbackLabel="Back to dashboard"
-    />
+    <DashboardLayout>
+      <div className="p-5 sm:p-8 max-w-[1200px]">
+        <div className="bg-surface-panel rounded-card border border-border-soft p-8 text-center">
+          <AlertCircle className="w-10 h-10 text-text-subtle/40 mx-auto mb-4" />
+          <h2 className="font-display text-lg font-semibold text-text-strong mb-2">
+            Something went wrong
+          </h2>
+          <p className="font-body text-[0.82rem] text-text-subtle mb-6 max-w-md mx-auto">
+            We couldn&apos;t load your call history. This is usually a temporary issue.
+          </p>
+          <Button onClick={reset} variant="outline" size="sm">
+            Try again
+          </Button>
+        </div>
+      </div>
+    </DashboardLayout>
   );
 }

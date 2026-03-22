@@ -9,11 +9,14 @@ export type AgentListFilters = {
 export type AgentListItem = {
   id: string;
   name: string;
+  slug: string | null;
   status: AgentStatus;
   isActive: boolean;
   voiceModel: string | null;
   firstMessage: string | null;
   updatedAt: Date;
+  phoneNumber: string | null;
+  callCount: number;
 };
 
 export type PhoneNumberOption = {
@@ -31,7 +34,7 @@ export async function listAgentsForUser(
   const normalizedStatus = filters.status?.trim().toUpperCase() || "";
 
   try {
-    return await prisma.agent.findMany({
+    const agents = await prisma.agent.findMany({
       where: {
         user: {
           email,
@@ -76,13 +79,34 @@ export async function listAgentsForUser(
       select: {
         id: true,
         name: true,
+        slug: true,
         status: true,
         isActive: true,
         voiceModel: true,
         firstMessage: true,
         updatedAt: true,
+        phoneNumbers: {
+          take: 1,
+          select: { phoneNumber: true },
+        },
+        _count: {
+          select: { calls: true },
+        },
       },
     });
+
+    return agents.map((a) => ({
+      id: a.id,
+      name: a.name,
+      slug: a.slug,
+      status: a.status,
+      isActive: a.isActive,
+      voiceModel: a.voiceModel,
+      firstMessage: a.firstMessage,
+      updatedAt: a.updatedAt,
+      phoneNumber: a.phoneNumbers[0]?.phoneNumber ?? null,
+      callCount: a._count.calls,
+    }));
   } catch {
     return [];
   }
@@ -107,6 +131,35 @@ export async function getAgentByIdForUser(email: string, agentId: string) {
           take: 5,
           orderBy: {
             createdAt: "desc",
+          },
+        },
+      },
+    });
+  } catch {
+    return null;
+  }
+}
+
+export async function getAgentBySlugOrIdForUser(email: string, identifier: string) {
+  try {
+    return await prisma.agent.findFirst({
+      where: {
+        user: { email },
+        OR: [{ slug: identifier }, { id: identifier }],
+      },
+      include: {
+        phoneNumbers: {
+          orderBy: { createdAt: "desc" },
+        },
+        calls: {
+          take: 5,
+          orderBy: { createdAt: "desc" },
+          select: {
+            id: true,
+            callerNumber: true,
+            status: true,
+            durationSeconds: true,
+            createdAt: true,
           },
         },
       },

@@ -1,21 +1,21 @@
-import { LandingClosingCta } from "@/components/landing/closing-cta";
-import { LandingFooter } from "@/components/landing/footer";
-import { LandingHero } from "@/components/landing/hero";
-import { LandingNavbar } from "@/components/landing/navbar";
-import { LandingProductShowcase } from "@/components/landing/product-showcase";
-import { LandingTrustStrip } from "@/components/landing/trust-strip";
-import { LandingWorkflow } from "@/components/landing/workflow";
+import Navbar from "@/components/landing/Navbar";
+import Hero from "@/components/landing/Hero";
+import TrustStrip from "@/components/landing/TrustStrip";
+import Workflow from "@/components/landing/Workflow";
+import ProductShowcase from "@/components/landing/ProductShowcase";
+import ClosingCTA from "@/components/landing/ClosingCTA";
+import Footer from "@/components/landing/Footer";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[var(--canvas)] text-[var(--text-strong)]">
-      <LandingNavbar />
-      <LandingHero />
-      <LandingTrustStrip />
-      <LandingWorkflow />
-      <LandingProductShowcase />
-      <LandingClosingCta />
-      <LandingFooter />
-    </main>
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <Hero />
+      <TrustStrip />
+      <Workflow />
+      <ProductShowcase />
+      <ClosingCTA />
+      <Footer />
+    </div>
   );
 }

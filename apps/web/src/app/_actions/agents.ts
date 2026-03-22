@@ -326,3 +326,52 @@ export async function archiveAgentAction(formData: FormData) {
     redirect(`/agents/${agentId}?error=database-unavailable`);
   }
 }
+
+export async function toggleAgentStatusAction(formData: FormData) {
+  const session = await getSession();
+
+  if (!session) {
+    redirect("/sign-in");
+  }
+
+  const agentId = readText(formData, "agentId");
+  const newStatus = readText(formData, "newStatus");
+
+  if (!agentId || !newStatus) {
+    redirect("/agents?error=missing-fields");
+  }
+
+  const normalizedStatus = normalizeAgentStatus(newStatus);
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email: session.email },
+      select: { id: true },
+    });
+
+    if (!user) {
+      redirect("/sign-in");
+    }
+
+    const existingAgent = await prisma.agent.findFirst({
+      where: { id: agentId, userId: user.id },
+      select: { id: true },
+    });
+
+    if (!existingAgent) {
+      redirect(`/agents/${agentId}?error=not-found`);
+    }
+
+    await prisma.agent.update({
+      where: { id: agentId },
+      data: {
+        status: normalizedStatus,
+        isActive: normalizedStatus === AgentStatus.ACTIVE,
+      },
+    });
+
+    redirect(`/agents/${agentId}?updated=1`);
+  } catch {
+    redirect(`/agents/${agentId}?error=database-unavailable`);
+  }
+}

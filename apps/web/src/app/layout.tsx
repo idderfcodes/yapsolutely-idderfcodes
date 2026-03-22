@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Toaster } from "@/components/ui/toaster";
+import { UserProvider } from "@/components/user-context";
+import { getSession } from "@/lib/auth";
 import "./globals.css";
 
 const generalSans = localFont({
@@ -57,18 +60,22 @@ export const metadata: Metadata = {
     "Retell-inspired AI voice agent platform for inbound calls, agents, and transcripts.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getSession();
   return (
     <html
       lang="en"
       className={`${generalSans.variable} ${satoshi.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-[var(--background)] text-[var(--foreground)]">
-        {children}
+        <UserProvider user={session}>
+          {children}
+        </UserProvider>
+        <Toaster />
       </body>
     </html>
   );
