@@ -55,9 +55,30 @@ const satoshi = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Yapsolutely",
+  title: {
+    default: "Yapsolutely — AI Voice Agent Platform",
+    template: "%s | Yapsolutely",
+  },
   description:
-    "Retell-inspired AI voice agent platform for inbound calls, agents, and transcripts.",
+    "Build, deploy, and manage AI voice agents for inbound phone calls. Configure agents, assign numbers, view transcripts, and test conversations — all from one dashboard.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://yapsolutely.com"),
+  openGraph: {
+    title: "Yapsolutely — AI Voice Agent Platform",
+    description:
+      "Build, deploy, and manage AI voice agents for inbound phone calls. Configure agents, assign numbers, view transcripts, and test conversations — all from one dashboard.",
+    siteName: "Yapsolutely",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Yapsolutely — AI Voice Agent Platform",
+    description:
+      "Build, deploy, and manage AI voice agents for inbound phone calls.",
+  },
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default async function RootLayout({
