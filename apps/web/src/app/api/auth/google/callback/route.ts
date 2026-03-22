@@ -24,7 +24,8 @@ export async function GET(request: Request) {
   const code = url.searchParams.get("code");
   const stateParam = url.searchParams.get("state");
   const error = url.searchParams.get("error");
-  const origin = `${url.protocol}//${url.host}`;
+  // Use NEXT_PUBLIC_APP_URL for the canonical origin (request.url is internal behind reverse proxy)
+  const origin = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || `${url.protocol}//${url.host}`;
 
   // User denied consent or other Google error
   if (error) {

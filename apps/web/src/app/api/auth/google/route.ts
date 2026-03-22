@@ -11,9 +11,9 @@ export async function GET(request: Request) {
     );
   }
 
-  // Determine the callback URL from the request origin
+  // Use NEXT_PUBLIC_APP_URL for the canonical origin (request.url is internal behind reverse proxy)
   const url = new URL(request.url);
-  const origin = `${url.protocol}//${url.host}`;
+  const origin = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || `${url.protocol}//${url.host}`;
   const redirectUri = `${origin}/api/auth/google/callback`;
 
   // Check if this is a sign-up flow (pass intent through state)
