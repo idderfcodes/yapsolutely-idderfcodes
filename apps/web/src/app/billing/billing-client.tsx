@@ -2,6 +2,7 @@
 
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { CreditCard } from "lucide-react";
+import Link from "next/link";
 
 const metrics = [
   { label: "Plan", value: "Beta", sub: "Full access" },
@@ -59,9 +60,15 @@ export default function BillingClient() {
         <div className="bg-surface-panel rounded-card border border-border-soft px-6 py-10 text-center">
           <CreditCard className="w-5 h-5 text-text-subtle/30 mx-auto mb-2" />
           <h3 className="font-display text-[1.02rem] font-medium text-text-strong mb-0.5">No payment method</h3>
-          <p className="font-body text-[0.89rem] text-text-subtle max-w-xs mx-auto">
+          <p className="font-body text-[0.89rem] text-text-subtle max-w-xs mx-auto mb-4">
             A payment method will be required when the beta transitions to paid plans.
           </p>
+          <Link
+            href="/pricing"
+            className="font-body text-[0.87rem] text-foreground underline underline-offset-2 hover:text-text-body transition-colors"
+          >
+            View pricing plans
+          </Link>
         </div>
       </div>
     </DashboardLayout>

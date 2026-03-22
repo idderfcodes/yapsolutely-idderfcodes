@@ -21,6 +21,7 @@ import {
   CreditCard,
 } from "lucide-react";
 import { signOutAction } from "@/app/_actions/auth";
+import ThemeToggle from "@/components/theme-toggle";
 
 interface NavItem {
   title: string;
@@ -145,11 +146,14 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
     <>
       {/* Desktop sidebar */}
       <aside className="hidden md:flex w-[220px] shrink-0 h-screen sticky top-0 bg-surface-panel border-r border-border-soft/50 flex-col">
-        <Link href="/dashboard" className="px-5 h-14 flex items-center hover:opacity-80 transition-opacity">
-          <span className="font-display text-[1.15rem] font-semibold tracking-[-0.02em] text-text-strong">
-            Yapsolutely
-          </span>
-        </Link>
+        <div className="px-5 h-14 flex items-center justify-between">
+          <Link href="/dashboard" className="hover:opacity-80 transition-opacity">
+            <span className="font-display text-[1.15rem] font-semibold tracking-[-0.02em] text-text-strong">
+              Yapsolutely
+            </span>
+          </Link>
+          <ThemeToggle />
+        </div>
 
         <nav className="flex-1 px-3 py-1 overflow-y-auto">
           <GroupedNav pathname={pathname} />

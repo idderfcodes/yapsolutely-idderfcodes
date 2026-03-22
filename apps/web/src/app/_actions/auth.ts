@@ -102,8 +102,12 @@ export async function signUpAction(formData: FormData) {
   }
 
   // Passwordless fallback
+  const existingUser = await prisma.user.findUnique({ where: { email }, select: { id: true } });
   await setSessionCookie(email, name || undefined);
   await ensureWorkspaceUser({ email, name: name || undefined });
+  if (existingUser) {
+    redirect("/dashboard");
+  }
   redirect("/agents?onboarding=true");
 }
 

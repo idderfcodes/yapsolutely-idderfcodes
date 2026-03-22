@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { ensureWorkspaceUser, SESSION_COOKIE_NAME } from "@/lib/auth";
+import { prisma } from "@/lib/db";
 
 interface GoogleTokenResponse {
   access_token: string;
@@ -125,11 +126,14 @@ export async function GET(request: Request) {
     }
   );
 
+  // Check if user already exists (returning user should skip onboarding)
+  const existingUser = await prisma.user.findUnique({ where: { email }, select: { id: true } });
+
   // Ensure user exists in database
   await ensureWorkspaceUser({ email, name });
 
-  // Redirect based on intent
-  if (intent === "sign-up") {
+  // Only show onboarding for genuinely new accounts
+  if (!existingUser && intent === "sign-up") {
     return NextResponse.redirect(`${origin}/agents?onboarding=true`);
   }
 

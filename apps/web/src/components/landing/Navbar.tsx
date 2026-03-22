@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import ThemeToggle from "@/components/theme-toggle";
 
 const navLinks = [
   { label: "Pricing", href: "/pricing" },
@@ -43,6 +44,7 @@ const Navbar = () => {
           </div>
         </div>
         <div className="hidden sm:flex items-center gap-3">
+          <ThemeToggle />
           <Button variant="ghost" size="default" className="font-body text-[0.95rem] text-text-subtle" asChild>
             <Link href="/sign-in">Sign in</Link>
           </Button>
