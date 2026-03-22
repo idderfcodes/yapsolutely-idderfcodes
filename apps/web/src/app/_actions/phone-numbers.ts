@@ -155,3 +155,57 @@ export async function deletePhoneNumberAction(formData: FormData) {
     redirect("/numbers?error=database-unavailable");
   }
 }
+
+export async function reassignPhoneNumberAction(formData: FormData) {
+  const session = await getSession();
+
+  if (!session) {
+    redirect("/sign-in");
+  }
+
+  const phoneNumberId = readText(formData, "phoneNumberId");
+  const agentId = readText(formData, "agentId");
+
+  if (!phoneNumberId) {
+    redirect("/numbers?error=missing-phone-number-id");
+  }
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email: session.email },
+      select: { id: true },
+    });
+
+    if (!user) {
+      redirect("/sign-in");
+    }
+
+    const phone = await prisma.phoneNumber.findFirst({
+      where: { id: phoneNumberId, userId: user.id },
+      select: { id: true },
+    });
+
+    if (!phone) {
+      redirect("/numbers?error=not-found");
+    }
+
+    if (agentId) {
+      const agent = await prisma.agent.findFirst({
+        where: { id: agentId, userId: user.id },
+        select: { id: true },
+      });
+      if (!agent) {
+        redirect("/numbers?error=invalid-agent");
+      }
+    }
+
+    await prisma.phoneNumber.update({
+      where: { id: phoneNumberId },
+      data: { agentId: agentId || null },
+    });
+
+    redirect("/numbers?updated=1");
+  } catch {
+    redirect("/numbers?error=database-unavailable");
+  }
+}

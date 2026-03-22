@@ -19,6 +19,11 @@ export type DashboardRecentToolEvent = {
   callerNumber: string | null;
 };
 
+export type DailyCallVolume = {
+  date: string; // YYYY-MM-DD
+  count: number;
+};
+
 export type DashboardMetrics = {
   activeAgents: number;
   assignedNumbers: number;
@@ -30,6 +35,7 @@ export type DashboardMetrics = {
   runtimeNote: string;
   recentCalls: DashboardRecentCall[];
   recentToolEvents: DashboardRecentToolEvent[];
+  callVolume: DailyCallVolume[];
 };
 
 export async function getDashboardMetrics(email: string): Promise<DashboardMetrics> {
@@ -156,6 +162,31 @@ export async function getDashboardMetrics(email: string): Promise<DashboardMetri
         }),
     ]);
 
+    // Build 7-day call volume
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+    sevenDaysAgo.setHours(0, 0, 0, 0);
+
+    const recentCallsForVolume = await prisma.call.findMany({
+      where: {
+        createdAt: { gte: sevenDaysAgo },
+        user: { email },
+      },
+      select: { createdAt: true },
+    });
+
+    const volumeMap = new Map<string, number>();
+    for (let i = 0; i < 7; i++) {
+      const d = new Date();
+      d.setDate(d.getDate() - (6 - i));
+      volumeMap.set(d.toISOString().slice(0, 10), 0);
+    }
+    for (const c of recentCallsForVolume) {
+      const key = c.createdAt.toISOString().slice(0, 10);
+      if (volumeMap.has(key)) volumeMap.set(key, volumeMap.get(key)! + 1);
+    }
+    const callVolume: DailyCallVolume[] = [...volumeMap.entries()].map(([date, count]) => ({ date, count }));
+
     return {
       activeAgents,
       assignedNumbers,
@@ -182,6 +213,7 @@ export async function getDashboardMetrics(email: string): Promise<DashboardMetri
         agentName: event.call.agent?.name ?? null,
         callerNumber: event.call.callerNumber,
       })),
+      callVolume,
     };
   } catch {
     return {
@@ -196,6 +228,7 @@ export async function getDashboardMetrics(email: string): Promise<DashboardMetri
         "Database credentials are placeholders for now, so metrics and proof surfaces fall back gracefully until Supabase is wired.",
       recentCalls: [],
       recentToolEvents: [],
+      callVolume: [],
     };
   }
 }

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Check, AlertCircle, Save } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { updateProfileAction } from "@/app/_actions/auth";
 
 type ReadinessCheck = {
   key: string;
@@ -37,19 +37,7 @@ export default function SettingsClient({
   configuredCount,
   totalCount,
 }: SettingsProps) {
-  const { toast } = useToast();
   const [isSaving, setIsSaving] = useState(false);
-
-  const handleSave = () => {
-    setIsSaving(true);
-    setTimeout(() => {
-      setIsSaving(false);
-      toast({
-        title: "Settings saved",
-        description: "Your workspace configuration has been updated.",
-      });
-    }, 800);
-  };
 
   return (
     <DashboardLayout>
@@ -62,31 +50,33 @@ export default function SettingsClient({
         <section className="bg-surface-panel border border-border-soft rounded-card p-5 sm:p-6 mb-5">
           <h2 className="font-display text-section-head text-text-strong mb-1">Workspace</h2>
           <p className="font-body text-body-sm text-text-subtle mb-6">General workspace identity and account details.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
-            <div className="space-y-1.5">
-              <Label className="font-body text-label text-text-subtle">Display name</Label>
-              <Input defaultValue={userName} className="h-10 rounded-lg" />
+          <form action={updateProfileAction} onSubmit={() => setIsSaving(true)}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
+              <div className="space-y-1.5">
+                <Label htmlFor="name" className="font-body text-label text-text-subtle">Display name</Label>
+                <Input id="name" name="name" defaultValue={userName} className="h-10 rounded-lg" required />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="font-body text-label text-text-subtle">Email</Label>
+                <Input defaultValue={userEmail} readOnly className="h-10 rounded-lg bg-surface-subtle font-mono text-text-subtle" />
+              </div>
             </div>
-            <div className="space-y-1.5">
-              <Label className="font-body text-label text-text-subtle">Email</Label>
-              <Input defaultValue={userEmail} readOnly className="h-10 rounded-lg bg-surface-subtle font-mono text-text-subtle" />
+            <div className="flex justify-end">
+              <Button type="submit" disabled={isSaving} className="gap-2">
+                {isSaving ? (
+                  <>
+                    <span className="w-3.5 h-3.5 border-2 border-background/30 border-t-background rounded-full animate-spin" />
+                    Saving&hellip;
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-3.5 h-3.5" />
+                    Save changes
+                  </>
+                )}
+              </Button>
             </div>
-          </div>
-          <div className="flex justify-end">
-            <Button onClick={handleSave} disabled={isSaving} className="gap-2">
-              {isSaving ? (
-                <>
-                  <span className="w-3.5 h-3.5 border-2 border-background/30 border-t-background rounded-full animate-spin" />
-                  Saving&hellip;
-                </>
-              ) : (
-                <>
-                  <Save className="w-3.5 h-3.5" />
-                  Save changes
-                </>
-              )}
-            </Button>
-          </div>
+          </form>
         </section>
 
         <section className="bg-surface-panel border border-border-soft rounded-card p-5 sm:p-6 mb-5">

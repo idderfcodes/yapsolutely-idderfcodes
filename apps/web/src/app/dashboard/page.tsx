@@ -16,6 +16,7 @@ export default async function DashboardPage() {
         failedCalls: metrics.failedCalls,
         toolActionsToday: metrics.toolActionsToday,
         runtimeStatus: metrics.runtimeStatus,
+        callVolume: metrics.callVolume,
         recentCalls: metrics.recentCalls.map((c) => ({
           ...c,
           createdAt: c.createdAt.toISOString(),

@@ -14,6 +14,11 @@ type RecentCall = {
   toolEvents: number;
 };
 
+type DailyCallVolume = {
+  date: string;
+  count: number;
+};
+
 type DashboardProps = {
   metrics: {
     activeAgents: number;
@@ -23,6 +28,7 @@ type DashboardProps = {
     failedCalls: number;
     toolActionsToday: number;
     runtimeStatus: string;
+    callVolume: DailyCallVolume[];
     recentCalls: RecentCall[];
   };
 };
@@ -72,6 +78,42 @@ const statusLabel = (s: string): string => {
   return map[s] ?? s;
 };
 
+function formatDayLabel(dateStr: string): string {
+  const d = new Date(dateStr + "T12:00:00");
+  return d.toLocaleDateString("en-US", { weekday: "short" });
+}
+
+function CallVolumeChart({ data }: { data: DailyCallVolume[] }) {
+  const max = Math.max(...data.map((d) => d.count), 1);
+  const total = data.reduce((sum, d) => sum + d.count, 0);
+
+  return (
+    <div>
+      <div className="flex items-end gap-2 h-32">
+        {data.map((day) => {
+          const pct = (day.count / max) * 100;
+          return (
+            <div key={day.date} className="flex-1 flex flex-col items-center gap-1.5">
+              <span className="font-mono text-[0.65rem] text-text-subtle">{day.count}</span>
+              <div className="w-full flex items-end justify-center" style={{ height: "80px" }}>
+                <div
+                  className="w-full max-w-[40px] rounded-t-md bg-emerald-500/80 transition-all duration-300 hover:bg-emerald-500"
+                  style={{ height: `${Math.max(pct, 4)}%` }}
+                />
+              </div>
+              <span className="font-body text-[0.62rem] text-text-subtle">{formatDayLabel(day.date)}</span>
+            </div>
+          );
+        })}
+      </div>
+      <div className="mt-3 pt-3 border-t border-border-soft flex items-center gap-4">
+        <span className="font-body text-[0.72rem] text-text-subtle">Total: <span className="font-mono text-text-body">{total}</span></span>
+        <span className="font-body text-[0.72rem] text-text-subtle">Avg: <span className="font-mono text-text-body">{data.length > 0 ? (total / data.length).toFixed(1) : 0}</span>/day</span>
+      </div>
+    </div>
+  );
+}
+
 export default function DashboardHome({ metrics }: DashboardProps) {
   const cards = [
     { label: "Active agents", value: metrics.activeAgents, icon: Bot, href: "/agents" },
@@ -101,6 +143,17 @@ export default function DashboardHome({ metrics }: DashboardProps) {
             </Link>
           ))}
         </div>
+
+        {/* Call volume chart */}
+        {metrics.callVolume.length > 0 && (
+          <div className="bg-surface-panel rounded-card border border-border-soft p-5 mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-display text-sm font-medium text-text-strong">Call volume</h3>
+              <span className="font-body text-[0.68rem] text-text-subtle">Last 7 days</span>
+            </div>
+            <CallVolumeChart data={metrics.callVolume} />
+          </div>
+        )}
 
         {/* Split: recent calls + quick actions */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">

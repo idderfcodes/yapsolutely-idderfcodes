@@ -54,3 +54,22 @@ export async function signOutAction() {
   cookieStore.delete(SESSION_COOKIE_NAME);
   redirect("/sign-in");
 }
+
+export async function updateProfileAction(formData: FormData) {
+  const name = normalizeName(formData.get("name"));
+
+  if (!name) {
+    redirect("/settings?error=missing-name");
+  }
+
+  const cookieStore = await cookies();
+  const raw = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+  if (!raw) {
+    redirect("/sign-in");
+  }
+
+  const session = JSON.parse(raw) as { email: string; name?: string };
+  await setSessionCookie(session.email, name);
+  await ensureWorkspaceUser({ email: session.email, name });
+  redirect("/settings?saved=1");
+}

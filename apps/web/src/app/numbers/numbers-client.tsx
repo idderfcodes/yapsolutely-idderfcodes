@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, Suspense } from "react";
-import { Search, SlidersHorizontal, Plus, Link2, Hash, X } from "lucide-react";
+import { Search, Plus, Hash, X, Trash2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import EmptyState from "@/components/dashboard/EmptyState";
-import { registerPhoneNumberAction } from "@/app/_actions/phone-numbers";
+import { registerPhoneNumberAction, reassignPhoneNumberAction, deletePhoneNumberAction } from "@/app/_actions/phone-numbers";
 
 type AgentOption = {
   id: string;
@@ -57,6 +57,7 @@ function NumbersInner({ numbers, agents }: { numbers: NumberItem[]; agents: Agen
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const filtered = query.trim()
     ? numbers.filter(
@@ -81,9 +82,6 @@ function NumbersInner({ numbers, agents }: { numbers: NumberItem[]; agents: Agen
             <p className="font-body text-[0.82rem] text-text-subtle">Assign phone numbers to agents and manage call routing.</p>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" className="font-body text-text-subtle text-[0.78rem] gap-1.5">
-              <Link2 className="w-3.5 h-3.5" />Assign
-            </Button>
             <Button onClick={() => setShowAddDialog(true)} variant="hero" size="default" className="rounded-lg gap-1.5 text-[0.8rem]">
               <Plus className="w-3.5 h-3.5" />Add number
             </Button>
@@ -113,9 +111,6 @@ function NumbersInner({ numbers, agents }: { numbers: NumberItem[]; agents: Agen
                   className="w-full h-9 pl-9 pr-3 rounded-lg border border-border-soft bg-surface-panel font-body text-[0.8rem] text-text-strong placeholder:text-text-subtle/50 focus:outline-none focus:ring-1 focus:ring-text-strong/10 transition-shadow"
                 />
               </div>
-              <button className="flex items-center gap-1.5 h-9 px-3 rounded-lg border border-border-soft bg-surface-panel font-body text-[0.78rem] text-text-subtle hover:text-text-body transition-colors">
-                <SlidersHorizontal className="w-3.5 h-3.5" />Filters
-              </button>
             </div>
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
@@ -136,16 +131,57 @@ function NumbersInner({ numbers, agents }: { numbers: NumberItem[]; agents: Agen
                       <tbody>
                         {filtered.map((n) => {
                           const status = getStatus(n);
+                          const isEditing = editingId === n.id;
                           return (
-                            <tr key={n.id} className="border-b border-border-soft last:border-0 hover:bg-surface-subtle/40 transition-colors cursor-pointer group">
+                            <tr key={n.id} className="border-b border-border-soft last:border-0 hover:bg-surface-subtle/40 transition-colors group">
                               <td className="px-5 py-3.5 font-mono text-[0.78rem] text-text-body">{n.phoneNumber}</td>
                               <td className="px-5 py-3.5 font-body text-[0.8rem] text-text-body">{n.friendlyName ?? "—"}</td>
-                              <td className="px-5 py-3.5 font-body text-[0.8rem] text-text-body">{n.assignedAgentName ?? "—"}</td>
+                              <td className="px-5 py-3.5">
+                                {isEditing ? (
+                                  <form action={reassignPhoneNumberAction} onSubmit={() => setEditingId(null)}>
+                                    <input type="hidden" name="phoneNumberId" value={n.id} />
+                                    <select
+                                      name="agentId"
+                                      defaultValue={n.assignedAgentId ?? ""}
+                                      onChange={(e) => e.currentTarget.form?.requestSubmit()}
+                                      onBlur={() => setEditingId(null)}
+                                      autoFocus
+                                      className="h-7 px-2 rounded-md border border-border-soft bg-surface-panel font-body text-[0.78rem] text-text-strong focus:outline-none focus:ring-1 focus:ring-text-strong/10"
+                                    >
+                                      <option value="">No agent</option>
+                                      {agents.map((a) => (
+                                        <option key={a.id} value={a.id}>{a.name}</option>
+                                      ))}
+                                    </select>
+                                  </form>
+                                ) : (
+                                  <button
+                                    onClick={() => setEditingId(n.id)}
+                                    className="font-body text-[0.8rem] text-text-body hover:text-text-strong hover:underline transition-colors text-left"
+                                  >
+                                    {n.assignedAgentName ?? <span className="text-text-subtle italic">Click to assign</span>}
+                                  </button>
+                                )}
+                              </td>
                               <td className="px-5 py-3.5">
                                 <span className={`inline-flex px-2 py-0.5 rounded-md text-[0.68rem] font-body font-medium ${statusStyle(status)}`}>{status}</span>
                               </td>
                               <td className="px-5 py-3.5 font-body text-[0.75rem] text-text-subtle">{n.twilioSid ? "Twilio" : "—"}</td>
-                              <td className="px-5 py-3.5 text-right font-body text-[0.75rem] text-text-subtle">{formatDate(n.createdAt)}</td>
+                              <td className="px-5 py-3.5 text-right">
+                                <div className="flex items-center justify-end gap-2">
+                                  <span className="font-body text-[0.75rem] text-text-subtle">{formatDate(n.createdAt)}</span>
+                                  <form action={deletePhoneNumberAction}>
+                                    <input type="hidden" name="phoneNumberId" value={n.id} />
+                                    <button
+                                      type="submit"
+                                      className="p-1 rounded-md text-text-subtle/0 group-hover:text-text-subtle hover:!text-red-500 hover:bg-red-50 transition-all"
+                                      title="Delete number"
+                                    >
+                                      <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
+                                  </form>
+                                </div>
+                              </td>
                             </tr>
                           );
                         })}
