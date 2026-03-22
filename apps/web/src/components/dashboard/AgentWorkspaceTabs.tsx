@@ -27,7 +27,7 @@ export default function AgentWorkspaceTabs({ slug }: AgentWorkspaceTabsProps) {
   })();
 
   return (
-    <div className="flex items-center gap-0.5 border-b border-border-soft/60">
+    <div className="flex items-center gap-0.5 border-b border-border-soft/60 overflow-x-auto">
       {tabs.map((tab) => {
         const active = tab.key === activeKey;
         const Icon = tab.icon;
@@ -35,10 +35,10 @@ export default function AgentWorkspaceTabs({ slug }: AgentWorkspaceTabsProps) {
           <Link
             key={tab.key}
             href={`${base}${tab.pathSuffix}`}
-            className={`flex items-center gap-1.5 px-3 py-2 font-body text-[0.84rem] transition-colors relative ${
+            className={`flex items-center gap-1.5 px-3 py-2 font-body text-[0.84rem] transition-all duration-150 relative shrink-0 ${
               active
                 ? "text-text-strong font-medium"
-                : "text-text-subtle hover:text-text-body"
+                : "text-text-subtle hover:text-text-body hover:bg-surface-subtle/30"
             }`}
           >
             <Icon className="w-3.5 h-3.5" />

@@ -76,7 +76,7 @@ function NavLinkItem({ item, onClick, pathname }: { item: NavItem; onClick?: () 
       className={`relative flex items-center gap-2.5 px-3 py-[0.38rem] rounded-lg font-body text-[0.84rem] transition-all duration-150 focus-ring ${
         active
           ? "bg-canvas text-text-strong font-medium shadow-xs"
-          : "text-text-subtle hover:text-text-body hover:bg-canvas/50"
+          : "text-text-subtle hover:text-text-body hover:bg-canvas/50 hover:translate-x-0.5"
       }`}
     >
       {active && (
@@ -220,7 +220,7 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
       {mobileOpen && (
         <div className="md:hidden fixed inset-0 z-40">
           <div className="absolute inset-0 bg-foreground/20 backdrop-blur-sm" onClick={() => setMobileOpen(false)} role="presentation" />
-          <div className="absolute top-14 left-0 right-0 bg-surface-panel border-b border-border-soft shadow-xl max-h-[calc(100vh-3.5rem)] overflow-y-auto">
+          <div className="absolute top-14 left-0 right-0 bg-surface-panel border-b border-border-soft shadow-xl max-h-[calc(100vh-3.5rem)] overflow-y-auto animate-slide-down">
             <nav className="px-4 py-3">
               <GroupedNav onClick={() => setMobileOpen(false)} pathname={pathname} />
             </nav>

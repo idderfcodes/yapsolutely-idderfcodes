@@ -69,8 +69,8 @@ export default function AboutPage() {
             What we believe
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {values.map((value) => (
-              <div key={value.title} className="bg-surface-panel rounded-2xl border border-border-soft/60 p-6">
+            {values.map((value, i) => (
+              <div key={value.title} className="bg-surface-panel rounded-2xl border border-border-soft/60 p-6 stagger-item transition-all duration-200 hover:border-border-soft hover:shadow-surface-sm" style={{ animationDelay: `${i * 0.08}s` }}>
                 <div className="w-9 h-9 rounded-xl bg-foreground/[0.04] flex items-center justify-center mb-4">
                   <value.icon className="w-4 h-4 text-text-subtle" />
                 </div>
@@ -94,7 +94,7 @@ export default function AboutPage() {
             Build your first voice agent in minutes. No credit card required.
           </p>
           <div className="flex items-center justify-center gap-3">
-            <Button variant="hero" size="lg" className="rounded-full font-display" asChild>
+            <Button variant="hero" size="lg" className="rounded-full font-display btn-press" asChild>
               <Link href="/sign-up">
                 Start building
                 <ArrowRight className="w-4 h-4 ml-1.5" />

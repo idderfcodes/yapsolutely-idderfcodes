@@ -192,7 +192,7 @@ export default function OnboardingPage() {
                 size="lg"
                 disabled={!canProceed() || isLoading}
                 onClick={handleNext}
-                className="flex-1 font-display font-medium tracking-[-0.01em] text-body-md h-11 rounded-xl transition-all duration-200"
+                className="flex-1 font-display font-medium tracking-[-0.01em] text-body-md h-11 rounded-xl transition-all duration-200 btn-press"
               >
                 {isLoading ? (
                   <span className="flex items-center gap-2">

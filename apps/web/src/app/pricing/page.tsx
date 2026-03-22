@@ -81,14 +81,15 @@ export default function PricingPage() {
 
         {/* Pricing grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {plans.map((plan) => (
+          {plans.map((plan, i) => (
             <div
               key={plan.name}
-              className={`relative bg-surface-panel rounded-2xl border p-7 sm:p-8 flex flex-col ${
+              className={`relative bg-surface-panel rounded-2xl border p-7 sm:p-8 flex flex-col stagger-item transition-all duration-200 hover:shadow-surface-md ${
                 plan.popular
                   ? "border-foreground/20 shadow-surface-md"
-                  : "border-border-soft/60"
+                  : "border-border-soft/60 hover:border-border-soft"
               }`}
+              style={{ animationDelay: `${i * 0.1}s` }}
             >
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
@@ -127,7 +128,7 @@ export default function PricingPage() {
               <Button
                 variant={plan.ctaVariant}
                 size="lg"
-                className="w-full rounded-xl font-display"
+                className="w-full rounded-xl font-display btn-press"
                 asChild
               >
                 {plan.name === "Enterprise" ? (

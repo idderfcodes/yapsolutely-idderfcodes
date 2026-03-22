@@ -2,6 +2,7 @@
 
 import { Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import Link from "next/link";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 
@@ -159,10 +160,15 @@ export default function CallDetailClient({ call }: { call: CallDetail }) {
                 {call.agentName ? `Handled by ${call.agentName}` : "Call detail"} &middot; {formatDate(call.createdAt)}
               </p>
             </div>
+            <Tooltip>
+              <TooltipTrigger asChild>
             <Button onClick={handleExport} variant="ghost" size="sm" className="font-body text-text-subtle text-[0.89rem] gap-1 h-7 px-2">
               <Download className="w-3 h-3" />
               Export
             </Button>
+              </TooltipTrigger>
+              <TooltipContent className="font-body text-[0.77rem]">Download transcript as text file</TooltipContent>
+            </Tooltip>
           </div>
         </div>
 
@@ -173,8 +179,8 @@ export default function CallDetailClient({ call }: { call: CallDetail }) {
             { label: "Started", value: formatTime(call.startedAt ?? call.createdAt) },
             { label: "Ended", value: formatTime(call.endedAt) },
             { label: "Events", value: call.events.length.toString() },
-          ].map((stat) => (
-            <div key={stat.label} className="bg-surface-panel rounded-lg border border-border-soft/60 px-4 py-3">
+          ].map((stat, i) => (
+            <div key={stat.label} className="bg-surface-panel rounded-lg border border-border-soft/60 px-4 py-3 stagger-item" style={{ animationDelay: `${i * 0.06}s` }}>
               <div className="font-body text-[0.67rem] text-text-subtle/70 uppercase tracking-[0.1em] mb-0.5">{stat.label}</div>
               <div className="font-mono text-[1rem] font-semibold text-text-strong">{stat.value}</div>
             </div>
@@ -185,7 +191,7 @@ export default function CallDetailClient({ call }: { call: CallDetail }) {
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
           {/* Transcript — primary */}
           <div className="xl:col-span-8">
-            <div className="bg-surface-panel rounded-card border border-border-soft overflow-hidden">
+            <div className="bg-surface-panel rounded-card border border-border-soft overflow-hidden transition-all duration-200 hover:border-border-soft/80 hover:shadow-surface-sm">
               <div className="px-4 py-3 border-b border-border-soft/60">
                 <h3 className="font-display text-[0.89rem] font-medium text-text-strong">Transcript</h3>
               </div>

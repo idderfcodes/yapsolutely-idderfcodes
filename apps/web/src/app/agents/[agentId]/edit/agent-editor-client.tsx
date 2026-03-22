@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import AgentWorkspaceTabs from "@/components/dashboard/AgentWorkspaceTabs";
@@ -104,7 +105,7 @@ export default function AgentEditorClient({ agent, isNew }: { agent: AgentEditDa
           <Button
             onClick={handleSave}
             disabled={isSaving}
-            className="bg-foreground text-primary-foreground hover:bg-foreground/90 font-display font-medium tracking-[-0.01em] text-[0.87rem] h-8 rounded-lg px-5 gap-1.5"
+            className="bg-foreground text-primary-foreground hover:bg-foreground/90 font-display font-medium tracking-[-0.01em] text-[0.87rem] h-8 rounded-lg px-5 gap-1.5 btn-press"
           >
             {isSaving ? (
               <>
@@ -123,9 +124,10 @@ export default function AgentEditorClient({ agent, isNew }: { agent: AgentEditDa
         </div>
 
         {/* Identity */}
-        <section className="bg-surface-panel rounded-card border border-border-soft mb-5">
+        <section className="bg-surface-panel rounded-card border border-border-soft mb-5 transition-all duration-200 hover:border-border-soft/80 hover:shadow-surface-sm">
           <div className="px-6 py-4 border-b border-border-soft">
             <h2 className="font-display text-[1.02rem] font-semibold text-text-strong tracking-[-0.01em]">Identity</h2>
+            <p className="font-body text-[0.82rem] text-text-subtle mt-0.5">Name, voice, and basic properties for this agent.</p>
           </div>
           <div className="p-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -197,7 +199,7 @@ export default function AgentEditorClient({ agent, isNew }: { agent: AgentEditDa
         </section>
 
         {/* System Prompt */}
-        <section className="bg-surface-panel rounded-card border border-border-soft mb-5 overflow-hidden">
+        <section className="bg-surface-panel rounded-card border border-border-soft mb-5 overflow-hidden transition-all duration-200 hover:border-border-soft/80 hover:shadow-surface-sm">
           <div className="px-6 py-4 border-b border-border-soft flex items-center justify-between">
             <div>
               <h2 className="font-display text-[1.02rem] font-semibold text-text-strong tracking-[-0.01em]">System prompt</h2>
@@ -208,11 +210,13 @@ export default function AgentEditorClient({ agent, isNew }: { agent: AgentEditDa
               </p>
             </div>
             {!showComposer && (
+              <Tooltip>
+                <TooltipTrigger asChild>
               <Button
                 onClick={() => setShowComposer(true)}
                 variant={hasPrompt ? "outline" : "default"}
                 size="sm"
-                className={`gap-2 rounded-lg font-body text-[0.87rem] ${
+                className={`gap-2 rounded-lg font-body text-[0.87rem] btn-press ${
                   hasPrompt
                     ? "border-border-soft text-text-body hover:border-foreground/20"
                     : "bg-foreground text-primary-foreground hover:bg-foreground/90 font-display font-medium"
@@ -230,6 +234,11 @@ export default function AgentEditorClient({ agent, isNew }: { agent: AgentEditDa
                   </>
                 )}
               </Button>
+                </TooltipTrigger>
+                <TooltipContent className="font-body text-[0.77rem]">
+                  {hasPrompt ? "Refine your prompt using AI suggestions" : "Auto-generate a system prompt from your agent details"}
+                </TooltipContent>
+              </Tooltip>
             )}
           </div>
 

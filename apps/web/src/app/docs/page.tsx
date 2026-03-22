@@ -92,7 +92,7 @@ export default function DocsPage() {
             Everything you need to create, deploy, and monitor AI-powered phone agents. From your first quickstart to production-grade integrations.
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
-            <Button variant="hero" size="lg" className="rounded-full font-display" asChild>
+            <Button variant="hero" size="lg" className="rounded-full font-display btn-press" asChild>
               <Link href="/docs#quickstart">
                 Quickstart
                 <ArrowRight className="w-4 h-4 ml-1.5" />
@@ -106,10 +106,11 @@ export default function DocsPage() {
 
         {/* Documentation grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {sections.map((section) => (
+          {sections.map((section, i) => (
             <div
               key={section.title}
-              className="bg-surface-panel rounded-2xl border border-border-soft/60 p-6 hover:border-border-soft transition-colors group"
+              className="bg-surface-panel rounded-2xl border border-border-soft/60 p-6 hover:border-border-soft hover:shadow-surface-sm transition-all duration-200 group stagger-item"
+              style={{ animationDelay: `${i * 0.06}s` }}
             >
               <div className="w-9 h-9 rounded-xl bg-foreground/[0.04] flex items-center justify-center mb-4">
                 <section.icon className="w-4 h-4 text-text-subtle group-hover:text-text-body transition-colors" />

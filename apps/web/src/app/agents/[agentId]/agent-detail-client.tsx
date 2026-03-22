@@ -3,6 +3,7 @@
 import { Pause, Play, Copy, Phone, Download } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import AgentWorkspaceTabs from "@/components/dashboard/AgentWorkspaceTabs";
 import { toggleAgentStatusAction, duplicateAgentAction } from "@/app/_actions/agents";
@@ -147,10 +148,15 @@ export default function AgentDetailClient({ agent }: { agent: AgentDetail }) {
             </div>
 
             <div className="flex items-center gap-1.5 shrink-0">
+              <Tooltip>
+                <TooltipTrigger asChild>
               <Button onClick={handleExport} variant="ghost" size="sm" className="font-body text-text-subtle text-[0.89rem] gap-1 h-7 px-2">
                 <Download className="w-3 h-3" />
                 <span className="hidden sm:inline">Export</span>
               </Button>
+                </TooltipTrigger>
+                <TooltipContent className="font-body text-[0.77rem]">Export agent config as JSON</TooltipContent>
+              </Tooltip>
               <form action={duplicateAgentAction}>
                 <input type="hidden" name="agentId" value={agent.id} />
                 <Button type="submit" variant="ghost" size="sm" className="font-body text-text-subtle text-[0.89rem] gap-1 h-7 px-2">
@@ -178,15 +184,20 @@ export default function AgentDetailClient({ agent }: { agent: AgentDetail }) {
         {/* ── Metrics strip ── */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
           {[
-            { label: "Calls handled", value: agent.totalCalls.toString() },
-            { label: "Avg. duration", value: avgDuration },
-            { label: "Completed", value: agent.completedCalls.toString() },
-            { label: "Numbers", value: agent.phoneNumbers.length.toString() },
-          ].map((stat) => (
-            <div key={stat.label} className="bg-surface-panel rounded-lg border border-border-soft/60 px-4 py-3">
+            { label: "Calls handled", value: agent.totalCalls.toString(), tip: "Total inbound calls routed to this agent" },
+            { label: "Avg. duration", value: avgDuration, tip: "Average call length across completed calls" },
+            { label: "Completed", value: agent.completedCalls.toString(), tip: "Calls that ended normally" },
+            { label: "Numbers", value: agent.phoneNumbers.length.toString(), tip: "Phone numbers assigned to this agent" },
+          ].map((stat, i) => (
+            <Tooltip key={stat.label}>
+              <TooltipTrigger asChild>
+            <div className="bg-surface-panel rounded-lg border border-border-soft/60 px-4 py-3 stagger-item" style={{ animationDelay: `${i * 0.06}s` }}>
               <div className="font-body text-[0.67rem] text-text-subtle/70 uppercase tracking-[0.1em] mb-0.5">{stat.label}</div>
               <div className="font-mono text-[1rem] font-semibold text-text-strong">{stat.value}</div>
             </div>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="font-body text-[0.77rem]">{stat.tip}</TooltipContent>
+            </Tooltip>
           ))}
         </div>
 
@@ -195,7 +206,7 @@ export default function AgentDetailClient({ agent }: { agent: AgentDetail }) {
           {/* Left — primary */}
           <div className="xl:col-span-8 space-y-4">
             {/* Prompt preview */}
-            <div className="bg-surface-panel rounded-card border border-border-soft">
+            <div className="bg-surface-panel rounded-card border border-border-soft transition-all duration-200 hover:border-border-soft/80 hover:shadow-surface-sm">
               <div className="px-4 py-3 border-b border-border-soft/60 flex items-center justify-between">
                 <h3 className="font-display text-[0.89rem] font-medium text-text-strong">System prompt</h3>
                 <Link
@@ -213,12 +224,12 @@ export default function AgentDetailClient({ agent }: { agent: AgentDetail }) {
             </div>
 
             {/* Configuration */}
-            <div className="bg-surface-panel rounded-card border border-border-soft">
+            <div className="bg-surface-panel rounded-card border border-border-soft transition-all duration-200 hover:border-border-soft/80 hover:shadow-surface-sm">
               <div className="px-4 py-3 border-b border-border-soft/60">
                 <h3 className="font-display text-[0.89rem] font-medium text-text-strong">Configuration</h3>
               </div>
               <div className="p-4">
-                <div className="grid grid-cols-2 gap-x-8 gap-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
                   {[
                     { label: "Voice model", value: agent.voiceModel ?? "Default" },
                     { label: "First message", value: agent.firstMessage ?? "Not set" },
@@ -235,7 +246,7 @@ export default function AgentDetailClient({ agent }: { agent: AgentDetail }) {
             </div>
 
             {/* Recent calls */}
-            <div className="bg-surface-panel rounded-card border border-border-soft">
+            <div className="bg-surface-panel rounded-card border border-border-soft transition-all duration-200 hover:border-border-soft/80 hover:shadow-surface-sm">
               <div className="px-4 py-3 border-b border-border-soft/60 flex items-center justify-between">
                 <h3 className="font-display text-[0.89rem] font-medium text-text-strong">Recent calls</h3>
                 <Link href="/calls" className="font-body text-[0.77rem] text-text-subtle hover:text-text-body transition-colors">
@@ -313,7 +324,7 @@ export default function AgentDetailClient({ agent }: { agent: AgentDetail }) {
                   <Link
                     key={action.label}
                     href={action.href}
-                    className="flex items-center justify-between px-3 py-2 rounded-lg font-body text-[0.84rem] text-text-body hover:bg-surface-subtle/40 transition-colors"
+                    className="flex items-center justify-between px-3 py-2 rounded-lg font-body text-[0.84rem] text-text-body hover:bg-surface-subtle/40 transition-all duration-150 hover:translate-x-0.5"
                   >
                     {action.label}
                     <span className="text-text-subtle/40">&rarr;</span>
