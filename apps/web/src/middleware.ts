@@ -7,12 +7,18 @@ const PUBLIC_PATHS = new Set([
   "/secure-account",
   "/verify-identity",
   "/onboarding",
+  "/pricing",
+  "/about",
+  "/changelog",
+  "/terms",
+  "/privacy",
 ]);
 
 const PUBLIC_PREFIXES = [
   "/api/",
   "/_next/",
   "/favicon.ico",
+  "/docs",
 ];
 
 function isPublicPath(pathname: string) {
