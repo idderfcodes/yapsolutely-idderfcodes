@@ -121,6 +121,38 @@ The `web` service automatically runs:
 
 before starting Next.js, so the schema is applied to the internal Postgres service during boot.
 
+### Repo-local deploy helper
+
+Once SSH access is restored from the development workspace, the repo now also supports a one-command deploy flow:
+
+- `npm run deploy:prod`
+
+Default assumptions:
+
+- VPS host: `84.247.176.111`
+- SSH user: `root`
+- remote repo path: `/opt/yapsolutely`
+- branch: `main`
+
+Supported overrides:
+
+- `YAPS_SSH_SCRIPT` — preferred helper path (for example `/tmp/ssh-vps.sh`)
+- `YAPS_SSH_USER`
+- `YAPS_SSH_HOST`
+- `YAPS_REMOTE_REPO_PATH`
+- `YAPS_DEPLOY_BRANCH`
+- `YAPS_SKIP_PREFLIGHT=1` to skip the final local preflight step
+
+What the helper does:
+
+1. verifies SSH access
+2. fetches and fast-forwards the remote repo to the chosen branch
+3. runs `docker compose up -d --build` in `deploy/`
+4. prints `docker compose ps`
+5. runs `npm run preflight:prod` locally unless explicitly skipped
+
+If SSH credentials are missing, the helper exits early with a clear error instead of half-deploying.
+
 ---
 
 ## 5) Seed the live demo data

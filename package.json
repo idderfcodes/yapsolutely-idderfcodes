@@ -10,6 +10,7 @@
     "dev:voice": "npm run dev -w apps/voice",
     "build:web": "npm run build -w apps/web",
     "lint:web": "npm run lint -w apps/web",
+    "deploy:prod": "bash scripts/deploy-production.sh",
     "preflight:prod": "node scripts/production-preflight.mjs",
     "smoke:prod": "node scripts/production-smoke.mjs",
     "warnings:prod": "node scripts/production-runtime-warnings.mjs",
