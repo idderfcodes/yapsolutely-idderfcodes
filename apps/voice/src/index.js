@@ -7,6 +7,7 @@ import {
   shouldEmitMockTurn,
 } from "./conversation-engine.js";
 import { createLivePipelineController } from "./live-pipeline.js";
+import { generateAssistantReply, isLlmConfigured } from "./llm.js";
 import { createSessionStore } from "./session-store.js";
 
 const port = Number(process.env.PORT || 3001);
@@ -855,6 +856,95 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  if (req.method === "POST" && requestUrl.pathname === "/chat") {
+    (async () => {
+      if (!isAuthorizedRuntimeRequest(req)) {
+        sendJson(res, 401, { error: "Unauthorized" });
+        return;
+      }
+
+      if (!isLlmConfigured()) {
+        sendJson(res, 503, {
+          error: "LLM not configured",
+          detail: "ANTHROPIC_API_KEY is not set on the voice runtime.",
+        });
+        return;
+      }
+
+      const body = await readRequestBody(req);
+      let payload;
+
+      try {
+        payload = JSON.parse(body);
+      } catch {
+        sendJson(res, 400, { error: "Invalid JSON body" });
+        return;
+      }
+
+      const { agent, messages } = payload;
+
+      if (!agent || !Array.isArray(messages)) {
+        sendJson(res, 400, { error: "Missing agent or messages array" });
+        return;
+      }
+
+      const session = {
+        agentId: agent.id || null,
+        agentName: agent.name || null,
+        agentDescription: agent.description || null,
+        systemPrompt: agent.systemPrompt || "",
+        firstMessage: agent.firstMessage || null,
+        voiceModel: agent.voiceModel || null,
+        voiceProvider: agent.voiceProvider || null,
+        language: agent.language || "en-US",
+        transferNumber: agent.transferNumber || null,
+        phoneNumber: null,
+        callerNumber: null,
+        externalCallId: null,
+        callMetadata: {},
+        pendingHangup: null,
+        callSid: null,
+        history: messages.map((m) => ({
+          role: m.role === "user" ? "user" : "assistant",
+          content: String(m.content || ""),
+        })),
+      };
+
+      const toolEvents = [];
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 30000);
+
+      try {
+        const reply = await generateAssistantReply(
+          session,
+          controller.signal,
+          async (_role, text, eventPayload) => {
+            toolEvents.push({ role: _role, text, payload: eventPayload });
+          },
+        );
+
+        sendJson(res, 200, {
+          reply: reply || "",
+          toolEvents,
+        });
+      } catch (error) {
+        if (controller.signal.aborted) {
+          sendJson(res, 504, { error: "LLM request timed out" });
+        } else {
+          sendJson(res, 502, {
+            error: "LLM request failed",
+            detail: error instanceof Error ? error.message : String(error),
+          });
+        }
+      } finally {
+        clearTimeout(timeout);
+      }
+    })().catch(() => {
+      sendJson(res, 500, { error: "Internal chat error" });
+    });
+    return;
+  }
+
   if (req.method === "GET" && requestUrl.pathname === "/") {
     sendJson(res, 200, {
       name: "Yapsolutely Voice Runtime",
@@ -862,6 +952,7 @@ const server = http.createServer((req, res) => {
       endpoints: {
         health: "/health",
         readiness: "/readiness",
+        chat: "/chat (POST, runtime-secret gated)",
         twilioInbound: "/twilio/inbound",
         twilioStatus: "/twilio/status",
         twilioStream: "/twilio/stream (WebSocket)",

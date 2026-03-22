@@ -633,8 +633,8 @@ At least one real behind-the-scenes business action works during or after a call
 
 ### Tasks
 
-- [ ] Decide whether browser test uses same runtime or a parallel path
-- [ ] Build test UI page
+- [x] Decide whether browser test uses same runtime or a parallel path
+- [x] Build test UI page
 - [ ] Add mic permissions flow
 - [ ] Send user audio to runtime
 - [ ] Play AI audio back in browser
@@ -836,15 +836,15 @@ Includes:
 | 2. Establish repository structure | done | workspace, web app, voice runtime scaffold, env files, and root scripts now exist |
 | 3. Scaffold dashboard shell | done | branded shell, cookie-based demo auth, stronger Prisma-backed proof surfaces, and in-app credential readiness reporting now exist |
 | 4. Implement data model | in progress | Prisma schema, client, migration, and stronger CRUD validation now exist; final end-to-end verification still pending |
-| 5. Build agent management workflow | in progress | create/list/edit/detail flows now work through Prisma-backed server components and actions, and agents can now be archived safely |
-| 6. Phone provisioning and mapping | in progress | manual registration, persistence, assignment UI, runtime lookup contract, assigned-number visibility, and number-removal controls now exist |
+| 5. Build agent management workflow | done | create/list/edit/detail/archive flows work through Prisma-backed server components and actions with pause/resume toggle; full Lovable UI replacement complete |
+| 6. Phone provisioning and mapping | in progress | manual registration with agent-assignment dialog, persistence, runtime lookup, assigned-number visibility, and removal controls now exist; Twilio credential wiring still pending |
 | 7. Adapt voice runtime | in progress | inbound webhook, stream TwiML, websocket media path, mock fallback, provider-backed live STT/TTS/LLM path, and mark-aware playback completion now exist; end-to-end Twilio validation under real audio is still pending |
 | 8. Connect runtime to product data | in progress | secure agent lookup, richer stream-session config, and start/end/event persistence are wired; live provider path now consumes passed voice config but still needs full call validation |
-| 9. Calls and transcript experience | done | calls list/detail are live with filter/search, loading/error UX, richer transcript review, and surfaced tool outcomes |
+| 9. Calls and transcript experience | done | calls list/detail are live with filter/search, loading/error UX, richer transcript review, surfaced tool outcomes, and full Lovable UI wiring |
 | 10. Business actions/tools | in progress | runtime tool interface now exists with lead capture, SMS confirmation, graceful end-call hooks, and logged tool events |
-| 11. Browser-based test experience | not started | intentionally later |
+| 11. Browser-based test experience | in progress | text-based chat test UI is live at `/agents/[agentId]/test`, proxied through `/api/runtime/chat` to the voice runtime's new `/chat` endpoint; voice-mode mic/speaker capture is the remaining enhancement |
 | 12. Flow builder | not started | key differentiator, later after core works |
-| 13. Visual design evolution | planning complete | visual execution is now fully specified in `plan/ui-masterplan.md`; implementation has not started yet |
+| 13. Visual design evolution | done | Lovable-designed Yapsolutely Voice Studio UI fully integrated — 49 shadcn components, custom dashboard layout, branded landing page, General Sans + Satoshi fonts, all pages wired to backend data with loading/error states |
 | 14. Deployment and demo readiness | in progress | web + voice are deployed to the VPS behind Caddy, production Postgres is live in the stack, the Twilio voice webhook is configured, seeded agent/number resolution works publicly, automated preflight + smoke scripts now verify readiness and simulated transcript persistence, and operator-facing handoff docs now exist; remaining work is final real-call validation plus Loom proof, with that live-call pass currently waiting on Karim’s upgraded Twilio account |
 | 15. Phase 2 roadmap | planning complete | known at high level |
 

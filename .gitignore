@@ -6,6 +6,7 @@ credentials/
 node_modules/
 
 # app dependencies and build artifacts
+.next/
 apps/*/node_modules/
 apps/*/.next/
 apps/*/out/
