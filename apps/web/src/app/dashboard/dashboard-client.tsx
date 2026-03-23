@@ -98,7 +98,7 @@ function CallVolumeChart({ data }: { data: DailyCallVolume[] }) {
               <span className="font-mono text-[0.67rem] text-text-subtle/70">{day.count}</span>
               <div className="w-full flex items-end justify-center" style={{ height: "68px" }}>
                 <div
-                  className="w-full max-w-[32px] rounded-t bg-emerald-500/70 transition-all duration-300 hover:bg-emerald-500"
+                  className="w-full max-w-[32px] rounded-t bg-accent-purple-soft/70 transition-all duration-300 hover:bg-accent-purple-soft"
                   style={{ height: `${Math.max(pct, 4)}%` }}
                 />
               </div>
@@ -242,7 +242,7 @@ export default function DashboardHome({ metrics }: DashboardProps) {
             {/* Runtime status */}
             <div className="bg-surface-panel rounded-card border border-border-soft overflow-hidden">
               <div className="px-4 py-3 flex items-center gap-2">
-                <span className={`w-1.5 h-1.5 rounded-full ${metrics.runtimeStatus === "Online" ? "bg-emerald-400 animate-pulse-dot" : "bg-text-subtle/30"}`} />
+                <span className={`w-1.5 h-1.5 rounded-full ${metrics.runtimeStatus === "Online" ? "bg-accent-gold animate-pulse-dot" : "bg-text-subtle/30"}`} />
                 <span className="font-body text-[0.89rem] font-medium text-text-strong">Runtime</span>
                 <span className="font-body text-[0.79rem] text-text-subtle ml-auto">{metrics.runtimeStatus}</span>
               </div>

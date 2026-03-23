@@ -10,7 +10,7 @@ const Hero = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-14 sm:mb-20">
           <div className="lg:col-span-7 animate-fade-up" style={{ animationDelay: "0.1s" }}>
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-elevated border border-border-soft/40 mb-8">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-dot" />
+              <span className="w-1.5 h-1.5 rounded-full bg-accent-gold animate-pulse-dot" />
               <span className="font-body text-[0.7rem] text-text-subtle tracking-wide">Handling calls now</span>
             </div>
             <h1 className="text-[2.25rem] sm:text-[3.5rem] lg:text-[4.5rem] font-semibold tracking-[-0.035em] leading-[1.02] text-foreground mb-6">
@@ -33,7 +33,7 @@ const Hero = () => {
               </Button>
             </div>
             <p className="mt-4 font-body text-[0.75rem] text-text-subtle/60 flex items-center gap-1.5">
-              <span className="w-1 h-1 rounded-full bg-emerald-400" />
+              <span className="w-1 h-1 rounded-full bg-accent-gold" />
               No credit card required. Free plan available.
             </p>
           </div>

@@ -20,7 +20,7 @@ const ClosingCTA = () => {
                 Configure an agent, assign a number, and start taking calls. Review every transcript and monitor performance from day one.
               </p>
               <div className="flex flex-col sm:flex-row items-start gap-3">
-                <Button size="xl" className="bg-surface-dark-foreground text-surface-dark hover:bg-surface-dark-foreground/90 rounded-full font-display font-medium tracking-[-0.01em] btn-press" asChild>
+                <Button size="xl" className="bg-surface-dark-foreground text-surface-dark hover:bg-surface-dark-foreground/90 rounded-full font-display font-medium tracking-[-0.01em] btn-press shadow-[0_0_0_1px_var(--accent-gold)_,_0_2px_10px_-2px_var(--accent-gold)/0.25]" asChild>
                   <Link href="/sign-up">
                     Start building
                     <ArrowRight className="w-4 h-4 ml-1.5" />

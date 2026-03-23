@@ -48,6 +48,10 @@
   --border-soft: hsl(220 15% 92%);
   --accent-warm: hsl(30 55% 75%);
   --accent-warm-dim: hsl(26 35% 62%);
+  --accent-gold: hsl(46 64% 52%);
+  --accent-gold-dim: hsl(46 50% 44%);
+  --accent-purple: hsl(275 100% 25%);
+  --accent-purple-soft: hsl(275 60% 40%);
 
   --shadow-xs: 0 1px 2px 0 hsl(220 15% 10% / 0.03);
   --shadow-sm: 0 1px 3px 0 hsl(220 15% 10% / 0.04), 0 1px 2px -1px hsl(220 15% 10% / 0.03);
@@ -104,6 +108,10 @@
   --border-soft: hsl(220 10% 20%);
   --accent-warm: hsl(30 45% 60%);
   --accent-warm-dim: hsl(26 30% 50%);
+  --accent-gold: hsl(46 58% 56%);
+  --accent-gold-dim: hsl(46 44% 48%);
+  --accent-purple: hsl(275 70% 55%);
+  --accent-purple-soft: hsl(275 50% 45%);
 }
 
 /* ── Tailwind v4 Theme Tokens ────────────────── */
@@ -142,6 +150,10 @@
   --color-border-soft: var(--border-soft);
   --color-accent-warm: var(--accent-warm);
   --color-accent-warm-dim: var(--accent-warm-dim);
+  --color-accent-gold: var(--accent-gold);
+  --color-accent-gold-dim: var(--accent-gold-dim);
+  --color-accent-purple: var(--accent-purple);
+  --color-accent-purple-soft: var(--accent-purple-soft);
   --color-sidebar: var(--sidebar-background);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);

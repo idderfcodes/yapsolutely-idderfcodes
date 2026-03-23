@@ -41,8 +41,8 @@ const Testimonials = () => {
           {useCases.map((uc, i) => (
             <ScrollReveal key={uc.title} variant="fade-up" delay={i * 100} duration={500}>
               <div className="bg-surface-panel rounded-2xl border border-border-soft/60 p-7 h-full flex flex-col">
-                <div className="w-10 h-10 rounded-xl bg-surface-elevated flex items-center justify-center mb-5">
-                  <uc.icon className="w-5 h-5 text-text-subtle" />
+                <div className="w-10 h-10 rounded-xl bg-accent-purple/[0.06] flex items-center justify-center mb-5">
+                  <uc.icon className="w-5 h-5 text-accent-purple-soft" />
                 </div>
 
                 <h3 className="font-display text-[0.95rem] font-semibold text-text-strong mb-3">

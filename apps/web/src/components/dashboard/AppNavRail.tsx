@@ -87,7 +87,7 @@ function NavLinkItem({ item, onClick, pathname }: { item: NavItem; onClick?: () 
       }`}
     >
       {active && (
-        <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-3.5 rounded-full bg-foreground/70" />
+        <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-3.5 rounded-full bg-accent-gold" />
       )}
       <item.icon className={`w-[0.85rem] h-[0.85rem] shrink-0 ${active ? "text-text-strong" : ""}`} />
       <span>{item.title}</span>
@@ -309,8 +309,8 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
             className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-canvas/80 border border-border-soft/40 hover:border-border-soft transition-colors group"
           >
             <div className={`w-2 h-2 rounded-full shrink-0 ${
-              user?.plan === "PRO" || user?.plan === "ENTERPRISE" ? "bg-emerald-400" :
-              user?.plan === "STARTER" ? "bg-blue-400" : "bg-amber-400 animate-pulse"
+              user?.plan === "PRO" || user?.plan === "ENTERPRISE" ? "bg-accent-gold" :
+              user?.plan === "STARTER" ? "bg-accent-purple-soft" : "bg-amber-400 animate-pulse"
             }`} />
             <div className="flex-1 min-w-0">
               <span className="font-body text-[0.72rem] font-medium text-text-strong block truncate">

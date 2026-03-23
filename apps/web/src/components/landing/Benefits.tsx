@@ -47,8 +47,8 @@ const Benefits = () => {
           {benefits.map((b, i) => (
             <ScrollReveal key={b.title} variant="fade-up" delay={i * 80} duration={500}>
               <div className="bg-surface-panel rounded-2xl border border-border-soft/60 p-6 h-full transition-all duration-200 hover:shadow-surface-md hover:border-border-soft group">
-                <div className="w-10 h-10 rounded-xl bg-foreground/[0.05] flex items-center justify-center mb-4 group-hover:bg-foreground/[0.08] transition-colors">
-                  <b.icon className="w-5 h-5 text-text-body" />
+                <div className="w-10 h-10 rounded-xl bg-accent-purple/[0.06] flex items-center justify-center mb-4 group-hover:bg-accent-purple/[0.1] transition-colors">
+                  <b.icon className="w-5 h-5 text-accent-purple-soft" />
                 </div>
                 <h3 className="font-display text-[0.92rem] font-semibold text-text-strong tracking-[-0.01em] mb-1.5">{b.title}</h3>
                 <p className="font-body text-[0.8rem] text-text-subtle leading-[1.65]">{b.desc}</p>
@@ -74,7 +74,7 @@ const Benefits = () => {
             <div className="mt-6">
               <Link
                 href="/pricing"
-                className="inline-flex items-center gap-1.5 font-body text-[0.82rem] text-text-subtle hover:text-foreground transition-colors"
+                className="inline-flex items-center gap-1.5 font-body text-[0.82rem] text-text-subtle hover:text-accent-gold transition-colors"
               >
                 See all features & pricing
                 <ArrowRight className="w-3.5 h-3.5" />

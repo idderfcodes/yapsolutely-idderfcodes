@@ -31,7 +31,7 @@ const Workflow = () => {
           <ScrollReveal variant="fade-up" delay={0} duration={600} className="lg:col-span-7">
             <div className="bg-surface-dark rounded-[1.5rem] p-8 sm:p-12 flex flex-col justify-between min-h-[340px] transition-shadow duration-300 hover:shadow-surface-xl h-full">
             <div>
-              <span className="font-mono text-xs text-surface-dark-foreground/20 block mb-6">01</span>
+              <span className="font-mono text-xs text-accent-gold/60 block mb-6">01</span>
               <h3 className="font-display text-[1.5rem] sm:text-[2rem] font-semibold tracking-[-0.025em] text-surface-dark-foreground mb-4 leading-[1.12]">
                 Define your agent&apos;s
                 <br />
@@ -78,7 +78,7 @@ const Workflow = () => {
           <div className="lg:col-span-5 flex flex-col gap-5">
             <ScrollReveal variant="fade-up" delay={150} duration={600}>
               <div className="bg-surface-elevated rounded-[1.25rem] p-7 sm:p-8 flex-1 border border-border-soft/20 transition-all duration-200 hover:border-border-soft/50 hover:shadow-surface-sm">
-                <span className="font-mono text-xs text-text-subtle/40 block mb-4">02</span>
+                <span className="font-mono text-xs text-accent-gold/50 block mb-4">02</span>
                 <h3 className="font-display text-lg font-semibold tracking-[-0.02em] text-foreground mb-2 leading-snug">
                   Assign a number and go live
                 </h3>
@@ -99,7 +99,7 @@ const Workflow = () => {
 
             <ScrollReveal variant="fade-up" delay={300} duration={600}>
               <div className="bg-surface-elevated rounded-[1.25rem] p-7 sm:p-8 flex-1 border border-border-soft/20 transition-all duration-200 hover:border-border-soft/50 hover:shadow-surface-sm">
-                <span className="font-mono text-xs text-text-subtle/40 block mb-4">03</span>
+                <span className="font-mono text-xs text-accent-gold/50 block mb-4">03</span>
                 <h3 className="font-display text-lg font-semibold tracking-[-0.02em] text-foreground mb-2 leading-snug">
                   Review every call in detail
                 </h3>
