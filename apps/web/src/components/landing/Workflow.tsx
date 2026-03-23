@@ -41,7 +41,30 @@ const Workflow = () => {
                 Set the voice, tone, routing logic, and fallback rules. Configure what your agent says, when it transfers, and how it handles edge cases.
               </p>
             </div>
-            <div className="mt-8 flex items-center justify-between">
+            {/* Mini prompt editor illustration */}
+            <div className="mt-6 bg-surface-dark-foreground/[0.04] rounded-xl p-4 sm:p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="w-2 h-2 rounded-full bg-red-400/40" />
+                <span className="w-2 h-2 rounded-full bg-yellow-400/40" />
+                <span className="w-2 h-2 rounded-full bg-emerald-400/40" />
+                <span className="ml-auto font-mono text-[0.55rem] text-surface-dark-foreground/15">prompt.md</span>
+              </div>
+              <div className="space-y-1.5 font-mono text-[0.65rem] leading-[1.7]">
+                <div className="text-surface-dark-foreground/20">
+                  <span className="text-emerald-400/40">role:</span> front-desk-agent
+                </div>
+                <div className="text-surface-dark-foreground/20">
+                  <span className="text-emerald-400/40">voice:</span> warm, professional
+                </div>
+                <div className="text-surface-dark-foreground/20">
+                  <span className="text-emerald-400/40">greeting:</span> &quot;Hi, how can I help?&quot;
+                </div>
+                <div className="text-surface-dark-foreground/20">
+                  <span className="text-emerald-400/40">transfer_on:</span> billing, complaints
+                </div>
+              </div>
+            </div>
+            <div className="mt-5 flex items-center justify-between">
               <span className="font-body text-[0.6rem] text-surface-dark-foreground/15 uppercase tracking-[0.2em]">Build</span>
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-dark-foreground/5">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400/60" />
@@ -59,10 +82,18 @@ const Workflow = () => {
                 <h3 className="font-display text-lg font-semibold tracking-[-0.02em] text-foreground mb-2 leading-snug">
                   Assign a number and go live
                 </h3>
-                <p className="font-body text-[0.82rem] text-text-subtle leading-[1.7]">
+                <p className="font-body text-[0.82rem] text-text-subtle leading-[1.7] mb-5">
                   Provision a phone number, attach it to your agent, and start receiving inbound calls. Push updates without downtime.
                 </p>
-                <div className="mt-6 font-body text-[0.6rem] text-text-subtle/25 uppercase tracking-[0.2em]">Deploy</div>
+                {/* Mini number assignment illustration */}
+                <div className="bg-secondary/60 rounded-lg p-3">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    <span className="font-mono text-[0.65rem] text-text-body">+1 (415) 555-0142</span>
+                    <span className="ml-auto font-body text-[0.55rem] text-text-subtle/50 bg-surface-panel px-2 py-0.5 rounded-full">Assigned</span>
+                  </div>
+                </div>
+                <div className="mt-4 font-body text-[0.6rem] text-text-subtle/25 uppercase tracking-[0.2em]">Deploy</div>
               </div>
             </ScrollReveal>
 
@@ -72,10 +103,21 @@ const Workflow = () => {
                 <h3 className="font-display text-lg font-semibold tracking-[-0.02em] text-foreground mb-2 leading-snug">
                   Review every call in detail
                 </h3>
-                <p className="font-body text-[0.82rem] text-text-subtle leading-[1.7]">
+                <p className="font-body text-[0.82rem] text-text-subtle leading-[1.7] mb-5">
                   Read transcripts, flag conversations, and track agent performance. Full audit trail on every interaction.
                 </p>
-                <div className="mt-6 font-body text-[0.6rem] text-text-subtle/25 uppercase tracking-[0.2em]">Monitor</div>
+                {/* Mini transcript preview */}
+                <div className="bg-secondary/60 rounded-lg p-3 space-y-1.5">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-[0.55rem] text-text-subtle/40 w-8">Agent</span>
+                    <span className="font-body text-[0.65rem] text-text-body">How can I help you today?</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-[0.55rem] text-text-subtle/40 w-8">Caller</span>
+                    <span className="font-body text-[0.65rem] text-text-body">I need to schedule an appointment.</span>
+                  </div>
+                </div>
+                <div className="mt-4 font-body text-[0.6rem] text-text-subtle/25 uppercase tracking-[0.2em]">Monitor</div>
               </div>
             </ScrollReveal>
           </div>

@@ -81,10 +81,10 @@ export default function VerifyIdentityPage() {
             </div>
 
             <h1 className="font-display text-[1.5rem] sm:text-[1.75rem] font-semibold tracking-[-0.03em] text-text-strong leading-[1.15] mb-2">
-              Verify your identity
+              Enter your code
             </h1>
             <p className="font-body text-body-md text-text-subtle leading-relaxed mb-8">
-              Enter the 6-digit code we sent to your email. Check your inbox and spam folder.
+              We sent a 6-digit code to your email. Check your inbox and spam folder.
             </p>
 
             <form className="mb-6" onSubmit={handleSubmit} noValidate>
@@ -143,19 +143,19 @@ export default function VerifyIdentityPage() {
       {/* Right: trust panel */}
       <div className="hidden lg:flex flex-1 bg-surface-dark rounded-l-[2rem] p-12 xl:p-16 items-center justify-center relative overflow-hidden">
         <div className="max-w-md animate-fade-in" style={{ animationDelay: "0.2s" }}>
-          <span className="font-body text-[0.6rem] text-surface-dark-foreground/20 uppercase tracking-[0.2em] block mb-6">Identity verification</span>
+          <span className="font-body text-[0.6rem] text-surface-dark-foreground/20 uppercase tracking-[0.2em] block mb-6">One-time code</span>
           <p className="font-display text-[1.75rem] font-semibold tracking-[-0.025em] text-surface-dark-foreground leading-[1.2] mb-6">
-            Almost there. One quick step to secure your workspace.
+            Almost there. Enter the code to access your workspace.
           </p>
           <p className="font-body text-body-md text-surface-dark-foreground/35 leading-relaxed mb-10">
-            Verification ensures your voice operations data stays private and only authorized team members have access.
+            The one-time code ensures your voice operations data stays private and only authorized team members have access.
           </p>
 
           <div className="bg-surface-dark-foreground/5 rounded-2xl p-6">
             <div className="space-y-4">
               {[
-                { step: "1", label: "Confirm email", status: "done" },
-                { step: "2", label: "Verify identity", status: "current" },
+                { step: "1", label: "Enter email", status: "done" },
+                { step: "2", label: "Enter code", status: "current" },
                 { step: "3", label: "Set up workspace", status: "upcoming" },
               ].map((item) => (
                 <div key={item.step} className="flex items-center gap-4">

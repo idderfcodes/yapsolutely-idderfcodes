@@ -69,9 +69,22 @@ const ProductShowcase = () => {
                   </div>
                   <h3 className="font-display text-[0.92rem] font-medium text-foreground">Transcripts &amp; Review</h3>
                 </div>
-                <p className="font-body text-[0.82rem] text-text-subtle leading-[1.7]">
+                <p className="font-body text-[0.82rem] text-text-subtle leading-[1.7] mb-4">
                   Every conversation is transcribed and indexed. Search across calls, flag moments for follow-up, and export data when you need it.
                 </p>
+                {/* Mini transcript snippet */}
+                <div className="bg-secondary/60 rounded-lg p-2.5 space-y-1">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1 h-1 rounded-full bg-emerald-400/60" />
+                    <span className="font-mono text-[0.6rem] text-text-subtle/50">0:04</span>
+                    <span className="font-body text-[0.62rem] text-text-body">Thanks for calling, how can I help?</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1 h-1 rounded-full bg-blue-400/60" />
+                    <span className="font-mono text-[0.6rem] text-text-subtle/50">0:08</span>
+                    <span className="font-body text-[0.62rem] text-text-body">I'd like to book an appointment...</span>
+                  </div>
+                </div>
               </div>
             </ScrollReveal>
 
@@ -83,9 +96,24 @@ const ProductShowcase = () => {
                   </div>
                   <h3 className="font-display text-[0.92rem] font-medium text-foreground">Call Logs &amp; Performance</h3>
                 </div>
-                <p className="font-body text-[0.82rem] text-text-subtle leading-[1.7]">
+                <p className="font-body text-[0.82rem] text-text-subtle leading-[1.7] mb-4">
                   Track duration, disposition, and volume across all agents. See which calls were resolved, flagged, and where to improve.
                 </p>
+                {/* Mini stats bar */}
+                <div className="flex gap-2">
+                  <div className="bg-secondary/60 rounded-lg px-3 py-1.5 flex-1 text-center">
+                    <div className="font-display text-sm font-semibold text-foreground">142</div>
+                    <div className="font-body text-[0.55rem] text-text-subtle">Calls</div>
+                  </div>
+                  <div className="bg-secondary/60 rounded-lg px-3 py-1.5 flex-1 text-center">
+                    <div className="font-display text-sm font-semibold text-foreground">2:38</div>
+                    <div className="font-body text-[0.55rem] text-text-subtle">Avg</div>
+                  </div>
+                  <div className="bg-secondary/60 rounded-lg px-3 py-1.5 flex-1 text-center">
+                    <div className="font-display text-sm font-semibold text-emerald-400">94%</div>
+                    <div className="font-body text-[0.55rem] text-text-subtle">Resolved</div>
+                  </div>
+                </div>
               </div>
             </ScrollReveal>
           </div>

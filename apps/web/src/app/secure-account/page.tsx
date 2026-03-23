@@ -57,7 +57,7 @@ export default function SecureAccountPage() {
               Secure your account
             </h1>
             <p className="font-body text-body-md text-text-subtle leading-relaxed mb-8">
-              Confirm your work email to complete account setup. We&apos;ll send a verification code.
+              Enter your work email. We&apos;ll send a 6-digit code to verify it&apos;s you.
             </p>
 
             <form className="space-y-4 mb-6" onSubmit={handleSubmit} noValidate>
@@ -84,14 +84,14 @@ export default function SecureAccountPage() {
                     <span className="w-3.5 h-3.5 border-2 border-primary-foreground/30 border-t-background rounded-full animate-spin" />
                     Sending code…
                   </span>
-                ) : "Send verification code"}
+                ) : "Send code"}
               </Button>
             </form>
 
             <div className="space-y-3 mt-8 pt-6 border-t border-border-soft/30">
               {[
                 { icon: Lock, text: "Your data is encrypted end-to-end" },
-                { icon: CheckCircle2, text: "Email verification protects your workspace" },
+                { icon: CheckCircle2, text: "One-time code protects your workspace" },
               ].map(({ icon: Icon, text }) => (
                 <div key={text} className="flex items-center gap-2.5">
                   <Icon className="w-3.5 h-3.5 text-text-subtle/50" />
@@ -115,14 +115,14 @@ export default function SecureAccountPage() {
             We take security seriously so you can focus on building.
           </p>
           <p className="font-body text-body-md text-surface-dark-foreground/35 leading-relaxed mb-10">
-            Email verification ensures only authorized team members access your voice operations workspace.
+            A one-time code ensures only authorized team members access your voice operations workspace.
           </p>
 
           <div className="bg-surface-dark-foreground/5 rounded-2xl p-6">
             <div className="space-y-4">
               {[
-                { step: "1", label: "Confirm email", status: "current" },
-                { step: "2", label: "Verify identity", status: "upcoming" },
+                { step: "1", label: "Enter email", status: "current" },
+                { step: "2", label: "Enter code", status: "upcoming" },
                 { step: "3", label: "Set up workspace", status: "upcoming" },
               ].map((item) => (
                 <div key={item.step} className="flex items-center gap-4">
