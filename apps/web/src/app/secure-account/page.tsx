@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { ArrowLeft, Shield, Lock, CheckCircle2 } from "lucide-react";
+import { sendOtpAction } from "@/app/_actions/verification";
 
 export default function SecureAccountPage() {
   const [email, setEmail] = useState("");
@@ -24,9 +25,14 @@ export default function SecureAccountPage() {
     e.preventDefault();
     if (!validate()) return;
     setIsLoading(true);
-    // TODO: wire to real email confirmation action
-    // For now, redirect to verify-identity
-    window.location.href = "/verify-identity";
+    const result = await sendOtpAction(email.trim().toLowerCase());
+    if (result.error) {
+      setErrors({ email: result.error });
+      setIsLoading(false);
+      return;
+    }
+    // Pass email via URL so verify-identity can reference it
+    window.location.href = `/verify-identity?email=${encodeURIComponent(email.trim().toLowerCase())}`;
   };
 
   return (

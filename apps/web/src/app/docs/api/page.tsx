@@ -113,7 +113,7 @@ export default function ApiReferencePage() {
         {/* Base URL */}
         <div className="bg-surface-dark rounded-xl p-4 sm:p-5 mb-10">
           <div className="font-body text-[0.62rem] text-surface-dark-foreground/30 uppercase tracking-[0.12em] mb-2">Base URL</div>
-          <code className="font-mono text-[0.85rem] text-surface-dark-foreground/80">https://api.yapsolutely.com/v1</code>
+          <code className="font-mono text-[0.85rem] text-surface-dark-foreground/80">https://yapsolutely.xyz/api/v1</code>
         </div>
 
         {/* Endpoints */}
@@ -147,7 +147,7 @@ export default function ApiReferencePage() {
           </p>
           <div className="bg-surface-dark rounded-xl p-5 overflow-x-auto">
             <pre className="font-mono text-[0.78rem] text-surface-dark-foreground/70 leading-[1.7]">
-{`curl https://api.yapsolutely.com/v1/agents \\
+{`curl https://yapsolutely.xyz/api/v1/agents \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json"`}
             </pre>

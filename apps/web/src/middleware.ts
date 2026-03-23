@@ -22,6 +22,9 @@ const PUBLIC_PREFIXES = [
   "/favicon.ico",
   "/docs",
   "/features",
+  "/robots",
+  "/sitemap",
+  "/manifest",
 ];
 
 function isPublicPath(pathname: string) {

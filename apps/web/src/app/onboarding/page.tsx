@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Sparkles, Check } from "lucide-react";
+import { saveOnboardingAction } from "@/app/_actions/verification";
 
 type Step = "role" | "agents" | "industry";
 
@@ -39,10 +40,26 @@ export default function OnboardingPage() {
   const [agentCount, setAgentCount] = useState("");
   const [industry, setIndustry] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [sessionEmail, setSessionEmail] = useState("");
+
+  useEffect(() => {
+    // Read email from session cookie (set during signup)
+    try {
+      const cookies = document.cookie.split(";").map(c => c.trim());
+      const sessionCookie = cookies.find(c => c.startsWith("yaps_session="));
+      if (sessionCookie) {
+        const value = decodeURIComponent(sessionCookie.split("=").slice(1).join("="));
+        const parsed = JSON.parse(value);
+        if (parsed.email) setSessionEmail(parsed.email);
+      }
+    } catch { /* ignore */ }
+  }, []);
 
   const handleComplete = async () => {
     setIsLoading(true);
-    // TODO: wire to real onboarding action that saves preferences
+    if (sessionEmail && role && agentCount && industry) {
+      await saveOnboardingAction({ role, agentCount, industry, email: sessionEmail });
+    }
     window.location.href = "/dashboard";
   };
 

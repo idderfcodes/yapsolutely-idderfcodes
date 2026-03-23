@@ -10,6 +10,7 @@ import {
   Settings,
   LogOut,
   ChevronUp,
+  ChevronDown,
   Menu,
   X,
   LayoutDashboard,
@@ -19,6 +20,9 @@ import {
   ShieldCheck,
   Bell,
   CreditCard,
+  Building2,
+  Plus,
+  Zap,
 } from "lucide-react";
 import { signOutAction } from "@/app/_actions/auth";
 import ThemeToggle from "@/components/theme-toggle";
@@ -114,8 +118,12 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [wsOpen, setWsOpen] = useState(false);
+  const [planHover, setPlanHover] = useState(false);
   const [lastPathname, setLastPathname] = useState(pathname);
   const menuRef = useRef<HTMLDivElement>(null);
+  const wsRef = useRef<HTMLDivElement>(null);
+  const planRef = useRef<HTMLDivElement>(null);
 
   if (pathname !== lastPathname) {
     setLastPathname(pathname);
@@ -131,10 +139,13 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setMenuOpen(false);
       }
+      if (wsRef.current && !wsRef.current.contains(e.target as Node)) {
+        setWsOpen(false);
+      }
     };
-    if (menuOpen) document.addEventListener("mousedown", handler);
+    if (menuOpen || wsOpen) document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
-  }, [menuOpen]);
+  }, [menuOpen, wsOpen]);
 
   const handleSignOut = () => {
     setMenuOpen(false);
@@ -146,12 +157,49 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
     <>
       {/* Desktop sidebar */}
       <aside className="hidden md:flex w-[220px] shrink-0 h-screen sticky top-0 bg-surface-panel border-r border-border-soft/50 flex-col">
-        <div className="px-5 h-14 flex items-center justify-between">
-          <Link href="/dashboard" className="hover:opacity-80 transition-opacity">
-            <span className="font-display text-[1.15rem] font-semibold tracking-[-0.02em] text-text-strong">
-              Yapsolutely
-            </span>
-          </Link>
+        {/* Workspace selector */}
+        <div className="relative px-3 pt-3 pb-2" ref={wsRef}>
+          <button
+            onClick={() => setWsOpen(!wsOpen)}
+            className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg hover:bg-canvas/60 transition-colors group"
+          >
+            <div className="w-7 h-7 rounded-lg bg-foreground/[0.08] flex items-center justify-center shrink-0">
+              <Building2 className="w-3.5 h-3.5 text-text-strong" />
+            </div>
+            <div className="flex-1 text-left min-w-0">
+              <span className="font-display text-[0.84rem] font-semibold text-text-strong block truncate">
+                {user?.name ? `${user.name.split(" ")[0]}'s Workspace` : "My Workspace"}
+              </span>
+            </div>
+            <ChevronDown className={`w-3.5 h-3.5 text-text-subtle shrink-0 transition-transform duration-200 ${wsOpen ? "rotate-180" : ""}`} />
+          </button>
+
+          {wsOpen && (
+            <div className="absolute top-full left-3 right-3 mt-1 bg-surface-panel rounded-xl border border-border-soft shadow-popover overflow-hidden z-50">
+              <div className="px-3 py-2 border-b border-border-soft/40">
+                <span className="font-body text-[0.67rem] text-text-subtle/50 uppercase tracking-[0.12em]">Workspaces</span>
+              </div>
+              <div className="py-1">
+                <button className="w-full flex items-center gap-2.5 px-3 py-2 bg-canvas/50">
+                  <div className="w-6 h-6 rounded-md bg-foreground/[0.08] flex items-center justify-center">
+                    <Building2 className="w-3 h-3 text-text-strong" />
+                  </div>
+                  <span className="font-body text-[0.84rem] text-text-strong truncate">
+                    {user?.name ? `${user.name.split(" ")[0]}'s Workspace` : "My Workspace"}
+                  </span>
+                </button>
+              </div>
+              <div className="border-t border-border-soft/40 py-1">
+                <button className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-canvas/50 transition-colors">
+                  <Plus className="w-3.5 h-3.5 text-text-subtle" />
+                  <span className="font-body text-[0.84rem] text-text-subtle">Create workspace</span>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="px-5 flex items-center justify-between pb-1">
           <ThemeToggle />
         </div>
 
@@ -159,8 +207,13 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
           <GroupedNav pathname={pathname} />
         </nav>
 
-        {/* Plan indicator */}
-        <div className="px-3 pb-2">
+        {/* Plan indicator with hover details */}
+        <div
+          className="px-3 pb-2 relative"
+          ref={planRef}
+          onMouseEnter={() => setPlanHover(true)}
+          onMouseLeave={() => setPlanHover(false)}
+        >
           <Link
             href="/billing"
             className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-canvas/80 border border-border-soft/40 hover:border-border-soft transition-colors group"
@@ -181,6 +234,61 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
               </span>
             </div>
           </Link>
+
+          {/* Hover popover */}
+          {planHover && (
+            <div className="absolute bottom-full left-3 right-3 mb-1.5 bg-surface-panel rounded-xl border border-border-soft shadow-popover overflow-hidden z-50 animate-fade-in">
+              <div className="px-4 py-3 border-b border-border-soft/40">
+                <div className="flex items-center gap-2 mb-1">
+                  <Zap className={`w-3.5 h-3.5 ${
+                    user?.plan === "PRO" || user?.plan === "ENTERPRISE" ? "text-emerald-400" :
+                    user?.plan === "STARTER" ? "text-blue-400" : "text-amber-400"
+                  }`} />
+                  <span className="font-display text-[0.84rem] font-semibold text-text-strong">
+                    {user?.plan === "PRO" ? "Pro Plan" :
+                     user?.plan === "ENTERPRISE" ? "Enterprise" :
+                     user?.plan === "STARTER" ? "Starter Plan" : "Free Trial"}
+                  </span>
+                </div>
+              </div>
+              <div className="px-4 py-3 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="font-body text-[0.77rem] text-text-subtle">Remaining Balance</span>
+                  <span className="font-mono text-[0.84rem] font-semibold text-text-strong">
+                    {user?.plan === "FREE_TRIAL" ? "$10.00" :
+                     user?.plan === "STARTER" ? "$25.00" :
+                     user?.plan === "PRO" ? "$100.00" : "$500.00"}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="font-body text-[0.77rem] text-text-subtle">Concurrency</span>
+                  <span className="font-mono text-[0.84rem] text-text-strong">
+                    0 / {user?.plan === "FREE_TRIAL" ? "5" :
+                         user?.plan === "STARTER" ? "10" :
+                         user?.plan === "PRO" ? "20" : "100"}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="font-body text-[0.77rem] text-text-subtle">Agents</span>
+                  <span className="font-mono text-[0.84rem] text-text-strong">
+                    {user?.plan === "FREE_TRIAL" ? "3 max" :
+                     user?.plan === "STARTER" ? "10 max" :
+                     user?.plan === "PRO" ? "50 max" : "Unlimited"}
+                  </span>
+                </div>
+              </div>
+              {(!user?.plan || user.plan === "FREE_TRIAL" || user.plan === "STARTER") && (
+                <div className="px-4 pb-3">
+                  <Link
+                    href="/billing"
+                    className="block w-full text-center font-display text-[0.79rem] font-medium px-3 py-1.5 rounded-lg bg-foreground text-primary-foreground hover:opacity-90 transition-opacity"
+                  >
+                    {user?.plan === "STARTER" ? "Upgrade to Pro" : "Add Payment Method"}
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Account footer */}

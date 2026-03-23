@@ -63,7 +63,7 @@ export const metadata: Metadata = {
   },
   description:
     "Build, deploy, and manage AI voice agents for inbound phone calls. Configure agents, assign numbers, view transcripts, and test conversations, all from one dashboard.",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://yapsolutely.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://yapsolutely.xyz"),
   openGraph: {
     title: "Yapsolutely | AI Voice Agent Platform",
     description:
@@ -78,8 +78,8 @@ export const metadata: Metadata = {
       "Build, deploy, and manage AI voice agents for inbound phone calls.",
   },
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
 };
 

@@ -1,14 +1,20 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft, Fingerprint } from "lucide-react";
+import { verifyOtpAction, sendOtpAction } from "@/app/_actions/verification";
 
 export default function VerifyIdentityPage() {
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email") || "";
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isResending, setIsResending] = useState(false);
   const [error, setError] = useState("");
+  const [resendMessage, setResendMessage] = useState("");
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const handleChange = useCallback((index: number, value: string) => {
@@ -50,10 +56,31 @@ export default function VerifyIdentityPage() {
       setError("Please enter the full 6-digit code");
       return;
     }
+    if (!email) {
+      setError("Missing email. Please go back and enter your email.");
+      return;
+    }
     setIsLoading(true);
-    // TODO: wire to real verification action
-    // For now, redirect to onboarding
+    const result = await verifyOtpAction(email, fullCode);
+    if (result.error) {
+      setError(result.error);
+      setIsLoading(false);
+      return;
+    }
     window.location.href = "/onboarding";
+  };
+
+  const handleResend = async () => {
+    if (!email || isResending) return;
+    setIsResending(true);
+    setResendMessage("");
+    const result = await sendOtpAction(email);
+    if (result.error) {
+      setError(result.error);
+    } else {
+      setResendMessage("New code sent! Check your inbox.");
+    }
+    setIsResending(false);
   };
 
   return (
@@ -127,10 +154,17 @@ export default function VerifyIdentityPage() {
               </Button>
             </form>
 
-            <div className="text-center">
-              <button className="font-body text-body-sm text-text-subtle hover:text-text-strong transition-colors">
-                Didn&apos;t receive a code? <span className="font-medium underline underline-offset-4">Resend</span>
+            <div className="text-center space-y-1">
+              <button
+                onClick={handleResend}
+                disabled={isResending}
+                className="font-body text-body-sm text-text-subtle hover:text-text-strong transition-colors disabled:opacity-50"
+              >
+                Didn&apos;t receive a code? <span className="font-medium underline underline-offset-4">{isResending ? "Sending…" : "Resend"}</span>
               </button>
+              {resendMessage && (
+                <p className="font-body text-label text-emerald-500 animate-slide-down">{resendMessage}</p>
+              )}
             </div>
           </div>
         </div>

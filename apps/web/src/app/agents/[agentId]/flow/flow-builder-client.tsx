@@ -181,6 +181,14 @@ type AgentSummary = {
 // ─── Block palette ──────────────────────────
 
 function BlockPalette({ onAdd }: { onAdd: (type: BlockType) => void }) {
+  const [justAdded, setJustAdded] = useState<string | null>(null);
+
+  const handleAdd = (type: BlockType) => {
+    setJustAdded(type);
+    onAdd(type);
+    setTimeout(() => setJustAdded(null), 600);
+  };
+
   return (
     <div className="bg-surface-panel rounded-card border border-border-soft">
       <div className="px-4 py-3 border-b border-border-soft">
@@ -190,22 +198,38 @@ function BlockPalette({ onAdd }: { onAdd: (type: BlockType) => void }) {
       <div className="p-3 grid grid-cols-1 gap-1.5">
         {BLOCK_DEFINITIONS.map((def) => {
           const Icon = def.icon;
+          const added = justAdded === def.type;
           return (
             <button
               key={def.type}
               type="button"
-              onClick={() => onAdd(def.type)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-surface-subtle/60 transition-colors text-left group"
+              onClick={() => handleAdd(def.type)}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 text-left group ${
+                added
+                  ? "bg-emerald-500/10 scale-[0.97] ring-1 ring-emerald-500/30"
+                  : "hover:bg-surface-subtle/60 active:scale-[0.97]"
+              }`}
             >
-              <div className={`w-7 h-7 rounded-md flex items-center justify-center ${def.color}`}>
-                <Icon className="w-3.5 h-3.5" />
+              <div className={`w-7 h-7 rounded-md flex items-center justify-center transition-transform duration-200 ${def.color} ${added ? "scale-110" : "group-active:scale-90"}`}>
+                {added ? (
+                  <svg className="w-3.5 h-3.5 text-emerald-400 animate-fade-in" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  <Icon className="w-3.5 h-3.5" />
+                )}
               </div>
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <div className="font-body text-[0.87rem] font-medium text-text-strong group-hover:text-text-strong/90">
                   {def.label}
                 </div>
                 <div className="font-body text-[0.82rem] text-text-subtle truncate">{def.description}</div>
               </div>
+              {added && (
+                <span className="font-body text-[0.72rem] text-emerald-400 font-medium animate-fade-in shrink-0">
+                  Added
+                </span>
+              )}
             </button>
           );
         })}
