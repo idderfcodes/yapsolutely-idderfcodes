@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useMemo, useRef, Suspense } from "react";
-import { Search, Plus, Upload, Bot } from "lucide-react";
+import { useState, useMemo, useRef, useEffect, Suspense } from "react";
+import { Search, Plus, Upload, Bot, MoreHorizontal, Copy, Pause, Play, Archive } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import OnboardingModal from "@/components/dashboard/OnboardingModal";
 import EmptyState from "@/components/dashboard/EmptyState";
-import { importAgentAction } from "@/app/_actions/agents";
+import { importAgentAction, duplicateAgentAction, toggleAgentStatusAction, archiveAgentAction } from "@/app/_actions/agents";
 import type { AgentListItem } from "@/lib/agent-data";
 
 const statusLabel = (status: string) => {
@@ -62,6 +62,21 @@ function AgentsClientInner({ agents }: { agents: AgentListItem[] }) {
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const menuContainerRef = useRef<HTMLDivElement>(null);
+
+  // Close menu on outside click
+  const handleMenuToggle = (agentId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setOpenMenuId(openMenuId === agentId ? null : agentId);
+  };
+
+  useEffect(() => {
+    if (!openMenuId) return;
+    const handler = (e: MouseEvent) => setOpenMenuId(null);
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [openMenuId]);
 
   const counts = useMemo(() => {
     const all = agents.length;
@@ -226,6 +241,7 @@ function AgentsClientInner({ agents }: { agents: AgentListItem[] }) {
                         <th className="text-left px-3 py-2 font-body text-[0.79rem] font-medium text-text-subtle/70 uppercase tracking-[0.08em]">Voice</th>
                         <th className="text-right px-3 py-2 font-body text-[0.79rem] font-medium text-text-subtle/70 uppercase tracking-[0.08em]">Calls</th>
                         <th className="text-right pl-3 pr-4 py-2 font-body text-[0.79rem] font-medium text-text-subtle/70 uppercase tracking-[0.08em]">Updated</th>
+                        <th className="w-10 pr-3 py-2"><span className="sr-only">Actions</span></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -259,6 +275,58 @@ function AgentsClientInner({ agents }: { agents: AgentListItem[] }) {
                           </td>
                           <td className="pl-3 pr-4 py-2.5 text-right font-body text-[0.77rem] text-text-subtle/70">
                             {timeAgo(agent.updatedAt)}
+                          </td>
+                          <td className="pr-3 py-2.5 relative">
+                            <button
+                              onClick={(e) => handleMenuToggle(agent.id, e)}
+                              className="p-1 rounded-md text-text-subtle/0 group-hover:text-text-subtle hover:!text-text-strong hover:bg-surface-subtle transition-all"
+                              aria-label="Agent actions"
+                            >
+                              <MoreHorizontal className="w-4 h-4" />
+                            </button>
+                            {openMenuId === agent.id && (
+                              <div className="absolute right-3 top-full mt-0.5 w-44 bg-surface-panel rounded-lg border border-border-soft shadow-popover z-50 py-1 animate-fade-in">
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); setOpenMenuId(null); router.push(`/agents/${agent.slug ?? agent.id}`); }}
+                                  className="w-full flex items-center gap-2 px-3 py-1.5 font-body text-[0.84rem] text-text-body hover:bg-surface-subtle transition-colors text-left"
+                                >
+                                  Edit
+                                </button>
+                                <form action={duplicateAgentAction} onSubmit={() => setOpenMenuId(null)}>
+                                  <input type="hidden" name="agentId" value={agent.id} />
+                                  <button
+                                    type="submit"
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="w-full flex items-center gap-2 px-3 py-1.5 font-body text-[0.84rem] text-text-body hover:bg-surface-subtle transition-colors text-left"
+                                  >
+                                    <Copy className="w-3.5 h-3.5 text-text-subtle" /> Duplicate
+                                  </button>
+                                </form>
+                                <form action={toggleAgentStatusAction} onSubmit={() => setOpenMenuId(null)}>
+                                  <input type="hidden" name="agentId" value={agent.id} />
+                                  <input type="hidden" name="newStatus" value={agent.status === "ACTIVE" ? "PAUSED" : "ACTIVE"} />
+                                  <button
+                                    type="submit"
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="w-full flex items-center gap-2 px-3 py-1.5 font-body text-[0.84rem] text-text-body hover:bg-surface-subtle transition-colors text-left"
+                                  >
+                                    {agent.status === "ACTIVE" ? <Pause className="w-3.5 h-3.5 text-text-subtle" /> : <Play className="w-3.5 h-3.5 text-text-subtle" />}
+                                    {agent.status === "ACTIVE" ? "Pause" : "Activate"}
+                                  </button>
+                                </form>
+                                <div className="border-t border-border-soft/40 my-0.5" />
+                                <form action={archiveAgentAction} onSubmit={() => setOpenMenuId(null)}>
+                                  <input type="hidden" name="agentId" value={agent.id} />
+                                  <button
+                                    type="submit"
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="w-full flex items-center gap-2 px-3 py-1.5 font-body text-[0.84rem] text-red-500 hover:bg-red-50 transition-colors text-left"
+                                  >
+                                    <Archive className="w-3.5 h-3.5" /> Archive
+                                  </button>
+                                </form>
+                              </div>
+                            )}
                           </td>
                         </tr>
                       ))}

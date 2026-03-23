@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, Suspense } from "react";
-import { Search, Plus, Hash, X, Trash2 } from "lucide-react";
+import { useState, useEffect, Suspense } from "react";
+import { Search, Plus, Hash, X, MoreHorizontal, Pencil, UserRoundCog } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import EmptyState from "@/components/dashboard/EmptyState";
 import { registerPhoneNumberAction, reassignPhoneNumberAction, deletePhoneNumberAction } from "@/app/_actions/phone-numbers";
@@ -58,6 +57,14 @@ function NumbersInner({ numbers, agents }: { numbers: NumberItem[]; agents: Agen
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!openMenuId) return;
+    const handler = () => setOpenMenuId(null);
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [openMenuId]);
 
   const filtered = query.trim()
     ? numbers.filter(
@@ -140,7 +147,8 @@ function NumbersInner({ numbers, agents }: { numbers: NumberItem[]; agents: Agen
                     <th className="text-left pl-4 pr-3 py-2 font-body text-[0.79rem] text-text-subtle/60 uppercase tracking-[0.08em]">Name</th>
                     <th className="text-left pl-4 pr-3 py-2 font-body text-[0.79rem] text-text-subtle/60 uppercase tracking-[0.08em]">Agent</th>
                     <th className="text-left pl-4 pr-3 py-2 font-body text-[0.79rem] text-text-subtle/60 uppercase tracking-[0.08em]">Status</th>
-                    <th className="text-right pl-4 pr-4 py-2 font-body text-[0.79rem] text-text-subtle/60 uppercase tracking-[0.08em]">Added</th>
+                    <th className="text-right pl-4 pr-3 py-2 font-body text-[0.79rem] text-text-subtle/60 uppercase tracking-[0.08em]">Added</th>
+                    <th className="w-10 pr-3 py-2"><span className="sr-only">Actions</span></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -181,24 +189,37 @@ function NumbersInner({ numbers, agents }: { numbers: NumberItem[]; agents: Agen
                         <td className="pl-4 pr-3 py-2.5">
                           <span className={`inline-flex px-1.5 py-px rounded text-[0.8rem] font-body font-medium ${statusStyle(status)}`}>{status}</span>
                         </td>
-                        <td className="pl-4 pr-4 py-2.5 text-right">
-                          <div className="flex items-center justify-end gap-1.5">
-                            <span className="font-body text-[0.89rem] text-text-subtle">{formatDate(n.createdAt)}</span>
-                            <form action={deletePhoneNumberAction}>
-                              <input type="hidden" name="phoneNumberId" value={n.id} />
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <button
-                                    type="submit"
-                                    className="p-0.5 rounded text-text-subtle/0 group-hover:text-text-subtle hover:!text-red-500 hover:bg-red-50 transition-all"
-                                  >
-                                    <Trash2 className="w-3 h-3" />
-                                  </button>
-                                </TooltipTrigger>
-                                <TooltipContent>Remove this number</TooltipContent>
-                              </Tooltip>
-                            </form>
-                          </div>
+                        <td className="pl-4 pr-3 py-2.5 text-right">
+                          <span className="font-body text-[0.89rem] text-text-subtle">{formatDate(n.createdAt)}</span>
+                        </td>
+                        <td className="pr-3 py-2.5 relative">
+                          <button
+                            onClick={(e) => { e.stopPropagation(); setOpenMenuId(openMenuId === n.id ? null : n.id); }}
+                            className="p-1 rounded-md text-text-subtle/0 group-hover:text-text-subtle hover:!text-text-strong hover:bg-surface-subtle transition-all"
+                            aria-label="Number actions"
+                          >
+                            <MoreHorizontal className="w-4 h-4" />
+                          </button>
+                          {openMenuId === n.id && (
+                            <div className="absolute right-3 top-full mt-0.5 w-44 bg-surface-panel rounded-lg border border-border-soft shadow-popover z-50 py-1 animate-fade-in" onMouseDown={(e) => e.stopPropagation()}>
+                              <button
+                                onClick={() => { setOpenMenuId(null); setEditingId(n.id); }}
+                                className="w-full flex items-center gap-2 px-3 py-1.5 font-body text-[0.84rem] text-text-body hover:bg-surface-subtle transition-colors text-left"
+                              >
+                                <UserRoundCog className="w-3.5 h-3.5 text-text-subtle" /> Reassign agent
+                              </button>
+                              <div className="border-t border-border-soft/40 my-0.5" />
+                              <form action={deletePhoneNumberAction} onSubmit={() => setOpenMenuId(null)}>
+                                <input type="hidden" name="phoneNumberId" value={n.id} />
+                                <button
+                                  type="submit"
+                                  className="w-full flex items-center gap-2 px-3 py-1.5 font-body text-[0.84rem] text-red-500 hover:bg-red-50 transition-colors text-left"
+                                >
+                                  Remove number
+                                </button>
+                              </form>
+                            </div>
+                          )}
                         </td>
                       </tr>
                     );

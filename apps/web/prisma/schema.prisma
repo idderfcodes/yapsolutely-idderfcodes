@@ -90,6 +90,7 @@ model User {
   agents            Agent[]
   calls             Call[]        @relation("UserCalls")
   phoneNumbers      PhoneNumber[]
+  paymentMethods    PaymentMethod[]
 }
 
 model Agent {
@@ -193,4 +194,20 @@ model EmailVerification {
   createdAt DateTime @default(now())
 
   @@index([email, code])
+}
+
+model PaymentMethod {
+  id          String   @id @default(cuid())
+  userId      String
+  cardLast4   String
+  cardBrand   String
+  expiryMonth Int
+  expiryYear  Int
+  billingName String
+  isDefault   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }

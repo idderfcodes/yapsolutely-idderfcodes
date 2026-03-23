@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Bot,
@@ -23,9 +23,11 @@ import {
   Building2,
   Plus,
   Zap,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { signOutAction } from "@/app/_actions/auth";
-import ThemeToggle from "@/components/theme-toggle";
+import { createWorkspaceAction } from "@/app/_actions/workspaces";
 
 interface NavItem {
   title: string;
@@ -116,14 +118,25 @@ function GroupedNav({ onClick, pathname }: { onClick?: () => void; pathname: str
 
 const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | null; plan?: string | null } }) => {
   const pathname = usePathname();
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [wsOpen, setWsOpen] = useState(false);
   const [planHover, setPlanHover] = useState(false);
   const [lastPathname, setLastPathname] = useState(pathname);
+  const [creatingWs, setCreatingWs] = useState(false);
+  const [wsName, setWsName] = useState("");
+  const [wsError, setWsError] = useState<string | null>(null);
+  const [theme, setThemeState] = useState<string>(() => {
+    if (typeof document !== "undefined") {
+      return document.documentElement.classList.contains("dark") ? "dark" : "light";
+    }
+    return "dark";
+  });
   const menuRef = useRef<HTMLDivElement>(null);
   const wsRef = useRef<HTMLDivElement>(null);
   const planRef = useRef<HTMLDivElement>(null);
+  const planTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   if (pathname !== lastPathname) {
     setLastPathname(pathname);
@@ -134,6 +147,15 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
     ? user.name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()
     : user?.email?.[0]?.toUpperCase() ?? "?";
 
+  const toggleTheme = useCallback(() => {
+    const root = document.documentElement;
+    const next = theme === "dark" ? "light" : "dark";
+    root.classList.remove("dark", "light");
+    root.classList.add(next);
+    setThemeState(next);
+    try { localStorage.setItem("theme", next); } catch { /* ignore */ }
+  }, [theme]);
+
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -141,11 +163,22 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
       }
       if (wsRef.current && !wsRef.current.contains(e.target as Node)) {
         setWsOpen(false);
+        setCreatingWs(false);
+        setWsName("");
+        setWsError(null);
       }
     };
     if (menuOpen || wsOpen) document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, [menuOpen, wsOpen]);
+
+  const handlePlanEnter = () => {
+    if (planTimerRef.current) clearTimeout(planTimerRef.current);
+    setPlanHover(true);
+  };
+  const handlePlanLeave = () => {
+    planTimerRef.current = setTimeout(() => setPlanHover(false), 200);
+  };
 
   const handleSignOut = () => {
     setMenuOpen(false);
@@ -153,12 +186,37 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
     signOutAction();
   };
 
+  const handleCreateWorkspace = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const name = wsName.trim();
+    if (!name) { setWsError("Name is required"); return; }
+    setWsError(null);
+    const formData = new FormData();
+    formData.set("name", name);
+    const result = await createWorkspaceAction(formData);
+    if (result?.error) { setWsError(result.error); return; }
+    setCreatingWs(false);
+    setWsName("");
+    setWsOpen(false);
+    router.refresh();
+  };
+
   return (
     <>
       {/* Desktop sidebar */}
       <aside className="hidden md:flex w-[220px] shrink-0 h-screen sticky top-0 bg-surface-panel border-r border-border-soft/50 flex-col">
+        {/* Logo */}
+        <div className="px-3 pt-3 pb-1">
+          <Link href="/dashboard" className="flex items-center gap-2 px-2.5">
+            <div className="w-6 h-6 rounded-md bg-foreground flex items-center justify-center shrink-0">
+              <span className="font-display text-[0.72rem] font-bold text-primary-foreground leading-none">Y</span>
+            </div>
+            <span className="font-display text-[0.92rem] font-semibold tracking-[-0.02em] text-text-strong">Yapsolutely</span>
+          </Link>
+        </div>
+
         {/* Workspace selector */}
-        <div className="relative px-3 pt-3 pb-2" ref={wsRef}>
+        <div className="relative px-3 pt-1 pb-2" ref={wsRef}>
           <button
             onClick={() => setWsOpen(!wsOpen)}
             className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg hover:bg-canvas/60 transition-colors group"
@@ -190,17 +248,34 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
                 </button>
               </div>
               <div className="border-t border-border-soft/40 py-1">
-                <button className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-canvas/50 transition-colors">
-                  <Plus className="w-3.5 h-3.5 text-text-subtle" />
-                  <span className="font-body text-[0.84rem] text-text-subtle">Create workspace</span>
-                </button>
+                {creatingWs ? (
+                  <form onSubmit={handleCreateWorkspace} className="px-3 py-2 space-y-2">
+                    <input
+                      type="text"
+                      value={wsName}
+                      onChange={(e) => setWsName(e.target.value)}
+                      placeholder="Workspace name"
+                      autoFocus
+                      className="w-full h-7 px-2.5 rounded-md border border-border-soft bg-canvas font-body text-[0.84rem] text-text-strong placeholder:text-text-subtle/40 focus:outline-none focus:ring-1 focus:ring-text-strong/10"
+                    />
+                    {wsError && <p className="font-body text-[0.72rem] text-red-500">{wsError}</p>}
+                    <div className="flex gap-1.5">
+                      <button type="submit" className="flex-1 h-6 rounded-md bg-foreground text-primary-foreground font-body text-[0.79rem] font-medium hover:opacity-90 transition-opacity">Create</button>
+                      <button type="button" onClick={() => { setCreatingWs(false); setWsName(""); setWsError(null); }} className="h-6 px-2 rounded-md font-body text-[0.79rem] text-text-subtle hover:bg-canvas transition-colors">Cancel</button>
+                    </div>
+                  </form>
+                ) : (
+                  <button
+                    onClick={() => setCreatingWs(true)}
+                    className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-canvas/50 transition-colors"
+                  >
+                    <Plus className="w-3.5 h-3.5 text-text-subtle" />
+                    <span className="font-body text-[0.84rem] text-text-subtle">Create workspace</span>
+                  </button>
+                )}
               </div>
             </div>
           )}
-        </div>
-
-        <div className="px-5 flex items-center justify-between pb-1">
-          <ThemeToggle />
         </div>
 
         <nav className="flex-1 px-3 py-1 overflow-y-auto">
@@ -211,8 +286,8 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
         <div
           className="px-3 pb-2 relative"
           ref={planRef}
-          onMouseEnter={() => setPlanHover(true)}
-          onMouseLeave={() => setPlanHover(false)}
+          onMouseEnter={handlePlanEnter}
+          onMouseLeave={handlePlanLeave}
         >
           <Link
             href="/billing"
@@ -295,14 +370,13 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
         <div className="relative px-3 pb-3 pt-2 border-t border-border-soft/40" ref={menuRef}>
           {menuOpen && (
             <div className="absolute bottom-full left-3 right-3 mb-1.5 bg-surface-panel rounded-xl border border-border-soft shadow-popover overflow-hidden z-50">
-              <Link
-                href="/settings"
-                onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-2.5 px-4 py-2.5 font-body text-[0.87rem] text-text-body hover:bg-surface-subtle transition-colors"
+              <button
+                onClick={toggleTheme}
+                className="w-full flex items-center gap-2.5 px-4 py-2.5 font-body text-[0.87rem] text-text-body hover:bg-surface-subtle transition-colors"
               >
-                <Settings className="w-3.5 h-3.5 text-text-subtle" />
-                Settings
-              </Link>
+                {theme === "dark" ? <Sun className="w-3.5 h-3.5 text-text-subtle" /> : <Moon className="w-3.5 h-3.5 text-text-subtle" />}
+                {theme === "dark" ? "Light mode" : "Dark mode"}
+              </button>
               <div className="border-t border-border-soft/50" />
               <button
                 onClick={handleSignOut}
@@ -342,7 +416,13 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
             </span>
           </Link>
           <div className="flex items-center gap-1">
-            <ThemeToggle />
+            <button
+              onClick={toggleTheme}
+              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-subtle transition-colors text-text-subtle hover:text-text-strong"
+              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label={mobileOpen ? "Close navigation" : "Open navigation"}

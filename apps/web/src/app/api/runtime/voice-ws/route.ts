@@ -2,11 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
+const runtimeSharedSecret = process.env.RUNTIME_SHARED_SECRET || "";
+// Public-facing WebSocket URL for browser connections
+const voiceStreamWssUrl = process.env.VOICE_STREAM_WSS_URL || "";
+// Internal URL for server-to-server calls
 const voiceRuntimeUrl =
   process.env.VOICE_RUNTIME_URL ||
   process.env.NEXT_PUBLIC_VOICE_RUNTIME_URL ||
   "http://localhost:3001";
-const runtimeSharedSecret = process.env.RUNTIME_SHARED_SECRET || "";
 
 export async function POST(req: NextRequest) {
   const session = await requireSession();
@@ -45,12 +48,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Agent not found" }, { status: 404 });
   }
 
-  // Build the WebSocket URL for the voice runtime
-  const baseUrl = voiceRuntimeUrl.replace(/\/$/, "");
-  const wsBase = baseUrl
-    .replace(/^http:/, "ws:")
-    .replace(/^https:/, "wss:");
-  const wsUrl = `${wsBase}/browser/stream?secret=${encodeURIComponent(runtimeSharedSecret)}`;
+  // Use the public-facing WSS URL for browser WebSocket connections
+  // Fall back to deriving from internal URL only for local dev
+  let wsUrl: string;
+  if (voiceStreamWssUrl) {
+    const base = voiceStreamWssUrl.replace(/\/twilio\/stream\/?$/, "");
+    wsUrl = `${base}/browser/stream?secret=${encodeURIComponent(runtimeSharedSecret)}`;
+  } else {
+    const baseUrl = voiceRuntimeUrl.replace(/\/$/, "");
+    const wsBase = baseUrl
+      .replace(/^http:/, "ws:")
+      .replace(/^https:/, "wss:");
+    wsUrl = `${wsBase}/browser/stream?secret=${encodeURIComponent(runtimeSharedSecret)}`;
+  }
 
   return NextResponse.json({
     wsUrl,
