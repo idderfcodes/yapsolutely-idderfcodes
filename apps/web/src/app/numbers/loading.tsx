@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function NumbersLoading() {
   return (
     <DashboardLayout>
-      <div className="p-5 sm:p-6 lg:p-8 max-w-[1100px]">
+      <div className="p-5 sm:p-6 lg:p-8 max-w-7xl">
         <div className="flex items-center justify-between mb-5">
           <div>
             <Skeleton className="h-5 w-24 mb-1" />

@@ -6,6 +6,7 @@ import { ensureWorkspaceUser, SESSION_COOKIE_NAME } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { signInSchema, signUpSchema, updateProfileSchema } from "@/lib/validations";
+import { sendOtpAction } from "@/app/_actions/verification";
 
 function normalizeEmail(value: FormDataEntryValue | null) {
   return typeof value === "string" ? value.trim().toLowerCase() : "";
@@ -93,22 +94,27 @@ export async function signUpAction(formData: FormData) {
       await prisma.user.create({
         data: { email, name: name || undefined, passwordHash: hash },
       });
-      await setSessionCookie(email, name || undefined);
-      redirect("/agents?onboarding=true");
+      // Send OTP for email verification
+      await sendOtpAction(email);
+      redirect(`/verify-identity?email=${encodeURIComponent(email)}&name=${encodeURIComponent(name || "")}`);
     } catch (e: unknown) {
       if (e && typeof e === "object" && "digest" in e) throw e;
       redirect("/sign-up?error=signup-failed");
     }
   }
 
-  // Passwordless fallback
-  const existingUser = await prisma.user.findUnique({ where: { email }, select: { id: true } });
-  await setSessionCookie(email, name || undefined);
-  await ensureWorkspaceUser({ email, name: name || undefined });
-  if (existingUser) {
-    redirect("/dashboard");
+  // Passwordless fallback — send OTP
+  try {
+    const existingUser = await prisma.user.findUnique({ where: { email }, select: { id: true } });
+    if (!existingUser) {
+      await prisma.user.create({ data: { email, name: name || undefined } });
+    }
+    await sendOtpAction(email);
+    redirect(`/verify-identity?email=${encodeURIComponent(email)}&name=${encodeURIComponent(name || "")}`);
+  } catch (e: unknown) {
+    if (e && typeof e === "object" && "digest" in e) throw e;
+    redirect("/sign-up?error=signup-failed");
   }
-  redirect("/agents?onboarding=true");
 }
 
 export async function signOutAction() {

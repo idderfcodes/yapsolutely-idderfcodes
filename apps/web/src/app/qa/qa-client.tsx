@@ -32,7 +32,7 @@ export default function QAClient({ data }: { data: QASummary }) {
 
   return (
     <DashboardLayout>
-      <div className="p-5 sm:p-6 lg:p-8 max-w-[1100px]">
+      <div className="p-5 sm:p-6 lg:p-8 max-w-7xl">
         {/* ── Header ── */}
         <div className="mb-5">
           <h1 className="font-display text-[1.38rem] font-semibold tracking-[-0.02em] text-text-strong">

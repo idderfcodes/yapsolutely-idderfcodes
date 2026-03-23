@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function DashboardLoading() {
   return (
     <DashboardLayout>
-      <div className="p-5 sm:p-6 lg:p-8 max-w-[1100px]">
+      <div className="p-5 sm:p-6 lg:p-8 max-w-7xl">
         <div className="mb-5">
           <Skeleton className="h-5 w-28 mb-1.5" />
           <Skeleton className="h-3.5 w-52" />

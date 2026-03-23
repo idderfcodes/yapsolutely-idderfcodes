@@ -27,7 +27,7 @@ import {
   Sun,
 } from "lucide-react";
 import { signOutAction } from "@/app/_actions/auth";
-import { createWorkspaceAction } from "@/app/_actions/workspaces";
+import { createWorkspaceAction, listWorkspacesAction } from "@/app/_actions/workspaces";
 
 interface NavItem {
   title: string;
@@ -127,6 +127,7 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
   const [creatingWs, setCreatingWs] = useState(false);
   const [wsName, setWsName] = useState("");
   const [wsError, setWsError] = useState<string | null>(null);
+  const [workspaces, setWorkspaces] = useState<{ id: string; name: string; slug: string }[]>([]);
   const [theme, setThemeState] = useState<string>(() => {
     if (typeof document !== "undefined") {
       return document.documentElement.classList.contains("dark") ? "dark" : "light";
@@ -172,6 +173,10 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
     return () => document.removeEventListener("mousedown", handler);
   }, [menuOpen, wsOpen]);
 
+  useEffect(() => {
+    listWorkspacesAction().then(setWorkspaces);
+  }, []);
+
   const handlePlanEnter = () => {
     if (planTimerRef.current) clearTimeout(planTimerRef.current);
     setPlanHover(true);
@@ -198,6 +203,7 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
     setCreatingWs(false);
     setWsName("");
     setWsOpen(false);
+    listWorkspacesAction().then(setWorkspaces);
     router.refresh();
   };
 
@@ -226,7 +232,7 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
             </div>
             <div className="flex-1 text-left min-w-0">
               <span className="font-display text-[0.84rem] font-semibold text-text-strong block truncate">
-                {user?.name ? `${user.name.split(" ")[0]}'s Workspace` : "My Workspace"}
+                {workspaces.length > 0 ? workspaces[0].name : (user?.name ? `${user.name.split(" ")[0]}'s Workspace` : "My Workspace")}
               </span>
             </div>
             <ChevronDown className={`w-3.5 h-3.5 text-text-subtle shrink-0 transition-transform duration-200 ${wsOpen ? "rotate-180" : ""}`} />
@@ -237,15 +243,24 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
               <div className="px-3 py-2 border-b border-border-soft/40">
                 <span className="font-body text-[0.67rem] text-text-subtle/50 uppercase tracking-[0.12em]">Workspaces</span>
               </div>
-              <div className="py-1">
-                <button className="w-full flex items-center gap-2.5 px-3 py-2 bg-canvas/50">
-                  <div className="w-6 h-6 rounded-md bg-foreground/[0.08] flex items-center justify-center">
-                    <Building2 className="w-3 h-3 text-text-strong" />
-                  </div>
-                  <span className="font-body text-[0.84rem] text-text-strong truncate">
-                    {user?.name ? `${user.name.split(" ")[0]}'s Workspace` : "My Workspace"}
-                  </span>
-                </button>
+              <div className="py-1 max-h-40 overflow-y-auto">
+                {workspaces.length > 0 ? workspaces.map((ws) => (
+                  <button key={ws.id} className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-canvas/50 transition-colors">
+                    <div className="w-6 h-6 rounded-md bg-foreground/[0.08] flex items-center justify-center">
+                      <Building2 className="w-3 h-3 text-text-strong" />
+                    </div>
+                    <span className="font-body text-[0.84rem] text-text-strong truncate">{ws.name}</span>
+                  </button>
+                )) : (
+                  <button className="w-full flex items-center gap-2.5 px-3 py-2 bg-canvas/50">
+                    <div className="w-6 h-6 rounded-md bg-foreground/[0.08] flex items-center justify-center">
+                      <Building2 className="w-3 h-3 text-text-strong" />
+                    </div>
+                    <span className="font-body text-[0.84rem] text-text-strong truncate">
+                      {user?.name ? `${user.name.split(" ")[0]}'s Workspace` : "My Workspace"}
+                    </span>
+                  </button>
+                )}
               </div>
               <div className="border-t border-border-soft/40 py-1">
                 {creatingWs ? (

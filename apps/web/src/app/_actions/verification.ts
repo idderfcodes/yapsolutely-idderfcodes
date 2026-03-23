@@ -1,7 +1,9 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
 import { generateOtp, sendVerificationEmail } from "@/lib/email";
+import { ensureWorkspaceUser, SESSION_COOKIE_NAME } from "@/lib/auth";
 
 const OTP_EXPIRY_MINUTES = 10;
 
@@ -83,5 +85,34 @@ export async function saveOnboardingAction(data: {
     },
   });
 
+  return { success: true };
+}
+
+export async function completeVerificationAction(email: string, name?: string) {
+  if (!email) return { error: "Missing email" };
+
+  const normalizedEmail = email.trim().toLowerCase();
+
+  // Confirm that a verified OTP exists for this email
+  const verified = await prisma.emailVerification.findFirst({
+    where: { email: normalizedEmail, verified: true },
+    orderBy: { createdAt: "desc" },
+  });
+
+  if (!verified) {
+    return { error: "Email not verified" };
+  }
+
+  // Set session cookie
+  const cookieStore = await cookies();
+  cookieStore.set(SESSION_COOKIE_NAME, JSON.stringify({ email: normalizedEmail, name }), {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 7,
+  });
+
+  await ensureWorkspaceUser({ email: normalizedEmail, name });
   return { success: true };
 }

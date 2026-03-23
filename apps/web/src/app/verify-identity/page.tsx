@@ -1,15 +1,20 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft, Fingerprint } from "lucide-react";
-import { verifyOtpAction, sendOtpAction } from "@/app/_actions/verification";
+import { verifyOtpAction, sendOtpAction, completeVerificationAction } from "@/app/_actions/verification";
 
 export default function VerifyIdentityPage() {
+  return <Suspense><VerifyIdentityInner /></Suspense>;
+}
+
+function VerifyIdentityInner() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
+  const nameParam = searchParams.get("name") || "";
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
   const [isResending, setIsResending] = useState(false);
@@ -64,6 +69,13 @@ export default function VerifyIdentityPage() {
     const result = await verifyOtpAction(email, fullCode);
     if (result.error) {
       setError(result.error);
+      setIsLoading(false);
+      return;
+    }
+    // Set session cookie now that email is verified
+    const sessionResult = await completeVerificationAction(email, nameParam || undefined);
+    if (sessionResult.error) {
+      setError(sessionResult.error);
       setIsLoading(false);
       return;
     }

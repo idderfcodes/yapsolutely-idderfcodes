@@ -47,3 +47,23 @@ export async function createWorkspaceAction(formData: FormData) {
 
   return { success: true, id: workspace.id, slug: workspace.slug };
 }
+
+export async function listWorkspacesAction() {
+  const session = await getSession();
+  if (!session) return [];
+
+  const user = await prisma.user.findUnique({ where: { email: session.email }, select: { id: true } });
+  if (!user) return [];
+
+  const memberships = await prisma.workspaceMember.findMany({
+    where: { userId: user.id },
+    include: { workspace: { select: { id: true, name: true, slug: true } } },
+    orderBy: { workspace: { createdAt: "asc" } },
+  });
+
+  return memberships.map((m) => ({
+    id: m.workspace.id,
+    name: m.workspace.name,
+    slug: m.workspace.slug,
+  }));
+}

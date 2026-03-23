@@ -1,15 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { signUpAction } from "@/app/_actions/auth";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Bot, Headphones, FileText, Eye, EyeOff } from "lucide-react";
 
+const errorMessages: Record<string, string> = {
+  "email-taken": "An account with this email already exists.",
+  "password-too-short": "Password must be at least 8 characters.",
+  "missing-email": "Please enter your email address.",
+  "signup-failed": "Something went wrong. Please try again.",
+};
+
 export default function SignUpPage() {
+  return <Suspense><SignUpInner /></Suspense>;
+}
+
+function SignUpInner() {
+  const searchParams = useSearchParams();
+  const serverError = searchParams.get("error");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,11 +44,17 @@ export default function SignUpPage() {
     e.preventDefault();
     if (!validate()) return;
     setIsLoading(true);
-    const formData = new FormData();
-    formData.set("email", email);
-    formData.set("name", fullName);
-    if (password) formData.set("password", password);
-    await signUpAction(formData);
+    try {
+      const formData = new FormData();
+      formData.set("email", email);
+      formData.set("name", fullName);
+      if (password) formData.set("password", password);
+      await signUpAction(formData);
+    } catch {
+      // redirect throws
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -78,6 +98,12 @@ export default function SignUpPage() {
                 or
               </span>
             </div>
+
+            {serverError && (
+              <div className="mb-4 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-body-sm text-destructive animate-slide-down">
+                {errorMessages[serverError] || "Something went wrong. Please try again."}
+              </div>
+            )}
 
             <form className="space-y-4 mb-6" onSubmit={handleSubmit} noValidate>
               <div className="space-y-1.5">

@@ -1,15 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { signInAction } from "@/app/_actions/auth";
 import { ArrowLeft, Phone, Shield, BarChart3, Eye, EyeOff } from "lucide-react";
 
+const errorMessages: Record<string, string> = {
+  "missing-email": "Please enter your email address.",
+  "invalid-credentials": "Invalid email or password. Please try again.",
+  "signup-failed": "Something went wrong. Please try again.",
+};
+
 export default function SignInPage() {
+  return <Suspense><SignInInner /></Suspense>;
+}
+
+function SignInInner() {
+  const searchParams = useSearchParams();
+  const serverError = searchParams.get("error");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
@@ -28,10 +41,16 @@ export default function SignInPage() {
     e.preventDefault();
     if (!validate()) return;
     setIsLoading(true);
-    const formData = new FormData();
-    formData.set("email", email);
-    if (password) formData.set("password", password);
-    await signInAction(formData);
+    try {
+      const formData = new FormData();
+      formData.set("email", email);
+      if (password) formData.set("password", password);
+      await signInAction(formData);
+    } catch {
+      // redirect throws — if we get here, something unexpected happened
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -75,6 +94,12 @@ export default function SignInPage() {
                 or
               </span>
             </div>
+
+            {serverError && (
+              <div className="mb-4 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-body-sm text-destructive animate-slide-down">
+                {errorMessages[serverError] || "Something went wrong. Please try again."}
+              </div>
+            )}
 
             <form className="space-y-4 mb-6" onSubmit={handleSubmit} noValidate>
               <div className="space-y-1.5">

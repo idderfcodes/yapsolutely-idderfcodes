@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function AgentDetailLoading() {
   return (
     <DashboardLayout>
-      <div className="p-5 sm:p-6 lg:p-8 max-w-[1100px]">
+      <div className="p-5 sm:p-6 lg:p-8 max-w-7xl">
         <Skeleton className="h-3 w-16 mb-3" />
         <div className="flex items-start justify-between gap-4 mb-3">
           <div>
