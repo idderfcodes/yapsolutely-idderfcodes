@@ -1,48 +1,90 @@
 "use client";
 
 import { useRef, useCallback, type MouseEvent as ReactMouseEvent } from "react";
-import { Bot, Shield, Zap, type LucideIcon } from "lucide-react";
 import ScrollReveal from "@/components/landing/ScrollReveal";
 
 /* ── Card data ── */
-const cards: {
-  icon: LucideIcon;
-  title: string;
-  desc: string;
-  rotation: number;
-  offsetY: number;
-}[] = [
+const cards = [
   {
-    icon: Bot,
-    title: "Custom\nAgents",
-    desc: "Build agents with unique personalities, scripts, and behaviors tailored to your business.",
-    rotation: -6,
-    offsetY: 18,
+    title: "Custom Agents",
+    desc: "Your best employee - cloned. Build agents that sound exactly like your brand, handle objections like a pro, and never take a sick day.",
+    visual: (
+      <div className="relative w-full h-full bg-gradient-to-br from-purple-900/40 via-purple-800/20 to-transparent flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(168,85,247,0.15),transparent_60%)]" />
+        {/* Agent avatar cluster */}
+        <div className="relative flex items-center -space-x-3">
+          {["bg-purple-500/80", "bg-indigo-500/80", "bg-violet-500/80"].map((bg, i) => (
+            <div key={i} className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full ${bg} border-2 border-surface-dark flex items-center justify-center shadow-lg`}>
+              <svg className="w-6 h-6 sm:w-7 sm:h-7 text-white/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0" />
+              </svg>
+            </div>
+          ))}
+        </div>
+        <div className="absolute bottom-4 left-4 right-4">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.06] w-fit">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[0.6rem] text-white/40 font-mono">3 agents active</span>
+          </div>
+        </div>
+      </div>
+    ),
   },
   {
-    icon: Zap,
-    title: "Sub-second\nResponses",
-    desc: "Streaming STT + LLM + TTS pipeline delivers natural, fast conversations.",
-    rotation: 0,
-    offsetY: 0,
+    title: "Sub-second Responses",
+    desc: "Callers can't tell it's AI. Our streaming STT + LLM + TTS pipeline responds faster than any human - under 800ms, every time.",
+    visual: (
+      <div className="relative w-full h-full bg-gradient-to-br from-amber-900/30 via-orange-800/10 to-transparent flex flex-col items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(245,158,11,0.1),transparent_60%)]" />
+        {/* Latency visualization */}
+        <div className="relative flex flex-col items-center gap-3">
+          <div className="text-[2.5rem] sm:text-[3rem] font-bold text-white/80 tracking-tight leading-none">
+            &lt;800<span className="text-[1.2rem] text-white/40 ml-0.5">ms</span>
+          </div>
+          <div className="flex items-center gap-1">
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className="w-1.5 rounded-full bg-amber-400/60"
+                style={{ height: `${12 + i * 6}px`, opacity: 0.4 + i * 0.15 }}
+              />
+            ))}
+          </div>
+          <span className="text-[0.6rem] text-white/30 font-body">voice response latency</span>
+        </div>
+      </div>
+    ),
   },
   {
-    icon: Shield,
-    title: "Full Audit\nTrail",
-    desc: "Every call logged with word-for-word transcripts and timeline events.",
-    rotation: 6,
-    offsetY: 18,
+    title: "Full Audit Trail",
+    desc: "Never wonder what happened on a call again. Every word transcribed, every event logged, every conversation reviewable from one place.",
+    visual: (
+      <div className="relative w-full h-full bg-gradient-to-br from-emerald-900/30 via-teal-800/10 to-transparent flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_60%,rgba(16,185,129,0.1),transparent_60%)]" />
+        {/* Transcript lines */}
+        <div className="w-[85%] space-y-2.5">
+          {[
+            { role: "Agent", text: "How can I help you today?", color: "text-emerald-400/50" },
+            { role: "Caller", text: "I need to reschedule my appointment.", color: "text-white/30" },
+            { role: "Agent", text: "Of course, let me pull that up for you.", color: "text-emerald-400/50" },
+          ].map((line, i) => (
+            <div key={i} className="flex gap-2.5 items-start">
+              <span className={`text-[0.55rem] font-mono ${line.color} shrink-0 w-8 mt-0.5`}>{line.role}</span>
+              <span className="text-[0.7rem] text-white/35 leading-[1.5] font-body">{line.text}</span>
+            </div>
+          ))}
+          <div className="flex items-center gap-1.5 ml-[42px] pt-1">
+            <span className="w-1 h-1 rounded-full bg-emerald-400/40" />
+            <span className="text-[0.5rem] text-white/20 font-body">100% transcribed</span>
+          </div>
+        </div>
+      </div>
+    ),
   },
 ];
 
 /* ── Tilt card ── */
-function TiltCard({
-  icon: Icon,
-  title,
-  desc,
-  rotation,
-  offsetY,
-}: (typeof cards)[number]) {
+function BenefitCard({ title, desc, visual }: (typeof cards)[number]) {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = useCallback(
@@ -54,9 +96,9 @@ function TiltCard({
       const y = e.clientY - rect.top;
       const midX = rect.width / 2;
       const midY = rect.height / 2;
-      const rotateY = ((x - midX) / midX) * 12;
-      const rotateX = ((midY - y) / midY) * 12;
-      el.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-12px) rotate(0deg)`;
+      const rotateY = ((x - midX) / midX) * 8;
+      const rotateX = ((midY - y) / midY) * 8;
+      el.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
     },
     [],
   );
@@ -69,30 +111,24 @@ function TiltCard({
 
   return (
     <div
-      className="flex-shrink-0 w-[260px] sm:w-[290px]"
-      style={{
-        transform: `rotate(${rotation}deg) translateY(${offsetY}px)`,
-        zIndex: rotation === 0 ? 10 : 5,
-      }}
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="relative rounded-2xl border border-white/[0.06] bg-[hsl(0_0%_10%)] overflow-hidden transition-transform duration-300 ease-out cursor-default select-none will-change-transform hover:border-accent-purple-soft/30 hover:shadow-[0_0_40px_rgba(168,85,247,0.08)] flex flex-col"
     >
-      <div
-        ref={cardRef}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        className="relative rounded-2xl border border-white/[0.08] bg-[hsl(0_0%_10%)] p-7 sm:p-8 transition-transform duration-300 ease-out cursor-default select-none will-change-transform hover:border-accent-purple-soft/40 hover:shadow-[0_0_40px_rgba(168,85,247,0.12)]"
-      >
-        {/* Icon */}
-        <div className="w-12 h-12 rounded-xl bg-accent-purple/20 flex items-center justify-center mb-5">
-          <Icon className="w-6 h-6 text-accent-purple-soft" />
-        </div>
+      {/* Visual / image area */}
+      <div className="w-full h-[200px] sm:h-[220px]">
+        {visual}
+      </div>
 
-        {/* Title */}
-        <h3 className="text-[1.6rem] sm:text-[1.85rem] font-bold text-white leading-[1.12] tracking-[-0.02em] whitespace-pre-line mb-3">
+      {/* Text content */}
+      <div className="p-6 sm:p-7 flex-1 flex flex-col">
+        <h3 className="text-[1.25rem] sm:text-[1.4rem] font-bold text-white leading-[1.15] tracking-[-0.02em] mb-3">
           {title}
         </h3>
-
-        {/* Description */}
-        <p className="text-[0.82rem] text-white/55 leading-[1.6]">{desc}</p>
+        <p className="text-[0.82rem] text-white/45 leading-[1.65] font-body">
+          {desc}
+        </p>
       </div>
     </div>
   );
@@ -102,10 +138,10 @@ function TiltCard({
 const Benefits = () => {
   return (
     <section className="relative py-20 sm:py-28 px-6 bg-surface-dark overflow-hidden">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* Heading */}
         <ScrollReveal variant="fade-up">
-          <div className="text-center mb-16 sm:mb-24">
+          <div className="text-center mb-14 sm:mb-20">
             <span className="font-body text-[0.65rem] text-white/40 uppercase tracking-[0.25em] block mb-5">
               Why Yapsolutely
             </span>
@@ -117,24 +153,22 @@ const Benefits = () => {
           </div>
         </ScrollReveal>
 
-        {/* Fanned cards */}
-        <ScrollReveal variant="scale-up" duration={900}>
-          <div className="flex justify-center items-end gap-[-20px] sm:gap-0">
-            <div className="flex items-end -space-x-4 sm:-space-x-6 justify-center">
-              {cards.map((card) => (
-                <TiltCard key={card.title} {...card} />
-              ))}
-            </div>
+        {/* Cards grid - equal sizes */}
+        <ScrollReveal variant="fade-up" delay={100} duration={800}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {cards.map((card) => (
+              <BenefitCard key={card.title} {...card} />
+            ))}
           </div>
         </ScrollReveal>
       </div>
 
-      {/* Subtle radial glow behind cards */}
+      {/* Subtle radial glow */}
       <div
         className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px]"
         style={{
           background:
-            "radial-gradient(ellipse at center bottom, rgba(168,85,247,0.06) 0%, transparent 70%)",
+            "radial-gradient(ellipse at center bottom, rgba(168,85,247,0.05) 0%, transparent 70%)",
         }}
       />
     </section>
