@@ -14,7 +14,10 @@ import FrameScrubber from "@/components/landing/FrameScrubber";
 
 export default function Home() {
   return (
-    <div className="min-h-screen">
+    <>
+      {/* Override body bg so the fixed canvas at z-0 is visible */}
+      <style>{`body { background: transparent !important; }`}</style>
+      <div className="min-h-screen">
       {/* Fixed canvas behind everything — light mode only */}
       <FrameScrubber />
       <div className="relative z-10">
@@ -46,5 +49,6 @@ export default function Home() {
       </div>
       </div>
     </div>
+    </>
   );
 }
