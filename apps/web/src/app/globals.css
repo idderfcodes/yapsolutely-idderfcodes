@@ -192,6 +192,9 @@
   --radius-card: var(--radius-card);
   --radius-pill: 9999px;
 
+  /* Max-widths */
+  --max-width-content-auth: var(--width-content-auth);
+
   /* Shadows */
   --shadow-surface-xs: var(--shadow-xs);
   --shadow-surface-sm: var(--shadow-sm);
@@ -211,7 +214,7 @@
   --width-content-default: 920px;
   --width-content-narrow: 860px;
   --width-content-form: 400px;
-  --width-content-auth: 400px;
+  --width-content-auth: 360px;
 
   /* Animations */
   --animate-accordion-down: accordion-down 0.2s ease-out;

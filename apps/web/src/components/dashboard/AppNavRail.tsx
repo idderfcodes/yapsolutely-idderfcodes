@@ -128,6 +128,12 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
   const [wsName, setWsName] = useState("");
   const [wsError, setWsError] = useState<string | null>(null);
   const [workspaces, setWorkspaces] = useState<{ id: string; name: string; slug: string }[]>([]);
+  const [activeWsId, setActiveWsId] = useState<string | null>(() => {
+    if (typeof window !== "undefined") {
+      try { return localStorage.getItem("yaps_active_ws"); } catch { /* ignore */ }
+    }
+    return null;
+  });
   const [theme, setThemeState] = useState<string>(() => {
     if (typeof document !== "undefined") {
       return document.documentElement.classList.contains("dark") ? "dark" : "light";
@@ -174,8 +180,23 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
   }, [menuOpen, wsOpen]);
 
   useEffect(() => {
-    listWorkspacesAction().then(setWorkspaces);
-  }, []);
+    listWorkspacesAction().then((wsList) => {
+      setWorkspaces(wsList);
+      if (wsList.length > 0 && !activeWsId) {
+        setActiveWsId(wsList[0].id);
+        try { localStorage.setItem("yaps_active_ws", wsList[0].id); } catch { /* ignore */ }
+      }
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const activeWs = workspaces.find((ws) => ws.id === activeWsId) ?? workspaces[0];
+
+  const handleSwitchWorkspace = (ws: { id: string; name: string; slug: string }) => {
+    setActiveWsId(ws.id);
+    try { localStorage.setItem("yaps_active_ws", ws.id); } catch { /* ignore */ }
+    setWsOpen(false);
+    router.refresh();
+  };
 
   const handlePlanEnter = () => {
     if (planTimerRef.current) clearTimeout(planTimerRef.current);
@@ -230,7 +251,7 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
             </div>
             <div className="flex-1 text-left min-w-0">
               <span className="font-display text-[0.84rem] font-semibold text-text-strong block truncate">
-                {workspaces.length > 0 ? workspaces[0].name : (user?.name ? `${user.name.split(" ")[0]}'s Workspace` : "My Workspace")}
+                {activeWs?.name ?? (user?.name ? `${user.name.split(" ")[0]}'s Workspace` : "My Workspace")}
               </span>
             </div>
             <ChevronDown className={`w-3.5 h-3.5 text-text-subtle shrink-0 transition-transform duration-200 ${wsOpen ? "rotate-180" : ""}`} />
@@ -243,11 +264,12 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
               </div>
               <div className="py-1 max-h-40 overflow-y-auto">
                 {workspaces.length > 0 ? workspaces.map((ws) => (
-                  <button key={ws.id} className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-canvas/50 transition-colors">
+                  <button key={ws.id} onClick={() => handleSwitchWorkspace(ws)} className={`w-full flex items-center gap-2.5 px-3 py-2 hover:bg-canvas/50 transition-colors ${ws.id === activeWsId ? "bg-canvas/50" : ""}`}>
                     <div className="w-6 h-6 rounded-md bg-foreground/[0.08] flex items-center justify-center">
                       <Building2 className="w-3 h-3 text-text-strong" />
                     </div>
                     <span className="font-body text-[0.84rem] text-text-strong truncate">{ws.name}</span>
+                    {ws.id === activeWsId && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-accent-gold shrink-0" />}
                   </button>
                 )) : (
                   <button className="w-full flex items-center gap-2.5 px-3 py-2 bg-canvas/50">

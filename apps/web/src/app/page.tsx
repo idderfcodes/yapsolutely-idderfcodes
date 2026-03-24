@@ -3,7 +3,6 @@ import Hero from "@/components/landing/Hero";
 import BrandCarousel from "@/components/landing/BrandCarousel";
 import Workflow from "@/components/landing/Workflow";
 import Benefits from "@/components/landing/Benefits";
-import DashboardPreview from "@/components/landing/DashboardPreview";
 import ClosingCTA from "@/components/landing/ClosingCTA";
 import FAQ from "@/components/landing/FAQ";
 import Footer from "@/components/landing/Footer";
@@ -29,15 +28,9 @@ export default function Home() {
         </ScrollReveal>
       </div>
 
-      <ScrollReveal variant="fade-up" duration={700}>
-        <DashboardPreview />
-      </ScrollReveal>
+      <UseCases />
 
       <Benefits />
-
-      <div className="bg-surface-panel">
-        <UseCases />
-      </div>
 
       <div className="bg-canvas">
         <ScrollReveal variant="scale-up" duration={800}>
