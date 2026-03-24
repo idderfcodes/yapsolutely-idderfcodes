@@ -59,28 +59,24 @@ export default function FrameScrubber() {
         let loaded = 0;
         const total = indices.length;
 
+        function onImageDone(i: number, img: HTMLImageElement | null) {
+          if (img) images[i] = img;
+          loaded++;
+          loadedCountRef.current = loaded;
+          if (loaded >= total) {
+            resolve(images as HTMLImageElement[]);
+          }
+        }
+
         function loadBatch(startIdx: number) {
           const end = Math.min(startIdx + BATCH_SIZE, total);
           for (let i = startIdx; i < end; i++) {
             const img = new Image();
-            img.decoding = "async";
             const frameNum = indices[i];
+            // Set handlers BEFORE src to catch cached images that fire synchronously
+            img.onload = () => onImageDone(i, img);
+            img.onerror = () => onImageDone(i, null);
             img.src = `${FRAME_PATH}${padFrame(frameNum)}.jpg`;
-            img.onload = () => {
-              images[i] = img;
-              loaded++;
-              loadedCountRef.current = loaded;
-              if (loaded === total) {
-                resolve(images as HTMLImageElement[]);
-              }
-            };
-            img.onerror = () => {
-              loaded++;
-              loadedCountRef.current = loaded;
-              if (loaded === total) {
-                resolve(images as HTMLImageElement[]);
-              }
-            };
           }
           // Schedule next batch after a small delay to avoid blocking
           if (end < total) {
@@ -133,15 +129,16 @@ export default function FrameScrubber() {
     []
   );
 
-  // Resize canvas to fill screen
+  // Resize canvas bitmap to match its CSS layout size
   const resizeCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = window.innerWidth * dpr;
-    canvas.height = window.innerHeight * dpr;
-    canvas.style.width = `${window.innerWidth}px`;
-    canvas.style.height = `${window.innerHeight}px`;
+    const w = canvas.offsetWidth;
+    const h = canvas.offsetHeight;
+    if (w === 0 || h === 0) return; // not laid out yet
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
     // Redraw current frame at new size
     if (lastFrameRef.current >= 0) {
       const saved = lastFrameRef.current;
@@ -178,12 +175,14 @@ export default function FrameScrubber() {
     });
   }, [drawFrame]);
 
-  // Main setup effect — runs once on mount, checks dark mode + reduced motion directly
+  // Main setup effect
   useEffect(() => {
-    // Check dark mode directly from DOM (avoids next-themes hydration issues)
     const isDark = document.documentElement.classList.contains("dark");
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (isDark || reducedMotion) return;
+
+    // Size canvas bitmap IMMEDIATELY before anything else
+    resizeCanvas();
 
     const indices = getFrameIndices();
 
@@ -194,7 +193,6 @@ export default function FrameScrubber() {
       onScroll(); // Draw initial frame
     });
 
-    resizeCanvas();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", resizeCanvas, { passive: true });
 
