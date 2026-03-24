@@ -4,7 +4,7 @@ import TrustStrip from "@/components/landing/TrustStrip";
 import BrandCarousel from "@/components/landing/BrandCarousel";
 import Workflow from "@/components/landing/Workflow";
 import Benefits from "@/components/landing/Benefits";
-import ProductShowcase from "@/components/landing/ProductShowcase";
+import DashboardPreview from "@/components/landing/DashboardPreview";
 import Testimonials from "@/components/landing/Testimonials";
 import ClosingCTA from "@/components/landing/ClosingCTA";
 import FAQ from "@/components/landing/FAQ";
@@ -20,10 +20,10 @@ export default function Home() {
 
       {/* ── Hero ── */}
       <Hero />
-      <TrustStrip />
       <ScrollReveal variant="fade-up" delay={80}>
         <BrandCarousel />
       </ScrollReveal>
+      <TrustStrip />
 
       {/* ── Opaque sections: alternating white / gray for rhythm ── */}
       <div className="bg-surface-panel">
@@ -31,6 +31,10 @@ export default function Home() {
           <Workflow />
         </ScrollReveal>
       </div>
+
+      <ScrollReveal variant="fade-up" duration={700}>
+        <DashboardPreview />
+      </ScrollReveal>
 
       <Benefits />
 
