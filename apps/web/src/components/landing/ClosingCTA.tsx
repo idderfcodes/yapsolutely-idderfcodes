@@ -9,7 +9,7 @@ const ClosingCTA = () => {
         <div className="bg-surface-dark rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden relative">
           {/* Subtle radial glow */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,var(--accent-purple)/0.08,transparent_60%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,var(--accent-gold)/0.06,transparent_60%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(255,255,255,0.04),transparent_60%)]" />
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-0">
             {/* Left: CTA */}
@@ -23,7 +23,7 @@ const ClosingCTA = () => {
                 Every missed call is a missed opportunity. Deploy an AI voice agent in minutes and never let another lead slip through.
               </p>
               <div className="flex flex-col sm:flex-row items-start gap-3">
-                <Button size="xl" className="bg-accent-gold text-surface-dark hover:bg-accent-gold/90 rounded-full font-display font-medium tracking-[-0.01em] btn-press shadow-[0_0_20px_-4px_var(--accent-gold)/0.4]" asChild>
+                <Button size="xl" className="bg-white text-surface-dark hover:bg-white/90 rounded-full font-display font-medium tracking-[-0.01em] btn-press shadow-[0_0_20px_-4px_rgba(255,255,255,0.3)]" asChild>
                   <Link href="/sign-up">
                     Get started free
                     <ArrowRight className="w-4 h-4 ml-1.5" />
@@ -47,8 +47,8 @@ const ClosingCTA = () => {
                   { icon: Shield, stat: "100%", label: "Every word transcribed and logged. Full audit trail." },
                 ].map((item) => (
                   <div key={item.stat} className="flex items-start gap-4 group">
-                    <div className="w-10 h-10 rounded-xl bg-accent-gold/10 flex items-center justify-center shrink-0 group-hover:bg-accent-gold/20 transition-colors">
-                      <item.icon className="w-5 h-5 text-accent-gold" />
+                    <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-white/15 transition-colors">
+                      <item.icon className="w-5 h-5 text-white/80" />
                     </div>
                     <div>
                       <div className="font-display text-lg font-semibold text-surface-dark-foreground/90 mb-0.5">{item.stat}</div>
