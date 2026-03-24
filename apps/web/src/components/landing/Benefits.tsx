@@ -137,7 +137,7 @@ function BenefitCard({ title, desc, visual }: (typeof cards)[number]) {
 /* ── Section ── */
 const Benefits = () => {
   return (
-    <section className="relative py-20 sm:py-28 px-6 bg-surface-dark overflow-hidden">
+    <section className="relative py-16 sm:py-28 px-5 sm:px-6 bg-surface-dark overflow-hidden">
       <div className="max-w-6xl mx-auto">
         {/* Heading */}
         <ScrollReveal variant="fade-up">

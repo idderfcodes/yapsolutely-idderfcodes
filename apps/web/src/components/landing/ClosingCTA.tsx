@@ -13,7 +13,7 @@ const ClosingCTA = () => {
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-0">
             {/* Left: CTA */}
-            <div className="p-10 sm:p-14 lg:p-16 flex flex-col justify-center">
+            <div className="p-8 sm:p-14 lg:p-16 flex flex-col justify-center">
               <h2 className="font-display text-[1.75rem] sm:text-[2.75rem] font-semibold tracking-[-0.03em] text-surface-dark-foreground mb-5 leading-[1.08]">
                 Stop losing calls.
                 <br />
@@ -22,7 +22,7 @@ const ClosingCTA = () => {
               <p className="font-body text-surface-dark-foreground/40 text-[0.95rem] max-w-md mb-8 leading-[1.7]">
                 Every missed call is a missed opportunity. Deploy an AI voice agent in minutes and never let another lead slip through.
               </p>
-              <div className="flex flex-col sm:flex-row items-start gap-3">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-3">
                 <Button size="xl" className="bg-white text-surface-dark hover:bg-white/90 rounded-full font-display font-medium tracking-[-0.01em] btn-press shadow-[0_0_20px_-4px_rgba(255,255,255,0.3)]" asChild>
                   <Link href="/sign-up">
                     Get started free

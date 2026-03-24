@@ -17,7 +17,7 @@ const DashboardPreview = () => {
 
         <div className="relative bg-surface-dark rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-8 md:p-10 overflow-hidden shadow-surface-xl">
           {/* Floating label */}
-          <div className="absolute top-5 right-5 sm:top-8 sm:right-8 z-10">
+          <div className="absolute top-3 right-3 sm:top-8 sm:right-8 z-10">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-dark-foreground/8 font-body text-[0.6rem] text-surface-dark-foreground/40 tracking-wider uppercase">
               Live dashboard preview
             </span>

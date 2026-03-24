@@ -149,6 +149,7 @@ const Workflow = () => {
                 <div
                   key={step.id}
                   onMouseEnter={() => setActiveStep(step.id)}
+                  onClick={() => setActiveStep(step.id)}
                   className={`w-full text-left p-5 sm:p-6 rounded-2xl transition-all duration-300 cursor-default ${
                     activeStep === step.id
                       ? "bg-white dark:bg-surface-elevated shadow-surface-sm"
@@ -172,10 +173,10 @@ const Workflow = () => {
                     </h3>
                   </div>
                   <div
-                    className={`transition-all duration-300 overflow-hidden ${
+                    className={`transition-all duration-300 overflow-hidden lg:transition-all ${
                       activeStep === step.id
                         ? "max-h-40 opacity-100 mt-2"
-                        : "max-h-0 opacity-0 mt-0"
+                        : "max-h-40 opacity-100 mt-2 lg:max-h-0 lg:opacity-0 lg:mt-0"
                     }`}
                   >
                     <p className="font-body text-[0.82rem] leading-[1.65] text-text-body">
@@ -186,8 +187,8 @@ const Workflow = () => {
               ))}
             </div>
 
-            {/* Right - illustration */}
-            <div className="relative min-h-[320px] sm:min-h-[380px] lg:min-h-[440px] flex items-center justify-center">
+            {/* Right - illustration (desktop only, hidden on mobile) */}
+            <div className="relative hidden lg:flex min-h-[320px] sm:min-h-[380px] lg:min-h-[440px] items-center justify-center">
               <StepIllustration activeStep={activeStep} />
             </div>
           </div>

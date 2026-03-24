@@ -21,14 +21,14 @@ const Hero = () => {
             <p className="text-[0.95rem] sm:text-[1.05rem] text-text-body max-w-lg leading-[1.65] mb-8">
               Build voice agents, assign them real phone numbers, and let them handle inbound calls. Review every transcript and monitor every conversation from one workspace.
             </p>
-            <div className="flex flex-col sm:flex-row items-start gap-3">
-              <Button variant="hero" size="xl" className="btn-press" asChild>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-3">
+              <Button variant="hero" size="xl" className="btn-press w-full sm:w-auto" asChild>
                 <Link href="/sign-up">
                   Start building free
                   <ArrowRight className="w-4 h-4 ml-1.5 transition-transform group-hover:translate-x-0.5" />
                 </Link>
               </Button>
-              <Button variant="hero-outline" size="xl" className="btn-press" asChild>
+              <Button variant="hero-outline" size="xl" className="btn-press w-full sm:w-auto" asChild>
                 <a href="#workflow">See how it works</a>
               </Button>
             </div>

@@ -337,6 +337,11 @@
     animation: scroll-left 30s linear infinite;
   }
   .focus-ring { @apply focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground/20 focus-visible:ring-offset-1 focus-visible:ring-offset-background; }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+  }
   .prose-yap h2 { @apply font-display text-[1rem] font-semibold text-text-strong tracking-[-0.01em] mt-8 mb-3 first:mt-0; }
   .prose-yap h3 { @apply font-display text-[0.88rem] font-medium text-text-strong mt-5 mb-2; }
   .prose-yap p { @apply font-body text-[0.82rem] text-text-body leading-[1.7] mb-3; }

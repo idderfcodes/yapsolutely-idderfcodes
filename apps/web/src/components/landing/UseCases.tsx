@@ -234,7 +234,6 @@ const UseCases = () => {
         <div
           ref={trackRef}
           className="flex gap-5 pl-6 pr-6 sm:pl-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {useCases.map((uc) => (
             <div
