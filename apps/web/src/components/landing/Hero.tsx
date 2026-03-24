@@ -40,62 +40,29 @@ const Hero = () => {
 
           {/* Right column — embedded voice agent illustration */}
           <div className="lg:col-span-5 animate-fade-up" style={{ animationDelay: "0.2s" }}>
-            <div className="relative flex justify-center">
-              {/* Phone mockup with voice waveform visualization */}
-              <svg viewBox="0 0 400 440" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[320px] mx-auto drop-shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
-                {/* Phone body */}
-                <rect x="60" y="20" width="280" height="400" rx="36" className="fill-surface-panel stroke-border-soft" strokeWidth="1.5"/>
-                {/* Screen area */}
-                <rect x="76" y="56" width="248" height="340" rx="8" className="fill-canvas"/>
-                {/* Status bar */}
-                <rect x="76" y="56" width="248" height="28" rx="8" className="fill-surface-panel" fillOpacity="0.8"/>
-                <circle cx="96" cy="70" r="3" fill="hsl(142,71%,45%)"/>
-                <text x="106" y="73" fontSize="9" className="fill-text-subtle" fontFamily="system-ui">Yapsolutely</text>
-                <text x="280" y="73" fontSize="8" className="fill-text-subtle" fontFamily="system-ui" textAnchor="end">4:23</text>
-                {/* Active call card */}
-                <rect x="92" y="100" width="216" height="72" rx="16" className="fill-surface-panel stroke-border-soft" strokeWidth="1"/>
-                <circle cx="120" cy="124" r="14" fill="hsl(142,71%,45%)" fillOpacity="0.1"/>
-                <circle cx="120" cy="124" r="6" fill="hsl(142,71%,45%)"/>
-                {/* Pulsing ring */}
-                <circle cx="120" cy="124" r="11" stroke="hsl(142,71%,45%)" strokeWidth="1" strokeOpacity="0.3">
-                  <animate attributeName="r" values="11;16;11" dur="2s" repeatCount="indefinite"/>
-                  <animate attributeName="stroke-opacity" values="0.3;0;0.3" dur="2s" repeatCount="indefinite"/>
-                </circle>
-                <text x="144" y="120" fontSize="11" fontWeight="600" className="fill-text-strong" fontFamily="system-ui">Inbound Sales Agent</text>
-                <text x="144" y="135" fontSize="9" className="fill-text-subtle" fontFamily="system-ui">+1 (415) 555-0142</text>
-                <rect x="144" y="146" width="44" height="16" rx="8" fill="hsl(142,71%,45%)" fillOpacity="0.1"/>
-                <text x="155" y="157" fontSize="8" fontWeight="500" fill="hsl(142,53%,42%)" fontFamily="system-ui">Active</text>
-                {/* Voice waveform visualization */}
-                <g transform="translate(92, 192)">
-                  <rect width="216" height="80" rx="16" className="fill-surface-panel stroke-border-soft" strokeWidth="1"/>
-                  <text x="16" y="20" fontSize="8" className="fill-text-subtle" fontFamily="system-ui" textDecoration="uppercase" letterSpacing="0.1em">LIVE AUDIO</text>
-                  {/* Waveform bars */}
-                  {[16,28,40,52,64,76,88,100,112,124,136,148,160,172,184,196].map((x, i) => {
-                    const heights = [18,28,22,36,30,24,34,20,28,38,24,32,26,20,30,22];
-                    const h = heights[i];
-                    return (
-                      <rect key={i} x={x} y={50 - h/2} width="6" height={h} rx="3" className="fill-foreground" fillOpacity={0.12 + (i % 3) * 0.06}>
-                        <animate attributeName="height" values={`${h};${h * 0.5};${h * 1.2};${h}`} dur={`${1.2 + i * 0.1}s`} repeatCount="indefinite"/>
-                        <animate attributeName="y" values={`${50-h/2};${50-h*0.25};${50-h*0.6};${50-h/2}`} dur={`${1.2 + i * 0.1}s`} repeatCount="indefinite"/>
-                      </rect>
-                    );
-                  })}
-                </g>
-                {/* Transcript preview */}
-                <g transform="translate(92, 290)">
-                  <rect width="216" height="92" rx="16" className="fill-surface-panel stroke-border-soft" strokeWidth="1"/>
-                  <text x="16" y="20" fontSize="8" className="fill-text-subtle" fontFamily="system-ui" letterSpacing="0.1em">TRANSCRIPT</text>
-                  <circle cx="26" cy="40" r="6" className="fill-foreground" fillOpacity="0.08"/>
-                  <text x="22" y="43" fontSize="7" className="fill-text-strong" fontFamily="system-ui" fontWeight="600" textAnchor="middle">A</text>
-                  <text x="38" y="42" fontSize="9" className="fill-text-body" fontFamily="system-ui">How can I help you today?</text>
-                  <circle cx="26" cy="62" r="6" fill="hsl(142,71%,45%)" fillOpacity="0.1"/>
-                  <text x="22" y="65" fontSize="7" fill="hsl(142,53%,42%)" fontFamily="system-ui" fontWeight="600" textAnchor="middle">C</text>
-                  <text x="38" y="64" fontSize="9" className="fill-text-body" fontFamily="system-ui">I&apos;d like to schedule a demo.</text>
-                  <rect x="38" y="74" width="80" height="4" rx="2" className="fill-border-soft"/>
-                </g>
-                {/* Notch */}
-                <rect x="160" y="26" width="80" height="20" rx="10" className="fill-canvas"/>
-              </svg>
+            {/* Browser-style bezel around real dashboard screenshot */}
+            <div className="relative mx-auto max-w-[520px] rounded-xl overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.12)] border border-border-soft/60">
+              {/* Browser chrome bar */}
+              <div className="flex items-center gap-2 px-4 py-2.5 bg-surface-panel border-b border-border-soft/40">
+                <div className="flex gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+                </div>
+                <div className="flex-1 mx-3">
+                  <div className="bg-canvas rounded-md px-3 py-1 text-[0.6rem] text-text-subtle font-mono text-center truncate">
+                    yapsolutely.xyz/dashboard
+                  </div>
+                </div>
+              </div>
+              {/* Screenshot */}
+              <img
+                src="/hero-dashboard.png"
+                alt="Yapsolutely dashboard showing voice agents, call logs, and live transcripts"
+                width={1641}
+                height={965}
+                className="w-full h-auto block"
+              />
             </div>
           </div>
         </div>
