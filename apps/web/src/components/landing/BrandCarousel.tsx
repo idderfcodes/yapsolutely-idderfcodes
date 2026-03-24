@@ -13,7 +13,7 @@ const stack = [
 
 const BrandCarousel = () => {
   return (
-    <section className="py-10 sm:py-14 overflow-hidden select-none">
+    <section className="pt-10 sm:pt-14 pb-0 overflow-hidden select-none">
       <p className="text-center font-body text-[0.7rem] text-text-subtle/50 uppercase tracking-[0.18em] mb-6">
         Powered by
       </p>
