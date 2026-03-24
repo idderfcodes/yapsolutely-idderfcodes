@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Menu, X, ChevronDown, Bot, Phone, FileText, BarChart3, Workflow, Sparkles, ArrowRight } from "lucide-react";
 import ThemeToggle from "@/components/theme-toggle";
+import Image from "next/image";
 
 const productLinks = [
   { label: "Voice Agents", href: "/features/voice-agents", description: "AI-powered phone agents", icon: Bot },
@@ -62,9 +63,7 @@ const Navbar = () => {
               className="font-display text-[1.2rem] font-bold tracking-[-0.03em] text-foreground hover:opacity-80 transition-opacity mr-8"
             >
               <span className="flex items-center gap-2">
-                <span className="w-7 h-7 rounded-lg bg-foreground flex items-center justify-center">
-                  <span className="text-[0.8rem] font-black text-background">Y</span>
-                </span>
+                <Image src="/logo-mark.svg" alt="" width={28} height={28} className="w-7 h-7 rounded-lg" />
                 Yapsolutely
               </span>
             </Link>

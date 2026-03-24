@@ -77,6 +77,12 @@ export const metadata: Metadata = {
     description:
       "Build, deploy, and manage AI voice agents for inbound phone calls.",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+  },
   robots: {
     index: true,
     follow: true,
