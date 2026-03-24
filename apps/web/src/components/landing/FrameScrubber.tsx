@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { useTheme } from "next-themes";
 
 const TOTAL_FRAMES = 240;
 const BATCH_SIZE = 20;
@@ -29,20 +28,7 @@ export default function FrameScrubber() {
   const lastFrameRef = useRef(-1);
 
   const [ready, setReady] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const { resolvedTheme } = useTheme();
-
-  // Client-only mount guard — prevents hydration mismatch
-  useEffect(() => {
-    setMounted(true);
-    setPrefersReducedMotion(
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    );
-  }, []);
-
-  // Show in light mode; treat undefined (pre-resolution) as light since defaultTheme="light"
-  const isLight = mounted && resolvedTheme !== "dark";
+  const [active, setActive] = useState(false);
 
   // Detect low-end / mobile → use half the frames
   const isLowEnd = useCallback(() => {
@@ -193,10 +179,14 @@ export default function FrameScrubber() {
     });
   }, [drawFrame]);
 
-  // Main setup effect
+  // Main setup effect — runs once on mount, checks dark mode + reduced motion directly
   useEffect(() => {
-    if (!isLight || prefersReducedMotion) return;
+    // Check dark mode directly from DOM (avoids next-themes hydration issues)
+    const isDark = document.documentElement.classList.contains("dark");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (isDark || reducedMotion) return;
 
+    setActive(true);
     const indices = getFrameIndices();
 
     preloadFrames(indices).then((images) => {
@@ -218,16 +208,14 @@ export default function FrameScrubber() {
       loadedCountRef.current = 0;
       lastFrameRef.current = -1;
     };
-  }, [isLight, prefersReducedMotion, getFrameIndices, preloadFrames, resizeCanvas, onScroll]);
-
-  // Don't render in dark mode or with reduced motion
-  if (!isLight || prefersReducedMotion) return null;
+  }, [getFrameIndices, preloadFrames, resizeCanvas, onScroll]);
 
   return (
     <div
       ref={containerRef}
       className="fixed inset-0 z-0 pointer-events-none"
       aria-hidden="true"
+      style={{ display: active ? undefined : "none" }}
     >
       <canvas
         ref={canvasRef}
