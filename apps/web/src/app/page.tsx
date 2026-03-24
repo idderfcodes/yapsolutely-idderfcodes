@@ -1,6 +1,5 @@
 import Navbar from "@/components/landing/Navbar";
 import Hero from "@/components/landing/Hero";
-import TrustStrip from "@/components/landing/TrustStrip";
 import BrandCarousel from "@/components/landing/BrandCarousel";
 import Workflow from "@/components/landing/Workflow";
 import Benefits from "@/components/landing/Benefits";
@@ -22,7 +21,6 @@ export default function Home() {
       <ScrollReveal variant="fade-up" delay={80}>
         <BrandCarousel />
       </ScrollReveal>
-      <TrustStrip />
 
       {/* ── Opaque sections: alternating white / gray for rhythm ── */}
       <div className="bg-surface-panel">
