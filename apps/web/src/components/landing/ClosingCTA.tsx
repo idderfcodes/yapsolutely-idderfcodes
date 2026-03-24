@@ -1,56 +1,61 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Phone, Zap, Shield } from "lucide-react";
 import Link from "next/link";
 
 const ClosingCTA = () => {
   return (
-    <section id="pricing" className="py-16 sm:py-20 px-6">
+    <section className="py-16 sm:py-20 px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="bg-surface-dark rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
-            {/* Left: editorial CTA */}
-            <div className="lg:col-span-7 p-10 sm:p-14 lg:p-16 flex flex-col justify-center">
-              <span className="font-body text-[0.6rem] text-surface-dark-foreground/20 uppercase tracking-[0.2em] block mb-6">Get started</span>
-              <h2 className="font-display text-[1.75rem] sm:text-[2.5rem] font-semibold tracking-[-0.03em] text-surface-dark-foreground mb-4 leading-[1.08]">
-                Your first agent can
-                <br className="hidden sm:block" />
-                go live in minutes
+        <div className="bg-surface-dark rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden relative">
+          {/* Subtle radial glow */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,var(--accent-purple)/0.08,transparent_60%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,var(--accent-gold)/0.06,transparent_60%)]" />
+
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-0">
+            {/* Left: CTA */}
+            <div className="p-10 sm:p-14 lg:p-16 flex flex-col justify-center">
+              <h2 className="font-display text-[1.75rem] sm:text-[2.75rem] font-semibold tracking-[-0.03em] text-surface-dark-foreground mb-5 leading-[1.08]">
+                Stop losing calls.
+                <br />
+                Start closing them.
               </h2>
-              <p className="font-body text-surface-dark-foreground/35 text-[0.9rem] max-w-md mb-10 leading-[1.65]">
-                Configure an agent, assign a number, and start taking calls. Review every transcript and monitor performance from day one.
+              <p className="font-body text-surface-dark-foreground/40 text-[0.95rem] max-w-md mb-8 leading-[1.7]">
+                Every missed call is a missed opportunity. Deploy an AI voice agent in minutes and never let another lead slip through.
               </p>
               <div className="flex flex-col sm:flex-row items-start gap-3">
-                <Button size="xl" className="bg-surface-dark-foreground text-surface-dark hover:bg-surface-dark-foreground/90 rounded-full font-display font-medium tracking-[-0.01em] btn-press shadow-[0_0_0_1px_var(--accent-gold)_,_0_2px_10px_-2px_var(--accent-gold)/0.25]" asChild>
+                <Button size="xl" className="bg-accent-gold text-surface-dark hover:bg-accent-gold/90 rounded-full font-display font-medium tracking-[-0.01em] btn-press shadow-[0_0_20px_-4px_var(--accent-gold)/0.4]" asChild>
                   <Link href="/sign-up">
-                    Start building
+                    Get started free
                     <ArrowRight className="w-4 h-4 ml-1.5" />
                   </Link>
                 </Button>
                 <Button size="xl" className="border border-surface-dark-foreground/10 bg-transparent text-surface-dark-foreground/60 hover:text-surface-dark-foreground hover:bg-surface-dark-foreground/5 rounded-full font-body font-medium tracking-[-0.01em]" asChild>
-                  <a href="mailto:hello@yapsolutely.com">Talk to us</a>
+                  <Link href="/docs">See the docs</Link>
                 </Button>
               </div>
+              <p className="font-body text-[0.72rem] text-surface-dark-foreground/20 mt-4">
+                No credit card required. Free tier includes 50 minutes/month.
+              </p>
             </div>
 
-            {/* Right: proof card */}
-            <div className="lg:col-span-5 p-8 sm:p-10 lg:p-12 lg:pl-0 flex items-center">
-              <div className="bg-surface-dark-foreground/5 rounded-2xl p-6 w-full">
-                <div className="font-body text-[0.6rem] text-surface-dark-foreground/25 uppercase tracking-[0.2em] mb-5">What you get</div>
-                <div className="space-y-4">
-                  {[
-                    { title: "Build", desc: "Prompt editor, voice selection, tool integrations" },
-                    { title: "Deploy", desc: "Real phone numbers, instant routing, zero downtime" },
-                    { title: "Monitor", desc: "Full transcripts, call logs, quality review" },
-                  ].map((item, i) => (
-                    <div key={item.title} className="flex gap-4">
-                      <span className="font-mono text-[0.6rem] text-surface-dark-foreground/15 pt-0.5">{String(i + 1).padStart(2, "0")}</span>
-                      <div>
-                        <div className="font-display text-sm font-medium text-surface-dark-foreground/80 mb-0.5">{item.title}</div>
-                        <div className="font-body text-[0.78rem] text-surface-dark-foreground/30 leading-[1.6]">{item.desc}</div>
-                      </div>
+            {/* Right: quick proof points */}
+            <div className="p-8 sm:p-10 lg:p-14 flex items-center">
+              <div className="space-y-6 w-full">
+                {[
+                  { icon: Zap, stat: "< 800ms", label: "Average voice response time. Callers can't tell it's AI." },
+                  { icon: Phone, stat: "24/7", label: "Your agent never sleeps, takes breaks, or calls in sick." },
+                  { icon: Shield, stat: "100%", label: "Every word transcribed and logged. Full audit trail." },
+                ].map((item) => (
+                  <div key={item.stat} className="flex items-start gap-4 group">
+                    <div className="w-10 h-10 rounded-xl bg-accent-gold/10 flex items-center justify-center shrink-0 group-hover:bg-accent-gold/20 transition-colors">
+                      <item.icon className="w-5 h-5 text-accent-gold" />
                     </div>
-                  ))}
-                </div>
+                    <div>
+                      <div className="font-display text-lg font-semibold text-surface-dark-foreground/90 mb-0.5">{item.stat}</div>
+                      <div className="font-body text-[0.82rem] text-surface-dark-foreground/35 leading-[1.6]">{item.label}</div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
