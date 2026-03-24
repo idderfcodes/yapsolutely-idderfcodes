@@ -32,9 +32,7 @@ export default function Home() {
         </ScrollReveal>
       </div>
 
-      <div className="bg-canvas">
-        <Benefits />
-      </div>
+      <Benefits />
 
       <div className="bg-surface-panel">
         <UseCases />
