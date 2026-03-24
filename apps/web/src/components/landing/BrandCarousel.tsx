@@ -3,19 +3,19 @@
 import Image from "next/image";
 
 const stack = [
-  { name: "Twilio", file: "twilio.svg" },
-  { name: "Deepgram", file: "deepgram.svg" },
-  { name: "Anthropic", file: "anthropic.svg" },
-  { name: "Next.js", file: "nextdotjs.svg" },
-  { name: "React", file: "react.svg" },
-  { name: "TypeScript", file: "typescript.svg" },
-  { name: "PostgreSQL", file: "postgresql.svg" },
-  { name: "Prisma", file: "prisma.svg" },
-  { name: "Tailwind CSS", file: "tailwindcss.svg" },
-  { name: "Node.js", file: "nodedotjs.svg" },
-  { name: "Docker", file: "docker.svg" },
-  { name: "Vercel", file: "vercel.svg" },
-  { name: "Zod", file: "zod.svg" },
+  { name: "Twilio", file: "twilio.svg", color: "#F22F46" },
+  { name: "Deepgram", file: "deepgram.svg", color: "#13EF93" },
+  { name: "Anthropic", file: "anthropic.svg", color: "#D4A27F" },
+  { name: "Next.js", file: "nextdotjs.svg", color: "#000000" },
+  { name: "React", file: "react.svg", color: "#61DAFB" },
+  { name: "TypeScript", file: "typescript.svg", color: "#3178C6" },
+  { name: "PostgreSQL", file: "postgresql.svg", color: "#4169E1" },
+  { name: "Prisma", file: "prisma.svg", color: "#2D3748" },
+  { name: "Tailwind CSS", file: "tailwindcss.svg", color: "#06B6D4" },
+  { name: "Node.js", file: "nodedotjs.svg", color: "#5FA04E" },
+  { name: "Docker", file: "docker.svg", color: "#2496ED" },
+  { name: "Vercel", file: "vercel.svg", color: "#000000" },
+  { name: "Zod", file: "zod.svg", color: "#3E67B1" },
 ];
 
 const BrandCarousel = () => {
@@ -23,7 +23,7 @@ const BrandCarousel = () => {
   const items = [...stack, ...stack];
 
   return (
-    <section className="pt-8 sm:pt-10 pb-8 sm:pb-10 overflow-hidden select-none">
+    <section className="pt-2 sm:pt-3 pb-8 sm:pb-10 overflow-hidden select-none">
       <p className="text-center font-body text-[0.7rem] text-text-subtle/50 uppercase tracking-[0.18em] mb-6">
         Powered by
       </p>
@@ -36,7 +36,7 @@ const BrandCarousel = () => {
 
         <div className="flex animate-scroll-left gap-10 sm:gap-14 w-max">
           {items.map((brand, i) => (
-            <div key={`${brand.name}-${i}`} className="flex items-center gap-2.5 opacity-40 grayscale shrink-0">
+            <div key={`${brand.name}-${i}`} className="flex items-center gap-2.5 opacity-70 shrink-0">
               <Image
                 src={`/logos/${brand.file}`}
                 alt={brand.name}

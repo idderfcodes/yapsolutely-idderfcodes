@@ -143,46 +143,37 @@ const Workflow = () => {
         {/* Two-column: steps on left, illustration on right */}
         <ScrollReveal variant="fade-up" delay={100}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-            {/* Left - clickable steps */}
-            <div className="space-y-1">
+            {/* Left - hoverable steps */}
+            <div className="space-y-2">
               {steps.map((step) => (
-                <button
+                <div
                   key={step.id}
-                  onClick={() => setActiveStep(step.id)}
-                  className={`w-full text-left p-5 sm:p-6 rounded-2xl transition-all duration-300 group cursor-pointer ${
+                  onMouseEnter={() => setActiveStep(step.id)}
+                  className={`w-full text-left p-5 sm:p-6 rounded-2xl transition-all duration-300 cursor-default ${
                     activeStep === step.id
-                      ? "bg-surface-elevated border border-border-soft/50 shadow-surface-sm"
-                      : "bg-transparent border border-transparent hover:bg-surface-elevated/50"
+                      ? "bg-white dark:bg-surface-elevated shadow-surface-sm"
+                      : "bg-transparent"
                   }`}
                 >
-                  <div className="flex items-start gap-4">
-                    <span
-                      className={`font-mono text-xs mt-1 transition-colors duration-300 ${
-                        activeStep === step.id ? "text-accent-gold" : "text-text-subtle/30"
-                      }`}
-                    >
-                      0{step.id + 1}
-                    </span>
-                    <div>
-                      <h3
-                        className={`font-display text-[1rem] sm:text-[1.1rem] font-semibold tracking-[-0.01em] leading-snug mb-1.5 transition-colors duration-300 ${
-                          activeStep === step.id ? "text-text-strong" : "text-text-subtle/60"
-                        }`}
-                      >
-                        {step.title}
-                      </h3>
-                      <p
-                        className={`font-body text-[0.82rem] leading-[1.65] transition-all duration-300 overflow-hidden ${
-                          activeStep === step.id
-                            ? "text-text-subtle max-h-40 opacity-100"
-                            : "max-h-0 opacity-0"
-                        }`}
-                      >
-                        {step.desc}
-                      </p>
-                    </div>
+                  <h3
+                    className={`font-display text-[1rem] sm:text-[1.1rem] font-semibold tracking-[-0.01em] leading-snug transition-colors duration-300 ${
+                      activeStep === step.id ? "text-text-strong" : "text-text-subtle/50"
+                    }`}
+                  >
+                    {step.title}
+                  </h3>
+                  <div
+                    className={`transition-all duration-300 overflow-hidden ${
+                      activeStep === step.id
+                        ? "max-h-40 opacity-100 mt-2"
+                        : "max-h-0 opacity-0 mt-0"
+                    }`}
+                  >
+                    <p className="font-body text-[0.82rem] leading-[1.65] text-text-subtle">
+                      {step.desc}
+                    </p>
                   </div>
-                </button>
+                </div>
               ))}
             </div>
 
