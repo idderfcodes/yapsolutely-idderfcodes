@@ -29,15 +29,20 @@ export default function FrameScrubber() {
   const lastFrameRef = useRef(-1);
 
   const [ready, setReady] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const { resolvedTheme } = useTheme();
 
-  // Determine if we should render at all
-  const isLight = resolvedTheme === "light";
+  // Client-only mount guard — prevents hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+    setPrefersReducedMotion(
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    );
+  }, []);
 
-  // Detect reduced motion preference
-  const prefersReducedMotion =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // Show in light mode; treat undefined (pre-resolution) as light since defaultTheme="light"
+  const isLight = mounted && resolvedTheme !== "dark";
 
   // Detect low-end / mobile → use half the frames
   const isLowEnd = useCallback(() => {
