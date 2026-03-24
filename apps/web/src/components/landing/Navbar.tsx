@@ -63,7 +63,7 @@ const Navbar = () => {
               className="font-display text-[1.2rem] font-bold tracking-[-0.03em] text-foreground hover:opacity-80 transition-opacity mr-8"
             >
               <span className="flex items-center gap-2">
-                <Image src="/logo-mark.svg" alt="" width={28} height={28} className="w-7 h-7 rounded-lg" />
+                <Image src="/favicon.svg" alt="" width={28} height={28} className="w-7 h-7 rounded-lg" />
                 Yapsolutely
               </span>
             </Link>

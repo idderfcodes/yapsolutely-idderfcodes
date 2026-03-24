@@ -2,7 +2,7 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const FROM_EMAIL = "Yapsolutely <onboarding@resend.dev>";
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "Yapsolutely <onboarding@resend.dev>";
 
 function otpEmailHtml(code: string) {
   return `<!DOCTYPE html>
@@ -62,7 +62,14 @@ export function generateOtp(): string {
 }
 
 export async function sendVerificationEmail(email: string, code: string) {
-  const { error } = await resend.emails.send({
+  console.log(`[email] Sending OTP to ${email} (code: ${code})`);
+
+  if (!process.env.RESEND_API_KEY) {
+    console.warn("[email] RESEND_API_KEY not set — OTP logged above but not emailed");
+    return;
+  }
+
+  const { data, error } = await resend.emails.send({
     from: FROM_EMAIL,
     to: email,
     subject: `${code} is your Yapsolutely verification code`,
@@ -71,6 +78,9 @@ export async function sendVerificationEmail(email: string, code: string) {
 
   if (error) {
     console.error("[email] Failed to send verification email:", error);
-    throw new Error("Failed to send verification email");
+    console.warn(`[email] OTP for ${email} was: ${code} (delivery failed, code still valid)`);
+    return;
   }
+
+  console.log(`[email] Verification email sent to ${email}, id: ${data?.id}`);
 }

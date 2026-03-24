@@ -214,7 +214,7 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
         {/* Logo */}
         <div className="px-3 pt-3 pb-1">
           <Link href="/dashboard" className="flex items-center gap-2 px-2.5">
-            <img src="/logo-mark.svg" alt="" width={24} height={24} className="w-6 h-6 rounded-md shrink-0" />
+            <img src="/favicon.svg" alt="" width={24} height={24} className="w-6 h-6 rounded-md shrink-0" />
             <span className="font-display text-[0.92rem] font-semibold tracking-[-0.02em] text-text-strong">Yapsolutely</span>
           </Link>
         </div>
@@ -424,7 +424,7 @@ const AppNavRail = ({ user }: { user?: { name?: string | null; email?: string | 
       <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-surface-panel/95 backdrop-blur-lg border-b border-border-soft">
         <div className="flex items-center justify-between h-14 px-4">
           <Link href="/dashboard" className="flex items-center gap-2">
-            <img src="/logo-mark.svg" alt="" width={28} height={28} className="w-7 h-7 rounded-lg" />
+            <img src="/favicon.svg" alt="" width={28} height={28} className="w-7 h-7 rounded-lg" />
             <span className="font-display text-[1.1rem] font-semibold tracking-[-0.02em] text-text-strong">
               Yapsolutely
             </span>
