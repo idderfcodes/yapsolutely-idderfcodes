@@ -1,225 +1,141 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef } from "react";
 
-const TOTAL_FRAMES = 240;
-const BATCH_SIZE = 20;
-const FRAME_PATH = "/frames/light-mode/ezgif-frame-";
-const CANVAS_BG = "#f0f2f5";
+const TOTAL = 240;
+const BG = "#f0f2f5";
 
-function padFrame(n: number): string {
+function pad(n: number) {
   return String(n).padStart(3, "0");
 }
 
+function loadImage(src: string): Promise<HTMLImageElement | null> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
+}
+
 /**
- * Scroll-scrubbing canvas that plays 240 JPG frames as a background animation.
- * - Fixed behind hero, completes by Workflow section
- * - Light mode only (hidden in dark mode, no images loaded)
- * - Batched preloading (20 at a time)
- * - Reduced frame set on mobile/low-end (every other frame)
- * - Respects prefers-reduced-motion
+ * Scroll-scrubbing canvas: 240 JPG frames play as user scrolls from #product → #workflow.
+ * Fixed behind content, light mode only, respects prefers-reduced-motion.
  */
 export default function FrameScrubber() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const framesRef = useRef<(HTMLImageElement | null)[]>([]);
-  const loadedCountRef = useRef(0);
-  const rafRef = useRef<number>(0);
-  const lastFrameRef = useRef(-1);
+  const frames = useRef<(HTMLImageElement | null)[]>([]);
+  const lastIdx = useRef(-1);
+  const raf = useRef(0);
+  const alive = useRef(true);
 
-  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    alive.current = true;
 
-  // Detect low-end / mobile → use half the frames
-  const isLowEnd = useCallback(() => {
-    if (typeof window === "undefined") return false;
-    const isMobile = window.innerWidth < 768;
-    const lowMemory =
-      "deviceMemory" in navigator &&
-      (navigator as unknown as { deviceMemory: number }).deviceMemory < 4;
-    const lowCores =
-      "hardwareConcurrency" in navigator && navigator.hardwareConcurrency < 4;
-    return isMobile || lowMemory || lowCores;
-  }, []);
+    // Bail in dark mode or reduced motion
+    if (document.documentElement.classList.contains("dark")) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  // Build the frame index list (all 240 or every other for low-end)
-  const getFrameIndices = useCallback(() => {
-    const step = isLowEnd() ? 2 : 1;
-    const indices: number[] = [];
-    for (let i = 1; i <= TOTAL_FRAMES; i += step) {
-      indices.push(i);
-    }
-    return indices;
-  }, [isLowEnd]);
-
-  // Preload images in batches of BATCH_SIZE
-  const preloadFrames = useCallback(
-    (indices: number[]) => {
-      return new Promise<HTMLImageElement[]>((resolve) => {
-        const images: (HTMLImageElement | null)[] = new Array(indices.length).fill(null);
-        let loaded = 0;
-        const total = indices.length;
-
-        function onImageDone(i: number, img: HTMLImageElement | null) {
-          if (img) images[i] = img;
-          loaded++;
-          loadedCountRef.current = loaded;
-          if (loaded >= total) {
-            resolve(images as HTMLImageElement[]);
-          }
-        }
-
-        function loadBatch(startIdx: number) {
-          const end = Math.min(startIdx + BATCH_SIZE, total);
-          for (let i = startIdx; i < end; i++) {
-            const img = new Image();
-            const frameNum = indices[i];
-            // Set handlers BEFORE src to catch cached images that fire synchronously
-            img.onload = () => onImageDone(i, img);
-            img.onerror = () => onImageDone(i, null);
-            img.src = `${FRAME_PATH}${padFrame(frameNum)}.jpg`;
-          }
-          // Schedule next batch after a small delay to avoid blocking
-          if (end < total) {
-            setTimeout(() => loadBatch(end), 16);
-          }
-        }
-
-        loadBatch(0);
-      });
-    },
-    []
-  );
-
-  // Draw a frame to the canvas
-  const drawFrame = useCallback(
-    (frameIdx: number) => {
-      const canvas = canvasRef.current;
-      const frames = framesRef.current;
-      if (!canvas || !frames.length) return;
-
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-
-      const clampedIdx = Math.max(0, Math.min(frameIdx, frames.length - 1));
-      if (clampedIdx === lastFrameRef.current) return;
-      lastFrameRef.current = clampedIdx;
-
-      const img = frames[clampedIdx];
-      if (!img) {
-        ctx.fillStyle = CANVAS_BG;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        return;
-      }
-
-      // Cover-fit the image to the canvas
-      const cw = canvas.width;
-      const ch = canvas.height;
-      const iw = img.naturalWidth;
-      const ih = img.naturalHeight;
-      const scale = Math.max(cw / iw, ch / ih);
-      const dw = iw * scale;
-      const dh = ih * scale;
-      const dx = (cw - dw) / 2;
-      const dy = (ch - dh) / 2;
-
-      ctx.fillStyle = CANVAS_BG;
-      ctx.fillRect(0, 0, cw, ch);
-      ctx.drawImage(img, dx, dy, dw, dh);
-    },
-    []
-  );
-
-  // Resize canvas bitmap to match its CSS layout size
-  const resizeCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const w = canvas.offsetWidth;
-    const h = canvas.offsetHeight;
-    if (w === 0 || h === 0) return; // not laid out yet
-    canvas.width = w * dpr;
-    canvas.height = h * dpr;
-    // Redraw current frame at new size
-    if (lastFrameRef.current >= 0) {
-      const saved = lastFrameRef.current;
-      lastFrameRef.current = -1;
-      drawFrame(saved);
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    // --- helpers ---
+    function sizeCanvas() {
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const w = Math.round(rect.width * dpr);
+      const h = Math.round(rect.height * dpr);
+      if (w > 0 && h > 0 && (canvas.width !== w || canvas.height !== h)) {
+        canvas.width = w;
+        canvas.height = h;
+      }
     }
-  }, [drawFrame]);
 
-  // Scroll handler: map scroll position to frame index
-  const onScroll = useCallback(() => {
-    if (rafRef.current) return;
-    rafRef.current = requestAnimationFrame(() => {
-      rafRef.current = 0;
-      const frames = framesRef.current;
-      if (!frames.length) return;
+    function draw(idx: number) {
+      if (!canvas || !ctx) return;
+      const list = frames.current;
+      const clamped = Math.max(0, Math.min(idx, list.length - 1));
+      if (clamped === lastIdx.current) return;
+      lastIdx.current = clamped;
 
-      // Find hero and workflow sections
-      const hero = document.getElementById("product");
-      const workflow = document.getElementById("workflow");
-      if (!hero || !workflow) return;
+      const img = list[clamped];
+      ctx.fillStyle = BG;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      if (img) {
+        const cw = canvas.width, ch = canvas.height;
+        const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+        const dw = img.naturalWidth * scale;
+        const dh = img.naturalHeight * scale;
+        ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+      }
+    }
 
-      const heroTop = hero.getBoundingClientRect().top + window.scrollY;
-      const workflowTop = workflow.getBoundingClientRect().top + window.scrollY;
-      const scrollRange = workflowTop - heroTop;
+    function onScroll() {
+      if (raf.current) return;
+      raf.current = requestAnimationFrame(() => {
+        raf.current = 0;
+        const list = frames.current;
+        if (!list.length) return;
+        const hero = document.getElementById("product");
+        const end = document.getElementById("workflow");
+        if (!hero || !end) return;
+        const top = hero.getBoundingClientRect().top + window.scrollY;
+        const bot = end.getBoundingClientRect().top + window.scrollY;
+        const range = bot - top;
+        if (range <= 0) return;
+        const t = Math.max(0, Math.min(1, (window.scrollY - top) / range));
+        draw(Math.round(t * (list.length - 1)));
+      });
+    }
 
-      if (scrollRange <= 0) return;
+    function onResize() {
+      sizeCanvas();
+      if (lastIdx.current >= 0) {
+        const saved = lastIdx.current;
+        lastIdx.current = -1;
+        draw(saved);
+      }
+    }
 
-      const progress = Math.max(
-        0,
-        Math.min(1, (window.scrollY - heroTop) / scrollRange)
-      );
-      const frameIdx = Math.round(progress * (frames.length - 1));
-      drawFrame(frameIdx);
-    });
-  }, [drawFrame]);
+    // --- init ---
+    sizeCanvas();
 
-  // Main setup effect
-  useEffect(() => {
-    const isDark = document.documentElement.classList.contains("dark");
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (isDark || reducedMotion) return;
+    // Use every-other frame on mobile
+    const step = window.innerWidth < 768 ? 2 : 1;
+    const indices: number[] = [];
+    for (let i = 1; i <= TOTAL; i += step) indices.push(i);
 
-    // Size canvas bitmap IMMEDIATELY before anything else
-    resizeCanvas();
-
-    const indices = getFrameIndices();
-
-    preloadFrames(indices).then((images) => {
-      framesRef.current = images;
-      setReady(true);
-      resizeCanvas();
-      onScroll(); // Draw initial frame
+    // Load all frames in parallel
+    Promise.all(
+      indices.map((n) => loadImage(`/frames/light-mode/ezgif-frame-${pad(n)}.jpg`))
+    ).then((imgs) => {
+      if (!alive.current) return;
+      frames.current = imgs;
+      canvas.style.opacity = "1";
+      sizeCanvas();
+      onScroll();
     });
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", resizeCanvas, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
 
     return () => {
+      alive.current = false;
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", resizeCanvas);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      framesRef.current = [];
-      loadedCountRef.current = 0;
-      lastFrameRef.current = -1;
+      window.removeEventListener("resize", onResize);
+      if (raf.current) cancelAnimationFrame(raf.current);
     };
-  }, [getFrameIndices, preloadFrames, resizeCanvas, onScroll]);
+  }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className="fixed inset-0 z-0 pointer-events-none"
-      aria-hidden="true"
-    >
+    <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
       <canvas
         ref={canvasRef}
         className="block w-full h-full"
-        style={{
-          backgroundColor: CANVAS_BG,
-          opacity: ready ? 1 : 0,
-          transition: "opacity 0.4s ease",
-        }}
+        style={{ backgroundColor: BG, opacity: 0, transition: "opacity 0.5s ease" }}
       />
     </div>
   );
