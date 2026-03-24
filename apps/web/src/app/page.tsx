@@ -5,7 +5,6 @@ import BrandCarousel from "@/components/landing/BrandCarousel";
 import Workflow from "@/components/landing/Workflow";
 import Benefits from "@/components/landing/Benefits";
 import DashboardPreview from "@/components/landing/DashboardPreview";
-import Testimonials from "@/components/landing/Testimonials";
 import ClosingCTA from "@/components/landing/ClosingCTA";
 import FAQ from "@/components/landing/FAQ";
 import Footer from "@/components/landing/Footer";
@@ -40,10 +39,6 @@ export default function Home() {
 
       <div className="bg-surface-panel">
         <UseCases />
-      </div>
-
-      <div className="bg-canvas">
-        <Testimonials />
       </div>
 
       <div className="bg-surface-panel">
