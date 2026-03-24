@@ -6,7 +6,7 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, Sparkles, Check } from "lucide-react";
 import { saveOnboardingAction } from "@/app/_actions/verification";
 
-type Step = "role" | "agents" | "industry";
+type Step = "role" | "industry";
 
 const ROLE_OPTIONS = [
   { value: "founder", label: "Founder / CEO", desc: "Building the product vision" },
@@ -14,13 +14,6 @@ const ROLE_OPTIONS = [
   { value: "operations", label: "Operations", desc: "Managing day-to-day workflows" },
   { value: "sales", label: "Sales / Support", desc: "Customer-facing team" },
   { value: "other", label: "Other", desc: "Something else entirely" },
-];
-
-const AGENT_COUNT_OPTIONS = [
-  { value: "1", label: "Just 1", desc: "Starting with a single agent" },
-  { value: "2-5", label: "2-5 agents", desc: "Small team of voice agents" },
-  { value: "6-20", label: "6-20 agents", desc: "Growing operation" },
-  { value: "20+", label: "20+ agents", desc: "Enterprise scale" },
 ];
 
 const INDUSTRY_OPTIONS = [
@@ -37,20 +30,17 @@ const INDUSTRY_OPTIONS = [
 export default function OnboardingPage() {
   const [step, setStep] = useState<Step>("role");
   const [role, setRole] = useState("");
-  const [agentCount, setAgentCount] = useState("");
   const [industry, setIndustry] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [sessionEmail, setSessionEmail] = useState("");
 
   useEffect(() => {
-    // Read email from session cookie (set during signup)
     try {
       const cookies = document.cookie.split(";").map(c => c.trim());
       const sessionCookie = cookies.find(c => c.startsWith("yaps_session="));
       if (sessionCookie) {
         const value = decodeURIComponent(sessionCookie.split("=").slice(1).join("="));
         const parsed = JSON.parse(value);
-        // eslint-disable-next-line react-hooks/set-state-in-effect -- reading cookie once on mount
         if (parsed.email) { setSessionEmail(parsed.email); }
       }
     } catch { /* ignore */ }
@@ -58,26 +48,25 @@ export default function OnboardingPage() {
 
   const handleComplete = async () => {
     setIsLoading(true);
-    if (sessionEmail && role && agentCount && industry) {
-      await saveOnboardingAction({ role, agentCount, industry, email: sessionEmail });
+    if (sessionEmail && role && industry) {
+      await saveOnboardingAction({ role, agentCount: "", industry, email: sessionEmail });
     }
-    window.location.href = "/dashboard";
+    // First sign-in: go to agents page to create their first agent
+    window.location.href = "/agents";
   };
 
   const canProceed = () => {
     if (step === "role") return !!role;
-    if (step === "agents") return !!agentCount;
     if (step === "industry") return !!industry;
     return false;
   };
 
   const handleNext = () => {
-    if (step === "role") setStep("agents");
-    else if (step === "agents") setStep("industry");
+    if (step === "role") setStep("industry");
     else handleComplete();
   };
 
-  const stepIndex = step === "role" ? 0 : step === "agents" ? 1 : 2;
+  const stepIndex = step === "role" ? 0 : 1;
 
   return (
     <div className="min-h-screen bg-canvas flex">
@@ -91,7 +80,7 @@ export default function OnboardingPage() {
             </span>
           </Link>
           <div className="flex items-center gap-1.5">
-            {[0, 1, 2].map((i) => (
+            {[0, 1].map((i) => (
               <span key={i} className={`w-6 h-1 rounded-full transition-colors ${i <= stepIndex ? "bg-foreground" : "bg-border"}`} />
             ))}
           </div>
@@ -137,33 +126,6 @@ export default function OnboardingPage() {
               </>
             )}
 
-            {step === "agents" && (
-              <>
-                <h1 className="font-display text-[1.5rem] sm:text-[1.75rem] font-semibold tracking-[-0.03em] text-text-strong leading-[1.15] mb-2">
-                  How many agents do you need?
-                </h1>
-                <p className="font-body text-body-md text-text-subtle leading-relaxed mb-8">
-                  You can always add more later. This helps us set up defaults.
-                </p>
-                <div className="grid grid-cols-2 gap-3">
-                  {AGENT_COUNT_OPTIONS.map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => setAgentCount(option.value)}
-                      className={`flex flex-col p-5 rounded-xl border transition-all duration-150 text-left ${
-                        agentCount === option.value
-                          ? "border-foreground bg-surface-elevated shadow-surface-xs"
-                          : "border-border-soft/40 bg-surface-panel hover:border-border hover:bg-surface-elevated"
-                      }`}
-                    >
-                      <div className="font-display text-lg font-semibold text-text-strong mb-1">{option.label}</div>
-                      <div className="font-body text-[0.89rem] text-text-subtle">{option.desc}</div>
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
-
             {step === "industry" && (
               <>
                 <h1 className="font-display text-[1.5rem] sm:text-[1.75rem] font-semibold tracking-[-0.03em] text-text-strong leading-[1.15] mb-2">
@@ -200,7 +162,7 @@ export default function OnboardingPage() {
                 <Button
                   variant="ghost"
                   size="lg"
-                  onClick={() => setStep(step === "industry" ? "agents" : "role")}
+                  onClick={() => setStep("role")}
                   className="font-body text-text-subtle"
                 >
                   Back
@@ -218,7 +180,7 @@ export default function OnboardingPage() {
                     Setting up…
                   </span>
                 ) : step === "industry" ? (
-                  "Enter workspace"
+                  "Start building"
                 ) : (
                   <span className="flex items-center gap-1.5">
                     Continue
@@ -258,9 +220,8 @@ export default function OnboardingPage() {
           <div className="bg-surface-dark-foreground/5 rounded-2xl p-6">
             <div className="space-y-4">
               {[
-                { step: "1", label: "Confirm email", status: "done" },
-                { step: "2", label: "Verify identity", status: "done" },
-                { step: "3", label: "Set up workspace", status: "current" },
+                { step: "1", label: "Verify email", status: "done" },
+                { step: "2", label: "Personalize workspace", status: "current" },
               ].map((item) => (
                 <div key={item.step} className="flex items-center gap-4">
                   <div className={`w-7 h-7 rounded-lg flex items-center justify-center font-mono text-xs ${

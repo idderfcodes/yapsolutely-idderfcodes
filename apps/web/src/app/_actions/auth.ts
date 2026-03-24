@@ -43,7 +43,7 @@ export async function signInAction(formData: FormData) {
   // If password provided, verify it
   if (password) {
     try {
-      const user = await prisma.user.findUnique({ where: { email }, select: { passwordHash: true, name: true } });
+      const user = await prisma.user.findUnique({ where: { email }, select: { passwordHash: true, name: true, workspaceSettings: true } });
       if (!user?.passwordHash) {
         redirect("/sign-in?error=invalid-credentials");
       }
@@ -53,7 +53,8 @@ export async function signInAction(formData: FormData) {
       }
       await setSessionCookie(email, user.name || undefined);
       await ensureWorkspaceUser({ email, name: user.name || undefined });
-      redirect("/dashboard");
+      const settings = user.workspaceSettings as Record<string, unknown> | null;
+      redirect(settings?.onboardedAt ? "/dashboard" : "/agents");
     } catch (e: unknown) {
       // redirect() throws NEXT_REDIRECT — rethrow it
       if (e && typeof e === "object" && "digest" in e) throw e;
@@ -64,7 +65,9 @@ export async function signInAction(formData: FormData) {
   // Passwordless fallback (demo mode)
   await setSessionCookie(email);
   await ensureWorkspaceUser({ email });
-  redirect("/dashboard");
+  const demoUser = await prisma.user.findUnique({ where: { email }, select: { workspaceSettings: true } });
+  const demoSettings = demoUser?.workspaceSettings as Record<string, unknown> | null;
+  redirect(demoSettings?.onboardedAt ? "/dashboard" : "/agents");
 }
 
 export async function signUpAction(formData: FormData) {

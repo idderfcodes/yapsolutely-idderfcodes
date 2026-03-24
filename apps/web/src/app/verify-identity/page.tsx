@@ -139,8 +139,8 @@ function VerifyIdentityInner() {
                     onChange={(e) => handleChange(i, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(i, e)}
                     onPaste={i === 0 ? handlePaste : undefined}
-                    className={`w-11 h-13 sm:w-12 sm:h-14 text-center text-lg font-display font-semibold rounded-xl border bg-surface-panel transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-foreground ${
-                      error ? "border-destructive ring-1 ring-destructive/20" : "border-border"
+                    className={`w-11 h-13 sm:w-12 sm:h-14 text-center text-lg font-display font-semibold rounded-xl border-2 bg-surface-panel text-text-strong transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-foreground ${
+                      error ? "border-destructive ring-1 ring-destructive/20" : "border-border-soft"
                     }`}
                     autoFocus={i === 0}
                   />
