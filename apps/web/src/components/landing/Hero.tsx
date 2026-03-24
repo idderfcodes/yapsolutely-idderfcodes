@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Hero = () => {
   return (
-    <section id="product" className="pt-28 sm:pt-36 pb-20 sm:pb-32 px-5 sm:px-6">
+    <section id="product" className="pt-28 sm:pt-36 pb-20 sm:pb-32 px-5 sm:px-6 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         {/* Asymmetric hero: left-aligned headline + right embedded illustration */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-14 sm:mb-20">
@@ -40,9 +40,9 @@ const Hero = () => {
 
           {/* Right column — embedded voice agent illustration */}
           <div className="lg:col-span-5 animate-fade-up" style={{ animationDelay: "0.2s" }}>
-            <div className="relative">
+            <div className="relative flex justify-center">
               {/* Phone mockup with voice waveform visualization */}
-              <svg viewBox="0 0 400 440" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[360px] mx-auto drop-shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
+              <svg viewBox="0 0 400 440" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[320px] mx-auto drop-shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
                 {/* Phone body */}
                 <rect x="60" y="20" width="280" height="400" rx="36" className="fill-surface-panel stroke-border-soft" strokeWidth="1.5"/>
                 {/* Screen area */}
