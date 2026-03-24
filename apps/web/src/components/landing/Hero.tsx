@@ -11,14 +11,14 @@ const Hero = () => {
           <div className="lg:col-span-6 animate-fade-up" style={{ animationDelay: "0.1s" }}>
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-elevated border border-border-soft/40 mb-8">
               <span className="w-1.5 h-1.5 rounded-full bg-accent-gold animate-pulse-dot" />
-              <span className="font-body text-[0.7rem] text-text-subtle tracking-wide">Handling calls now</span>
+              <span className="font-body text-[0.7rem] text-text-body tracking-wide">Handling calls now</span>
             </div>
             <h1 className="text-[2.25rem] sm:text-[3.5rem] lg:text-[4.5rem] font-semibold tracking-[-0.035em] leading-[1.02] text-foreground mb-6">
               AI agents that
               <br />
               answer your phone
             </h1>
-            <p className="text-[0.95rem] sm:text-[1.05rem] text-text-subtle max-w-lg leading-[1.65] mb-8">
+            <p className="text-[0.95rem] sm:text-[1.05rem] text-text-body max-w-lg leading-[1.65] mb-8">
               Build voice agents, assign them real phone numbers, and let them handle inbound calls. Review every transcript and monitor every conversation from one workspace.
             </p>
             <div className="flex flex-col sm:flex-row items-start gap-3">
@@ -32,7 +32,7 @@ const Hero = () => {
                 <a href="#workflow">See how it works</a>
               </Button>
             </div>
-            <p className="mt-4 font-body text-[0.75rem] text-text-subtle/60 flex items-center gap-1.5">
+            <p className="mt-4 font-body text-[0.75rem] text-text-body/80 flex items-center gap-1.5">
               <span className="w-1 h-1 rounded-full bg-accent-gold" />
               No credit card required. Free plan available.
             </p>
@@ -50,7 +50,7 @@ const Hero = () => {
                   <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
                 </div>
                 <div className="flex-1 mx-3">
-                  <div className="bg-canvas rounded-md px-3 py-1 text-[0.6rem] text-text-subtle font-mono text-center truncate">
+                  <div className="bg-canvas rounded-md px-3 py-1 text-[0.6rem] text-text-body font-mono text-center truncate">
                     yapsolutely.xyz/dashboard
                   </div>
                 </div>

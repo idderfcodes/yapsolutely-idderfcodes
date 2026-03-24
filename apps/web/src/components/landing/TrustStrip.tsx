@@ -16,7 +16,7 @@ const TrustStrip = () => {
               {i > 0 && <span className="hidden sm:block w-px h-4 bg-border/40" />}
               <div className="flex items-center gap-2">
                 <span className="font-display text-[0.7rem] font-medium text-text-body tracking-wide">{cap.detail}</span>
-                <span className="font-body text-[0.7rem] text-text-subtle/60">{cap.label}</span>
+                <span className="font-body text-[0.7rem] text-text-body">{cap.label}</span>
               </div>
             </div>
           ))}

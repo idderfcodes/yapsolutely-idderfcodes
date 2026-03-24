@@ -16,7 +16,7 @@ const StatsStrip = () => {
               <div className="font-display text-[1.5rem] sm:text-[1.75rem] font-semibold tracking-[-0.03em] text-foreground mb-1">
                 {stat.value}
               </div>
-              <div className="font-body text-[0.78rem] text-text-subtle">
+              <div className="font-body text-[0.78rem] text-text-body">
                 {stat.label}
               </div>
             </div>

@@ -128,13 +128,13 @@ const Workflow = () => {
         {/* Heading */}
         <ScrollReveal variant="fade-up">
           <div className="mb-10 sm:mb-14">
-            <span className="font-body text-[0.65rem] text-text-subtle/60 uppercase tracking-[0.2em] block mb-4">How it works</span>
+            <span className="font-body text-[0.65rem] text-text-body uppercase tracking-[0.2em] block mb-4">How it works</span>
             <h2 className="text-[2.25rem] sm:text-[3rem] font-semibold tracking-[-0.03em] text-foreground leading-[1.08] mb-4">
               Three steps to a
               <br />
               working phone agent
             </h2>
-            <p className="font-body text-[0.9rem] text-text-subtle leading-[1.7] max-w-md">
+            <p className="font-body text-[0.9rem] text-text-body leading-[1.7] max-w-md">
               No SDK integration, no custom infrastructure. Configure your agent, assign a number, and calls start flowing.
             </p>
           </div>
@@ -155,13 +155,22 @@ const Workflow = () => {
                       : "bg-transparent"
                   }`}
                 >
-                  <h3
-                    className={`font-display text-[1rem] sm:text-[1.1rem] font-semibold tracking-[-0.01em] leading-snug transition-colors duration-300 ${
-                      activeStep === step.id ? "text-text-strong" : "text-text-subtle/50"
-                    }`}
-                  >
-                    {step.title}
-                  </h3>
+                  <div className="flex items-baseline gap-3">
+                    <span
+                      className={`font-mono text-[0.75rem] sm:text-[0.85rem] font-bold tracking-tight transition-colors duration-300 ${
+                        activeStep === step.id ? "text-accent-gold" : "text-text-body/40"
+                      }`}
+                    >
+                      {String(step.id + 1).padStart(2, "0")}
+                    </span>
+                    <h3
+                      className={`font-display text-[1rem] sm:text-[1.1rem] font-semibold tracking-[-0.01em] leading-snug transition-colors duration-300 ${
+                        activeStep === step.id ? "text-text-strong" : "text-text-body/70"
+                      }`}
+                    >
+                      {step.title}
+                    </h3>
+                  </div>
                   <div
                     className={`transition-all duration-300 overflow-hidden ${
                       activeStep === step.id
@@ -169,7 +178,7 @@ const Workflow = () => {
                         : "max-h-0 opacity-0 mt-0"
                     }`}
                   >
-                    <p className="font-body text-[0.82rem] leading-[1.65] text-text-subtle">
+                    <p className="font-body text-[0.82rem] leading-[1.65] text-text-body">
                       {step.desc}
                     </p>
                   </div>

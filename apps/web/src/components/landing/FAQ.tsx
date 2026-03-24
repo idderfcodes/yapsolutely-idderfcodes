@@ -59,13 +59,13 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
           {question}
         </span>
         <ChevronDown
-          className={`w-4.5 h-4.5 text-text-subtle shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={`w-4.5 h-4.5 text-text-body shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
         />
       </button>
       <div
         className={`overflow-hidden transition-all duration-300 ${open ? "max-h-60 pb-5" : "max-h-0"}`}
       >
-        <p className="font-body text-body-md text-text-subtle leading-relaxed">
+        <p className="font-body text-body-md text-text-body leading-relaxed">
           {answer}
         </p>
       </div>
@@ -81,7 +81,7 @@ const FAQ = () => {
           <h2 className="font-display text-[1.6rem] sm:text-[2rem] font-semibold tracking-[-0.03em] text-text-strong leading-[1.15] mb-3">
             Frequently asked questions
           </h2>
-          <p className="font-body text-body-md text-text-subtle max-w-xl mx-auto">
+          <p className="font-body text-body-md text-text-body max-w-xl mx-auto">
             Everything you need to know about building and deploying AI voice agents.
           </p>
         </div>

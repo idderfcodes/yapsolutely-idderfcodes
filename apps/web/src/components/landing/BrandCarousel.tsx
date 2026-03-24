@@ -24,7 +24,7 @@ const BrandCarousel = () => {
 
   return (
     <section className="pt-2 sm:pt-3 pb-8 sm:pb-10 overflow-hidden select-none">
-      <p className="text-center font-body text-[0.7rem] text-text-subtle/50 uppercase tracking-[0.18em] mb-6">
+      <p className="text-center font-body text-[0.7rem] text-text-body uppercase tracking-[0.18em] mb-6">
         Powered by
       </p>
 
