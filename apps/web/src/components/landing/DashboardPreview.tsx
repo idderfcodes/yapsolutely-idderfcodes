@@ -2,8 +2,19 @@ import { Phone, MessageSquare } from "lucide-react";
 
 const DashboardPreview = () => {
   return (
-    <section className="px-5 sm:px-6 pb-16 sm:pb-20">
+    <section className="px-5 sm:px-6 py-16 sm:py-20">
       <div className="max-w-7xl mx-auto">
+        {/* Section heading */}
+        <div className="mb-8 sm:mb-12">
+          <span className="font-body text-[0.65rem] text-text-body uppercase tracking-[0.2em] block mb-4">Dashboard</span>
+          <h2 className="text-[2rem] sm:text-[2.75rem] font-semibold tracking-[-0.03em] text-foreground leading-[1.08] mb-4">
+            Your command center
+          </h2>
+          <p className="font-body text-[0.9rem] text-text-body leading-[1.7] max-w-lg">
+            Manage agents, review transcripts, and monitor every call from a single workspace. Everything you need in one place.
+          </p>
+        </div>
+
         <div className="relative bg-surface-dark rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-8 md:p-10 overflow-hidden shadow-surface-xl">
           {/* Floating label */}
           <div className="absolute top-5 right-5 sm:top-8 sm:right-8 z-10">

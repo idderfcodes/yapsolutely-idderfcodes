@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { Phone, MessageSquare, BarChart3, Settings, Workflow } from "lucide-react";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { Phone, MessageSquare, BarChart3, Settings, Workflow, ChevronLeft, ChevronRight } from "lucide-react";
 
 const useCases = [
   {
@@ -182,53 +182,64 @@ const useCases = [
 
 const UseCases = () => {
   const trackRef = useRef<HTMLDivElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const cardWidth = 380; // card width + gap
 
-  useEffect(() => {
+  const scrollToIndex = useCallback((index: number) => {
     const track = trackRef.current;
     if (!track) return;
-
-    let raf = 0;
-    function onScroll() {
-      if (raf) return;
-      raf = requestAnimationFrame(() => {
-        raf = 0;
-        if (!track) return;
-        const rect = track.parentElement!.getBoundingClientRect();
-        const viewH = window.innerHeight;
-        const scrolled = viewH - rect.top;
-        const total = rect.height + viewH;
-        const t = Math.max(0, Math.min(1, scrolled / total));
-        // Move from 0 to -30% of the track's scroll width
-        const maxShift = track.scrollWidth - track.parentElement!.clientWidth;
-        track.style.transform = `translateX(-${t * Math.min(maxShift, maxShift)}px)`;
-      });
-    }
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (raf) cancelAnimationFrame(raf);
-    };
+    const clamped = Math.max(0, Math.min(index, useCases.length - 1));
+    setCurrentIndex(clamped);
+    track.scrollTo({ left: clamped * cardWidth, behavior: "smooth" });
   }, []);
+
+  const handlePrev = useCallback(() => scrollToIndex(currentIndex - 1), [currentIndex, scrollToIndex]);
+  const handleNext = useCallback(() => scrollToIndex(currentIndex + 1), [currentIndex, scrollToIndex]);
 
   return (
     <section className="py-16 sm:py-20 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 mb-10">
-        <span className="font-body text-[0.65rem] text-text-subtle/60 uppercase tracking-[0.2em] block mb-4">Use cases</span>
-        <h2 className="text-[2rem] sm:text-[2.75rem] font-semibold tracking-[-0.03em] text-foreground leading-[1.08]">
-          Built for every inbound
-          <br className="hidden sm:block" />
-          call scenario
-        </h2>
+        <div className="flex items-end justify-between">
+          <div>
+            <span className="font-body text-[0.65rem] text-text-body uppercase tracking-[0.2em] block mb-4">Use cases</span>
+            <h2 className="text-[2rem] sm:text-[2.75rem] font-semibold tracking-[-0.03em] text-foreground leading-[1.08]">
+              Built for every inbound
+              <br className="hidden sm:block" />
+              call scenario
+            </h2>
+          </div>
+          {/* Pagination arrows */}
+          <div className="hidden sm:flex items-center gap-2">
+            <button
+              onClick={handlePrev}
+              disabled={currentIndex === 0}
+              className="w-10 h-10 rounded-full border border-border-soft/60 flex items-center justify-center transition-all hover:bg-surface-elevated disabled:opacity-30 disabled:cursor-not-allowed"
+              aria-label="Previous use case"
+            >
+              <ChevronLeft className="w-4.5 h-4.5 text-foreground" />
+            </button>
+            <button
+              onClick={handleNext}
+              disabled={currentIndex >= useCases.length - 1}
+              className="w-10 h-10 rounded-full border border-border-soft/60 flex items-center justify-center transition-all hover:bg-surface-elevated disabled:opacity-30 disabled:cursor-not-allowed"
+              aria-label="Next use case"
+            >
+              <ChevronRight className="w-4.5 h-4.5 text-foreground" />
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="relative">
-        <div ref={trackRef} className="flex gap-5 pl-6 pr-6 sm:pl-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] will-change-transform" style={{ transition: "transform 0.1s linear" }}>
+        <div
+          ref={trackRef}
+          className="flex gap-5 pl-6 pr-6 sm:pl-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
           {useCases.map((uc) => (
             <div
               key={uc.title}
-              className="shrink-0 w-[320px] sm:w-[360px] rounded-[1.5rem] bg-surface-dark overflow-hidden flex flex-col"
+              className="shrink-0 w-[320px] sm:w-[360px] rounded-[1.5rem] bg-surface-dark overflow-hidden flex flex-col snap-start"
             >
               {/* Mockup area */}
               <div className="p-5 sm:p-6 flex-1">

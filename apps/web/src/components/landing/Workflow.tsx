@@ -33,7 +33,7 @@ function StepIllustration({ activeStep }: { activeStep: number }) {
           activeStep === 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
         }`}
       >
-        <div className="w-full max-w-[340px] bg-surface-dark rounded-2xl p-5 sm:p-6 shadow-surface-xl">
+        <div className="w-full max-w-[340px] lg:max-w-[440px] bg-surface-dark rounded-2xl p-5 sm:p-6 lg:p-8 shadow-surface-xl">
           <div className="flex items-center gap-2 mb-4">
             <span className="w-2.5 h-2.5 rounded-full bg-red-400/50" />
             <span className="w-2.5 h-2.5 rounded-full bg-yellow-400/50" />
@@ -59,7 +59,7 @@ function StepIllustration({ activeStep }: { activeStep: number }) {
           activeStep === 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
         }`}
       >
-        <div className="w-full max-w-[340px] bg-surface-dark rounded-2xl p-5 sm:p-6 shadow-surface-xl">
+        <div className="w-full max-w-[340px] lg:max-w-[440px] bg-surface-dark rounded-2xl p-5 sm:p-6 lg:p-8 shadow-surface-xl">
           <div className="text-[0.6rem] font-body text-surface-dark-foreground/25 uppercase tracking-[0.15em] mb-5">Phone numbers</div>
           <div className="space-y-2.5">
             {[
@@ -88,7 +88,7 @@ function StepIllustration({ activeStep }: { activeStep: number }) {
           activeStep === 2 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
         }`}
       >
-        <div className="w-full max-w-[340px] bg-surface-dark rounded-2xl p-5 sm:p-6 shadow-surface-xl">
+        <div className="w-full max-w-[340px] lg:max-w-[440px] bg-surface-dark rounded-2xl p-5 sm:p-6 lg:p-8 shadow-surface-xl">
           <div className="flex items-center justify-between mb-4">
             <div className="text-[0.6rem] font-body text-surface-dark-foreground/25 uppercase tracking-[0.15em]">Call detail</div>
             <span className="text-[0.55rem] text-emerald-400/60 font-body px-2 py-0.5 rounded-full bg-emerald-400/10">Completed</span>
@@ -187,7 +187,7 @@ const Workflow = () => {
             </div>
 
             {/* Right - illustration */}
-            <div className="relative min-h-[320px] sm:min-h-[380px] flex items-center justify-center">
+            <div className="relative min-h-[320px] sm:min-h-[380px] lg:min-h-[440px] flex items-center justify-center">
               <StepIllustration activeStep={activeStep} />
             </div>
           </div>

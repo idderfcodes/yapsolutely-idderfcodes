@@ -145,9 +145,8 @@ const Benefits = () => {
             <span className="font-body text-[0.65rem] text-white/40 uppercase tracking-[0.25em] block mb-5">
               Why Yapsolutely
             </span>
-            <h2 className="text-[2rem] sm:text-[2.8rem] lg:text-[3.4rem] font-semibold tracking-[-0.03em] text-white/90 leading-[1.1] italic">
-              Everything you need to deploy
-              <br className="hidden sm:block" />
+            <h2 className="text-[1.6rem] sm:text-[2.8rem] lg:text-[3.4rem] font-semibold tracking-[-0.03em] text-white/90 leading-[1.12] italic">
+              Everything you need to deploy<br className="hidden sm:block" />{" "}
               voice agents at scale
             </h2>
           </div>
