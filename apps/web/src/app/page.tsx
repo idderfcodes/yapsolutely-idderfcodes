@@ -10,10 +10,14 @@ import ClosingCTA from "@/components/landing/ClosingCTA";
 import FAQ from "@/components/landing/FAQ";
 import Footer from "@/components/landing/Footer";
 import ScrollReveal from "@/components/landing/ScrollReveal";
+import FrameScrubber from "@/components/landing/FrameScrubber";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-canvas">
+      {/* Fixed canvas behind everything — light mode only */}
+      <FrameScrubber />
+      <div className="relative z-10">
       <Navbar />
       <Hero />
       <ScrollReveal variant="fade-up" delay={0}>
@@ -25,6 +29,8 @@ export default function Home() {
       <ScrollReveal variant="slide-up" duration={800}>
         <Workflow />
       </ScrollReveal>
+      {/* Solid background from here down to cover the fixed canvas */}
+      <div className="bg-canvas">
       <Benefits />
       <ScrollReveal variant="fade-up" duration={800}>
         <ProductShowcase />
@@ -37,6 +43,8 @@ export default function Home() {
         <FAQ />
       </ScrollReveal>
       <Footer />
+      </div>
+      </div>
     </div>
   );
 }

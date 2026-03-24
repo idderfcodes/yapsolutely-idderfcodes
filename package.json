@@ -21,5 +21,8 @@
     "test:voice": "npm run test -w apps/voice",
     "test:web": "npm run test -w apps/web",
     "check": "npm run lint && npm run build"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5"
   }
 }
