@@ -44,7 +44,7 @@ function otpEmailHtml(code: string) {
           <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:20px">
             <p style="margin:0;font-size:11px;color:rgba(250,250,250,0.2);line-height:1.5">
               If you didn&rsquo;t request this code, you can safely ignore this email.<br>
-              &copy; 2025 Yapsolutely, Inc.
+              &copy; 2026 Yapsolutely, Inc.
             </p>
           </div>
         </td></tr>

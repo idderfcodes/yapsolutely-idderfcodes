@@ -202,7 +202,7 @@ export default function OnboardingPage() {
         </div>
 
         <div className="mt-auto pt-6">
-          <p className="font-body text-[0.82rem] text-text-subtle/50">© 2025 Yapsolutely, Inc.</p>
+          <p className="font-body text-[0.82rem] text-text-subtle/50">© 2026 Yapsolutely, Inc.</p>
         </div>
       </div>
 
