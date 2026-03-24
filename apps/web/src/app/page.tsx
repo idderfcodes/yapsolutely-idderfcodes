@@ -10,6 +10,7 @@ import ClosingCTA from "@/components/landing/ClosingCTA";
 import FAQ from "@/components/landing/FAQ";
 import Footer from "@/components/landing/Footer";
 import ScrollReveal from "@/components/landing/ScrollReveal";
+import StatsStrip from "@/components/landing/StatsStrip";
 
 export default function Home() {
   return (
@@ -45,6 +46,12 @@ export default function Home() {
       </div>
 
       <div className="bg-surface-panel">
+        <ScrollReveal variant="fade-up" duration={600}>
+          <StatsStrip />
+        </ScrollReveal>
+      </div>
+
+      <div className="bg-canvas">
         <ScrollReveal variant="scale-up" duration={800}>
           <ClosingCTA />
         </ScrollReveal>
