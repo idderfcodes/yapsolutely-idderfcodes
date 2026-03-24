@@ -27,7 +27,7 @@ const moreBenefits = [
 
 const Benefits = () => {
   return (
-    <section className="py-24 sm:py-32 px-6">
+    <section className="py-16 sm:py-20 px-6">
       <div className="max-w-7xl mx-auto">
         <ScrollReveal variant="fade-up">
           <div className="text-center mb-14">

@@ -7,7 +7,7 @@ const faqs = [
   {
     question: "What is Yapsolutely?",
     answer:
-      "Yapsolutely is an AI voice agent platform that lets you build, deploy, and manage phone-based AI agents. Your agents can answer inbound calls, handle scheduling, qualify leads, and more — with full transcripts and call logs.",
+      "Yapsolutely is an AI voice agent platform that lets you build, deploy, and manage phone-based AI agents. Your agents can answer inbound calls, handle scheduling, qualify leads, and more - with full transcripts and call logs.",
   },
   {
     question: "How do I set up my first voice agent?",
@@ -75,7 +75,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
 
 const FAQ = () => {
   return (
-    <section className="py-24 sm:py-32 px-6">
+    <section className="py-16 sm:py-20 px-6">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="font-display text-[1.6rem] sm:text-[2rem] font-semibold tracking-[-0.03em] text-text-strong leading-[1.15] mb-3">

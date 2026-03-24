@@ -64,7 +64,7 @@ export default function FlowBuilderPage() {
             visually
           </h1>
           <p className="font-body text-[1rem] sm:text-[1.1rem] text-text-subtle max-w-2xl leading-[1.75] mb-8">
-            The flow builder lets you design agent behavior by arranging conversation blocks in order. Define greetings, qualification steps, FAQ handling, and escalation rules — then generate a production-ready system prompt with one click.
+            The flow builder lets you design agent behavior by arranging conversation blocks in order. Define greetings, qualification steps, FAQ handling, and escalation rules - then generate a production-ready system prompt with one click.
           </p>
           <div className="flex flex-wrap gap-3">
             <Button variant="hero" size="lg" className="rounded-full font-display text-[0.95rem] btn-press" asChild>

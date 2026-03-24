@@ -47,7 +47,7 @@ function SignInInner() {
       if (password) formData.set("password", password);
       await signInAction(formData);
     } catch {
-      // redirect throws — if we get here, something unexpected happened
+      // redirect throws - if we get here, something unexpected happened
     } finally {
       setIsLoading(false);
     }

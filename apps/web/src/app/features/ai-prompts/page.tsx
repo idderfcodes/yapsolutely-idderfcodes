@@ -69,7 +69,7 @@ export default function AIPromptsPage() {
             agent&apos;s instructions
           </h1>
           <p className="font-body text-[1rem] sm:text-[1.1rem] text-text-subtle max-w-2xl leading-[1.75] mb-8">
-            Stop spending hours crafting system prompts. Describe what your agent should do — or design a visual flow — and let AI generate production-ready instructions optimized for phone conversations.
+            Stop spending hours crafting system prompts. Describe what your agent should do - or design a visual flow - and let AI generate production-ready instructions optimized for phone conversations.
           </p>
           <div className="flex flex-wrap gap-3">
             <Button variant="hero" size="lg" className="rounded-full font-display text-[0.95rem] btn-press" asChild>

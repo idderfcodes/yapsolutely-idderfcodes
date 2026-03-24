@@ -65,7 +65,7 @@ export async function sendVerificationEmail(email: string, code: string) {
   console.log(`[email] Sending OTP to ${email} (code: ${code})`);
 
   if (!process.env.RESEND_API_KEY) {
-    console.warn("[email] RESEND_API_KEY not set — OTP logged above but not emailed");
+    console.warn("[email] RESEND_API_KEY not set - OTP logged above but not emailed");
     return;
   }
 

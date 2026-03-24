@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Yapsolutely",
     short_name: "Yapsolutely",
-    description: "AI voice agent platform — build, deploy, and manage phone agents",
+    description: "AI voice agent platform - build, deploy, and manage phone agents",
     start_url: "/dashboard",
     display: "standalone",
     background_color: "#09090b",

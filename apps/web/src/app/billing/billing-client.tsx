@@ -20,13 +20,13 @@ const metrics = [
   { label: "Plan", value: "Beta", sub: "Full access" },
   { label: "Call Minutes", value: "0", sub: "Unlimited" },
   { label: "Agent Slots", value: "0", sub: "Unlimited" },
-  { label: "Next Invoice", value: "—", sub: "No billing" },
+  { label: "Next Invoice", value: "-", sub: "No billing" },
 ];
 
 const drivers = [
-  { label: "Telephony (Twilio)", value: "—", detail: "Per-minute call charges" },
-  { label: "Transcription (Deepgram)", value: "—", detail: "Per-minute STT charges" },
-  { label: "AI (Anthropic)", value: "—", detail: "Token-based LLM charges" },
+  { label: "Telephony (Twilio)", value: "-", detail: "Per-minute call charges" },
+  { label: "Transcription (Deepgram)", value: "-", detail: "Per-minute STT charges" },
+  { label: "AI (Anthropic)", value: "-", detail: "Token-based LLM charges" },
 ];
 
 function formatCardNumber(value: string) {

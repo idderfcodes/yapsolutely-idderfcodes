@@ -22,7 +22,7 @@ const benefits = [
   {
     icon: Link2,
     title: "Instant agent assignment",
-    description: "Assign a number to an agent in one click. Change the assignment anytime — zero downtime, zero configuration headaches.",
+    description: "Assign a number to an agent in one click. Change the assignment anytime - zero downtime, zero configuration headaches.",
   },
   {
     icon: BarChart3,
@@ -32,7 +32,7 @@ const benefits = [
   {
     icon: Shield,
     title: "Verified and compliant",
-    description: "All numbers are provisioned through verified carriers. No gray-market routing — real numbers with real caller ID presentation.",
+    description: "All numbers are provisioned through verified carriers. No gray-market routing - real numbers with real caller ID presentation.",
   },
   {
     icon: RefreshCw,
@@ -60,7 +60,7 @@ export default function PhoneNumbersPage() {
             Always connected.
           </h1>
           <p className="font-body text-[1rem] sm:text-[1.1rem] text-text-subtle max-w-2xl leading-[1.75] mb-8">
-            Provision dedicated phone numbers and assign them to the exact AI agent that should answer. Every call is routed instantly — no IVR menus, no transfers, no waiting.
+            Provision dedicated phone numbers and assign them to the exact AI agent that should answer. Every call is routed instantly - no IVR menus, no transfers, no waiting.
           </p>
           <div className="flex flex-wrap gap-3">
             <Button variant="hero" size="lg" className="rounded-full font-display text-[0.95rem] btn-press" asChild>

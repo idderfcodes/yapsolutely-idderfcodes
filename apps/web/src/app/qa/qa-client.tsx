@@ -27,7 +27,7 @@ export default function QAClient({ data }: { data: QASummary }) {
     { label: "Reviewed", value: data.totalReviewed.toString(), sub: "Calls scored" },
     { label: "Passed", value: data.passed.toString(), sub: "Met criteria" },
     { label: "Flagged", value: data.flagged.toString(), sub: "Needs review" },
-    { label: "Avg Score", value: data.totalReviewed > 0 ? `${data.avgScore}` : "—", sub: "Out of 100" },
+    { label: "Avg Score", value: data.totalReviewed > 0 ? `${data.avgScore}` : "-", sub: "Out of 100" },
   ];
 
   return (
@@ -118,7 +118,7 @@ export default function QAClient({ data }: { data: QASummary }) {
                         </Link>
                       </td>
                       <td className="pl-4 pr-3 py-2.5 font-mono text-[0.82rem] text-text-body">
-                        {call.callerNumber || "—"}
+                        {call.callerNumber || "-"}
                       </td>
                       <td className="pl-4 pr-3 py-2.5">
                         <span
@@ -136,7 +136,7 @@ export default function QAClient({ data }: { data: QASummary }) {
                       <td className="pl-4 pr-3 py-2.5 font-mono text-[0.82rem] text-text-body">
                         {call.durationSeconds > 0
                           ? formatDuration(call.durationSeconds)
-                          : "—"}
+                          : "-"}
                       </td>
                       <td className="pl-4 pr-3 py-2.5">
                         {call.status === "passed" ? (

@@ -37,7 +37,7 @@ const benefits = [
   {
     icon: Eye,
     title: "Tool action visibility",
-    description: "When your agent performs actions during a call — booking appointments, capturing leads, sending SMS — those actions appear inline in the transcript.",
+    description: "When your agent performs actions during a call - booking appointments, capturing leads, sending SMS - those actions appear inline in the transcript.",
   },
 ];
 

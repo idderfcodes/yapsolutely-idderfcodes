@@ -36,13 +36,13 @@ export default function AnalyticsClient({ data }: { data: AnalyticsSummary }) {
     },
     {
       label: "Avg Duration",
-      value: data.avgDurationSeconds > 0 ? formatDuration(data.avgDurationSeconds) : "—",
+      value: data.avgDurationSeconds > 0 ? formatDuration(data.avgDurationSeconds) : "-",
       sub: "All completed",
       icon: Clock,
     },
     {
       label: "Success Rate",
-      value: data.totalCalls > 0 ? `${data.successRate}%` : "—",
+      value: data.totalCalls > 0 ? `${data.successRate}%` : "-",
       sub: "Completed / total",
       icon: TrendingUp,
     },
@@ -184,7 +184,7 @@ export default function AnalyticsClient({ data }: { data: AnalyticsSummary }) {
                       <td className="pl-4 pr-3 py-2.5 font-mono text-[0.89rem] text-text-body">
                         {agent.avgDuration > 0
                           ? formatDuration(agent.avgDuration)
-                          : "—"}
+                          : "-"}
                       </td>
                       <td className="pl-4 pr-3 py-2.5 font-mono text-[0.89rem] text-text-body">
                         {agent.successRate}%

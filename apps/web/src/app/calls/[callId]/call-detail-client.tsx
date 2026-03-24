@@ -31,14 +31,14 @@ type CallDetail = {
 };
 
 function formatDuration(seconds: number | null): string {
-  if (seconds == null) return "—";
+  if (seconds == null) return "-";
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
 function formatTime(iso: string | null): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
   return new Date(iso).toLocaleTimeString("en-US", {
     hour: "numeric",
     minute: "2-digit",
@@ -108,7 +108,7 @@ export default function CallDetailClient({ call }: { call: CallDetail }) {
       `Status: ${statusLabel(call.status)}`,
       `Duration: ${formatDuration(call.durationSeconds)}`,
       `Caller: ${call.callerNumber ?? "Unknown"}`,
-      `Agent: ${call.agentName ?? "—"}`,
+      `Agent: ${call.agentName ?? "-"}`,
       "",
       "--- Transcript ---",
       "",
@@ -189,7 +189,7 @@ export default function CallDetailClient({ call }: { call: CallDetail }) {
 
         {/* ── Two-column content ── */}
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
-          {/* Transcript — primary */}
+          {/* Transcript - primary */}
           <div className="xl:col-span-8">
             <div className="bg-surface-panel rounded-card border border-border-soft overflow-hidden transition-all duration-200 hover:border-border-soft/80 hover:shadow-surface-sm">
               <div className="px-4 py-3 border-b border-border-soft/60">
@@ -259,9 +259,9 @@ export default function CallDetailClient({ call }: { call: CallDetail }) {
               <div className="p-4 space-y-1">
                 {[
                   { label: "Caller", value: call.callerNumber ?? "Unknown", mono: true },
-                  { label: "Destination", value: call.toNumber ?? "—", mono: true },
-                  { label: "Agent", value: call.agentName ?? "—" },
-                  { label: "Number", value: call.phoneNumber ?? call.toNumber ?? "—", mono: true },
+                  { label: "Destination", value: call.toNumber ?? "-", mono: true },
+                  { label: "Agent", value: call.agentName ?? "-" },
+                  { label: "Number", value: call.phoneNumber ?? call.toNumber ?? "-", mono: true },
                   { label: "Status", value: statusLabel(call.status) },
                   { label: "Date", value: formatDate(call.createdAt) },
                 ].map((item) => (

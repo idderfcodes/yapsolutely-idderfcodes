@@ -21,7 +21,7 @@ type CallItem = {
 };
 
 function formatDuration(seconds: number | null): string {
-  if (seconds == null) return "—";
+  if (seconds == null) return "-";
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
   return `${m}:${s.toString().padStart(2, "0")}`;
@@ -255,7 +255,7 @@ function CallsInner({ calls }: { calls: CallItem[] }) {
                               <span className="font-body text-[0.87rem] text-text-body">{call.callerNumber ?? "Unknown"}</span>
                             </div>
                           </td>
-                          <td className="px-3 py-2.5 font-body text-[0.84rem] text-text-body">{call.agentName ?? "—"}</td>
+                          <td className="px-3 py-2.5 font-body text-[0.84rem] text-text-body">{call.agentName ?? "-"}</td>
                           <td className="px-3 py-2.5">
                             <span className={`inline-flex px-1.5 py-px rounded text-[0.8rem] font-body font-medium ${statusPill(call.status)}`}>
                               {statusLabel(call.status)}

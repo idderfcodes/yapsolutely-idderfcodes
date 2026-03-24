@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const Footer = () => {
   return (
@@ -7,7 +8,10 @@ const Footer = () => {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-10">
           {/* Brand */}
           <div className="col-span-2 sm:col-span-1">
-            <span className="font-display text-sm font-medium text-surface-dark-foreground block mb-3">Yapsolutely</span>
+            <Link href="/" className="flex items-center gap-2 mb-3 hover:opacity-80 transition-opacity">
+              <Image src="/favicon.svg" alt="" width={24} height={24} className="w-6 h-6 rounded-md brightness-0 invert" />
+              <span className="font-display text-sm font-medium text-surface-dark-foreground">Yapsolutely</span>
+            </Link>
             <p className="font-body text-[0.75rem] text-surface-dark-foreground/40 leading-[1.6] max-w-[200px]">
               AI voice agents that answer your phone. Build, deploy, monitor.
             </p>

@@ -72,7 +72,7 @@ const callStatusStyle = (s: string) => {
 };
 
 function formatDuration(seconds: number | null) {
-  if (!seconds) return "—";
+  if (!seconds) return "-";
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
   return `${m}:${s.toString().padStart(2, "0")}`;
@@ -192,11 +192,11 @@ function PhoneNumberSection({ agentId, slug, phoneNumbers }: { agentId: string; 
 
 export default function AgentDetailClient({ agent }: { agent: AgentDetail }) {
   const slug = agent.slug ?? agent.id;
-  const primaryNumber = agent.phoneNumbers[0]?.phoneNumber ?? "—";
+  const primaryNumber = agent.phoneNumbers[0]?.phoneNumber ?? "-";
   const avgDuration =
     agent.calls.length > 0
       ? formatDuration(Math.round(agent.calls.reduce((sum, c) => sum + (c.durationSeconds ?? 0), 0) / agent.calls.length))
-      : "—";
+      : "-";
 
   const handleExport = () => {
     const exportData = {
@@ -301,7 +301,7 @@ export default function AgentDetailClient({ agent }: { agent: AgentDetail }) {
 
         {/* ── Two-column content ── */}
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
-          {/* Left — primary */}
+          {/* Left - primary */}
           <div className="xl:col-span-8 space-y-4">
             {/* Prompt preview */}
             <div className="bg-surface-panel rounded-card border border-border-soft transition-all duration-200 hover:border-border-soft/80 hover:shadow-surface-sm">
@@ -383,7 +383,7 @@ export default function AgentDetailClient({ agent }: { agent: AgentDetail }) {
             </div>
           </div>
 
-          {/* Right — sidecar */}
+          {/* Right - sidecar */}
           <div className="xl:col-span-4 space-y-4">
             <div className="bg-surface-panel rounded-card border border-border-soft">
               <div className="px-4 py-3 border-b border-border-soft/60">
@@ -408,7 +408,7 @@ export default function AgentDetailClient({ agent }: { agent: AgentDetail }) {
               </div>
             </div>
 
-            {/* Phone number — interactive */}
+            {/* Phone number - interactive */}
             <PhoneNumberSection agentId={agent.id} slug={slug} phoneNumbers={agent.phoneNumbers} />
 
             {/* Quick actions */}

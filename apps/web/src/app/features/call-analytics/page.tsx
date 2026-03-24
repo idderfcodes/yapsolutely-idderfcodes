@@ -27,7 +27,7 @@ const benefits = [
   {
     icon: Clock,
     title: "Duration analysis",
-    description: "Understand how long your agents spend on calls. Short calls may indicate quick resolutions — or premature hang-ups. The data tells the story.",
+    description: "Understand how long your agents spend on calls. Short calls may indicate quick resolutions - or premature hang-ups. The data tells the story.",
   },
   {
     icon: Filter,

@@ -265,7 +265,7 @@ function AgentsClientInner({ agents }: { agents: AgentListItem[] }) {
                             </span>
                           </td>
                           <td className="px-3 py-2.5 font-mono text-[0.79rem] text-text-subtle">
-                            {agent.phoneNumber ?? "—"}
+                            {agent.phoneNumber ?? "-"}
                           </td>
                           <td className="px-3 py-2.5 font-body text-[0.89rem] text-text-body">
                             {agent.voiceModel ?? "Default"}

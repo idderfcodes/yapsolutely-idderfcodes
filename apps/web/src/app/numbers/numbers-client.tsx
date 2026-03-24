@@ -158,7 +158,7 @@ function NumbersInner({ numbers, agents }: { numbers: NumberItem[]; agents: Agen
                     return (
                       <tr key={n.id} className="border-b border-border-soft/30 last:border-0 hover:bg-surface-subtle/40 transition-colors group">
                         <td className="pl-4 pr-3 py-2.5 font-mono text-[0.89rem] text-text-body">{n.phoneNumber}</td>
-                        <td className="pl-4 pr-3 py-2.5 font-body text-[0.87rem] text-text-body">{n.friendlyName ?? "—"}</td>
+                        <td className="pl-4 pr-3 py-2.5 font-body text-[0.87rem] text-text-body">{n.friendlyName ?? "-"}</td>
                         <td className="pl-4 pr-3 py-2.5">
                           {isEditing ? (
                             <form action={reassignPhoneNumberAction} onSubmit={() => setEditingId(null)}>

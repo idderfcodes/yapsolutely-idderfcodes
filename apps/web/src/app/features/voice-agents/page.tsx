@@ -43,7 +43,7 @@ const benefits = [
 
 const steps = [
   { step: "01", title: "Create an agent", description: "Give it a name, role description, and system prompt that defines how it should behave on calls." },
-  { step: "02", title: "Configure the voice", description: "Choose a voice model that matches your brand. Professional, warm, energetic — pick the tone that fits." },
+  { step: "02", title: "Configure the voice", description: "Choose a voice model that matches your brand. Professional, warm, energetic - pick the tone that fits." },
   { step: "03", title: "Assign a phone number", description: "Connect a dedicated phone number to your agent. Inbound calls to that number are automatically routed." },
   { step: "04", title: "Go live", description: "Your agent starts taking real calls immediately. Monitor performance, review transcripts, and iterate." },
 ];
@@ -61,7 +61,7 @@ export default function VoiceAgentsPage() {
             handle real phone calls
           </h1>
           <p className="font-body text-[1rem] sm:text-[1.1rem] text-text-subtle max-w-2xl leading-[1.75] mb-8">
-            Build custom AI agents that answer inbound calls, follow your instructions, and handle conversations autonomously. No scripts. No hold music. Just intelligent, natural conversation — every time someone calls.
+            Build custom AI agents that answer inbound calls, follow your instructions, and handle conversations autonomously. No scripts. No hold music. Just intelligent, natural conversation - every time someone calls.
           </p>
           <div className="flex flex-wrap gap-3">
             <Button variant="hero" size="lg" className="rounded-full font-display text-[0.95rem] btn-press" asChild>

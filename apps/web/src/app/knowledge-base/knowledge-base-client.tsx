@@ -61,10 +61,10 @@ export default function KnowledgeBaseClient() {
             <tbody>
               {emptyRows.map((i) => (
                 <tr key={i} className="border-b border-border-soft/30 last:border-0">
-                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.87rem] text-text-subtle/50">—</td>
-                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.89rem] text-text-subtle/50">—</td>
-                  <td className="pl-4 pr-3 py-2.5 font-mono text-[0.89rem] text-text-subtle/50">—</td>
-                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.89rem] text-text-subtle/50">—</td>
+                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.87rem] text-text-subtle/50">-</td>
+                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.89rem] text-text-subtle/50">-</td>
+                  <td className="pl-4 pr-3 py-2.5 font-mono text-[0.89rem] text-text-subtle/50">-</td>
+                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.89rem] text-text-subtle/50">-</td>
                 </tr>
               ))}
             </tbody>
@@ -88,15 +88,15 @@ export default function KnowledgeBaseClient() {
             <ul className="space-y-2">
               <li className="font-body text-[0.78rem] text-text-subtle leading-[1.6] flex items-start gap-2">
                 <span className="text-emerald-500 font-semibold mt-px">1.</span>
-                <span><strong className="text-text-body">Upload your FAQ document</strong> — paste your website FAQ or support docs so agents can answer common questions.</span>
+                <span><strong className="text-text-body">Upload your FAQ document</strong> - paste your website FAQ or support docs so agents can answer common questions.</span>
               </li>
               <li className="font-body text-[0.78rem] text-text-subtle leading-[1.6] flex items-start gap-2">
                 <span className="text-emerald-500 font-semibold mt-px">2.</span>
-                <span><strong className="text-text-body">Add your website URL</strong> — we&apos;ll crawl and index key pages so your agents stay up to date with your content.</span>
+                <span><strong className="text-text-body">Add your website URL</strong> - we&apos;ll crawl and index key pages so your agents stay up to date with your content.</span>
               </li>
               <li className="font-body text-[0.78rem] text-text-subtle leading-[1.6] flex items-start gap-2">
                 <span className="text-emerald-500 font-semibold mt-px">3.</span>
-                <span><strong className="text-text-body">Import custom data</strong> — add pricing tables, product specs, or any structured data your agents need.</span>
+                <span><strong className="text-text-body">Import custom data</strong> - add pricing tables, product specs, or any structured data your agents need.</span>
               </li>
             </ul>
           </div>

@@ -6,9 +6,9 @@ import { PhoneOutgoing } from "lucide-react";
 
 const metrics = [
   { label: "Campaigns", value: "0", sub: "Created" },
-  { label: "Contacts", value: "—", sub: "Uploaded" },
-  { label: "Calls Made", value: "—", sub: "All time" },
-  { label: "Completion", value: "—", sub: "Success rate" },
+  { label: "Contacts", value: "-", sub: "Uploaded" },
+  { label: "Calls Made", value: "-", sub: "All time" },
+  { label: "Completion", value: "-", sub: "Success rate" },
 ];
 
 const emptyRows = Array.from({ length: 4 }, (_, i) => i);
@@ -61,11 +61,11 @@ export default function BatchCallsClient() {
             <tbody>
               {emptyRows.map((i) => (
                 <tr key={i} className="border-b border-border-soft/30 last:border-0">
-                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.87rem] text-text-subtle/50">—</td>
-                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.89rem] text-text-subtle/50">—</td>
-                  <td className="pl-4 pr-3 py-2.5 font-mono text-[0.89rem] text-text-subtle/50">—</td>
-                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.89rem] text-text-subtle/50">—</td>
-                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.89rem] text-text-subtle/50">—</td>
+                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.87rem] text-text-subtle/50">-</td>
+                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.89rem] text-text-subtle/50">-</td>
+                  <td className="pl-4 pr-3 py-2.5 font-mono text-[0.89rem] text-text-subtle/50">-</td>
+                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.89rem] text-text-subtle/50">-</td>
+                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.89rem] text-text-subtle/50">-</td>
                 </tr>
               ))}
             </tbody>

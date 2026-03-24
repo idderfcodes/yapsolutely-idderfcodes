@@ -7,7 +7,7 @@ const metrics = [
   { label: "Active", value: "0", sub: "Unresolved" },
   { label: "Critical", value: "0", sub: "Immediate" },
   { label: "Warning", value: "0", sub: "Needs attention" },
-  { label: "Resolved", value: "—", sub: "Last 30d" },
+  { label: "Resolved", value: "-", sub: "Last 30d" },
 ];
 
 const alertCategories = [
@@ -71,10 +71,10 @@ export default function AlertsClient() {
             <tbody>
               {emptyRows.map((i) => (
                 <tr key={i} className="border-b border-border-soft/30 last:border-0">
-                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.89rem] text-text-subtle/50">—</td>
-                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.87rem] text-text-subtle/50">—</td>
-                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.89rem] text-text-subtle/50">—</td>
-                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.89rem] text-text-subtle/50">—</td>
+                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.89rem] text-text-subtle/50">-</td>
+                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.87rem] text-text-subtle/50">-</td>
+                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.89rem] text-text-subtle/50">-</td>
+                  <td className="pl-4 pr-3 py-2.5 font-body text-[0.89rem] text-text-subtle/50">-</td>
                 </tr>
               ))}
             </tbody>

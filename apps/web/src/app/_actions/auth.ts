@@ -56,7 +56,7 @@ export async function signInAction(formData: FormData) {
       const settings = user.workspaceSettings as Record<string, unknown> | null;
       redirect(settings?.onboardedAt ? "/dashboard" : "/agents");
     } catch (e: unknown) {
-      // redirect() throws NEXT_REDIRECT — rethrow it
+      // redirect() throws NEXT_REDIRECT - rethrow it
       if (e && typeof e === "object" && "digest" in e) throw e;
       redirect("/sign-in?error=invalid-credentials");
     }
@@ -106,7 +106,7 @@ export async function signUpAction(formData: FormData) {
     }
   }
 
-  // Passwordless fallback — send OTP
+  // Passwordless fallback - send OTP
   try {
     const existingUser = await prisma.user.findUnique({ where: { email }, select: { id: true } });
     if (!existingUser) {

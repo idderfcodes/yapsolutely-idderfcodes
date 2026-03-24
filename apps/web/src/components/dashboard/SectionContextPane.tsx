@@ -20,7 +20,7 @@ interface SectionConfig {
  */
 function getSectionConfig(pathname: string): SectionConfig | null {
   if (pathname.startsWith("/agents")) {
-    // Agent detail subpages — show agent workspace nav
+    // Agent detail subpages - show agent workspace nav
     const agentMatch = pathname.match(/^\/agents\/([^/]+)/);
     if (agentMatch && agentMatch[1] !== "new") {
       const agentSlug = agentMatch[1];

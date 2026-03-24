@@ -20,7 +20,7 @@ export async function addPaymentMethodAction(formData: FormData) {
   const expiryRaw = (formData.get("expiry") as string) ?? "";
   const billingName = ((formData.get("billingName") as string) ?? "").trim();
 
-  // Validate card number (basic length check — real validation would use a payment provider)
+  // Validate card number (basic length check - real validation would use a payment provider)
   if (!/^\d{13,19}$/.test(cardNumber)) {
     redirect("/billing?error=invalid-card");
   }

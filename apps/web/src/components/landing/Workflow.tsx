@@ -4,7 +4,7 @@ import ScrollReveal from "@/components/landing/ScrollReveal";
 
 const Workflow = () => {
   return (
-    <section id="workflow" className="pt-28 sm:pt-36 pb-28 sm:pb-36 px-6">
+    <section id="workflow" className="py-16 sm:py-20 px-6">
       <div className="max-w-7xl mx-auto">
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-14">

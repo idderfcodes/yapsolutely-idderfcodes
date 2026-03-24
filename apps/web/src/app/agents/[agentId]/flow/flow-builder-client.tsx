@@ -558,7 +558,7 @@ export default function FlowBuilderClient({
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-4 gap-5">
-          {/* Block palette — sidebar */}
+          {/* Block palette - sidebar */}
           <div className="xl:col-span-1 order-2 xl:order-1">
             <BlockPalette onAdd={addBlock} />
           </div>

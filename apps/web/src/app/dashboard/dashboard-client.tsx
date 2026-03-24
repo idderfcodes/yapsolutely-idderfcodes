@@ -35,7 +35,7 @@ type DashboardProps = {
 };
 
 function formatDuration(seconds: number | null): string {
-  if (seconds == null) return "—";
+  if (seconds == null) return "-";
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
   return `${m}:${s.toString().padStart(2, "0")}`;
@@ -185,7 +185,7 @@ export default function DashboardHome({ metrics }: DashboardProps) {
                         <Phone className="w-3 h-3 text-text-subtle/30" />
                         <div>
                           <div className="font-body text-[0.87rem] text-text-body">{call.callerNumber ?? "Unknown"}</div>
-                          <div className="font-body text-[0.79rem] text-text-subtle/60">{call.agentName ?? "—"} · {formatTime(call.createdAt)}</div>
+                          <div className="font-body text-[0.79rem] text-text-subtle/60">{call.agentName ?? "-"} · {formatTime(call.createdAt)}</div>
                         </div>
                       </div>
                       <div className="flex items-center gap-2.5">

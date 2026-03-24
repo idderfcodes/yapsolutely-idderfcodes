@@ -8,7 +8,7 @@ const useCases = [
     icon: Phone,
     title: "After-hours reception",
     description:
-      "Let an AI agent answer calls when your team is offline. Capture caller details, qualify leads, and route urgent requests — so you never miss an opportunity.",
+      "Let an AI agent answer calls when your team is offline. Capture caller details, qualify leads, and route urgent requests - so you never miss an opportunity.",
   },
   {
     icon: FileText,
@@ -26,7 +26,7 @@ const useCases = [
 
 const Testimonials = () => {
   return (
-    <section className="py-24 sm:py-32 px-6">
+    <section className="py-16 sm:py-20 px-6">
       <div className="max-w-7xl mx-auto">
         <ScrollReveal variant="fade-up">
           <div className="text-center mb-14">

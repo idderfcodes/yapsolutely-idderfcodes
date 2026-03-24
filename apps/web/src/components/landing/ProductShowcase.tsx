@@ -5,7 +5,7 @@ import ScrollReveal from "@/components/landing/ScrollReveal";
 
 const ProductShowcase = () => {
   return (
-    <section id="platform" className="py-28 sm:py-36 px-6">
+    <section id="platform" className="py-16 sm:py-20 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Section header */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">

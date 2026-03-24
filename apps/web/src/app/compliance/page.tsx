@@ -14,7 +14,7 @@ const frameworks = [
     items: [
       "Data processing agreements (DPA) available on request",
       "Right to access, rectify, and delete personal data",
-      "Data portability — export your data at any time",
+      "Data portability - export your data at any time",
       "Lawful basis for processing documented for all data flows",
       "Sub-processor list maintained and available",
       "72-hour breach notification commitment",

@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const ClosingCTA = () => {
   return (
-    <section id="pricing" className="py-28 sm:py-36 px-6">
+    <section id="pricing" className="py-16 sm:py-20 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="bg-surface-dark rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">

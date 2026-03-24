@@ -4,11 +4,11 @@ import Link from "next/link";
 
 const Hero = () => {
   return (
-    <section id="product" className="pt-28 sm:pt-36 pb-20 sm:pb-32 px-5 sm:px-6 overflow-hidden">
+    <section id="product" className="pt-24 sm:pt-32 pb-16 sm:pb-20 px-5 sm:px-6 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         {/* Asymmetric hero: left-aligned headline + right embedded illustration */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-14 sm:mb-20">
-          <div className="lg:col-span-7 animate-fade-up" style={{ animationDelay: "0.1s" }}>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center mb-14 sm:mb-20">
+          <div className="lg:col-span-6 animate-fade-up" style={{ animationDelay: "0.1s" }}>
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-elevated border border-border-soft/40 mb-8">
               <span className="w-1.5 h-1.5 rounded-full bg-accent-gold animate-pulse-dot" />
               <span className="font-body text-[0.7rem] text-text-subtle tracking-wide">Handling calls now</span>
@@ -38,10 +38,10 @@ const Hero = () => {
             </p>
           </div>
 
-          {/* Right column — embedded voice agent illustration */}
-          <div className="lg:col-span-5 animate-fade-up" style={{ animationDelay: "0.2s" }}>
+          {/* Right column - embedded voice agent illustration */}
+          <div className="lg:col-span-6 animate-fade-up" style={{ animationDelay: "0.2s" }}>
             {/* Browser-style bezel around real dashboard screenshot */}
-            <div className="relative mx-auto max-w-[520px] rounded-xl overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.12)] border border-border-soft/60">
+            <div className="relative mx-auto rounded-xl overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.12)] border border-border-soft/60">
               {/* Browser chrome bar */}
               <div className="flex items-center gap-2 px-4 py-2.5 bg-surface-panel border-b border-border-soft/40">
                 <div className="flex gap-1.5">
@@ -67,7 +67,7 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Dark contrast dashboard preview — the signature editorial block */}
+        {/* Dark contrast dashboard preview - the signature editorial block */}
         <div className="animate-fade-up" style={{ animationDelay: "0.35s" }}>
           <div className="relative bg-surface-dark rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-8 md:p-10 overflow-hidden shadow-surface-xl">
             {/* Floating label */}
