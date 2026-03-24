@@ -15,40 +15,54 @@ import FrameScrubber from "@/components/landing/FrameScrubber";
 export default function Home() {
   return (
     <>
-      {/* Override body bg so the fixed canvas at z-0 is visible */}
-      <style>{`body { background: transparent !important; }`}</style>
-      <div className="min-h-screen">
-      {/* Fixed canvas behind everything — light mode only */}
+      {/* Fixed scroll-driven animation behind hero (light mode only) */}
       <FrameScrubber />
+
       <div className="relative z-10">
-      <Navbar />
-      <Hero />
-      <ScrollReveal variant="fade-up" delay={0}>
+        <Navbar />
+
+        {/* ── Transparent zone: animation visible behind ── */}
+        <Hero />
         <TrustStrip />
-      </ScrollReveal>
-      <ScrollReveal variant="fade-up" delay={80}>
-        <BrandCarousel />
-      </ScrollReveal>
-      <ScrollReveal variant="slide-up" duration={800}>
-        <Workflow />
-      </ScrollReveal>
-      {/* Solid background from here down to cover the fixed canvas */}
-      <div className="bg-canvas">
-      <Benefits />
-      <ScrollReveal variant="fade-up" duration={800}>
-        <ProductShowcase />
-      </ScrollReveal>
-      <Testimonials />
-      <ScrollReveal variant="scale-up" duration={800}>
-        <ClosingCTA />
-      </ScrollReveal>
-      <ScrollReveal variant="fade-up" duration={600}>
-        <FAQ />
-      </ScrollReveal>
-      <Footer />
+        <ScrollReveal variant="fade-up" delay={80}>
+          <BrandCarousel />
+        </ScrollReveal>
+
+        {/* ── Opaque sections: alternating white / gray for rhythm ── */}
+        <div className="bg-surface-panel">
+          <ScrollReveal variant="slide-up" duration={800}>
+            <Workflow />
+          </ScrollReveal>
+        </div>
+
+        <div className="bg-canvas">
+          <Benefits />
+        </div>
+
+        <div className="bg-surface-panel">
+          <ScrollReveal variant="fade-up" duration={800}>
+            <ProductShowcase />
+          </ScrollReveal>
+        </div>
+
+        <div className="bg-canvas">
+          <Testimonials />
+        </div>
+
+        <div className="bg-surface-panel">
+          <ScrollReveal variant="scale-up" duration={800}>
+            <ClosingCTA />
+          </ScrollReveal>
+        </div>
+
+        <div className="bg-canvas">
+          <ScrollReveal variant="fade-up" duration={600}>
+            <FAQ />
+          </ScrollReveal>
+        </div>
+
+        <Footer />
       </div>
-      </div>
-    </div>
     </>
   );
 }

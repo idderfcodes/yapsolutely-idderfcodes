@@ -75,7 +75,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
 
 const FAQ = () => {
   return (
-    <section className="py-24 sm:py-32 px-6 bg-canvas">
+    <section className="py-24 sm:py-32 px-6">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="font-display text-[1.6rem] sm:text-[2rem] font-semibold tracking-[-0.03em] text-text-strong leading-[1.15] mb-3">

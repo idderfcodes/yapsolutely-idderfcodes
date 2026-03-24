@@ -3,82 +3,61 @@
 import { useEffect, useRef } from "react";
 
 const TOTAL = 240;
-const BG = "#f0f2f5";
 
 function pad(n: number) {
   return String(n).padStart(3, "0");
 }
 
-function loadImage(src: string): Promise<HTMLImageElement | null> {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = () => resolve(null);
-    img.src = src;
-  });
-}
-
 /**
- * Scroll-scrubbing canvas: 240 JPG frames play as user scrolls from #product → #workflow.
- * Fixed behind content, light mode only, respects prefers-reduced-motion.
+ * Scroll-scrubbing animation: 240 JPG frames play as user scrolls
+ * from #product (hero) to #workflow (how it works).
+ * Uses a plain <img> tag — no canvas, no 2D context, no bitmap sizing.
+ * Light mode only. Respects prefers-reduced-motion.
  */
 export default function FrameScrubber() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const frames = useRef<(HTMLImageElement | null)[]>([]);
-  const lastIdx = useRef(-1);
-  const raf = useRef(0);
-  const alive = useRef(true);
+  const imgRef = useRef<HTMLImageElement>(null);
+  const urlsRef = useRef<string[]>([]);
+  const aliveRef = useRef(true);
+  const rafRef = useRef(0);
 
   useEffect(() => {
-    alive.current = true;
+    aliveRef.current = true;
 
-    // Bail in dark mode or reduced motion
     if (document.documentElement.classList.contains("dark")) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const img = imgRef.current;
+    if (!img) return;
 
-    // --- helpers ---
-    function sizeCanvas() {
-      if (!canvas) return;
-      const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const w = Math.round(rect.width * dpr);
-      const h = Math.round(rect.height * dpr);
-      if (w > 0 && h > 0 && (canvas.width !== w || canvas.height !== h)) {
-        canvas.width = w;
-        canvas.height = h;
-      }
+    // Build frame URL list
+    const step = window.innerWidth < 768 ? 2 : 1;
+    const urls: string[] = [];
+    for (let i = 1; i <= TOTAL; i += step) {
+      urls.push(`/frames/light-mode/ezgif-frame-${pad(i)}.jpg`);
     }
+    urlsRef.current = urls;
 
-    function draw(idx: number) {
-      if (!canvas || !ctx) return;
-      const list = frames.current;
-      const clamped = Math.max(0, Math.min(idx, list.length - 1));
-      if (clamped === lastIdx.current) return;
-      lastIdx.current = clamped;
+    // Show first frame immediately
+    img.src = urls[0];
 
-      const img = list[clamped];
-      ctx.fillStyle = BG;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      if (img) {
-        const cw = canvas.width, ch = canvas.height;
-        const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
-        const dw = img.naturalWidth * scale;
-        const dh = img.naturalHeight * scale;
-        ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
-      }
+    // Preload all frames in background
+    let loaded = 0;
+    for (const url of urls) {
+      const preload = new Image();
+      preload.onload = preload.onerror = () => {
+        loaded++;
+        if (loaded >= urls.length && aliveRef.current && imgRef.current) {
+          imgRef.current.style.opacity = "1";
+        }
+      };
+      preload.src = url;
     }
 
     function onScroll() {
-      if (raf.current) return;
-      raf.current = requestAnimationFrame(() => {
-        raf.current = 0;
-        const list = frames.current;
-        if (!list.length) return;
+      if (rafRef.current) return;
+      rafRef.current = requestAnimationFrame(() => {
+        rafRef.current = 0;
+        if (!imgRef.current || !urlsRef.current.length) return;
         const hero = document.getElementById("product");
         const end = document.getElementById("workflow");
         if (!hero || !end) return;
@@ -87,55 +66,28 @@ export default function FrameScrubber() {
         const range = bot - top;
         if (range <= 0) return;
         const t = Math.max(0, Math.min(1, (window.scrollY - top) / range));
-        draw(Math.round(t * (list.length - 1)));
+        const idx = Math.round(t * (urlsRef.current.length - 1));
+        imgRef.current.src = urlsRef.current[idx];
       });
     }
 
-    function onResize() {
-      sizeCanvas();
-      if (lastIdx.current >= 0) {
-        const saved = lastIdx.current;
-        lastIdx.current = -1;
-        draw(saved);
-      }
-    }
-
-    // --- init ---
-    sizeCanvas();
-
-    // Use every-other frame on mobile
-    const step = window.innerWidth < 768 ? 2 : 1;
-    const indices: number[] = [];
-    for (let i = 1; i <= TOTAL; i += step) indices.push(i);
-
-    // Load all frames in parallel
-    Promise.all(
-      indices.map((n) => loadImage(`/frames/light-mode/ezgif-frame-${pad(n)}.jpg`))
-    ).then((imgs) => {
-      if (!alive.current) return;
-      frames.current = imgs;
-      canvas.style.opacity = "1";
-      sizeCanvas();
-      onScroll();
-    });
-
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onResize, { passive: true });
+    onScroll();
 
     return () => {
-      alive.current = false;
+      aliveRef.current = false;
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onResize);
-      if (raf.current) cancelAnimationFrame(raf.current);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
 
   return (
     <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
-      <canvas
-        ref={canvasRef}
-        className="block w-full h-full"
-        style={{ backgroundColor: BG, opacity: 0, transition: "opacity 0.5s ease" }}
+      <img
+        ref={imgRef}
+        alt=""
+        className="block w-full h-full object-cover"
+        style={{ opacity: 0, transition: "opacity 0.6s ease" }}
       />
     </div>
   );
