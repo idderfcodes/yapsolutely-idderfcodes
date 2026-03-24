@@ -28,7 +28,6 @@ export default function FrameScrubber() {
   const lastFrameRef = useRef(-1);
 
   const [ready, setReady] = useState(false);
-  const [active, setActive] = useState(false);
 
   // Detect low-end / mobile → use half the frames
   const isLowEnd = useCallback(() => {
@@ -186,7 +185,6 @@ export default function FrameScrubber() {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (isDark || reducedMotion) return;
 
-    setActive(true);
     const indices = getFrameIndices();
 
     preloadFrames(indices).then((images) => {
@@ -215,7 +213,6 @@ export default function FrameScrubber() {
       ref={containerRef}
       className="fixed inset-0 z-0 pointer-events-none"
       aria-hidden="true"
-      style={{ display: active ? undefined : "none" }}
     >
       <canvas
         ref={canvasRef}
