@@ -26,6 +26,8 @@ const navLinks = [
   { label: "Support", href: "/support" },
 ];
 
+const heroHighlights = ["Flow builder included", "Browser voice testing", "Transcript exports"];
+
 const marqueeLogos = [
   { file: "twilio", label: "Twilio" },
   { file: "deepgram", label: "Deepgram" },
@@ -240,6 +242,37 @@ const trustItems = [
   { title: "Deployment visibility", copy: "Keep agents, calls, numbers, and outcomes in the same workspace." },
 ];
 
+const readinessCards = [
+  {
+    eyebrow: "Platform security",
+    title: "Protected runtime access",
+    description:
+      "Internal runtime routes are gated with shared-secret checks, and authenticated product access is signed separately so call operations are not left exposed.",
+    detail: "Auth secret + runtime secret",
+  },
+  {
+    eyebrow: "Deployment visibility",
+    title: "Health and readiness built in",
+    description:
+      "The product already exposes health and readiness surfaces so operators can tell a missing config value from an actual runtime problem before going live.",
+    detail: "Web + runtime verification",
+  },
+  {
+    eyebrow: "Audit trail",
+    title: "Transcripts stay reviewable",
+    description:
+      "Call logs, transcript history, timeline events, and tool outcomes stay attached to every conversation for QA, debugging, and operational review.",
+    detail: "Timeline + transcript detail",
+  },
+  {
+    eyebrow: "Compliance surface",
+    title: "Docs for real customer review",
+    description:
+      "Compliance, privacy, and terms pages are already live, covering recording, data handling, and regulatory expectations instead of hiding them behind sales calls.",
+    detail: "GDPR · CCPA · TCPA",
+  },
+];
+
 const faqItems = [
   {
     question: "What is Yapsolutely?",
@@ -301,49 +334,34 @@ export default function RevisedLandingPage() {
   return (
     <div className="landing-shell min-h-screen">
       <header className="sticky top-0 z-50 border-b border-[var(--landing-border)]/80 bg-white/88 backdrop-blur-xl">
-        <div className="landing-container flex h-[4.5rem] items-center justify-between gap-6 py-4">
-          <Link href="/" className="flex items-center gap-3 cursor-pointer">
-            <Image src="/favicon.svg" alt="Yapsolutely" width={34} height={34} className="h-8 w-8 rounded-xl" />
-            <div>
-              <div className="landing-display text-[1.35rem] leading-none tracking-[-0.04em] text-[var(--landing-text)]">Yapsolutely</div>
-              <div className="landing-body text-[0.68rem] uppercase tracking-[0.22em] text-[var(--landing-text-muted)]">Voice agent platform</div>
+        <div className="landing-container flex h-[5rem] items-center justify-between gap-5 py-4 lg:gap-8">
+          <Link href="/" className="flex min-w-0 items-center gap-3.5 cursor-pointer">
+            <div className="flex h-10 w-10 items-center justify-center rounded-[1rem] border border-[var(--landing-border)] bg-[var(--landing-background-soft)]">
+              <Image src="/favicon.svg" alt="Yapsolutely" width={26} height={26} className="h-6.5 w-6.5 rounded-lg" />
+            </div>
+            <div className="min-w-0">
+              <div className="landing-display text-[1.5rem] leading-none tracking-[-0.045em] text-[var(--landing-text)]">Yapsolutely</div>
+              <div className="landing-body mt-1 text-[0.64rem] uppercase tracking-[0.28em] text-[var(--landing-text-muted)]">Voice agent platform</div>
             </div>
           </Link>
 
-          <nav className="hidden items-center gap-7 md:flex">
+          <nav className="hidden flex-1 items-center justify-center gap-6 lg:flex xl:gap-8">
             {navLinks.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
-                className="landing-body text-[0.94rem] font-medium text-[var(--landing-text)]/88 transition hover:text-[var(--landing-accent)]"
+                className="landing-body text-[0.93rem] font-medium text-[var(--landing-text)]/88 transition hover:text-[var(--landing-accent)]"
               >
                 {link.label}
               </Link>
             ))}
           </nav>
 
-          <div className="hidden xl:flex items-center gap-3 rounded-full border border-[var(--landing-border)] bg-white px-3 py-2">
-            <div className="flex -space-x-2">
-              {["#F5C7BB", "#E6D3C7", "#D95F3B"].map((color, index) => (
-                <span
-                  key={index}
-                  className="flex h-8 w-8 items-center justify-center rounded-full border border-white text-[0.65rem] font-semibold text-[var(--landing-text)]"
-                  style={{ backgroundColor: color }}
-                >
-                  {String.fromCharCode(65 + index)}
-                </span>
-              ))}
-            </div>
-            <div className="landing-body text-[0.82rem] font-medium text-[var(--landing-text-muted)]">
-              Trusted by operators building live phone workflows
-            </div>
-          </div>
-
-          <div className="hidden items-center gap-3 md:flex">
-            <Link href="/sign-in" className="landing-button-secondary px-5 py-3 landing-body text-[0.92rem] font-medium">
+          <div className="hidden items-center gap-2.5 md:flex">
+            <Link href="/sign-in" className="landing-button-secondary px-5 py-3 landing-body text-[0.9rem] font-medium">
               Sign in
             </Link>
-            <Link href="/sign-up" className="landing-button-primary px-5 py-3 landing-body text-[0.92rem] font-semibold">
+            <Link href="/sign-up" className="landing-button-primary px-5 py-3 landing-body text-[0.9rem] font-semibold">
               Start building free
             </Link>
           </div>
@@ -394,10 +412,10 @@ export default function RevisedLandingPage() {
       </header>
 
       <main>
-        <section className="relative overflow-hidden pb-10 pt-10 sm:pt-14">
-          <div className="absolute inset-x-0 top-0 -z-10 h-[420px] bg-[radial-gradient(circle_at_top,rgba(217,95,59,0.12),transparent_55%)]" />
+        <section className="relative overflow-hidden pb-12 pt-12 sm:pb-16 sm:pt-16">
+          <div className="absolute inset-x-0 top-0 -z-10 h-[460px] bg-[radial-gradient(circle_at_top,rgba(217,95,59,0.13),transparent_55%)]" />
           <div className="landing-container">
-            <div className="grid items-center gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:gap-14">
+            <div className="grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
               <motion.div
                 variants={fadeUp}
                 initial="hidden"
@@ -409,13 +427,22 @@ export default function RevisedLandingPage() {
                   <span className="landing-body text-[0.84rem] font-medium text-[var(--landing-text)]">Handling calls now</span>
                 </div>
 
-                <h1 className="landing-display max-w-[12ch] text-[3.5rem] leading-[0.92] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[4.7rem] lg:text-[6.3rem]">
+                <h1 className="landing-display max-w-[9.4ch] text-[3.45rem] leading-[0.9] tracking-[-0.055em] text-[var(--landing-text)] sm:text-[4.6rem] lg:text-[6.05rem]">
                   AI agents that answer every inbound call
                 </h1>
 
-                <p className="landing-body mt-6 max-w-[36rem] text-[1.02rem] leading-8 text-[var(--landing-text-muted)] sm:text-[1.08rem]">
+                <p className="landing-body mt-6 max-w-[34rem] text-[1.02rem] leading-8 text-[var(--landing-text-muted)] sm:text-[1.08rem]">
                   For sales, support, and operations teams that cannot afford dropped intent. Build the agent, assign the number, and review the outcome from one workspace.
                 </p>
+
+                <div className="mt-6 flex flex-wrap gap-2.5">
+                  {heroHighlights.map((item) => (
+                    <div key={item} className="landing-pill inline-flex items-center gap-2 px-3.5 py-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[var(--landing-accent)]" />
+                      <span className="landing-body text-[0.8rem] font-medium text-[var(--landing-text-muted)]">{item}</span>
+                    </div>
+                  ))}
+                </div>
 
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Link href="/sign-up" className="landing-button-primary inline-flex items-center justify-center gap-2 px-6 py-3.5 landing-body text-[0.96rem] font-semibold">
@@ -427,7 +454,25 @@ export default function RevisedLandingPage() {
                   </Link>
                 </div>
 
-                <p className="landing-body mt-4 text-[0.86rem] text-[var(--landing-text-muted)]">No credit card required. Free plan available.</p>
+                <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
+                  <p className="landing-body text-[0.86rem] text-[var(--landing-text-muted)]">No credit card required. Free plan available.</p>
+                  <div className="inline-flex items-center gap-3 rounded-full border border-[var(--landing-border)] bg-white px-3 py-2">
+                    <div className="flex -space-x-2">
+                      {["#F5C7BB", "#E6D3C7", "#D95F3B"].map((color, index) => (
+                        <span
+                          key={index}
+                          className="flex h-7 w-7 items-center justify-center rounded-full border border-white text-[0.62rem] font-semibold text-[var(--landing-text)]"
+                          style={{ backgroundColor: color }}
+                        >
+                          {String.fromCharCode(65 + index)}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="landing-body text-[0.79rem] font-medium text-[var(--landing-text-muted)]">
+                      Trusted by operators building live phone workflows
+                    </div>
+                  </div>
+                </div>
 
                 <div className="mt-8 grid gap-3 sm:grid-cols-3">
                   {[
@@ -449,7 +494,9 @@ export default function RevisedLandingPage() {
                 animate="show"
                 transition={{ duration: 0.55, delay: 0.12, ease: "easeOut" }}
               >
-                <div className="landing-card overflow-hidden p-3 sm:p-4">
+                <div className="relative mx-auto w-full max-w-[660px]">
+                  <div className="absolute inset-x-[10%] bottom-[-3.5rem] h-24 rounded-full bg-[radial-gradient(circle,rgba(217,95,59,0.18),transparent_72%)] blur-3xl" />
+                  <div className="landing-card relative overflow-hidden p-3 sm:p-4 shadow-[0_42px_120px_-54px_rgba(20,20,20,0.32)]">
                   <div className="mb-3 flex items-center justify-between rounded-[1.2rem] border border-[var(--landing-border)] bg-[var(--landing-background-soft)] px-4 py-3">
                     <div className="flex gap-2">
                       <span className="h-2.5 w-2.5 rounded-full bg-[#ff8d7a]" />
@@ -471,6 +518,7 @@ export default function RevisedLandingPage() {
                       className="h-auto w-full object-cover"
                     />
                   </div>
+                </div>
                 </div>
               </motion.div>
             </div>
@@ -741,6 +789,86 @@ export default function RevisedLandingPage() {
                   <p className="landing-body mt-3 text-[0.9rem] leading-7 text-[var(--landing-text-muted)]">{item.copy}</p>
                 </motion.div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="landing-section">
+          <div className="landing-container">
+            <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }}>
+              <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-[var(--landing-accent)]">Security & readiness</div>
+              <div className="mt-3 grid gap-4 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
+                <h2 className="landing-display max-w-[11ch] text-[2.8rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.7rem]">
+                  Customer-facing calls need visible trust layers
+                </h2>
+                <p className="landing-body max-w-[36rem] text-[1rem] leading-8 text-[var(--landing-text-muted)] lg:justify-self-end">
+                  The landing page should show that Yapsolutely is more than a pretty wrapper around a model. Security, deployment checks, audit trails, and compliance surfaces already exist in the product.
+                </p>
+              </div>
+            </motion.div>
+
+            <div className="mt-10 grid gap-4 xl:grid-cols-[0.58fr_0.42fr]">
+              <div className="grid gap-4 sm:grid-cols-2">
+                {readinessCards.map((item, index) => (
+                  <motion.div
+                    key={item.title}
+                    variants={fadeUp}
+                    initial="hidden"
+                    whileInView="show"
+                    whileHover={{ y: -3 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.38, delay: index * 0.05 }}
+                    className="landing-card p-6"
+                  >
+                    <div className="landing-body text-[0.76rem] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">{item.eyebrow}</div>
+                    <div className="landing-display mt-4 text-[1.9rem] leading-[0.98] tracking-[-0.04em] text-[var(--landing-text)]">{item.title}</div>
+                    <p className="landing-body mt-3 text-[0.94rem] leading-7 text-[var(--landing-text-muted)]">{item.description}</p>
+                    <div className="mt-5 inline-flex rounded-full border border-[var(--landing-border)] bg-[var(--landing-background-soft)] px-3 py-1.5 landing-body text-[0.76rem] font-semibold text-[var(--landing-accent)]">
+                      {item.detail}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              <motion.div
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.42, delay: 0.08 }}
+                className="overflow-hidden rounded-[2rem] bg-[var(--landing-dark)] p-7 text-white sm:p-8"
+              >
+                <div className="landing-body text-[0.76rem] font-semibold uppercase tracking-[0.2em] text-white/55">Trust stack</div>
+                <h3 className="landing-display mt-4 max-w-[12ch] text-[2.5rem] leading-[0.95] tracking-[-0.05em] text-white">
+                  The operational layer is already there
+                </h3>
+                <p className="landing-body mt-4 max-w-[30rem] text-[0.96rem] leading-8 text-white/68">
+                  That matters when you are asking a team to route real customer calls through AI. The trust story should be visible before anyone clicks sign up.
+                </p>
+
+                <div className="mt-7 space-y-3">
+                  {[
+                    "Encrypted data in transit and at rest",
+                    "Runtime-to-web routes protected by shared secret",
+                    "Compliance, privacy, and terms pages live today",
+                    "Transcript exports and call review already in product",
+                  ].map((item) => (
+                    <div key={item} className="flex items-start gap-3 rounded-[1.2rem] border border-white/10 bg-white/[0.05] px-4 py-4">
+                      <span className="mt-1 inline-flex h-2.5 w-2.5 rounded-full bg-[#f1b19d]" />
+                      <span className="landing-body text-[0.92rem] leading-7 text-white/84">{item}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                  <Link href="/compliance" className="inline-flex items-center justify-center rounded-full bg-white px-5 py-3 landing-body text-[0.92rem] font-semibold text-[var(--landing-dark)] transition hover:bg-[var(--landing-background-soft)] hover:scale-[1.01]">
+                    Review compliance
+                  </Link>
+                  <Link href="/privacy" className="inline-flex items-center justify-center rounded-full border border-white/14 px-5 py-3 landing-body text-[0.92rem] font-medium text-white transition hover:bg-white/8 hover:scale-[1.01]">
+                    Read privacy policy
+                  </Link>
+                </div>
+              </motion.div>
             </div>
           </div>
         </section>
