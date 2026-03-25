@@ -173,30 +173,33 @@ const features = [
   },
 ];
 
-const testimonials = [
+const proofCards = [
   {
-    quote:
-      "We finally have a front line that answers instantly, routes cleanly, and gives us transcripts we can actually act on.",
-    name: "Maya Chen",
-    role: "Operations Lead",
-    company: "Northline Health",
-    result: "Cut missed inbound opportunities",
+    title: "Real-time voice runtime",
+    eyebrow: "Live call path",
+    stat: "<800ms",
+    statLabel: "target voice response time",
+    description:
+      "Inbound webhooks, streaming audio, speech recognition, language generation, and spoken responses are already wired into one live pipeline.",
+    bullets: ["Twilio-compatible call flow", "Deepgram speech stack", "Anthropic response layer"],
   },
   {
-    quote:
-      "The biggest difference is operational clarity. We know what was said, what happened, and what needs follow-up after every call.",
-    name: "Adrian Cole",
-    role: "Revenue Director",
-    company: "Ridge Commerce",
-    result: "Better sales follow-up",
+    title: "Reviewable call history",
+    eyebrow: "Transcript proof",
+    stat: "100%",
+    statLabel: "transcript visibility",
+    description:
+      "Calls are stored with transcripts, event history, and action outcomes so the team can review what happened after every conversation ends.",
+    bullets: ["Per-call timeline", "Action outcome logging", "Detail views + exports"],
   },
   {
-    quote:
-      "We wanted something that felt like a real product, not a prompt demo. This gives us the workflow, the number routing, and the audit trail.",
-    name: "Sara Mitchell",
-    role: "Customer Experience",
-    company: "Westbay Dental",
-    result: "Cleaner support operations",
+    title: "Operator-first workspace",
+    eyebrow: "Product depth",
+    stat: "5",
+    statLabel: "runtime business tools",
+    description:
+      "Agents, phone numbers, browser testing, flow building, and readiness checks all live in the same product instead of scattered tools.",
+    bullets: ["Flow builder included", "Browser test mode", "Numbers + agents linked"],
   },
 ];
 
@@ -667,21 +670,21 @@ export default function RevisedLandingPage() {
         <section className="landing-section bg-[var(--landing-background-soft)]">
           <div className="landing-container">
             <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }}>
-              <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-[var(--landing-accent)]">Social proof</div>
+              <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-[var(--landing-accent)]">Product proof</div>
               <div className="mt-3 grid gap-4 lg:grid-cols-[0.84fr_1.16fr] lg:items-end">
                 <h2 className="landing-display max-w-[10ch] text-[2.8rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.7rem]">
-                  What strong operations sound like after deployment
+                  Show the product depth, not borrowed credibility
                 </h2>
                 <p className="landing-body max-w-[35rem] text-[1rem] leading-8 text-[var(--landing-text-muted)] lg:justify-self-end">
-                  The brief called for more proof and less template energy. That means showing outcomes, not just claiming them.
+                  The strongest trust signal right now is the product itself. These are the live surfaces that make Yapsolutely feel operational instead of like a dressed-up prompt demo.
                 </p>
               </div>
             </motion.div>
 
             <div className="mt-10 grid gap-4 lg:grid-cols-3">
-              {testimonials.map((item, index) => (
+              {proofCards.map((item, index) => (
                 <motion.div
-                  key={item.name}
+                  key={item.title}
                   variants={fadeUp}
                   initial="hidden"
                   whileInView="show"
@@ -690,20 +693,29 @@ export default function RevisedLandingPage() {
                   transition={{ duration: 0.38, delay: index * 0.06 }}
                   className="landing-card p-6 sm:p-7"
                 >
-                  <div className="mb-5 flex items-center gap-1 text-[var(--landing-accent)]">
-                    {Array.from({ length: 5 }).map((_, starIndex) => (
-                      <span key={starIndex}>★</span>
-                    ))}
+                  <div className="landing-body text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">
+                    {item.eyebrow}
                   </div>
-                  <p className="landing-body text-[1rem] leading-8 text-[var(--landing-text)]">“{item.quote}”</p>
-                  <div className="mt-6 border-t border-[var(--landing-border)] pt-5">
-                    <div className="landing-display text-[1.55rem] leading-none tracking-[-0.04em] text-[var(--landing-text)]">{item.name}</div>
-                    <div className="landing-body mt-2 text-[0.88rem] font-medium text-[var(--landing-text-muted)]">
-                      {item.role} · {item.company}
+                  <div className="mt-5 flex items-end justify-between gap-4 border-b border-[var(--landing-border)] pb-5">
+                    <div>
+                      <div className="landing-display text-[2.6rem] leading-none tracking-[-0.05em] text-[var(--landing-text)]">{item.stat}</div>
+                      <div className="landing-body mt-2 text-[0.82rem] font-medium text-[var(--landing-text-muted)]">{item.statLabel}</div>
                     </div>
-                    <div className="landing-body mt-3 text-[0.82rem] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">
-                      {item.result}
+                    <div className="rounded-full border border-[var(--landing-border)] bg-[var(--landing-background)] px-3 py-1.5 landing-body text-[0.74rem] font-semibold uppercase tracking-[0.14em] text-[var(--landing-accent)]">
+                      Verified in product
                     </div>
+                  </div>
+                  <div className="mt-5">
+                    <div className="landing-display text-[1.8rem] leading-[0.98] tracking-[-0.04em] text-[var(--landing-text)]">{item.title}</div>
+                    <p className="landing-body mt-3 text-[0.97rem] leading-7 text-[var(--landing-text-muted)]">{item.description}</p>
+                  </div>
+                  <div className="mt-6 space-y-3">
+                    {item.bullets.map((bullet) => (
+                      <div key={bullet} className="landing-body flex items-center gap-3 text-[0.9rem] text-[var(--landing-text)]">
+                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[var(--landing-background)] text-[var(--landing-accent)]">•</span>
+                        <span>{bullet}</span>
+                      </div>
+                    ))}
                   </div>
                 </motion.div>
               ))}
