@@ -28,6 +28,12 @@ const navLinks = [
 
 const heroHighlights = ["Launch in minutes", "Browser voice testing", "Searchable transcripts"];
 
+const heroProofChips = [
+  { label: "Runtime", value: "Online" },
+  { label: "Flow", value: "Generated" },
+  { label: "Review", value: "Synced" },
+];
+
 const marqueeLogos = [
   { file: "twilio", label: "Twilio" },
   { file: "deepgram", label: "Deepgram" },
@@ -497,29 +503,92 @@ export default function RevisedLandingPage() {
               >
                 <div className="relative mx-auto w-full max-w-[660px]">
                   <div className="absolute inset-x-[10%] bottom-[-3.5rem] h-24 rounded-full bg-[radial-gradient(circle,rgba(217,95,59,0.18),transparent_72%)] blur-3xl" />
-                  <div className="landing-card relative overflow-hidden p-3 sm:p-4 shadow-[0_42px_120px_-54px_rgba(20,20,20,0.32)]">
-                  <div className="mb-3 flex items-center justify-between rounded-[1.2rem] border border-[var(--landing-border)] bg-[var(--landing-background-soft)] px-4 py-3">
-                    <div className="flex gap-2">
-                      <span className="h-2.5 w-2.5 rounded-full bg-[#ff8d7a]" />
-                      <span className="h-2.5 w-2.5 rounded-full bg-[#ffd37a]" />
-                      <span className="h-2.5 w-2.5 rounded-full bg-[#7fcf9f]" />
+                  <motion.div
+                    initial={{ opacity: 0, y: 18 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.16, ease: "easeOut" }}
+                    className="absolute -left-3 top-14 z-10 hidden w-[210px] rounded-[1.55rem] border border-[var(--landing-border)] bg-white/96 p-4 shadow-[0_22px_60px_-34px_rgba(20,20,20,0.28)] backdrop-blur md:block xl:-left-12"
+                  >
+                    <div className="landing-body text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">
+                      Operator snapshot
                     </div>
-                    <div className="landing-body rounded-full border border-[var(--landing-border)] bg-white px-3 py-1 text-[0.72rem] font-medium text-[var(--landing-text-muted)]">
-                      yapsolutely.xyz
+                    <div className="landing-display mt-3 text-[1.5rem] leading-[0.98] tracking-[-0.04em] text-[var(--landing-text)]">
+                      Ready to go live
                     </div>
-                  </div>
+                    <div className="mt-4 space-y-2.5">
+                      {heroProofChips.map((chip) => (
+                        <div key={chip.label} className="flex items-center justify-between rounded-full border border-[var(--landing-border)] bg-[var(--landing-background-soft)] px-3 py-2">
+                          <span className="landing-body text-[0.78rem] font-medium text-[var(--landing-text-muted)]">{chip.label}</span>
+                          <span className="landing-body text-[0.74rem] font-semibold uppercase tracking-[0.12em] text-[var(--landing-text)]">{chip.value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
 
-                  <div className="overflow-hidden rounded-[1.35rem] border border-[var(--landing-border)] bg-white">
-                    <Image
-                      src="/hero-dashboard.png"
-                      alt="Yapsolutely workspace dashboard"
-                      width={1641}
-                      height={965}
-                      priority
-                      className="h-auto w-full object-cover"
-                    />
+                  <div className="landing-card relative overflow-hidden p-3 sm:p-4 shadow-[0_42px_120px_-54px_rgba(20,20,20,0.32)]">
+                    <div className="mb-3 flex items-center justify-between rounded-[1.2rem] border border-[var(--landing-border)] bg-[var(--landing-background-soft)] px-4 py-3">
+                      <div className="flex gap-2">
+                        <span className="h-2.5 w-2.5 rounded-full bg-[#ff8d7a]" />
+                        <span className="h-2.5 w-2.5 rounded-full bg-[#ffd37a]" />
+                        <span className="h-2.5 w-2.5 rounded-full bg-[#7fcf9f]" />
+                      </div>
+                      <div className="landing-body rounded-full border border-[var(--landing-border)] bg-white px-3 py-1 text-[0.72rem] font-medium text-[var(--landing-text-muted)]">
+                        yapsolutely.xyz
+                      </div>
+                    </div>
+
+                    <div className="relative overflow-hidden rounded-[1.35rem] border border-[var(--landing-border)] bg-white">
+                      <Image
+                        src="/hero-dashboard.png"
+                        alt="Yapsolutely workspace dashboard"
+                        width={1641}
+                        height={965}
+                        priority
+                        className="h-auto w-full object-cover"
+                      />
+
+                      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/16 to-transparent" />
+
+                      <motion.div
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.45, delay: 0.24, ease: "easeOut" }}
+                        className="absolute bottom-4 left-4 hidden max-w-[240px] rounded-[1.25rem] border border-white/40 bg-white/94 p-4 shadow-[0_20px_44px_-28px_rgba(20,20,20,0.35)] backdrop-blur lg:block"
+                      >
+                        <div className="landing-body text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">
+                          Call review
+                        </div>
+                        <div className="mt-3 space-y-2">
+                          {[
+                            "Lead qualified and routed",
+                            "SMS confirmation logged",
+                            "Transcript export ready",
+                          ].map((line) => (
+                            <div key={line} className="rounded-full bg-[var(--landing-background-soft)] px-3 py-2 landing-body text-[0.78rem] font-medium text-[var(--landing-text)]">
+                              {line}
+                            </div>
+                          ))}
+                        </div>
+                      </motion.div>
+                    </div>
+
+                    <motion.div
+                      initial={{ opacity: 0, x: 16 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5, delay: 0.28, ease: "easeOut" }}
+                      className="absolute -right-2 bottom-8 hidden w-[220px] rounded-[1.6rem] bg-[var(--landing-dark)] p-4 text-white shadow-[0_26px_60px_-34px_rgba(20,20,20,0.5)] md:block xl:-right-10"
+                    >
+                      <div className="landing-body text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white/55">
+                        Operating layer
+                      </div>
+                      <div className="landing-display mt-3 text-[1.55rem] leading-[0.98] tracking-[-0.04em] text-white">
+                        Not just a prompt box
+                      </div>
+                      <p className="landing-body mt-3 text-[0.82rem] leading-6 text-white/68">
+                        Numbers, transcripts, browser tests, and deployment checks all stay in one flow.
+                      </p>
+                    </motion.div>
                   </div>
-                </div>
                 </div>
               </motion.div>
             </div>
