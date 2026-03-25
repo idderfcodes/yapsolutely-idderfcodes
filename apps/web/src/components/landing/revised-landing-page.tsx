@@ -19,14 +19,14 @@ import {
 } from "@heroicons/react/24/outline";
 
 const navLinks = [
-  { label: "Product", href: "#features" },
+  { label: "Platform", href: "#features" },
+  { label: "Use cases", href: "#use-cases" },
   { label: "Pricing", href: "#pricing" },
-  { label: "Docs", href: "/docs" },
-  { label: "About", href: "/about" },
+  { label: "Resources", href: "/docs" },
   { label: "Support", href: "/support" },
 ];
 
-const heroHighlights = ["Flow builder included", "Browser voice testing", "Transcript exports"];
+const heroHighlights = ["Launch in minutes", "Browser voice testing", "Searchable transcripts"];
 
 const marqueeLogos = [
   { file: "twilio", label: "Twilio" },
@@ -424,15 +424,16 @@ export default function RevisedLandingPage() {
               >
                 <div className="landing-pill mb-6 inline-flex items-center gap-2 px-4 py-2">
                   <span className="h-2 w-2 rounded-full bg-[var(--landing-accent)]" />
-                  <span className="landing-body text-[0.84rem] font-medium text-[var(--landing-text)]">Handling calls now</span>
+                  <span className="landing-body text-[0.84rem] font-medium text-[var(--landing-text)]">Built for teams that run on phone calls</span>
                 </div>
 
-                <h1 className="landing-display max-w-[9.4ch] text-[3.45rem] leading-[0.9] tracking-[-0.055em] text-[var(--landing-text)] sm:text-[4.6rem] lg:text-[6.05rem]">
-                  AI agents that answer every inbound call
+                <h1 className="landing-display max-w-[9.6ch] text-[3.45rem] leading-[0.9] tracking-[-0.055em] text-[var(--landing-text)] sm:text-[4.6rem] lg:text-[6.05rem]">
+                  Answer, qualify, book, & review
+                  <span className="text-[var(--landing-accent)]"> every inbound call.</span>
                 </h1>
 
                 <p className="landing-body mt-6 max-w-[34rem] text-[1.02rem] leading-8 text-[var(--landing-text-muted)] sm:text-[1.08rem]">
-                  For sales, support, and operations teams that cannot afford dropped intent. Build the agent, assign the number, and review the outcome from one workspace.
+                  AI voice agents for sales, support, and operations teams. Configure the workflow, assign the number, and keep every conversation visible from one workspace.
                 </p>
 
                 <div className="mt-6 flex flex-wrap gap-2.5">
@@ -455,7 +456,7 @@ export default function RevisedLandingPage() {
                 </div>
 
                 <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
-                  <p className="landing-body text-[0.86rem] text-[var(--landing-text-muted)]">No credit card required. Free plan available.</p>
+                  <p className="landing-body text-[0.86rem] text-[var(--landing-text-muted)]">No credit card required. Get your first agent live in minutes.</p>
                   <div className="inline-flex items-center gap-3 rounded-full border border-[var(--landing-border)] bg-white px-3 py-2">
                     <div className="flex -space-x-2">
                       {["#F5C7BB", "#E6D3C7", "#D95F3B"].map((color, index) => (
@@ -551,10 +552,10 @@ export default function RevisedLandingPage() {
               <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-[var(--landing-accent)]">How it works</div>
               <div className="mt-3 grid gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
                 <h2 className="landing-display max-w-[10ch] text-[2.8rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.7rem]">
-                  Three steps to a working phone agent
+                  Launch your first voice agent in three steps
                 </h2>
                 <p className="landing-body max-w-[34rem] text-[1rem] leading-8 text-[var(--landing-text-muted)] lg:justify-self-end">
-                  The setup is simple on purpose. Define the behavior, attach a number, and review every call without digging through disconnected tools.
+                  Set the behavior, attach the number, and review every call from one clean operating layer.
                 </p>
               </div>
             </motion.div>
@@ -589,10 +590,10 @@ export default function RevisedLandingPage() {
               <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-[var(--landing-accent)]">Use cases</div>
               <div className="mt-3 grid gap-4 lg:grid-cols-[0.92fr_1.08fr] lg:items-end">
                 <h2 className="landing-display max-w-[10ch] text-[2.8rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.7rem]">
-                  Built for every inbound call scenario
+                  One workflow for every inbound call type
                 </h2>
                 <p className="landing-body max-w-[35rem] text-[1rem] leading-8 text-[var(--landing-text-muted)] lg:justify-self-end">
-                  Sales, support, scheduling, and after-hours coverage all live in the same product pattern, which means less rework and faster deployment.
+                  Sales, support, scheduling, and after-hours coverage all run through the same product pattern, so teams can move faster with less rework.
                 </p>
               </div>
             </motion.div>
@@ -661,10 +662,10 @@ export default function RevisedLandingPage() {
               <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-[var(--landing-accent)]">Features</div>
               <div className="mt-3 grid gap-4 lg:grid-cols-[0.88fr_1.12fr] lg:items-end">
                 <h2 className="landing-display max-w-[10ch] text-[2.8rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.7rem]">
-                  The operator layer for voice agents
+                  Everything needed to run voice agents well
                 </h2>
                 <p className="landing-body max-w-[35rem] text-[1rem] leading-8 text-[var(--landing-text-muted)] lg:justify-self-end">
-                  This is not just a prompt box with a phone number attached. The homepage needs to show the real product depth, and so does the product itself.
+                  Not just a prompt box with a phone number attached. The product gives your team the workflow, visibility, and controls needed to go live with confidence.
                 </p>
               </div>
             </motion.div>
@@ -721,10 +722,10 @@ export default function RevisedLandingPage() {
               <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-[var(--landing-accent)]">Product proof</div>
               <div className="mt-3 grid gap-4 lg:grid-cols-[0.84fr_1.16fr] lg:items-end">
                 <h2 className="landing-display max-w-[10ch] text-[2.8rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.7rem]">
-                  Show the product depth, not borrowed credibility
+                  Proof that stays inside the product
                 </h2>
                 <p className="landing-body max-w-[35rem] text-[1rem] leading-8 text-[var(--landing-text-muted)] lg:justify-self-end">
-                  The strongest trust signal right now is the product itself. These are the live surfaces that make Yapsolutely feel operational instead of like a dressed-up prompt demo.
+                  The strongest trust signal is the product itself. These are the live surfaces that make Yapsolutely feel operational instead of like a dressed-up prompt demo.
                 </p>
               </div>
             </motion.div>
@@ -799,10 +800,10 @@ export default function RevisedLandingPage() {
               <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-[var(--landing-accent)]">Security & readiness</div>
               <div className="mt-3 grid gap-4 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
                 <h2 className="landing-display max-w-[11ch] text-[2.8rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.7rem]">
-                  Customer-facing calls need visible trust layers
+                  Customer-facing calls need visible trust
                 </h2>
                 <p className="landing-body max-w-[36rem] text-[1rem] leading-8 text-[var(--landing-text-muted)] lg:justify-self-end">
-                  The landing page should show that Yapsolutely is more than a pretty wrapper around a model. Security, deployment checks, audit trails, and compliance surfaces already exist in the product.
+                  Security, deployment checks, audit trails, and compliance surfaces already exist in the product. The landing page should make that obvious.
                 </p>
               </div>
             </motion.div>
@@ -879,10 +880,10 @@ export default function RevisedLandingPage() {
               <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-[var(--landing-accent)]">Pricing</div>
               <div className="mt-3 grid gap-4 lg:grid-cols-[0.84fr_1.16fr] lg:items-end">
                 <h2 className="landing-display max-w-[10ch] text-[2.8rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.7rem]">
-                  Start lean. Scale when the workflow proves out.
+                  Start simple. Scale when the workflow proves out.
                 </h2>
                 <p className="landing-body max-w-[35rem] text-[1rem] leading-8 text-[var(--landing-text-muted)] lg:justify-self-end">
-                  Pricing should feel simple on the surface and credible underneath. The goal is to make the first yes easy without flattening the product.
+                  Make the first yes easy, then scale into more volume, more routing, and more operational depth when the time is right.
                 </p>
               </div>
             </motion.div>
@@ -1007,10 +1008,10 @@ export default function RevisedLandingPage() {
                 <div>
                   <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-white/55">Get started</div>
                   <h2 className="landing-display mt-3 max-w-[10ch] text-[3rem] leading-[0.93] tracking-[-0.05em] text-white sm:text-[4rem]">
-                    Stop losing calls. Start closing them.
+                    Put every inbound call to work.
                   </h2>
                   <p className="landing-body mt-5 max-w-[33rem] text-[1rem] leading-8 text-white/66">
-                    Every missed call is missed intent. Deploy an AI voice agent in minutes and keep the line working even when your team is not.
+                    Deploy an AI voice agent in minutes, keep the line active around the clock, and give your team full visibility after every conversation.
                   </p>
                   <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                     <Link href="/sign-up" className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 landing-body text-[0.96rem] font-semibold text-[var(--landing-dark)] transition hover:bg-[var(--landing-background-soft)] hover:scale-[1.01]">
