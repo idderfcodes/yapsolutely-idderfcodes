@@ -7,52 +7,52 @@ import ThemeProvider from "@/components/theme-provider";
 import { getSession } from "@/lib/auth";
 import "./globals.css";
 
-const generalSans = localFont({
+const bagossCondensed = localFont({
   src: [
     {
-      path: "./fonts/general-sans-400.woff2",
+      path: "./fonts/landing/bagoss-condensed-400.woff2",
       weight: "400",
       style: "normal",
     },
     {
-      path: "./fonts/general-sans-500.woff2",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "./fonts/general-sans-600.woff2",
+      path: "./fonts/landing/bagoss-condensed-600.woff2",
       weight: "600",
       style: "normal",
     },
     {
-      path: "./fonts/general-sans-700.woff2",
+      path: "./fonts/landing/bagoss-condensed-700.woff2",
       weight: "700",
       style: "normal",
     },
   ],
-  variable: "--font-general-sans",
+  variable: "--font-bagoss",
   display: "swap",
 });
 
-const satoshi = localFont({
+const inter = localFont({
   src: [
     {
-      path: "./fonts/satoshi-400.woff2",
+      path: "./fonts/landing/inter-400.ttf",
       weight: "400",
       style: "normal",
     },
     {
-      path: "./fonts/satoshi-500.woff2",
+      path: "./fonts/landing/inter-500.ttf",
       weight: "500",
       style: "normal",
     },
     {
-      path: "./fonts/satoshi-700.woff2",
+      path: "./fonts/landing/inter-600.ttf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "./fonts/landing/inter-700.ttf",
       weight: "700",
       style: "normal",
     },
   ],
-  variable: "--font-satoshi",
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -97,7 +97,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${generalSans.variable} ${satoshi.variable} h-full antialiased`}
+      className={`${bagossCondensed.variable} ${inter.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full bg-[var(--background)] text-[var(--foreground)]">
