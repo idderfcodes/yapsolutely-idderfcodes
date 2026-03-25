@@ -56,6 +56,55 @@ const satoshi = localFont({
   display: "swap",
 });
 
+const bagossCondensed = localFont({
+  src: [
+    {
+      path: "./fonts/landing/bagoss-condensed-400.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./fonts/landing/bagoss-condensed-600.woff2",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "./fonts/landing/bagoss-condensed-700.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-landing-display",
+  display: "swap",
+});
+
+const inter = localFont({
+  src: [
+    {
+      path: "./fonts/landing/inter-400.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./fonts/landing/inter-500.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "./fonts/landing/inter-600.ttf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "./fonts/landing/inter-700.ttf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-landing-body",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: {
     default: "Yapsolutely | AI Voice Agent Platform",
@@ -97,7 +146,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${generalSans.variable} ${satoshi.variable} h-full antialiased`}
+      className={`${generalSans.variable} ${satoshi.variable} ${bagossCondensed.variable} ${inter.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full bg-[var(--background)] text-[var(--foreground)]">
