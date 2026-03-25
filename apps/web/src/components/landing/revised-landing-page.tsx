@@ -215,29 +215,35 @@ const pricingTiers = [
   {
     name: "Starter",
     price: "$0",
+    tag: "Proof of concept",
     blurb: "For proving the workflow and getting the first agent live.",
     cta: "Start free",
     href: "/sign-up",
     highlighted: false,
     features: ["1 active agent", "Limited monthly minutes", "Transcript review", "Basic routing"],
+    note: "Best for trying the workflow end to end before you scale volume.",
   },
   {
     name: "Pro",
     price: "$149",
+    tag: "Most picked",
     blurb: "For teams that need real inbound coverage and cleaner operations.",
     cta: "Start building",
     href: "/sign-up",
     highlighted: true,
     features: ["Multiple agents", "Number assignment", "Call analytics", "Priority support"],
+    note: "The right starting point for teams replacing missed calls with a real operating layer.",
   },
   {
     name: "Enterprise",
     price: "Custom",
+    tag: "High volume",
     blurb: "For high-volume teams that need deployment depth and control.",
     cta: "Talk to sales",
     href: "/support",
     highlighted: false,
     features: ["Advanced rollout support", "Security review", "Custom workflows", "Deployment guidance"],
+    note: "Designed for rollout planning, internal review, and custom operating requirements.",
   },
 ];
 
@@ -957,7 +963,7 @@ export default function RevisedLandingPage() {
               </div>
             </motion.div>
 
-            <div className="mt-10 grid gap-4 lg:grid-cols-3">
+            <div className="mt-10 grid gap-4 lg:grid-cols-[0.96fr_1.08fr_0.96fr] lg:items-stretch">
               {pricingTiers.map((tier, index) => (
                 <motion.div
                   key={tier.name}
@@ -967,10 +973,22 @@ export default function RevisedLandingPage() {
                   whileHover={{ y: -3 }}
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{ duration: 0.38, delay: index * 0.05 }}
-                  className={`p-6 sm:p-7 ${tier.highlighted ? "landing-card border-[var(--landing-accent)] shadow-[0_24px_60px_-28px_rgba(217,95,59,0.4)]" : "landing-card-soft"}`}
+                  className={`${tier.highlighted ? "landing-card border-[var(--landing-accent)] shadow-[0_28px_70px_-34px_rgba(217,95,59,0.35)] lg:-translate-y-3" : "landing-card-soft lg:translate-y-4"} relative overflow-hidden p-6 sm:p-7`}
                 >
-                  <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">{tier.name}</div>
-                  <div className="landing-display mt-4 text-[3rem] leading-none tracking-[-0.05em] text-[var(--landing-text)]">{tier.price}</div>
+                  {tier.highlighted ? (
+                    <div className="absolute inset-x-0 top-0 h-1 bg-[var(--landing-accent)]" />
+                  ) : null}
+
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">{tier.name}</div>
+                      <div className="landing-display mt-4 text-[3rem] leading-none tracking-[-0.05em] text-[var(--landing-text)]">{tier.price}</div>
+                    </div>
+                    <div className={`rounded-full px-3 py-1.5 landing-body text-[0.72rem] font-semibold uppercase tracking-[0.14em] ${tier.highlighted ? "bg-[var(--landing-accent)] text-white" : "border border-[var(--landing-border)] bg-white text-[var(--landing-text-muted)]"}`}>
+                      {tier.tag}
+                    </div>
+                  </div>
+
                   <p className="landing-body mt-4 min-h-[4rem] text-[0.95rem] leading-7 text-[var(--landing-text-muted)]">{tier.blurb}</p>
                   <Link
                     href={tier.href}
@@ -978,13 +996,21 @@ export default function RevisedLandingPage() {
                   >
                     {tier.cta}
                   </Link>
-                  <div className="mt-6 space-y-3 border-t border-[var(--landing-border)] pt-6">
+
+                  <div className="mt-6 rounded-[1.35rem] border border-[var(--landing-border)] bg-white/65 p-4">
+                    <div className="landing-body text-[0.74rem] font-semibold uppercase tracking-[0.16em] text-[var(--landing-accent)]">Included</div>
+                    <div className="mt-4 space-y-3">
                     {tier.features.map((feature) => (
                       <div key={feature} className="landing-body flex items-center gap-3 text-[0.92rem] text-[var(--landing-text)]">
-                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[var(--landing-background)] text-[var(--landing-accent)]">•</span>
+                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[var(--landing-background-soft)] text-[var(--landing-accent)]">•</span>
                         <span>{feature}</span>
                       </div>
                     ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-5 rounded-[1.2rem] bg-[var(--landing-background-soft)] px-4 py-4 landing-body text-[0.84rem] leading-6 text-[var(--landing-text-muted)]">
+                    {tier.note}
                   </div>
                 </motion.div>
               ))}
@@ -1024,7 +1050,7 @@ export default function RevisedLandingPage() {
                 </p>
               </motion.div>
 
-              <div className="space-y-3">
+              <div className="overflow-hidden rounded-[2rem] border border-[var(--landing-border)] bg-[var(--landing-background-soft)] px-5 sm:px-7">
                 {faqItems.map((item, index) => {
                   const open = openFaq === item.question;
                   return (
@@ -1035,14 +1061,26 @@ export default function RevisedLandingPage() {
                       whileInView="show"
                       viewport={{ once: true, amount: 0.18 }}
                       transition={{ duration: 0.36, delay: index * 0.04 }}
-                      className="landing-card overflow-hidden"
+                      className={`overflow-hidden ${index !== 0 ? "border-t border-[var(--landing-border)]" : ""}`}
                     >
                       <button
                         type="button"
                         onClick={() => setOpenFaq(open ? "" : item.question)}
-                        className="flex w-full cursor-pointer items-center justify-between gap-4 px-5 py-5 text-left sm:px-6"
+                        className="flex w-full cursor-pointer items-start justify-between gap-4 py-5 text-left sm:py-6"
                       >
-                        <span className="landing-body text-[1rem] font-semibold text-[var(--landing-text)]">{item.question}</span>
+                        <div className="flex min-w-0 items-start gap-4 sm:gap-5">
+                          <span className="landing-display inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--landing-border)] bg-white text-[1rem] leading-none tracking-[-0.04em] text-[var(--landing-text)]">
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
+                          <div className="min-w-0">
+                            <span className="landing-body block text-[1rem] font-semibold text-[var(--landing-text)]">{item.question}</span>
+                            {!open ? (
+                              <span className="landing-body mt-2 block max-w-[42rem] text-[0.9rem] leading-6 text-[var(--landing-text-muted)]">
+                                {item.answer}
+                              </span>
+                            ) : null}
+                          </div>
+                        </div>
                         <ChevronDownIcon className={`h-5 w-5 shrink-0 text-[var(--landing-text-muted)] transition-transform ${open ? "rotate-180" : ""}`} />
                       </button>
                       <motion.div
@@ -1051,8 +1089,10 @@ export default function RevisedLandingPage() {
                         transition={{ duration: 0.2, ease: "easeOut" }}
                         className="overflow-hidden"
                       >
-                        <div className="px-5 pb-5 sm:px-6 sm:pb-6">
-                          <p className="landing-body max-w-[46rem] text-[0.95rem] leading-7 text-[var(--landing-text-muted)]">{item.answer}</p>
+                        <div className="pb-5 pl-14 sm:pb-6 sm:pl-[3.8rem]">
+                          <p className="landing-body max-w-[46rem] rounded-[1.25rem] bg-white px-4 py-4 text-[0.95rem] leading-7 text-[var(--landing-text-muted)] sm:px-5">
+                            {item.answer}
+                          </p>
                         </div>
                       </motion.div>
                     </motion.div>
