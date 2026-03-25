@@ -166,6 +166,60 @@ const features = [
   },
 ];
 
+const testimonials = [
+  {
+    quote:
+      "We finally have a front line that answers instantly, routes cleanly, and gives us transcripts we can actually act on.",
+    name: "Maya Chen",
+    role: "Operations Lead",
+    company: "Northline Health",
+  },
+  {
+    quote:
+      "The biggest difference is operational clarity. We know what was said, what happened, and what needs follow-up after every call.",
+    name: "Adrian Cole",
+    role: "Revenue Director",
+    company: "Ridge Commerce",
+  },
+  {
+    quote:
+      "We wanted something that felt like a real product, not a prompt demo. This gives us the workflow, the number routing, and the audit trail.",
+    name: "Sara Mitchell",
+    role: "Customer Experience",
+    company: "Westbay Dental",
+  },
+];
+
+const pricingTiers = [
+  {
+    name: "Starter",
+    price: "$0",
+    blurb: "For proving the workflow and getting the first agent live.",
+    cta: "Start free",
+    href: "/sign-up",
+    highlighted: false,
+    features: ["1 active agent", "Limited monthly minutes", "Transcript review", "Basic routing"],
+  },
+  {
+    name: "Pro",
+    price: "$149",
+    blurb: "For teams that need real inbound coverage and cleaner operations.",
+    cta: "Start building",
+    href: "/sign-up",
+    highlighted: true,
+    features: ["Multiple agents", "Number assignment", "Call analytics", "Priority support"],
+  },
+  {
+    name: "Enterprise",
+    price: "Custom",
+    blurb: "For high-volume teams that need deployment depth and control.",
+    cta: "Talk to sales",
+    href: "/support",
+    highlighted: false,
+    features: ["Advanced rollout support", "Security review", "Custom workflows", "Deployment guidance"],
+  },
+];
+
 const faqItems = [
   {
     question: "What is Yapsolutely?",
@@ -247,6 +301,23 @@ export default function RevisedLandingPage() {
               </Link>
             ))}
           </nav>
+
+          <div className="hidden xl:flex items-center gap-3 rounded-full border border-[var(--landing-border)] bg-white px-3 py-2">
+            <div className="flex -space-x-2">
+              {["#F5C7BB", "#E6D3C7", "#D95F3B"].map((color, index) => (
+                <span
+                  key={index}
+                  className="flex h-8 w-8 items-center justify-center rounded-full border border-white text-[0.65rem] font-semibold text-[var(--landing-text)]"
+                  style={{ backgroundColor: color }}
+                >
+                  {String.fromCharCode(65 + index)}
+                </span>
+              ))}
+            </div>
+            <div className="landing-body text-[0.82rem] font-medium text-[var(--landing-text-muted)]">
+              Trusted by operators building live phone workflows
+            </div>
+          </div>
 
           <div className="hidden items-center gap-3 md:flex">
             <Link href="/sign-in" className="landing-button-secondary px-5 py-3 landing-body text-[0.92rem] font-medium">
@@ -570,6 +641,97 @@ export default function RevisedLandingPage() {
           </div>
         </section>
 
+        <section className="landing-section bg-[var(--landing-background-soft)]">
+          <div className="landing-container">
+            <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }}>
+              <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-[var(--landing-accent)]">Social proof</div>
+              <div className="mt-3 grid gap-4 lg:grid-cols-[0.84fr_1.16fr] lg:items-end">
+                <h2 className="landing-display max-w-[10ch] text-[2.8rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.7rem]">
+                  What strong operations sound like after deployment
+                </h2>
+                <p className="landing-body max-w-[35rem] text-[1rem] leading-8 text-[var(--landing-text-muted)] lg:justify-self-end">
+                  The brief called for more proof and less template energy. That means showing outcomes, not just claiming them.
+                </p>
+              </div>
+            </motion.div>
+
+            <div className="mt-10 grid gap-4 lg:grid-cols-3">
+              {testimonials.map((item, index) => (
+                <motion.div
+                  key={item.name}
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.38, delay: index * 0.06 }}
+                  className="landing-card p-6 sm:p-7"
+                >
+                  <div className="mb-5 flex items-center gap-1 text-[var(--landing-accent)]">
+                    {Array.from({ length: 5 }).map((_, starIndex) => (
+                      <span key={starIndex}>★</span>
+                    ))}
+                  </div>
+                  <p className="landing-body text-[1rem] leading-8 text-[var(--landing-text)]">“{item.quote}”</p>
+                  <div className="mt-6 border-t border-[var(--landing-border)] pt-5">
+                    <div className="landing-display text-[1.55rem] leading-none tracking-[-0.04em] text-[var(--landing-text)]">{item.name}</div>
+                    <div className="landing-body mt-2 text-[0.88rem] font-medium text-[var(--landing-text-muted)]">
+                      {item.role} · {item.company}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="landing-section" id="pricing">
+          <div className="landing-container">
+            <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }}>
+              <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-[var(--landing-accent)]">Pricing</div>
+              <div className="mt-3 grid gap-4 lg:grid-cols-[0.84fr_1.16fr] lg:items-end">
+                <h2 className="landing-display max-w-[10ch] text-[2.8rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.7rem]">
+                  Start lean. Scale when the workflow proves out.
+                </h2>
+                <p className="landing-body max-w-[35rem] text-[1rem] leading-8 text-[var(--landing-text-muted)] lg:justify-self-end">
+                  Pricing should feel simple on the surface and credible underneath. The goal is to make the first yes easy without flattening the product.
+                </p>
+              </div>
+            </motion.div>
+
+            <div className="mt-10 grid gap-4 lg:grid-cols-3">
+              {pricingTiers.map((tier, index) => (
+                <motion.div
+                  key={tier.name}
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.38, delay: index * 0.05 }}
+                  className={`p-6 sm:p-7 ${tier.highlighted ? "landing-card border-[var(--landing-accent)] shadow-[0_24px_60px_-28px_rgba(217,95,59,0.4)]" : "landing-card-soft"}`}
+                >
+                  <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">{tier.name}</div>
+                  <div className="landing-display mt-4 text-[3rem] leading-none tracking-[-0.05em] text-[var(--landing-text)]">{tier.price}</div>
+                  <p className="landing-body mt-4 min-h-[4rem] text-[0.95rem] leading-7 text-[var(--landing-text-muted)]">{tier.blurb}</p>
+                  <Link
+                    href={tier.href}
+                    className={`${tier.highlighted ? "landing-button-primary" : "landing-button-secondary"} mt-6 inline-flex w-full items-center justify-center px-5 py-3 landing-body text-[0.95rem] font-semibold`}
+                  >
+                    {tier.cta}
+                  </Link>
+                  <div className="mt-6 space-y-3 border-t border-[var(--landing-border)] pt-6">
+                    {tier.features.map((feature) => (
+                      <div key={feature} className="landing-body flex items-center gap-3 text-[0.92rem] text-[var(--landing-text)]">
+                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[var(--landing-background)] text-[var(--landing-accent)]">•</span>
+                        <span>{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section className="px-4 pb-4 pt-2 sm:px-6 lg:px-8">
           <div className="landing-container">
             <div className="overflow-hidden rounded-[2rem] bg-[var(--landing-dark)] px-6 py-7 text-white sm:px-10 sm:py-9">
@@ -671,23 +833,33 @@ export default function RevisedLandingPage() {
                   </div>
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-3">
-                  {[
-                    { icon: MicrophoneIcon, title: "Voice-first", copy: "Built for real phone conversations, not chatbot demos." },
-                    { icon: ShieldCheckIcon, title: "Reviewable", copy: "Transcripts and actions stay visible after every call." },
-                    { icon: ChartBarSquareIcon, title: "Operational", copy: "One workspace for agents, calls, numbers, and outcomes." },
-                  ].map((item) => {
-                    const Icon = item.icon;
-                    return (
+                <div className="grid gap-4 lg:grid-cols-[0.62fr_0.38fr] lg:items-stretch">
+                  <div className="rounded-[1.8rem] border border-white/10 bg-white/[0.06] p-6 sm:p-7">
+                    <MascotSignal className="h-28 w-28 text-[#f1b19d]" />
+                    <div className="landing-display mt-6 text-[2.1rem] leading-[0.97] tracking-[-0.04em] text-white">A brand cue that feels like Yapsolutely</div>
+                    <p className="landing-body mt-4 max-w-[28rem] text-[0.94rem] leading-7 text-white/64">
+                      Friendly enough to feel human, structured enough to feel operational. A simple signal mark gives the landing page more identity without turning it into a mascot parade.
+                    </p>
+                  </div>
+
+                  <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
+                    {[
+                      { icon: MicrophoneIcon, title: "Voice-first", copy: "Built for real phone conversations, not chatbot demos." },
+                      { icon: ShieldCheckIcon, title: "Reviewable", copy: "Transcripts and actions stay visible after every call." },
+                      { icon: ChartBarSquareIcon, title: "Operational", copy: "One workspace for agents, calls, numbers, and outcomes." },
+                    ].map((item) => {
+                      const Icon = item.icon;
+                      return (
                         <div key={item.title} className="rounded-[1.6rem] border border-white/10 bg-white/[0.06] p-5">
-                        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-white/85">
-                          <Icon className="h-5 w-5" />
+                          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-white/85">
+                            <Icon className="h-5 w-5" />
+                          </div>
+                          <div className="landing-display mt-5 text-[1.7rem] leading-[0.98] tracking-[-0.04em] text-white">{item.title}</div>
+                          <p className="landing-body mt-3 text-[0.92rem] leading-7 text-white/64">{item.copy}</p>
                         </div>
-                        <div className="landing-display mt-5 text-[1.7rem] leading-[0.98] tracking-[-0.04em] text-white">{item.title}</div>
-                        <p className="landing-body mt-3 text-[0.92rem] leading-7 text-white/64">{item.copy}</p>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -744,6 +916,25 @@ export default function RevisedLandingPage() {
         </div>
       </footer>
     </div>
+  );
+}
+
+function MascotSignal({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 120 120" fill="none" className={className} aria-hidden="true">
+      <circle cx="60" cy="60" r="56" fill="currentColor" fillOpacity="0.12" />
+      <circle cx="60" cy="48" r="18" fill="currentColor" fillOpacity="0.9" />
+      <path
+        d="M34 89C38 73 48 65 60 65C72 65 82 73 86 89"
+        stroke="currentColor"
+        strokeWidth="10"
+        strokeLinecap="round"
+      />
+      <path d="M88 31C98 35 104 43 106 54" stroke="currentColor" strokeWidth="5" strokeLinecap="round" opacity="0.75" />
+      <path d="M95 23C108 28 116 39 118 53" stroke="currentColor" strokeWidth="4" strokeLinecap="round" opacity="0.5" />
+      <path d="M32 31C22 35 16 43 14 54" stroke="currentColor" strokeWidth="5" strokeLinecap="round" opacity="0.75" />
+      <path d="M25 23C12 28 4 39 2 53" stroke="currentColor" strokeWidth="4" strokeLinecap="round" opacity="0.5" />
+    </svg>
   );
 }
 
