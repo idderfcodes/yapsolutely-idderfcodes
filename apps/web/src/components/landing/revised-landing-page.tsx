@@ -20,9 +20,10 @@ import {
 
 const navLinks = [
   { label: "Product", href: "#features" },
-  { label: "Pricing", href: "/pricing" },
+  { label: "Pricing", href: "#pricing" },
   { label: "Docs", href: "/docs" },
   { label: "About", href: "/about" },
+  { label: "Support", href: "/support" },
 ];
 
 const marqueeLogos = [
@@ -220,6 +221,13 @@ const pricingTiers = [
   },
 ];
 
+const trustItems = [
+  { title: "Number routing", copy: "Assign real numbers to live agents without losing the operational map." },
+  { title: "Transcript review", copy: "Read every conversation after the call, not just the summary." },
+  { title: "Human handoff", copy: "Escalate the right calls instead of forcing every path through automation." },
+  { title: "Deployment visibility", copy: "Keep agents, calls, numbers, and outcomes in the same workspace." },
+];
+
 const faqItems = [
   {
     question: "What is Yapsolutely?",
@@ -389,12 +397,12 @@ export default function RevisedLandingPage() {
                   <span className="landing-body text-[0.84rem] font-medium text-[var(--landing-text)]">Handling calls now</span>
                 </div>
 
-                <h1 className="landing-display max-w-[11ch] text-[3.5rem] leading-[0.92] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[4.7rem] lg:text-[6.3rem]">
-                  AI agents that answer your phone
+                <h1 className="landing-display max-w-[12ch] text-[3.5rem] leading-[0.92] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[4.7rem] lg:text-[6.3rem]">
+                  AI agents that answer every inbound call
                 </h1>
 
                 <p className="landing-body mt-6 max-w-[36rem] text-[1.02rem] leading-8 text-[var(--landing-text-muted)] sm:text-[1.08rem]">
-                  Build voice agents, assign real phone numbers, handle inbound calls, and review every transcript from one workspace built for operators, not demos.
+                  For sales, support, and operations teams that cannot afford dropped intent. Build the agent, assign the number, and review the outcome from one workspace.
                 </p>
 
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -684,6 +692,28 @@ export default function RevisedLandingPage() {
           </div>
         </section>
 
+        <section className="px-4 py-4 sm:px-6 lg:px-8">
+          <div className="landing-container">
+            <div className="grid gap-4 lg:grid-cols-4">
+              {trustItems.map((item, index) => (
+                <motion.div
+                  key={item.title}
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.36, delay: index * 0.04 }}
+                  className="landing-card-soft p-5"
+                >
+                  <div className="landing-body text-[0.76rem] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">Trust layer</div>
+                  <div className="landing-display mt-3 text-[1.7rem] leading-[0.98] tracking-[-0.04em] text-[var(--landing-text)]">{item.title}</div>
+                  <p className="landing-body mt-3 text-[0.9rem] leading-7 text-[var(--landing-text-muted)]">{item.copy}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section className="landing-section" id="pricing">
           <div className="landing-container">
             <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }}>
@@ -878,6 +908,21 @@ export default function RevisedLandingPage() {
               <p className="landing-body mt-4 max-w-[18rem] text-[0.94rem] leading-7 text-[var(--landing-text-muted)]">
                 AI voice agents that answer your phone, handle inbound calls, and give your team a cleaner operational layer.
               </p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {[
+                  ["Docs", "/docs"],
+                  ["Support", "/support"],
+                  ["Pricing", "#pricing"],
+                ].map(([label, href]) => (
+                  <Link
+                    key={label}
+                    href={href}
+                    className="landing-body rounded-full border border-[var(--landing-border)] bg-white px-3 py-1.5 text-[0.82rem] font-medium text-[var(--landing-text)] transition hover:border-[var(--landing-accent)] hover:text-[var(--landing-accent)]"
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </div>
             </div>
 
             <FooterColumn
