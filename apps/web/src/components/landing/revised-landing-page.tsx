@@ -134,36 +134,42 @@ const features = [
     description: "Streaming voice infrastructure keeps conversations moving naturally instead of sounding like a form submission with a microphone.",
     icon: BoltIcon,
     tone: "wide",
+    proof: "Live speech pipeline",
   },
   {
     title: "Full audit trail",
     description: "Every call, transcript, handoff, and follow-up action is stored in one place for review and ops clarity.",
     icon: ShieldCheckIcon,
     tone: "wide",
+    proof: "Every step visible",
   },
   {
     title: "Custom agents",
     description: "Set the voice, prompt, first response, and edge-case behavior without duct-taping tools together.",
     icon: SparklesIcon,
     tone: "small",
+    proof: "Prompt + voice control",
   },
   {
     title: "Real phone numbers",
     description: "Assign real numbers to real agents and route inbound conversations cleanly.",
     icon: PhoneArrowDownLeftIcon,
     tone: "small",
+    proof: "Routing built in",
   },
   {
     title: "After-hours coverage",
     description: "Capture demand when your human team is offline and keep the queue warm.",
     icon: ClockIcon,
     tone: "small",
+    proof: "Always-on intake",
   },
   {
     title: "Analytics dashboard",
     description: "See outcomes, transcripts, volume, and agent behavior from one workspace.",
     icon: ChartBarSquareIcon,
     tone: "small",
+    proof: "Outcome visibility",
   },
 ];
 
@@ -174,6 +180,7 @@ const testimonials = [
     name: "Maya Chen",
     role: "Operations Lead",
     company: "Northline Health",
+    result: "Cut missed inbound opportunities",
   },
   {
     quote:
@@ -181,6 +188,7 @@ const testimonials = [
     name: "Adrian Cole",
     role: "Revenue Director",
     company: "Ridge Commerce",
+    result: "Better sales follow-up",
   },
   {
     quote:
@@ -188,6 +196,7 @@ const testimonials = [
     name: "Sara Mitchell",
     role: "Customer Experience",
     company: "Westbay Dental",
+    result: "Cleaner support operations",
   },
 ];
 
@@ -542,16 +551,18 @@ export default function RevisedLandingPage() {
                 {useCases.map((item) => {
                   const active = item.id === activeUseCase;
                   return (
-                    <button
+                    <motion.button
                       key={item.id}
                       type="button"
                       onClick={() => setActiveUseCase(item.id)}
+                      whileHover={{ y: -2 }}
+                      whileTap={{ scale: 0.99 }}
                       className={`landing-card cursor-pointer text-left px-5 py-5 transition-all ${active ? "border-[var(--landing-accent)] bg-white shadow-[0_20px_50px_-30px_rgba(217,95,59,0.45)]" : "hover:-translate-y-0.5 hover:border-[color:var(--landing-accent)]/35"}`}
                     >
                       <div className="landing-body text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">{item.label}</div>
                       <div className="landing-display mt-3 text-[1.9rem] leading-[0.98] tracking-[-0.04em] text-[var(--landing-text)]">{item.title}</div>
                       <p className="landing-body mt-3 text-[0.95rem] leading-7 text-[var(--landing-text-muted)]">{item.description}</p>
-                    </button>
+                    </motion.button>
                   );
                 })}
               </div>
@@ -616,9 +627,10 @@ export default function RevisedLandingPage() {
                     variants={fadeUp}
                     initial="hidden"
                     whileInView="show"
+                    whileHover={{ y: -3 }}
                     viewport={{ once: true, amount: 0.18 }}
                     transition={{ duration: 0.42, delay: index * 0.05 }}
-                    className={`landing-card p-6 sm:p-7 ${feature.tone === "wide" ? "lg:col-span-3 lg:grid lg:grid-cols-[0.38fr_0.62fr] lg:items-start lg:gap-6" : ""}`}
+                    className={`group landing-card p-6 sm:p-7 ${feature.tone === "wide" ? "lg:col-span-3 lg:grid lg:grid-cols-[0.38fr_0.62fr] lg:items-start lg:gap-6" : ""}`}
                   >
                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--landing-background-soft)] text-[var(--landing-accent)]">
                       <Icon className="h-6 w-6" />
@@ -627,6 +639,9 @@ export default function RevisedLandingPage() {
                       <div>
                         <h3 className="landing-display mt-5 text-[2rem] leading-[0.97] tracking-[-0.04em] text-[var(--landing-text)]">{feature.title}</h3>
                         <p className="landing-body mt-3 max-w-[38rem] text-[0.97rem] leading-7 text-[var(--landing-text-muted)]">{feature.description}</p>
+                        <div className="mt-4 inline-flex translate-y-0 items-center rounded-full border border-[var(--landing-border)] bg-[var(--landing-background-soft)] px-3 py-1.5 landing-body text-[0.78rem] font-semibold text-[var(--landing-accent)] transition duration-200 group-hover:-translate-y-0.5 group-hover:border-[var(--landing-accent)]/40">
+                          {feature.proof}
+                        </div>
                       </div>
                       {feature.tone === "wide" ? (
                         <div className="mt-6 rounded-[1.4rem] border border-[var(--landing-border)] bg-[var(--landing-card)] p-5 lg:mt-0 lg:min-w-[290px]">
@@ -670,6 +685,7 @@ export default function RevisedLandingPage() {
                   variants={fadeUp}
                   initial="hidden"
                   whileInView="show"
+                  whileHover={{ y: -3 }}
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{ duration: 0.38, delay: index * 0.06 }}
                   className="landing-card p-6 sm:p-7"
@@ -684,6 +700,9 @@ export default function RevisedLandingPage() {
                     <div className="landing-display text-[1.55rem] leading-none tracking-[-0.04em] text-[var(--landing-text)]">{item.name}</div>
                     <div className="landing-body mt-2 text-[0.88rem] font-medium text-[var(--landing-text-muted)]">
                       {item.role} · {item.company}
+                    </div>
+                    <div className="landing-body mt-3 text-[0.82rem] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">
+                      {item.result}
                     </div>
                   </div>
                 </motion.div>
@@ -735,6 +754,7 @@ export default function RevisedLandingPage() {
                   variants={fadeUp}
                   initial="hidden"
                   whileInView="show"
+                  whileHover={{ y: -3 }}
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{ duration: 0.38, delay: index * 0.05 }}
                   className={`p-6 sm:p-7 ${tier.highlighted ? "landing-card border-[var(--landing-accent)] shadow-[0_24px_60px_-28px_rgba(217,95,59,0.4)]" : "landing-card-soft"}`}
