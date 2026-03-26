@@ -80,6 +80,12 @@
   --landing-border: #e8e4de;
   --landing-card: #f0ede8;
   --landing-dark: #141414;
+  --landing-hero-left: #141414;
+  --landing-hero-right: #1a1a1a;
+  --landing-text-on-dark: #f7f4ef;
+  --landing-text-muted-on-dark: #b8b1a7;
+  --landing-stats-bg: #141414;
+  --landing-cta-bg: #141414;
 }
 
 .dark {
@@ -367,16 +373,33 @@
     font-family: var(--font-landing-body), "Inter", system-ui, sans-serif;
   }
 
+  .landing-shell h1,
+  .landing-shell h2,
+  .landing-shell h3,
+  .landing-shell h4,
+  .landing-shell h5,
+  .landing-shell h6 {
+    font-family: var(--font-landing-display), "Bagoss Condensed", system-ui, sans-serif;
+    font-weight: 500;
+  }
+
   .landing-muted {
     color: var(--landing-text-muted);
   }
 
   .landing-display {
-    font-family: var(--font-landing-body), "Inter", system-ui, sans-serif;
+    font-family: var(--font-landing-display), "Bagoss Condensed", system-ui, sans-serif;
+    font-weight: 500;
   }
 
   .landing-body {
     font-family: var(--font-landing-body), "Inter", system-ui, sans-serif;
+    font-weight: 400;
+  }
+
+  .landing-stat {
+    font-family: var(--font-landing-display), "Bagoss Condensed", system-ui, sans-serif;
+    font-weight: 600;
   }
 
   .landing-container {
@@ -392,7 +415,7 @@
 
   .landing-card {
     border: 1px solid var(--landing-border);
-    background: var(--landing-background);
+    background: var(--landing-card);
     border-radius: 12px;
     box-shadow: 0 14px 34px -26px rgba(20, 20, 20, 0.16);
     transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
@@ -439,6 +462,22 @@
     background: var(--landing-background-soft);
     border-color: color-mix(in srgb, var(--landing-accent) 28%, var(--landing-border));
     box-shadow: 0 14px 32px -20px color-mix(in srgb, var(--landing-accent) 24%, transparent);
+    transform: scale(1.03);
+  }
+
+  .landing-button-secondary-dark {
+    background: transparent;
+    color: var(--landing-text-on-dark);
+    border: 1px solid rgba(247, 244, 239, 0.14);
+    border-radius: 9999px;
+    transition: transform 160ms ease, border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+    cursor: pointer;
+  }
+
+  .landing-button-secondary-dark:hover {
+    background: rgba(247, 244, 239, 0.08);
+    border-color: rgba(247, 244, 239, 0.24);
+    box-shadow: 0 14px 32px -20px rgba(0, 0, 0, 0.32);
     transform: scale(1.03);
   }
 

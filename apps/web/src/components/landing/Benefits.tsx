@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useCallback, type MouseEvent as ReactMouseEvent } from "react";
+import { useRef, useEffect, type MouseEvent as ReactMouseEvent } from "react";
 import ScrollReveal from "@/components/landing/ScrollReveal";
 
 /* ── Card data ── */
@@ -86,27 +86,71 @@ const cards = [
 /* ── Tilt card ── */
 function BenefitCard({ title, desc, visual }: (typeof cards)[number]) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const frameRef = useRef<number | null>(null);
+  const currentRotationRef = useRef({ x: 0, y: 0, lift: 0 });
+  const targetRotationRef = useRef({ x: 0, y: 0, lift: 0 });
 
-  const handleMouseMove = useCallback(
-    (e: ReactMouseEvent<HTMLDivElement>) => {
-      const el = cardRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const midX = rect.width / 2;
-      const midY = rect.height / 2;
-      const rotateY = ((x - midX) / midX) * 8;
-      const rotateX = ((midY - y) / midY) * 8;
-      el.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
-    },
-    [],
-  );
-
-  const handleMouseLeave = useCallback(() => {
+  function animateTilt() {
     const el = cardRef.current;
     if (!el) return;
-    el.style.transform = "";
+
+    const easing = 0.12;
+    const current = currentRotationRef.current;
+    const target = targetRotationRef.current;
+
+    current.x += (target.x - current.x) * easing;
+    current.y += (target.y - current.y) * easing;
+    current.lift += (target.lift - current.lift) * easing;
+
+    el.style.transform = `perspective(900px) rotateX(${current.x.toFixed(2)}deg) rotateY(${current.y.toFixed(2)}deg) translateY(${current.lift.toFixed(2)}px)`;
+
+    const isStillMoving =
+      Math.abs(target.x - current.x) > 0.01 ||
+      Math.abs(target.y - current.y) > 0.01 ||
+      Math.abs(target.lift - current.lift) > 0.01;
+
+    if (isStillMoving) {
+      frameRef.current = window.requestAnimationFrame(animateTilt);
+    } else {
+      frameRef.current = null;
+    }
+  }
+
+  function queueAnimation() {
+    if (frameRef.current !== null) {
+      return;
+    }
+
+    frameRef.current = window.requestAnimationFrame(animateTilt);
+  }
+
+  function handleMouseMove(e: ReactMouseEvent<HTMLDivElement>) {
+    const el = cardRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const midX = rect.width / 2;
+    const midY = rect.height / 2;
+    targetRotationRef.current = {
+      y: ((x - midX) / midX) * 4.5,
+      x: ((midY - y) / midY) * 4.5,
+      lift: -5,
+    };
+    queueAnimation();
+  }
+
+  function handleMouseLeave() {
+    targetRotationRef.current = { x: 0, y: 0, lift: 0 };
+    queueAnimation();
+  }
+
+  useEffect(() => {
+    return () => {
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current);
+      }
+    };
   }, []);
 
   return (

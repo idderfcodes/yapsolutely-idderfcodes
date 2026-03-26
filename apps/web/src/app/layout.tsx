@@ -56,7 +56,24 @@ const satoshi = localFont({
   display: "swap",
 });
 
-const landingInter = localFont({
+const landingDisplay = localFont({
+  src: [
+    {
+      path: "./fonts/landing/bagoss-condensed-500.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "./fonts/landing/bagoss-condensed-600.ttf",
+      weight: "600",
+      style: "normal",
+    },
+  ],
+  variable: "--font-landing-display",
+  display: "swap",
+});
+
+const landingBody = localFont({
   src: [
     {
       path: "./fonts/landing/inter-400.ttf",
@@ -66,16 +83,6 @@ const landingInter = localFont({
     {
       path: "./fonts/landing/inter-500.ttf",
       weight: "500",
-      style: "normal",
-    },
-    {
-      path: "./fonts/landing/inter-600.ttf",
-      weight: "600",
-      style: "normal",
-    },
-    {
-      path: "./fonts/landing/inter-700.ttf",
-      weight: "700",
       style: "normal",
     },
   ],
@@ -124,7 +131,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${generalSans.variable} ${satoshi.variable} ${landingInter.variable} h-full antialiased`}
+      className={`${generalSans.variable} ${satoshi.variable} ${landingDisplay.variable} ${landingBody.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full bg-[var(--background)] text-[var(--foreground)]">
