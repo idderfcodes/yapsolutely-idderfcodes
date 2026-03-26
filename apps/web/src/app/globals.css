@@ -372,7 +372,7 @@
   }
 
   .landing-display {
-    font-family: var(--font-landing-display), "Bagoss Condensed", system-ui, sans-serif;
+    font-family: var(--font-landing-body), "Inter", system-ui, sans-serif;
   }
 
   .landing-body {

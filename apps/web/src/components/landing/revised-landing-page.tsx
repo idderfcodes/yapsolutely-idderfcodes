@@ -18,6 +18,16 @@ import {
   SparklesIcon,
 } from "@heroicons/react/24/outline";
 
+import {
+  ContainerAnimated,
+  ContainerInset,
+  ContainerScroll,
+  ContainerSticky,
+  HeroButton,
+  HeroVideo,
+} from "./container-scroll";
+import { DottedSurface } from "./dotted-surface";
+
 const navLinks = [
   { label: "Product", href: "#features" },
   { label: "How it works", href: "#how-it-works" },
@@ -48,6 +58,41 @@ const heroStats = [
   {
     value: "100%",
     label: "Calls transcribed",
+  },
+];
+
+const galleryImages = [
+  {
+    src: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2069&auto=format&fit=crop",
+    alt: "Team collaborating around a desk",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop",
+    alt: "Operator working at a laptop",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop",
+    alt: "Business team in a planning meeting",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=2070&auto=format&fit=crop",
+    alt: "Modern operations workspace",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop",
+    alt: "Professionals speaking across a table",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1516321497487-e288fb19713f?q=80&w=2070&auto=format&fit=crop",
+    alt: "Desk with laptop and digital collaboration tools",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=2070&auto=format&fit=crop",
+    alt: "Distributed team reviewing work together",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=1974&auto=format&fit=crop",
+    alt: "Customer support style headset and computer workspace",
   },
 ];
 
@@ -200,7 +245,7 @@ export default function RevisedLandingPage() {
 
   return (
     <div className="landing-shell relative min-h-screen overflow-x-clip bg-[var(--landing-background)] text-[var(--landing-text)]">
-      <DottedBackdrop />
+      <LandingBackdrop />
       <SpotlightCursor />
 
       <div className="relative z-10">
@@ -396,6 +441,18 @@ export default function RevisedLandingPage() {
                   ))}
                 </div>
               </div>
+            </div>
+          </section>
+
+          <section className="px-4 py-6 sm:px-6 sm:py-8">
+            <div className="landing-container">
+              <RelevantImageGallery />
+            </div>
+          </section>
+
+          <section className="px-4 py-6 sm:px-6 sm:py-8">
+            <div className="landing-container">
+              <ScrollVideoShowcase />
             </div>
           </section>
 
@@ -772,6 +829,110 @@ function HeroShowcase() {
   );
 }
 
+function ScrollVideoShowcase() {
+  return (
+    <div className="overflow-hidden rounded-[34px] border border-[var(--landing-border)] bg-[#0E0E10] shadow-[0_34px_80px_-48px_rgba(20,20,20,0.55)]">
+      <ContainerScroll className="min-h-[160svh]">
+        <ContainerSticky className="flex min-h-svh items-center justify-center px-3 py-3 sm:px-6 sm:py-6">
+          <div className="relative flex min-h-[680px] w-full items-stretch overflow-hidden rounded-[30px] border border-white/10 bg-[radial-gradient(circle_at_top,rgba(217,95,59,0.24),transparent_32%),linear-gradient(180deg,#121316_0%,#0B0B0C_100%)]">
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,transparent_26%,rgba(0,0,0,0.16)_100%)]" />
+
+            <ContainerAnimated
+              className="relative z-20 mx-auto flex w-full max-w-[44rem] flex-col items-center px-6 pt-14 text-center sm:px-10 sm:pt-18"
+              inputRange={[0, 0.36]}
+              outputRange={[56, 0]}
+            >
+              <div className="landing-body inline-flex items-center rounded-full border border-white/12 bg-white/6 px-4 py-2 text-[12px] font-medium uppercase tracking-[0.16em] text-white/72 backdrop-blur-sm">
+                Product walkthrough
+              </div>
+
+              <h3 className="landing-display mt-6 max-w-[12ch] text-[3rem] leading-[0.9] tracking-[-0.06em] text-white sm:text-[4.5rem]">
+                See the operator workspace move like a real team would use it
+              </h3>
+
+              <p className="landing-body mt-5 max-w-[34rem] text-[16px] leading-7 text-white/70 sm:text-[17px]">
+                This section uses your scroll-driven container pattern as a placeholder product film: one surface for the call flow, the live transcript, and the handoff cues your team actually cares about.
+              </p>
+
+              <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+                <HeroButton
+                  type="button"
+                  onClick={() => {
+                    document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="border-[rgba(217,95,59,0.45)] bg-[rgba(217,95,59,0.12)] px-5 py-2.5 shadow-[0px_18px_48px_rgba(217,95,59,0.24)] hover:bg-[rgba(217,95,59,0.18)]"
+                >
+                  <span className="landing-body text-[14px] font-semibold text-white">
+                    Follow the workflow
+                  </span>
+                  <ArrowLongRightIcon className="ml-2 h-4 w-4 text-white transition-transform duration-200 group-hover:translate-x-0.5" />
+                </HeroButton>
+
+                <div className="landing-body rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[13px] font-medium text-white/65 backdrop-blur-sm">
+                  Placeholder video for now — motion system is live.
+                </div>
+              </div>
+            </ContainerAnimated>
+
+            <ContainerInset
+              className="absolute inset-x-3 bottom-3 top-[35%] z-10 sm:inset-x-6 sm:bottom-6 sm:top-[32%]"
+              insetYRange={[54, 2]}
+              insetXRange={[42, 2]}
+              roundednessRange={[1000, 30]}
+            >
+              <div className="relative h-full w-full overflow-hidden rounded-[30px] border border-white/10 bg-[#111214] shadow-[0_30px_90px_-46px_rgba(0,0,0,0.9)]">
+                <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-between gap-4 border-b border-white/10 bg-black/45 px-5 py-3 backdrop-blur-md">
+                  <div>
+                    <div className="landing-body text-[11px] font-semibold uppercase tracking-[0.18em] text-white/48">
+                      Placeholder walkthrough
+                    </div>
+                    <div className="landing-body mt-1 text-[14px] font-medium text-white">
+                      Voice agent workspace preview
+                    </div>
+                  </div>
+
+                  <div className="landing-body rounded-full border border-white/12 bg-white/8 px-3 py-1.5 text-[11px] font-medium text-white/72">
+                    Live preview
+                  </div>
+                </div>
+
+                <HeroVideo
+                  poster="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop"
+                  preload="none"
+                  aria-label="Placeholder video panel for the Yapsolutely product walkthrough"
+                  className="h-full w-full object-cover pt-[68px]"
+                />
+
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.04)_0%,transparent_30%,rgba(7,7,8,0.72)_100%)]" />
+
+                <div className="absolute bottom-5 left-5 right-5 z-20 grid gap-3 md:grid-cols-3">
+                  {[
+                    ["Transcript", "Streaming line-by-line with action events attached"],
+                    ["Routing", "Escalate to a human when pricing or urgency crosses the line"],
+                    ["Outcome", "Book, resolve, or capture structured follow-up in one pass"],
+                  ].map(([title, description]) => (
+                    <div
+                      key={title}
+                      className="rounded-[20px] border border-white/10 bg-black/40 px-4 py-4 backdrop-blur-md"
+                    >
+                      <div className="landing-body text-[11px] font-semibold uppercase tracking-[0.16em] text-[rgba(255,255,255,0.48)]">
+                        {title}
+                      </div>
+                      <div className="landing-body mt-2 text-[13px] leading-6 text-white/78">
+                        {description}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </ContainerInset>
+          </div>
+        </ContainerSticky>
+      </ContainerScroll>
+    </div>
+  );
+}
+
 function PromptFlowPreview() {
   return (
     <div className="space-y-3">
@@ -973,26 +1134,104 @@ function FooterColumn({ title, links }: { title: string; links: [string, string]
   );
 }
 
-function DottedBackdrop() {
+function RelevantImageGallery() {
+  const duplicatedImages = [...galleryImages, ...galleryImages];
+
   return (
-    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-      <motion.div
-        aria-hidden="true"
-        className="absolute inset-0 opacity-70"
-        animate={{ backgroundPosition: ["0px 0px", "0px 24px", "0px 0px"] }}
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at center, rgba(217,95,59,0.12) 1px, transparent 1px)",
-          backgroundSize: "26px 26px",
-          maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.55), rgba(0,0,0,0.1))",
-          WebkitMaskImage:
-            "linear-gradient(to bottom, rgba(0,0,0,0.55), rgba(0,0,0,0.1))",
-        }}
-      />
-      <div className="absolute left-[-10%] top-[8%] h-[28rem] w-[28rem] rounded-full bg-[color:color-mix(in_srgb,var(--landing-accent)_9%,transparent)] blur-3xl" />
-      <div className="absolute bottom-[2%] right-[-8%] h-[26rem] w-[26rem] rounded-full bg-[rgba(20,20,20,0.05)] blur-3xl" />
-    </div>
+    <>
+      <style>{`
+        @keyframes scroll-right {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+
+        .landing-infinite-scroll {
+          animation: scroll-right 20s linear infinite;
+        }
+
+        .landing-scroll-container {
+          mask: linear-gradient(
+            90deg,
+            transparent 0%,
+            black 10%,
+            black 90%,
+            transparent 100%
+          );
+          -webkit-mask: linear-gradient(
+            90deg,
+            transparent 0%,
+            black 10%,
+            black 90%,
+            transparent 100%
+          );
+        }
+
+        .landing-image-item {
+          transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .landing-image-item:hover {
+          transform: scale(1.05);
+          filter: brightness(1.08);
+        }
+      `}</style>
+
+      <div className="relative overflow-hidden rounded-[34px] border border-[rgba(255,255,255,0.08)] bg-black px-6 py-10 shadow-[0_32px_70px_-36px_rgba(0,0,0,0.45)] sm:px-8 sm:py-12 lg:px-10">
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/90 to-black z-0" />
+
+        <div className="relative z-10 mb-8 flex max-w-[42rem] flex-col gap-4">
+          <div className="inline-flex w-fit items-center rounded-full border border-white/10 bg-white/5 px-4 py-2">
+            <span className="landing-body text-[12px] font-medium uppercase tracking-[0.18em] text-white/60">
+              Who it is for
+            </span>
+          </div>
+          <h2 className="landing-display max-w-[12ch] text-[3rem] leading-[0.92] tracking-[-0.06em] text-white sm:text-[4rem]">
+            Built for teams living inside real customer conversations
+          </h2>
+          <p className="landing-body max-w-[38rem] text-[16px] leading-7 text-white/65">
+            Sales desks, support teams, clinics, service operators, and after-hours teams all need the same thing: every inbound call answered, captured, and routed cleanly.
+          </p>
+        </div>
+
+        <div className="relative z-10 flex items-center justify-center py-2">
+          <div className="landing-scroll-container w-full">
+            <div className="landing-infinite-scroll flex w-max gap-6">
+              {duplicatedImages.map((image, index) => (
+                <div
+                  key={`${image.src}-${index}`}
+                  className="landing-image-item flex-shrink-0 h-48 w-48 overflow-hidden rounded-xl shadow-2xl md:h-64 md:w-64 lg:h-80 lg:w-80"
+                >
+                  <img
+                    src={image.src}
+                    alt={image.alt}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black to-transparent z-20" />
+      </div>
+    </>
+  );
+}
+
+function LandingBackdrop() {
+  return (
+    <>
+      <DottedSurface className="opacity-[0.52] [mask-image:linear-gradient(to_bottom,rgba(0,0,0,0.42),rgba(0,0,0,0.14))] [-webkit-mask-image:linear-gradient(to_bottom,rgba(0,0,0,0.42),rgba(0,0,0,0.14))]" />
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        <div className="absolute left-[-10%] top-[8%] h-[28rem] w-[28rem] rounded-full bg-[color:color-mix(in_srgb,var(--landing-accent)_9%,transparent)] blur-3xl" />
+        <div className="absolute bottom-[2%] right-[-8%] h-[26rem] w-[26rem] rounded-full bg-[rgba(20,20,20,0.05)] blur-3xl" />
+      </div>
+    </>
   );
 }
 
