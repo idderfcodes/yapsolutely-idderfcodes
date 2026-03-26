@@ -225,9 +225,32 @@ const footerColumns = [
   },
 ];
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0 },
+const revealFromLeft = {
+  hidden: { x: -48, y: 20, scale: 0.96, rotate: -1.5 },
+  show: { x: 0, y: 0, scale: 1, rotate: 0 },
+};
+
+const revealFromRight = {
+  hidden: { x: 48, y: 20, scale: 0.96, rotate: 1.5 },
+  show: { x: 0, y: 0, scale: 1, rotate: 0 },
+};
+
+const sectionReveal = {
+  hidden: {
+    y: 42,
+    scale: 0.97,
+    clipPath: "inset(0 0 100% 0 round 28px)",
+  },
+  show: {
+    y: 0,
+    scale: 1,
+    clipPath: "inset(0 0 0% 0 round 28px)",
+  },
+};
+
+const cardReveal = {
+  hidden: { y: 54, scale: 0.94, rotateX: 10 },
+  show: { y: 0, scale: 1, rotateX: 0 },
 };
 
 const staggerContainer = {
@@ -341,11 +364,11 @@ export default function RevisedLandingPage() {
             <div className="landing-container">
               <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.96fr)_minmax(0,1.04fr)] lg:gap-14">
                 <motion.div
-                  variants={fadeUp}
+                  variants={revealFromLeft}
                   initial="hidden"
                   animate="show"
-                  transition={{ duration: 0.45, ease: "easeOut" }}
-                  className="max-w-[38rem]"
+                  transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                  className="max-w-[38rem] [transform-style:preserve-3d]"
                 >
                   <div className="landing-pill inline-flex items-center gap-3 px-4 py-2">
                     <span className="relative flex h-2.5 w-2.5">
@@ -389,7 +412,7 @@ export default function RevisedLandingPage() {
                     {heroStats.map((stat) => (
                       <div
                         key={stat.label}
-                        className="rounded-[22px] border border-[var(--landing-border)] bg-white/90 px-4 py-4 shadow-[0_18px_36px_-28px_rgba(20,20,20,0.18)] backdrop-blur-sm"
+                        className="rounded-[22px] border border-[var(--landing-border)] bg-white/90 px-4 py-4 shadow-[0_18px_36px_-28px_rgba(20,20,20,0.18)] backdrop-blur-sm transition-transform duration-300 hover:-translate-y-1.5 hover:scale-[1.02]"
                       >
                         <div className="landing-display text-[2rem] leading-none tracking-[-0.05em] text-[var(--landing-text)]">
                           {stat.value}
@@ -403,11 +426,11 @@ export default function RevisedLandingPage() {
                 </motion.div>
 
                 <motion.div
-                  variants={fadeUp}
+                  variants={revealFromRight}
                   initial="hidden"
                   animate="show"
-                  transition={{ duration: 0.55, delay: 0.1, ease: "easeOut" }}
-                  className="relative"
+                  transition={{ duration: 0.65, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
+                  className="relative [transform-style:preserve-3d]"
                 >
                   <HeroShowcase />
                 </motion.div>
@@ -459,11 +482,11 @@ export default function RevisedLandingPage() {
           <section id="how-it-works" className="landing-section pt-8">
             <div className="landing-container">
               <motion.div
-                variants={fadeUp}
+                variants={sectionReveal}
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.45 }}
+                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                 className="max-w-[42rem]"
               >
                 <div className="landing-pill inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--landing-text-muted)]">
@@ -488,8 +511,13 @@ export default function RevisedLandingPage() {
                   const Icon = step.icon;
 
                   return (
-                    <motion.div key={step.number} variants={fadeUp}>
-                      <div className="landing-card landing-card-hover h-full rounded-[30px] bg-white/92 p-6 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.22)]">
+                    <motion.div key={step.number} variants={cardReveal}>
+                      <motion.div
+                        variants={cardReveal}
+                        whileHover={{ y: -10, rotate: -0.8, scale: 1.015 }}
+                        transition={{ duration: 0.28, ease: "easeOut" }}
+                        className="landing-card landing-card-hover h-full rounded-[30px] bg-white/92 p-6 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.22)] [transform-style:preserve-3d]"
+                      >
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[color-mix(in_srgb,var(--landing-accent)_10%,white)] text-[var(--landing-accent)]">
                             <Icon className="h-5 w-5" />
@@ -509,7 +537,7 @@ export default function RevisedLandingPage() {
                         <div className="mt-6 rounded-[24px] border border-[var(--landing-border)] bg-[var(--landing-background-soft)] p-4">
                           {step.preview}
                         </div>
-                      </div>
+                      </motion.div>
                     </motion.div>
                   );
                 })}
@@ -520,11 +548,11 @@ export default function RevisedLandingPage() {
           <section id="features" className="landing-section pt-4">
             <div className="landing-container">
               <motion.div
-                variants={fadeUp}
+                variants={sectionReveal}
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.45 }}
+                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                 className="max-w-[46rem]"
               >
                 <div className="landing-pill inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--landing-text-muted)]">
@@ -552,7 +580,9 @@ export default function RevisedLandingPage() {
                   return (
                     <motion.div
                       key={tile.title}
-                      variants={fadeUp}
+                      variants={cardReveal}
+                      whileHover={{ y: -12, rotate: 0.6, scale: 1.012 }}
+                      transition={{ duration: 0.28, ease: "easeOut" }}
                       className={wide ? "lg:col-span-2" : "lg:col-span-1"}
                     >
                       <div className="landing-card landing-card-hover h-full rounded-[30px] bg-white/92 p-6 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.22)]">
@@ -579,11 +609,11 @@ export default function RevisedLandingPage() {
           <section id="faq" className="landing-section pt-4">
             <div className="landing-container max-w-[62rem]">
               <motion.div
-                variants={fadeUp}
+                variants={sectionReveal}
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.45 }}
+                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                 className="max-w-[42rem]"
               >
                 <div className="landing-pill inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--landing-text-muted)]">
@@ -607,7 +637,9 @@ export default function RevisedLandingPage() {
                   return (
                     <motion.div
                       key={item.id}
-                      variants={fadeUp}
+                      variants={cardReveal}
+                      whileHover={{ x: 6 }}
+                      transition={{ duration: 0.24, ease: "easeOut" }}
                       className="border-b border-[var(--landing-border)] py-4 last:border-b-0"
                     >
                       <button
@@ -625,7 +657,13 @@ export default function RevisedLandingPage() {
                             </div>
                             <motion.div
                               initial={false}
-                              animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
+                              animate={{
+                                height: open ? "auto" : 0,
+                                y: open ? 0 : -16,
+                                clipPath: open
+                                  ? "inset(0 0 0% 0 round 12px)"
+                                  : "inset(0 0 100% 0 round 12px)",
+                              }}
                               transition={{ duration: 0.24, ease: "easeOut" }}
                               className="overflow-hidden"
                             >
@@ -650,11 +688,12 @@ export default function RevisedLandingPage() {
           <section className="px-4 pb-10 sm:px-6 sm:pb-14">
             <div className="landing-container">
               <motion.div
-                variants={fadeUp}
+                variants={sectionReveal}
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.45 }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ y: -8, scale: 1.01 }}
                 className="overflow-hidden rounded-[34px] border border-[var(--landing-border)] bg-[linear-gradient(135deg,rgba(255,255,255,0.96),rgba(247,244,239,0.96))] p-8 shadow-[0_28px_48px_-34px_rgba(20,20,20,0.24)] sm:p-10 lg:p-12"
               >
                 <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
