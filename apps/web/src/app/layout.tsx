@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -78,29 +79,8 @@ const bagossCondensed = localFont({
   display: "swap",
 });
 
-const inter = localFont({
-  src: [
-    {
-      path: "./fonts/landing/inter-400.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "./fonts/landing/inter-500.ttf",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "./fonts/landing/inter-600.ttf",
-      weight: "600",
-      style: "normal",
-    },
-    {
-      path: "./fonts/landing/inter-700.ttf",
-      weight: "700",
-      style: "normal",
-    },
-  ],
+const inter = Inter({
+  subsets: ["latin"],
   variable: "--font-landing-body",
   display: "swap",
 });

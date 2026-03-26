@@ -8,30 +8,22 @@ import {
   ArrowLongRightIcon,
   Bars3Icon,
   BoltIcon,
+  CalendarDaysIcon,
   ChartBarSquareIcon,
-  ChatBubbleLeftRightIcon,
-  ChevronDownIcon,
+  CheckCircleIcon,
   ClockIcon,
-  MicrophoneIcon,
-  PhoneArrowDownLeftIcon,
+  MinusIcon,
+  PhoneIcon,
+  PlusIcon,
   ShieldCheckIcon,
   SparklesIcon,
 } from "@heroicons/react/24/outline";
 
 const navLinks = [
-  { label: "Platform", href: "#features" },
-  { label: "Use cases", href: "#use-cases" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "Resources", href: "/docs" },
-  { label: "Support", href: "/support" },
-];
-
-const heroHighlights = ["Launch in minutes", "Browser voice testing", "Searchable transcripts"];
-
-const heroProofChips = [
-  { label: "Runtime", value: "Online" },
-  { label: "Flow", value: "Generated" },
-  { label: "Review", value: "Synced" },
+  { label: "Product", href: "#features" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "Docs", href: "/docs" },
+  { label: "About", href: "/about" },
 ];
 
 const marqueeLogos = [
@@ -39,249 +31,111 @@ const marqueeLogos = [
   { file: "deepgram", label: "Deepgram" },
   { file: "anthropic", label: "Anthropic" },
   { file: "nextdotjs", label: "Next.js" },
-  { file: "tailwindcss", label: "Tailwind CSS" },
+  { file: "tailwindcss", label: "Tailwind" },
   { file: "prisma", label: "Prisma" },
   { file: "vercel", label: "Vercel" },
   { file: "nodedotjs", label: "Node.js" },
-  { file: "typescript", label: "TypeScript" },
-  { file: "react", label: "React" },
 ];
 
-const steps = [
+const howItWorks = [
   {
     number: "01",
-    title: "Define your agent",
-    description: "Write the prompt, choose the voice, and set the rules for how every conversation should flow.",
-    eyebrow: "Prompt + voice",
+    title: "Define Your Agent",
+    description: "Set the voice, tone, routing logic, and fallback rules for every conversation.",
+    render: () => <PromptEditorSnippet />,
   },
   {
     number: "02",
-    title: "Assign a number and go live",
-    description: "Connect a real phone number to the agent so inbound calls route instantly without the usual setup maze.",
-    eyebrow: "Routing",
+    title: "Assign a Number",
+    description: "Attach a real phone number and push changes live without touching custom infrastructure.",
+    render: () => <PhoneAssignmentSnippet />,
   },
   {
     number: "03",
-    title: "Review every call",
-    description: "Track transcripts, outcomes, and follow-up actions from one workspace that actually feels operational.",
-    eyebrow: "Audit trail",
+    title: "Review Every Call",
+    description: "Read transcripts, outcomes, and follow-up actions from one clear review workspace.",
+    render: () => <TranscriptReviewSnippet />,
   },
 ];
 
 const useCases = [
   {
     id: "sales",
-    label: "Inbound sales",
-    title: "Qualify leads the moment they call",
-    description:
-      "Answer pricing questions, capture intent, and book the next step before a hot lead cools off.",
-    metrics: ["47 calls today", "78% qualified", "3:42 avg duration"],
-    lines: [
-      "Agent: Thanks for calling. Are you evaluating for your team or a client?",
-      "Caller: For my team. We need something live this month.",
-      "Action: Demo booked for tomorrow, 11:30 AM.",
-    ],
+    tab: "Inbound Sales",
+    title: "Qualify leads, answer pricing, and book demos.",
+    description: "Route serious buyers faster by capturing budget, urgency, and fit the moment they call.",
+    preview: <LeadScorePreview />,
   },
   {
     id: "booking",
-    label: "Appointment booking",
-    title: "Schedule without the back-and-forth",
-    description:
-      "Let the agent confirm availability, lock the slot, and send the caller a follow-up confirmation instantly.",
-    metrics: ["12 bookings this week", "SMS confirmation sent", "2 reschedules handled"],
-    lines: [
-      "Agent: I can get you in Wednesday at 2 PM or Thursday at 10:30.",
-      "Caller: Thursday works better.",
-      "Action: Appointment confirmed. SMS sent.",
-    ],
+    tab: "Appointment Booking",
+    title: "Confirm availability, book the slot, and send the follow-up.",
+    description: "Let the agent handle scheduling without the back-and-forth or missed voicemail loops.",
+    preview: <BookingCalendarPreview />,
   },
   {
     id: "support",
-    label: "Customer support",
-    title: "Cover tier-one support around the clock",
-    description:
-      "Handle common questions, pull from your known answers, and escalate the right conversations to a human.",
-    metrics: ["94% resolved", "24/7 coverage", "Escalates only when needed"],
-    lines: [
-      "Caller: I need help resetting access for my account.",
-      "Agent: I can help with that. Let me verify the email first.",
-      "Action: Support path completed, transcript saved.",
-    ],
+    tab: "Customer Support",
+    title: "Handle tier-one support and escalate only when needed.",
+    description: "Answer common questions, capture the issue, and route complex requests with context.",
+    preview: <SupportTranscriptPreview />,
   },
   {
     id: "qualification",
-    label: "Lead qualification",
-    title: "Screen every inquiry with the same standard",
-    description:
-      "Collect the details that matter, score fit, and pass only the strongest opportunities to the team.",
-    metrics: ["Lead score captured", "CRM-ready notes", "No missed intake"],
-    lines: [
-      "Agent: How many locations are you managing today?",
-      "Caller: We have five now and two more opening soon.",
-      "Action: Marked as high-intent multi-location prospect.",
-    ],
+    tab: "Lead Qualification",
+    title: "Screen interest, capture data, and route the hottest leads first.",
+    description: "Use structured intake so the team only spends time on the strongest opportunities.",
+    preview: <QualificationPreview />,
   },
   {
-    id: "after-hours",
-    label: "After-hours coverage",
-    title: "Stay available when your team is offline",
-    description:
-      "Keep the line active overnight, capture every request, and queue the right follow-ups for the morning.",
-    metrics: ["Never miss a call", "Overnight capture", "Morning summary ready"],
-    lines: [
-      "Agent: Our team is offline right now, but I can help take care of this.",
-      "Caller: I need a callback first thing in the morning.",
-      "Action: Priority note added for next business day.",
-    ],
+    id: "afterhours",
+    tab: "After-hours Coverage",
+    title: "Capture details overnight and queue follow-ups for the morning.",
+    description: "Keep the line active even when the team is offline so no inbound intent gets lost.",
+    preview: <AfterHoursPreview />,
   },
 ];
 
-const features = [
+const featureCards = [
   {
-    title: "Sub-second responses",
-    description: "Streaming voice infrastructure keeps conversations moving naturally instead of sounding like a form submission with a microphone.",
+    type: "wide",
+    title: "Sub-second Responses",
+    description: "Callers can't tell it's AI. Streaming voice keeps the conversation moving naturally.",
     icon: BoltIcon,
-    tone: "wide",
-    proof: "Live speech pipeline",
+    metric: "<800ms",
+    caption: "Average voice response target",
   },
   {
-    title: "Full audit trail",
-    description: "Every call, transcript, handoff, and follow-up action is stored in one place for review and ops clarity.",
+    type: "wide",
+    title: "Full Audit Trail",
+    description: "Every word transcribed, every event logged, and every action visible after the call ends.",
     icon: ShieldCheckIcon,
-    tone: "wide",
-    proof: "Every step visible",
+    metric: "100%",
+    caption: "Every word transcribed",
   },
   {
-    title: "Custom agents",
-    description: "Set the voice, prompt, first response, and edge-case behavior without duct-taping tools together.",
+    type: "small",
+    title: "Custom Agents",
+    description: "Prompt editor, voice settings, and behavior controls in one flow.",
     icon: SparklesIcon,
-    tone: "small",
-    proof: "Prompt + voice control",
   },
   {
-    title: "Real phone numbers",
-    description: "Assign real numbers to real agents and route inbound conversations cleanly.",
-    icon: PhoneArrowDownLeftIcon,
-    tone: "small",
-    proof: "Routing built in",
+    type: "small",
+    title: "Real Phone Numbers",
+    description: "US and international numbers powered through Twilio-backed routing.",
+    icon: PhoneIcon,
   },
   {
-    title: "After-hours coverage",
-    description: "Capture demand when your human team is offline and keep the queue warm.",
+    type: "small",
+    title: "After-hours Coverage",
+    description: "Never miss a call when your human team is offline.",
     icon: ClockIcon,
-    tone: "small",
-    proof: "Always-on intake",
   },
   {
-    title: "Analytics dashboard",
-    description: "See outcomes, transcripts, volume, and agent behavior from one workspace.",
+    type: "small",
+    title: "Analytics Dashboard",
+    description: "Review call outcomes, volume, and agent performance from one workspace.",
     icon: ChartBarSquareIcon,
-    tone: "small",
-    proof: "Outcome visibility",
-  },
-];
-
-const proofCards = [
-  {
-    title: "Real-time voice runtime",
-    eyebrow: "Live call path",
-    stat: "<800ms",
-    statLabel: "target voice response time",
-    description:
-      "Inbound webhooks, streaming audio, speech recognition, language generation, and spoken responses are already wired into one live pipeline.",
-    bullets: ["Twilio-compatible call flow", "Deepgram speech stack", "Anthropic response layer"],
-  },
-  {
-    title: "Reviewable call history",
-    eyebrow: "Transcript proof",
-    stat: "100%",
-    statLabel: "transcript visibility",
-    description:
-      "Calls are stored with transcripts, event history, and action outcomes so the team can review what happened after every conversation ends.",
-    bullets: ["Per-call timeline", "Action outcome logging", "Detail views + exports"],
-  },
-  {
-    title: "Operator-first workspace",
-    eyebrow: "Product depth",
-    stat: "5",
-    statLabel: "runtime business tools",
-    description:
-      "Agents, phone numbers, browser testing, flow building, and readiness checks all live in the same product instead of scattered tools.",
-    bullets: ["Flow builder included", "Browser test mode", "Numbers + agents linked"],
-  },
-];
-
-const pricingTiers = [
-  {
-    name: "Starter",
-    price: "$0",
-    tag: "Proof of concept",
-    blurb: "For proving the workflow and getting the first agent live.",
-    cta: "Start free",
-    href: "/sign-up",
-    highlighted: false,
-    features: ["1 active agent", "Limited monthly minutes", "Transcript review", "Basic routing"],
-    note: "Best for trying the workflow end to end before you scale volume.",
-  },
-  {
-    name: "Pro",
-    price: "$149",
-    tag: "Most picked",
-    blurb: "For teams that need real inbound coverage and cleaner operations.",
-    cta: "Start building",
-    href: "/sign-up",
-    highlighted: true,
-    features: ["Multiple agents", "Number assignment", "Call analytics", "Priority support"],
-    note: "The right starting point for teams replacing missed calls with a real operating layer.",
-  },
-  {
-    name: "Enterprise",
-    price: "Custom",
-    tag: "High volume",
-    blurb: "For high-volume teams that need deployment depth and control.",
-    cta: "Talk to sales",
-    href: "/support",
-    highlighted: false,
-    features: ["Advanced rollout support", "Security review", "Custom workflows", "Deployment guidance"],
-    note: "Designed for rollout planning, internal review, and custom operating requirements.",
-  },
-];
-
-const trustItems = [
-  { title: "Number routing", copy: "Assign real numbers to live agents without losing the operational map." },
-  { title: "Transcript review", copy: "Read every conversation after the call, not just the summary." },
-  { title: "Human handoff", copy: "Escalate the right calls instead of forcing every path through automation." },
-  { title: "Deployment visibility", copy: "Keep agents, calls, numbers, and outcomes in the same workspace." },
-];
-
-const readinessCards = [
-  {
-    eyebrow: "Platform security",
-    title: "Protected runtime access",
-    description:
-      "Internal runtime routes are gated with shared-secret checks, and authenticated product access is signed separately so call operations are not left exposed.",
-    detail: "Auth secret + runtime secret",
-  },
-  {
-    eyebrow: "Deployment visibility",
-    title: "Health and readiness built in",
-    description:
-      "The product already exposes health and readiness surfaces so operators can tell a missing config value from an actual runtime problem before going live.",
-    detail: "Web + runtime verification",
-  },
-  {
-    eyebrow: "Audit trail",
-    title: "Transcripts stay reviewable",
-    description:
-      "Call logs, transcript history, timeline events, and tool outcomes stay attached to every conversation for QA, debugging, and operational review.",
-    detail: "Timeline + transcript detail",
-  },
-  {
-    eyebrow: "Compliance surface",
-    title: "Docs for real customer review",
-    description:
-      "Compliance, privacy, and terms pages are already live, covering recording, data handling, and regulatory expectations instead of hiding them behind sales calls.",
-    detail: "GDPR · CCPA · TCPA",
   },
 ];
 
@@ -328,15 +182,53 @@ const faqItems = [
   },
 ];
 
+const footerColumns = [
+  {
+    title: "Product",
+    links: [
+      ["Features", "#features"],
+      ["Pricing", "/pricing"],
+      ["Changelog", "/changelog"],
+      ["Documentation", "/docs"],
+      ["API Reference", "/docs/api"],
+    ] as [string, string][],
+  },
+  {
+    title: "Company",
+    links: [
+      ["About", "/about"],
+      ["Support", "/support"],
+      ["Compliance", "/compliance"],
+      ["Contact", "mailto:hello@yapsolutely.com"],
+    ] as [string, string][],
+  },
+  {
+    title: "Legal",
+    links: [
+      ["Terms of Service", "/terms"],
+      ["Privacy Policy", "/privacy"],
+    ] as [string, string][],
+  },
+];
+
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   show: { opacity: 1, y: 0 },
 };
 
+const staggerContainer = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
 export default function RevisedLandingPage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeUseCase, setActiveUseCase] = useState(useCases[0].id);
   const [openFaq, setOpenFaq] = useState(faqItems[0].question);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const activeUseCaseData = useMemo(
     () => useCases.find((item) => item.id === activeUseCase) ?? useCases[0],
@@ -344,45 +236,39 @@ export default function RevisedLandingPage() {
   );
 
   return (
-    <div className="landing-shell min-h-screen">
-      <header className="sticky top-0 z-50 border-b border-[var(--landing-border)]/80 bg-white/88 backdrop-blur-xl">
-        <div className="landing-container flex h-[5rem] items-center justify-between gap-5 py-4 lg:gap-8">
-          <Link href="/" className="flex min-w-0 items-center gap-3.5 cursor-pointer">
-            <div className="flex h-10 w-10 items-center justify-center rounded-[1rem] border border-[var(--landing-border)] bg-[var(--landing-background-soft)]">
-              <Image src="/favicon.svg" alt="Yapsolutely" width={26} height={26} className="h-6.5 w-6.5 rounded-lg" />
-            </div>
-            <div className="min-w-0">
-              <div className="landing-display text-[1.5rem] leading-none tracking-[-0.045em] text-[var(--landing-text)]">Yapsolutely</div>
-              <div className="landing-body mt-1 text-[0.64rem] uppercase tracking-[0.28em] text-[var(--landing-text-muted)]">Voice agent platform</div>
-            </div>
+    <div className="landing-shell min-h-screen bg-[var(--landing-background)] text-[var(--landing-text)]">
+      <header className="sticky top-0 z-50 border-b border-[var(--landing-border)]/80 bg-white/80 backdrop-blur-md">
+        <div className="landing-container flex h-20 items-center justify-between gap-6">
+          <Link href="/" className="cursor-pointer landing-display text-[2rem] leading-none tracking-[-0.04em] text-[var(--landing-text)]">
+            Yapsolutely
           </Link>
 
-          <nav className="hidden flex-1 items-center justify-center gap-6 lg:flex xl:gap-8">
+          <nav className="hidden items-center gap-10 md:flex">
             {navLinks.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
-                className="landing-body text-[0.93rem] font-medium text-[var(--landing-text)]/88 transition hover:text-[var(--landing-accent)]"
+                className="landing-body cursor-pointer text-[14px] font-medium text-[var(--landing-text-muted)] transition-colors hover:text-[var(--landing-text)]"
               >
                 {link.label}
               </Link>
             ))}
           </nav>
 
-          <div className="hidden items-center gap-2.5 md:flex">
-            <Link href="/sign-in" className="landing-button-secondary px-5 py-3 landing-body text-[0.9rem] font-medium">
+          <div className="hidden items-center gap-3 md:flex">
+            <Link href="/sign-in" className="landing-button-secondary inline-flex items-center justify-center px-5 py-3 landing-body text-[14px] font-medium">
               Sign in
             </Link>
-            <Link href="/sign-up" className="landing-button-primary px-5 py-3 landing-body text-[0.9rem] font-semibold">
+            <Link href="/sign-up" className="landing-button-primary inline-flex items-center justify-center px-5 py-3 landing-body text-[14px] font-semibold">
               Start building free
             </Link>
           </div>
 
           <button
             type="button"
-            onClick={() => setMobileMenuOpen((open) => !open)}
-            className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-[var(--landing-border)] text-[var(--landing-text)] md:hidden"
-            aria-label="Open navigation"
+            onClick={() => setMobileMenuOpen((current) => !current)}
+            className="inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-[var(--landing-border)] text-[var(--landing-text)] md:hidden"
+            aria-label="Toggle navigation"
             aria-expanded={mobileMenuOpen}
           >
             <Bars3Icon className="h-5 w-5" />
@@ -390,114 +276,84 @@ export default function RevisedLandingPage() {
         </div>
 
         {mobileMenuOpen ? (
-          <div className="border-t border-[var(--landing-border)] bg-white md:hidden">
+          <div className="border-t border-[var(--landing-border)] bg-white/95 md:hidden">
             <div className="landing-container flex flex-col gap-3 py-4">
               {navLinks.map((link) => (
                 <Link
                   key={link.label}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="landing-body rounded-2xl border border-[var(--landing-border)] px-4 py-3 text-[0.95rem] font-medium text-[var(--landing-text)]"
+                  className="landing-body cursor-pointer rounded-xl border border-[var(--landing-border)] px-4 py-3 text-[14px] font-medium text-[var(--landing-text)]"
                 >
                   {link.label}
                 </Link>
               ))}
-              <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <Link
-                  href="/sign-in"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="landing-button-secondary inline-flex items-center justify-center px-5 py-3 landing-body text-[0.92rem] font-medium"
-                >
-                  Sign in
-                </Link>
-                <Link
-                  href="/sign-up"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="landing-button-primary inline-flex items-center justify-center px-5 py-3 landing-body text-[0.92rem] font-semibold"
-                >
-                  Start building free
-                </Link>
-              </div>
+              <Link
+                href="/sign-in"
+                onClick={() => setMobileMenuOpen(false)}
+                className="landing-button-secondary inline-flex items-center justify-center px-5 py-3 landing-body text-[14px] font-medium"
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/sign-up"
+                onClick={() => setMobileMenuOpen(false)}
+                className="landing-button-primary inline-flex items-center justify-center px-5 py-3 landing-body text-[14px] font-semibold"
+              >
+                Start building free
+              </Link>
             </div>
           </div>
         ) : null}
       </header>
 
       <main>
-        <section className="relative overflow-hidden pb-12 pt-12 sm:pb-16 sm:pt-16">
-          <div className="absolute inset-x-0 top-0 -z-10 h-[460px] bg-[radial-gradient(circle_at_top,rgba(217,95,59,0.13),transparent_55%)]" />
+        <section className="landing-section overflow-hidden pt-10 sm:pt-16">
           <div className="landing-container">
-            <div className="grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
+            <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.04fr] lg:gap-16">
               <motion.div
                 variants={fadeUp}
                 initial="hidden"
                 animate="show"
-                transition={{ duration: 0.55, ease: "easeOut" }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="max-w-[560px]"
               >
-                <div className="landing-pill mb-6 inline-flex items-center gap-2 px-4 py-2">
-                  <span className="h-2 w-2 rounded-full bg-[var(--landing-accent)]" />
-                  <span className="landing-body text-[0.84rem] font-medium text-[var(--landing-text)]">Built for teams that run on phone calls</span>
+                <div className="landing-pill inline-flex items-center gap-3 px-4 py-2">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--landing-accent)] opacity-45" />
+                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[var(--landing-accent)]" />
+                  </span>
+                  <span className="landing-body text-[13px] font-medium text-[var(--landing-text)]">Handling calls now</span>
                 </div>
 
-                <h1 className="landing-display max-w-[9.6ch] text-[3.45rem] leading-[0.9] tracking-[-0.055em] text-[var(--landing-text)] sm:text-[4.6rem] lg:text-[6.05rem]">
-                  Answer, qualify, book, & review
-                  <span className="text-[var(--landing-accent)]"> every inbound call.</span>
+                <h1 className="landing-display mt-6 max-w-[10ch] text-[3.5rem] leading-[0.94] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[4.2rem] lg:text-[4rem] xl:text-[4.5rem]">
+                  AI agents that answer your phone
                 </h1>
 
-                <p className="landing-body mt-6 max-w-[34rem] text-[1.02rem] leading-8 text-[var(--landing-text-muted)] sm:text-[1.08rem]">
-                  AI voice agents for sales, support, and operations teams. Configure the workflow, assign the number, and keep every conversation visible from one workspace.
+                <p className="landing-body mt-6 max-w-[32rem] text-[16px] leading-7 text-[var(--landing-text-muted)]">
+                  Build voice agents, assign real phone numbers, handle inbound calls. One workspace.
                 </p>
 
-                <div className="mt-6 flex flex-wrap gap-2.5">
-                  {heroHighlights.map((item) => (
-                    <div key={item} className="landing-pill inline-flex items-center gap-2 px-3.5 py-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[var(--landing-accent)]" />
-                      <span className="landing-body text-[0.8rem] font-medium text-[var(--landing-text-muted)]">{item}</span>
-                    </div>
-                  ))}
-                </div>
-
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <Link href="/sign-up" className="landing-button-primary inline-flex items-center justify-center gap-2 px-6 py-3.5 landing-body text-[0.96rem] font-semibold">
+                  <Link href="/sign-up" className="landing-button-primary inline-flex items-center justify-center gap-2 px-6 py-3.5 landing-body text-[15px] font-semibold">
                     Start building free
                     <ArrowLongRightIcon className="h-5 w-5" />
                   </Link>
-                  <Link href="#how-it-works" className="landing-button-secondary inline-flex items-center justify-center px-6 py-3.5 landing-body text-[0.96rem] font-medium">
+                  <Link href="#how-it-works" className="landing-button-secondary inline-flex items-center justify-center px-6 py-3.5 landing-body text-[15px] font-medium">
                     See how it works
                   </Link>
                 </div>
 
-                <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
-                  <p className="landing-body text-[0.86rem] text-[var(--landing-text-muted)]">No credit card required. Get your first agent live in minutes.</p>
-                  <div className="inline-flex items-center gap-3 rounded-full border border-[var(--landing-border)] bg-white px-3 py-2">
-                    <div className="flex -space-x-2">
-                      {["#F5C7BB", "#E6D3C7", "#D95F3B"].map((color, index) => (
-                        <span
-                          key={index}
-                          className="flex h-7 w-7 items-center justify-center rounded-full border border-white text-[0.62rem] font-semibold text-[var(--landing-text)]"
-                          style={{ backgroundColor: color }}
-                        >
-                          {String.fromCharCode(65 + index)}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="landing-body text-[0.79rem] font-medium text-[var(--landing-text-muted)]">
-                      Trusted by operators building live phone workflows
-                    </div>
-                  </div>
-                </div>
+                <p className="landing-body mt-4 text-[13px] text-[var(--landing-text-muted)]">
+                  No credit card required. Free plan available.
+                </p>
 
-                <div className="mt-8 grid gap-3 sm:grid-cols-3">
-                  {[
-                    ["<800ms", "voice response time"],
-                    ["24/7", "inbound coverage"],
-                    ["100%", "transcript visibility"],
-                  ].map(([value, label]) => (
-                    <div key={label} className="landing-card-soft px-5 py-4">
-                      <div className="landing-display text-[2rem] leading-none tracking-[-0.04em] text-[var(--landing-text)]">{value}</div>
-                      <div className="landing-body mt-2 text-[0.83rem] font-medium text-[var(--landing-text-muted)]">{label}</div>
-                    </div>
-                  ))}
+                <div className="landing-body mt-8 flex flex-wrap items-center gap-3 text-[13px] font-medium text-[var(--landing-text-muted)] sm:gap-5">
+                  <span>&lt;800ms</span>
+                  <span className="text-[var(--landing-border)]">·</span>
+                  <span>24/7</span>
+                  <span className="text-[var(--landing-border)]">·</span>
+                  <span>100% transcribed</span>
                 </div>
               </motion.div>
 
@@ -506,94 +362,79 @@ export default function RevisedLandingPage() {
                 initial="hidden"
                 animate="show"
                 transition={{ duration: 0.55, delay: 0.12, ease: "easeOut" }}
+                className="lg:justify-self-end"
               >
-                <div className="relative mx-auto w-full max-w-[660px]">
-                  <div className="absolute inset-x-[10%] bottom-[-3.5rem] h-24 rounded-full bg-[radial-gradient(circle,rgba(217,95,59,0.18),transparent_72%)] blur-3xl" />
-                  <motion.div
-                    initial={{ opacity: 0, y: 18 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.16, ease: "easeOut" }}
-                    className="absolute -left-3 top-14 z-10 hidden w-[210px] rounded-[1.55rem] border border-[var(--landing-border)] bg-white/96 p-4 shadow-[0_22px_60px_-34px_rgba(20,20,20,0.28)] backdrop-blur md:block xl:-left-12"
-                  >
-                    <div className="landing-body text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">
-                      Operator snapshot
-                    </div>
-                    <div className="landing-display mt-3 text-[1.5rem] leading-[0.98] tracking-[-0.04em] text-[var(--landing-text)]">
-                      Ready to go live
-                    </div>
-                    <div className="mt-4 space-y-2.5">
-                      {heroProofChips.map((chip) => (
-                        <div key={chip.label} className="flex items-center justify-between rounded-full border border-[var(--landing-border)] bg-[var(--landing-background-soft)] px-3 py-2">
-                          <span className="landing-body text-[0.78rem] font-medium text-[var(--landing-text-muted)]">{chip.label}</span>
-                          <span className="landing-body text-[0.74rem] font-semibold uppercase tracking-[0.12em] text-[var(--landing-text)]">{chip.value}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </motion.div>
-
-                  <div className="landing-card relative overflow-hidden p-3 sm:p-4 shadow-[0_42px_120px_-54px_rgba(20,20,20,0.32)]">
-                    <div className="mb-3 flex items-center justify-between rounded-[1.2rem] border border-[var(--landing-border)] bg-[var(--landing-background-soft)] px-4 py-3">
-                      <div className="flex gap-2">
-                        <span className="h-2.5 w-2.5 rounded-full bg-[#ff8d7a]" />
-                        <span className="h-2.5 w-2.5 rounded-full bg-[#ffd37a]" />
-                        <span className="h-2.5 w-2.5 rounded-full bg-[#7fcf9f]" />
+                <div className="landing-card rotate-1 overflow-hidden border border-[var(--landing-border)] bg-white p-3 shadow-[0_32px_70px_-34px_rgba(20,20,20,0.28)] sm:p-4">
+                  <div className="rounded-xl border border-[var(--landing-border)] bg-[var(--landing-background-soft)] px-4 py-3">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-2">
+                        <span className="h-2.5 w-2.5 rounded-full bg-[#FF8A80]" />
+                        <span className="h-2.5 w-2.5 rounded-full bg-[#FFD180]" />
+                        <span className="h-2.5 w-2.5 rounded-full bg-[#A5D6A7]" />
                       </div>
-                      <div className="landing-body rounded-full border border-[var(--landing-border)] bg-white px-3 py-1 text-[0.72rem] font-medium text-[var(--landing-text-muted)]">
-                        yapsolutely.xyz
+                      <div className="landing-body rounded-full border border-[var(--landing-border)] bg-white px-4 py-1.5 text-[12px] font-medium text-[var(--landing-text-muted)]">
+                        yapsolutely.xyz/dashboard
                       </div>
                     </div>
 
-                    <div className="relative overflow-hidden rounded-[1.35rem] border border-[var(--landing-border)] bg-white">
-                      <Image
-                        src="/hero-dashboard.png"
-                        alt="Yapsolutely workspace dashboard"
-                        width={1641}
-                        height={965}
-                        priority
-                        className="h-auto w-full object-cover"
-                      />
-
-                      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/16 to-transparent" />
-
-                      <motion.div
-                        initial={{ opacity: 0, y: 16 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.45, delay: 0.24, ease: "easeOut" }}
-                        className="absolute bottom-4 left-4 hidden max-w-[240px] rounded-[1.25rem] border border-white/40 bg-white/94 p-4 shadow-[0_20px_44px_-28px_rgba(20,20,20,0.35)] backdrop-blur lg:block"
-                      >
-                        <div className="landing-body text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">
-                          Call review
+                    <div className="mt-4 grid gap-4 lg:grid-cols-[180px_1fr]">
+                      <div className="rounded-xl border border-[var(--landing-border)] bg-white p-4">
+                        <div className="landing-body text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--landing-text-muted)]">
+                          Agents
                         </div>
-                        <div className="mt-3 space-y-2">
+                        <div className="mt-4 space-y-3">
                           {[
-                            "Lead qualified and routed",
-                            "SMS confirmation logged",
-                            "Transcript export ready",
-                          ].map((line) => (
-                            <div key={line} className="rounded-full bg-[var(--landing-background-soft)] px-3 py-2 landing-body text-[0.78rem] font-medium text-[var(--landing-text)]">
-                              {line}
+                            { name: "Inbound Sales", status: "ACTIVE" },
+                            { name: "Support Line", status: "ACTIVE" },
+                            { name: "After-hours", status: "DRAFT" },
+                          ].map((agent) => (
+                            <div key={agent.name} className="rounded-xl border border-[var(--landing-border)] bg-[var(--landing-background-soft)] px-3 py-3">
+                              <div className="flex items-center justify-between gap-3">
+                                <span className="landing-body text-[13px] font-medium text-[var(--landing-text)]">{agent.name}</span>
+                                <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${agent.status === "ACTIVE" ? "bg-[#F6EEE8] text-[var(--landing-accent)]" : "bg-white text-[var(--landing-text-muted)]"}`}>
+                                  {agent.status}
+                                </span>
+                              </div>
                             </div>
                           ))}
                         </div>
-                      </motion.div>
-                    </div>
+                      </div>
 
-                    <motion.div
-                      initial={{ opacity: 0, x: 16 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.5, delay: 0.28, ease: "easeOut" }}
-                      className="absolute -right-2 bottom-8 hidden w-[220px] rounded-[1.6rem] bg-[var(--landing-dark)] p-4 text-white shadow-[0_26px_60px_-34px_rgba(20,20,20,0.5)] md:block xl:-right-10"
-                    >
-                      <div className="landing-body text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white/55">
-                        Operating layer
+                      <div className="space-y-4">
+                        <div className="grid gap-3 sm:grid-cols-3">
+                          {[
+                            ["Calls today", "47"],
+                            ["Avg duration", "3:42"],
+                            ["Resolved", "91%"],
+                          ].map(([label, value]) => (
+                            <div key={label} className="rounded-xl border border-[var(--landing-border)] bg-white px-4 py-4">
+                              <div className="landing-body text-[11px] font-medium text-[var(--landing-text-muted)]">{label}</div>
+                              <div className="landing-display mt-2 text-[1.8rem] leading-none tracking-[-0.04em] text-[var(--landing-text)]">{value}</div>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="rounded-xl border border-[var(--landing-border)] bg-white p-4">
+                          <div className="flex items-center justify-between gap-4 border-b border-[var(--landing-border)] pb-3">
+                            <div>
+                              <div className="landing-body text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--landing-text-muted)]">
+                                Live transcript
+                              </div>
+                              <div className="landing-body mt-1 text-[13px] font-medium text-[var(--landing-text)]">+1 (415) 555-0142</div>
+                            </div>
+                            <span className="rounded-full bg-[#F6EEE8] px-3 py-1 text-[11px] font-semibold text-[var(--landing-accent)]">
+                              Lead score 91
+                            </span>
+                          </div>
+
+                          <div className="mt-4 space-y-3">
+                            <TranscriptBubble speaker="Agent" copy="Thanks for calling. Are you evaluating for your team or for a client?" />
+                            <TranscriptBubble speaker="Caller" copy="For my team. We need something live this month." caller />
+                            <TranscriptBubble speaker="Action" copy="Demo booked for tomorrow at 11:30 AM." compact />
+                          </div>
+                        </div>
                       </div>
-                      <div className="landing-display mt-3 text-[1.55rem] leading-[0.98] tracking-[-0.04em] text-white">
-                        Not just a prompt box
-                      </div>
-                      <p className="landing-body mt-3 text-[0.82rem] leading-6 text-white/68">
-                        Numbers, transcripts, browser tests, and deployment checks all stay in one flow.
-                      </p>
-                    </motion.div>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -601,19 +442,17 @@ export default function RevisedLandingPage() {
           </div>
         </section>
 
-        <section className="overflow-hidden py-6">
+        <section className="overflow-hidden py-8 sm:py-10">
           <div className="landing-container">
-            <div className="mb-5 text-center landing-body text-[0.78rem] font-semibold uppercase tracking-[0.22em] text-[var(--landing-text-muted)]">
-              Powered by
-            </div>
+            <div className="landing-body mb-4 text-center text-[12px] font-medium text-[var(--landing-text-muted)]">Powered by</div>
             <div className="relative overflow-hidden">
-              <div className="absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-white to-transparent" />
-              <div className="absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-white to-transparent" />
-              <div className="flex w-max animate-scroll-left gap-10 py-3">
+              <div className="absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-white to-transparent" />
+              <div className="absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-white to-transparent" />
+              <div className="flex w-max animate-scroll-left items-center gap-12 py-3">
                 {[...marqueeLogos, ...marqueeLogos].map((logo, index) => (
-                  <div key={`${logo.file}-${index}`} className="flex items-center gap-3 px-1">
-                    <Image src={`/logos/${logo.file}.svg`} alt={logo.label} width={24} height={24} className="h-6 w-6" />
-                    <span className="landing-body text-[0.95rem] font-semibold text-[var(--landing-text)]">{logo.label}</span>
+                  <div key={`${logo.file}-${index}`} className="flex items-center gap-3 opacity-85">
+                    <Image src={`/logos/${logo.file}.svg`} alt={logo.label} width={28} height={28} className="h-7 w-7" />
+                    <span className="landing-body text-[14px] font-medium text-[var(--landing-text-muted)]">{logo.label}</span>
                   </div>
                 ))}
               </div>
@@ -621,489 +460,7 @@ export default function RevisedLandingPage() {
           </div>
         </section>
 
-        <section id="how-it-works" className="landing-section">
-          <div className="landing-container">
-            <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }}>
-              <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-[var(--landing-accent)]">How it works</div>
-              <div className="mt-3 grid gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
-                <h2 className="landing-display max-w-[10ch] text-[2.8rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.7rem]">
-                  Launch your first voice agent in three steps
-                </h2>
-                <p className="landing-body max-w-[34rem] text-[1rem] leading-8 text-[var(--landing-text-muted)] lg:justify-self-end">
-                  Set the behavior, attach the number, and review every call from one clean operating layer.
-                </p>
-              </div>
-            </motion.div>
-
-            <div className="mt-10 grid gap-4 lg:grid-cols-3">
-              {steps.map((step, index) => (
-                <motion.div
-                  key={step.number}
-                  className="landing-card p-6 sm:p-7"
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.42, delay: index * 0.07 }}
-                >
-                  <div className="landing-body text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">{step.eyebrow}</div>
-                  <div className="mt-6 flex items-center gap-4">
-                    <span className="landing-display text-[2.6rem] leading-none tracking-[-0.05em] text-[var(--landing-text)]">{step.number}</span>
-                    <span className="h-px flex-1 bg-[var(--landing-border)]" />
-                  </div>
-                  <h3 className="landing-display mt-6 text-[2rem] leading-[0.96] tracking-[-0.04em] text-[var(--landing-text)]">{step.title}</h3>
-                  <p className="landing-body mt-4 text-[0.98rem] leading-7 text-[var(--landing-text-muted)]">{step.description}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="landing-section bg-[var(--landing-background-soft)]" id="use-cases">
-          <div className="landing-container">
-            <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }}>
-              <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-[var(--landing-accent)]">Use cases</div>
-              <div className="mt-3 grid gap-4 lg:grid-cols-[0.92fr_1.08fr] lg:items-end">
-                <h2 className="landing-display max-w-[10ch] text-[2.8rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.7rem]">
-                  One workflow for every inbound call type
-                </h2>
-                <p className="landing-body max-w-[35rem] text-[1rem] leading-8 text-[var(--landing-text-muted)] lg:justify-self-end">
-                  Sales, support, scheduling, and after-hours coverage all run through the same product pattern, so teams can move faster with less rework.
-                </p>
-              </div>
-            </motion.div>
-
-            <div className="mt-10 grid gap-8 lg:grid-cols-[0.44fr_0.56fr]">
-              <div className="flex flex-col gap-3">
-                {useCases.map((item) => {
-                  const active = item.id === activeUseCase;
-                  return (
-                    <motion.button
-                      key={item.id}
-                      type="button"
-                      onClick={() => setActiveUseCase(item.id)}
-                      whileHover={{ y: -2 }}
-                      whileTap={{ scale: 0.99 }}
-                      className={`landing-card cursor-pointer text-left px-5 py-5 transition-all ${active ? "border-[var(--landing-accent)] bg-white shadow-[0_20px_50px_-30px_rgba(217,95,59,0.45)]" : "hover:-translate-y-0.5 hover:border-[color:var(--landing-accent)]/35"}`}
-                    >
-                      <div className="landing-body text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">{item.label}</div>
-                      <div className="landing-display mt-3 text-[1.9rem] leading-[0.98] tracking-[-0.04em] text-[var(--landing-text)]">{item.title}</div>
-                      <p className="landing-body mt-3 text-[0.95rem] leading-7 text-[var(--landing-text-muted)]">{item.description}</p>
-                    </motion.button>
-                  );
-                })}
-              </div>
-
-              <motion.div
-                key={activeUseCaseData.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.24, ease: "easeOut" }}
-                className="landing-card overflow-hidden bg-[var(--landing-dark)] p-6 text-white sm:p-8"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <div className="landing-body text-[0.78rem] font-semibold uppercase tracking-[0.2em] text-white/55">Live workflow preview</div>
-                    <h3 className="landing-display mt-3 text-[2.25rem] leading-[0.97] tracking-[-0.04em] text-white">{activeUseCaseData.title}</h3>
-                  </div>
-                  <div className="rounded-full border border-white/12 bg-white/[0.06] p-3">
-                    <ChatBubbleLeftRightIcon className="h-5 w-5 text-white/80" />
-                  </div>
-                </div>
-
-                <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                  {activeUseCaseData.metrics.map((metric) => (
-                      <div key={metric} className="rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-4">
-                      <div className="landing-body text-[0.82rem] font-medium text-white/82">{metric}</div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-6 space-y-3 rounded-[1.5rem] border border-white/10 bg-white/[0.045] p-5">
-                  {activeUseCaseData.lines.map((line) => (
-                    <div key={line} className="rounded-2xl border border-white/8 bg-white/[0.045] px-4 py-4 landing-body text-[0.94rem] leading-7 text-white/78">
-                      {line}
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        <section id="features" className="landing-section">
-          <div className="landing-container">
-            <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }}>
-              <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-[var(--landing-accent)]">Features</div>
-              <div className="mt-3 grid gap-4 lg:grid-cols-[0.88fr_1.12fr] lg:items-end">
-                <h2 className="landing-display max-w-[10ch] text-[2.8rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.7rem]">
-                  Everything needed to run voice agents well
-                </h2>
-                <p className="landing-body max-w-[35rem] text-[1rem] leading-8 text-[var(--landing-text-muted)] lg:justify-self-end">
-                  Not just a prompt box with a phone number attached. The product gives your team the workflow, visibility, and controls needed to go live with confidence.
-                </p>
-              </div>
-            </motion.div>
-
-            <div className="mt-10 grid gap-4 lg:grid-cols-3">
-              {features.map((feature, index) => {
-                const Icon = feature.icon;
-                return (
-                  <motion.div
-                    key={feature.title}
-                    variants={fadeUp}
-                    initial="hidden"
-                    whileInView="show"
-                    whileHover={{ y: -3 }}
-                    viewport={{ once: true, amount: 0.18 }}
-                    transition={{ duration: 0.42, delay: index * 0.05 }}
-                    className={`group landing-card p-6 sm:p-7 ${feature.tone === "wide" ? "lg:col-span-3 lg:grid lg:grid-cols-[0.38fr_0.62fr] lg:items-start lg:gap-6" : ""}`}
-                  >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--landing-background-soft)] text-[var(--landing-accent)]">
-                      <Icon className="h-6 w-6" />
-                    </div>
-                    <div className={feature.tone === "wide" ? "lg:flex lg:items-start lg:justify-between lg:gap-6" : ""}>
-                      <div>
-                        <h3 className="landing-display mt-5 text-[2rem] leading-[0.97] tracking-[-0.04em] text-[var(--landing-text)]">{feature.title}</h3>
-                        <p className="landing-body mt-3 max-w-[38rem] text-[0.97rem] leading-7 text-[var(--landing-text-muted)]">{feature.description}</p>
-                        <div className="mt-4 inline-flex translate-y-0 items-center rounded-full border border-[var(--landing-border)] bg-[var(--landing-background-soft)] px-3 py-1.5 landing-body text-[0.78rem] font-semibold text-[var(--landing-accent)] transition duration-200 group-hover:-translate-y-0.5 group-hover:border-[var(--landing-accent)]/40">
-                          {feature.proof}
-                        </div>
-                      </div>
-                      {feature.tone === "wide" ? (
-                        <div className="mt-6 rounded-[1.4rem] border border-[var(--landing-border)] bg-[var(--landing-card)] p-5 lg:mt-0 lg:min-w-[290px]">
-                          <div className="landing-body text-[0.76rem] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">Operational proof</div>
-                          <div className="landing-display mt-3 text-[2.4rem] leading-none tracking-[-0.05em] text-[var(--landing-text)]">
-                            {feature.title === "Sub-second responses" ? "<800ms" : "100%"}
-                          </div>
-                          <p className="landing-body mt-2 text-[0.88rem] leading-6 text-[var(--landing-text-muted)]">
-                            {feature.title === "Sub-second responses"
-                              ? "Average voice response target for natural inbound conversations."
-                              : "Transcript and action visibility for post-call review."}
-                          </p>
-                        </div>
-                      ) : null}
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        <section className="landing-section bg-[var(--landing-background-soft)]">
-          <div className="landing-container">
-            <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }}>
-              <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-[var(--landing-accent)]">Product proof</div>
-              <div className="mt-3 grid gap-4 lg:grid-cols-[0.84fr_1.16fr] lg:items-end">
-                <h2 className="landing-display max-w-[10ch] text-[2.8rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.7rem]">
-                  Proof that stays inside the product
-                </h2>
-                <p className="landing-body max-w-[35rem] text-[1rem] leading-8 text-[var(--landing-text-muted)] lg:justify-self-end">
-                  The strongest trust signal is the product itself. These are the live surfaces that make Yapsolutely feel operational instead of like a dressed-up prompt demo.
-                </p>
-              </div>
-            </motion.div>
-
-            <div className="mt-10 grid gap-4 lg:grid-cols-3">
-              {proofCards.map((item, index) => (
-                <motion.div
-                  key={item.title}
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="show"
-                  whileHover={{ y: -3 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.38, delay: index * 0.06 }}
-                  className="landing-card p-6 sm:p-7"
-                >
-                  <div className="landing-body text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">
-                    {item.eyebrow}
-                  </div>
-                  <div className="mt-5 flex items-end justify-between gap-4 border-b border-[var(--landing-border)] pb-5">
-                    <div>
-                      <div className="landing-display text-[2.6rem] leading-none tracking-[-0.05em] text-[var(--landing-text)]">{item.stat}</div>
-                      <div className="landing-body mt-2 text-[0.82rem] font-medium text-[var(--landing-text-muted)]">{item.statLabel}</div>
-                    </div>
-                    <div className="rounded-full border border-[var(--landing-border)] bg-[var(--landing-background)] px-3 py-1.5 landing-body text-[0.74rem] font-semibold uppercase tracking-[0.14em] text-[var(--landing-accent)]">
-                      Verified in product
-                    </div>
-                  </div>
-                  <div className="mt-5">
-                    <div className="landing-display text-[1.8rem] leading-[0.98] tracking-[-0.04em] text-[var(--landing-text)]">{item.title}</div>
-                    <p className="landing-body mt-3 text-[0.97rem] leading-7 text-[var(--landing-text-muted)]">{item.description}</p>
-                  </div>
-                  <div className="mt-6 space-y-3">
-                    {item.bullets.map((bullet) => (
-                      <div key={bullet} className="landing-body flex items-center gap-3 text-[0.9rem] text-[var(--landing-text)]">
-                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[var(--landing-background)] text-[var(--landing-accent)]">•</span>
-                        <span>{bullet}</span>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="px-4 py-4 sm:px-6 lg:px-8">
-          <div className="landing-container">
-            <div className="grid gap-4 lg:grid-cols-4">
-              {trustItems.map((item, index) => (
-                <motion.div
-                  key={item.title}
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.36, delay: index * 0.04 }}
-                  className="landing-card-soft p-5"
-                >
-                  <div className="landing-body text-[0.76rem] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">Trust layer</div>
-                  <div className="landing-display mt-3 text-[1.7rem] leading-[0.98] tracking-[-0.04em] text-[var(--landing-text)]">{item.title}</div>
-                  <p className="landing-body mt-3 text-[0.9rem] leading-7 text-[var(--landing-text-muted)]">{item.copy}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="landing-section">
-          <div className="landing-container">
-            <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }}>
-              <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-[var(--landing-accent)]">Security & readiness</div>
-              <div className="mt-3 grid gap-4 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
-                <h2 className="landing-display max-w-[11ch] text-[2.8rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.7rem]">
-                  Customer-facing calls need visible trust
-                </h2>
-                <p className="landing-body max-w-[36rem] text-[1rem] leading-8 text-[var(--landing-text-muted)] lg:justify-self-end">
-                  Security, deployment checks, audit trails, and compliance surfaces already exist in the product. The landing page should make that obvious.
-                </p>
-              </div>
-            </motion.div>
-
-            <div className="mt-10 grid gap-4 xl:grid-cols-[0.58fr_0.42fr]">
-              <div className="grid gap-4 sm:grid-cols-2">
-                {readinessCards.map((item, index) => (
-                  <motion.div
-                    key={item.title}
-                    variants={fadeUp}
-                    initial="hidden"
-                    whileInView="show"
-                    whileHover={{ y: -3 }}
-                    viewport={{ once: true, amount: 0.2 }}
-                    transition={{ duration: 0.38, delay: index * 0.05 }}
-                    className="landing-card p-6"
-                  >
-                    <div className="landing-body text-[0.76rem] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">{item.eyebrow}</div>
-                    <div className="landing-display mt-4 text-[1.9rem] leading-[0.98] tracking-[-0.04em] text-[var(--landing-text)]">{item.title}</div>
-                    <p className="landing-body mt-3 text-[0.94rem] leading-7 text-[var(--landing-text-muted)]">{item.description}</p>
-                    <div className="mt-5 inline-flex rounded-full border border-[var(--landing-border)] bg-[var(--landing-background-soft)] px-3 py-1.5 landing-body text-[0.76rem] font-semibold text-[var(--landing-accent)]">
-                      {item.detail}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-
-              <motion.div
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.42, delay: 0.08 }}
-                className="overflow-hidden rounded-[2rem] bg-[var(--landing-dark)] p-7 text-white sm:p-8"
-              >
-                <div className="landing-body text-[0.76rem] font-semibold uppercase tracking-[0.2em] text-white/55">Trust stack</div>
-                <h3 className="landing-display mt-4 max-w-[12ch] text-[2.5rem] leading-[0.95] tracking-[-0.05em] text-white">
-                  The operational layer is already there
-                </h3>
-                <p className="landing-body mt-4 max-w-[30rem] text-[0.96rem] leading-8 text-white/68">
-                  That matters when you are asking a team to route real customer calls through AI. The trust story should be visible before anyone clicks sign up.
-                </p>
-
-                <div className="mt-7 space-y-3">
-                  {[
-                    "Encrypted data in transit and at rest",
-                    "Runtime-to-web routes protected by shared secret",
-                    "Compliance, privacy, and terms pages live today",
-                    "Transcript exports and call review already in product",
-                  ].map((item) => (
-                    <div key={item} className="flex items-start gap-3 rounded-[1.2rem] border border-white/10 bg-white/[0.05] px-4 py-4">
-                      <span className="mt-1 inline-flex h-2.5 w-2.5 rounded-full bg-[#f1b19d]" />
-                      <span className="landing-body text-[0.92rem] leading-7 text-white/84">{item}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <Link href="/compliance" className="inline-flex items-center justify-center rounded-full bg-white px-5 py-3 landing-body text-[0.92rem] font-semibold text-[var(--landing-dark)] transition hover:bg-[var(--landing-background-soft)] hover:scale-[1.01]">
-                    Review compliance
-                  </Link>
-                  <Link href="/privacy" className="inline-flex items-center justify-center rounded-full border border-white/14 px-5 py-3 landing-body text-[0.92rem] font-medium text-white transition hover:bg-white/8 hover:scale-[1.01]">
-                    Read privacy policy
-                  </Link>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        <section className="landing-section" id="pricing">
-          <div className="landing-container">
-            <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }}>
-              <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-[var(--landing-accent)]">Pricing</div>
-              <div className="mt-3 grid gap-4 lg:grid-cols-[0.84fr_1.16fr] lg:items-end">
-                <h2 className="landing-display max-w-[10ch] text-[2.8rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.7rem]">
-                  Start simple. Scale when the workflow proves out.
-                </h2>
-                <p className="landing-body max-w-[35rem] text-[1rem] leading-8 text-[var(--landing-text-muted)] lg:justify-self-end">
-                  Make the first yes easy, then scale into more volume, more routing, and more operational depth when the time is right.
-                </p>
-              </div>
-            </motion.div>
-
-            <div className="mt-10 grid gap-4 lg:grid-cols-[0.96fr_1.08fr_0.96fr] lg:items-stretch">
-              {pricingTiers.map((tier, index) => (
-                <motion.div
-                  key={tier.name}
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="show"
-                  whileHover={{ y: -3 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.38, delay: index * 0.05 }}
-                  className={`${tier.highlighted ? "landing-card border-[var(--landing-accent)] shadow-[0_28px_70px_-34px_rgba(217,95,59,0.35)] lg:-translate-y-3" : "landing-card-soft lg:translate-y-4"} relative overflow-hidden p-6 sm:p-7`}
-                >
-                  {tier.highlighted ? (
-                    <div className="absolute inset-x-0 top-0 h-1 bg-[var(--landing-accent)]" />
-                  ) : null}
-
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">{tier.name}</div>
-                      <div className="landing-display mt-4 text-[3rem] leading-none tracking-[-0.05em] text-[var(--landing-text)]">{tier.price}</div>
-                    </div>
-                    <div className={`rounded-full px-3 py-1.5 landing-body text-[0.72rem] font-semibold uppercase tracking-[0.14em] ${tier.highlighted ? "bg-[var(--landing-accent)] text-white" : "border border-[var(--landing-border)] bg-white text-[var(--landing-text-muted)]"}`}>
-                      {tier.tag}
-                    </div>
-                  </div>
-
-                  <p className="landing-body mt-4 min-h-[4rem] text-[0.95rem] leading-7 text-[var(--landing-text-muted)]">{tier.blurb}</p>
-                  <Link
-                    href={tier.href}
-                    className={`${tier.highlighted ? "landing-button-primary" : "landing-button-secondary"} mt-6 inline-flex w-full items-center justify-center px-5 py-3 landing-body text-[0.95rem] font-semibold`}
-                  >
-                    {tier.cta}
-                  </Link>
-
-                  <div className="mt-6 rounded-[1.35rem] border border-[var(--landing-border)] bg-white/65 p-4">
-                    <div className="landing-body text-[0.74rem] font-semibold uppercase tracking-[0.16em] text-[var(--landing-accent)]">Included</div>
-                    <div className="mt-4 space-y-3">
-                    {tier.features.map((feature) => (
-                      <div key={feature} className="landing-body flex items-center gap-3 text-[0.92rem] text-[var(--landing-text)]">
-                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[var(--landing-background-soft)] text-[var(--landing-accent)]">•</span>
-                        <span>{feature}</span>
-                      </div>
-                    ))}
-                    </div>
-                  </div>
-
-                  <div className="mt-5 rounded-[1.2rem] bg-[var(--landing-background-soft)] px-4 py-4 landing-body text-[0.84rem] leading-6 text-[var(--landing-text-muted)]">
-                    {tier.note}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="px-4 pb-4 pt-2 sm:px-6 lg:px-8">
-          <div className="landing-container">
-            <div className="overflow-hidden rounded-[2rem] bg-[var(--landing-dark)] px-6 py-7 text-white sm:px-10 sm:py-9">
-              <div className="grid gap-8 sm:grid-cols-3">
-                {[
-                  ["<800ms", "voice response latency"],
-                  ["24/7", "agent availability"],
-                  ["100%", "transcript review"],
-                ].map(([value, label]) => (
-                  <div key={label}>
-                    <div className="landing-display text-[3rem] leading-none tracking-[-0.05em] text-white sm:text-[3.6rem]">{value}</div>
-                    <div className="landing-body mt-2 text-[0.94rem] font-medium text-white/65">{label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="landing-section">
-          <div className="landing-container">
-            <div className="grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
-              <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }}>
-                <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-[var(--landing-accent)]">FAQ</div>
-                <h2 className="landing-display mt-3 max-w-[10ch] text-[2.8rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.7rem]">
-                  Everything you need to know before going live
-                </h2>
-                <p className="landing-body mt-4 max-w-[32rem] text-[1rem] leading-8 text-[var(--landing-text-muted)]">
-                  The core questions are operational, not theoretical. The answers should feel the same way.
-                </p>
-              </motion.div>
-
-              <div className="overflow-hidden rounded-[2rem] border border-[var(--landing-border)] bg-[var(--landing-background-soft)] px-5 sm:px-7">
-                {faqItems.map((item, index) => {
-                  const open = openFaq === item.question;
-                  return (
-                    <motion.div
-                      key={item.question}
-                      variants={fadeUp}
-                      initial="hidden"
-                      whileInView="show"
-                      viewport={{ once: true, amount: 0.18 }}
-                      transition={{ duration: 0.36, delay: index * 0.04 }}
-                      className={`overflow-hidden ${index !== 0 ? "border-t border-[var(--landing-border)]" : ""}`}
-                    >
-                      <button
-                        type="button"
-                        onClick={() => setOpenFaq(open ? "" : item.question)}
-                        className="flex w-full cursor-pointer items-start justify-between gap-4 py-5 text-left sm:py-6"
-                      >
-                        <div className="flex min-w-0 items-start gap-4 sm:gap-5">
-                          <span className="landing-display inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--landing-border)] bg-white text-[1rem] leading-none tracking-[-0.04em] text-[var(--landing-text)]">
-                            {String(index + 1).padStart(2, "0")}
-                          </span>
-                          <div className="min-w-0">
-                            <span className="landing-body block text-[1rem] font-semibold text-[var(--landing-text)]">{item.question}</span>
-                            {!open ? (
-                              <span className="landing-body mt-2 block max-w-[42rem] text-[0.9rem] leading-6 text-[var(--landing-text-muted)]">
-                                {item.answer}
-                              </span>
-                            ) : null}
-                          </div>
-                        </div>
-                        <ChevronDownIcon className={`h-5 w-5 shrink-0 text-[var(--landing-text-muted)] transition-transform ${open ? "rotate-180" : ""}`} />
-                      </button>
-                      <motion.div
-                        initial={false}
-                        animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
-                        transition={{ duration: 0.2, ease: "easeOut" }}
-                        className="overflow-hidden"
-                      >
-                        <div className="pb-5 pl-14 sm:pb-6 sm:pl-[3.8rem]">
-                          <p className="landing-body max-w-[46rem] rounded-[1.25rem] bg-white px-4 py-4 text-[0.95rem] leading-7 text-[var(--landing-text-muted)] sm:px-5">
-                            {item.answer}
-                          </p>
-                        </div>
-                      </motion.div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="px-4 pb-16 pt-4 sm:px-6 lg:px-8">
+        <section id="how-it-works" className="landing-section bg-[var(--landing-background-soft)]">
           <div className="landing-container">
             <motion.div
               variants={fadeUp}
@@ -1111,57 +468,235 @@ export default function RevisedLandingPage() {
               whileInView="show"
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.45 }}
-              className="overflow-hidden rounded-[2rem] bg-[var(--landing-dark)] px-6 py-8 text-white sm:px-10 sm:py-12 lg:px-14 lg:py-14"
+              className="max-w-[700px]"
             >
-              <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-                <div>
-                  <div className="landing-body text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-white/55">Get started</div>
-                  <h2 className="landing-display mt-3 max-w-[10ch] text-[3rem] leading-[0.93] tracking-[-0.05em] text-white sm:text-[4rem]">
-                    Put every inbound call to work.
-                  </h2>
-                  <p className="landing-body mt-5 max-w-[33rem] text-[1rem] leading-8 text-white/66">
-                    Deploy an AI voice agent in minutes, keep the line active around the clock, and give your team full visibility after every conversation.
-                  </p>
-                  <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                    <Link href="/sign-up" className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 landing-body text-[0.96rem] font-semibold text-[var(--landing-dark)] transition hover:bg-[var(--landing-background-soft)] hover:scale-[1.01]">
-                      Get started free
-                      <ArrowLongRightIcon className="h-5 w-5" />
-                    </Link>
-                    <Link href="/docs" className="inline-flex items-center justify-center rounded-full border border-white/14 px-6 py-3.5 landing-body text-[0.96rem] font-medium text-white transition hover:bg-white/8 hover:scale-[1.01]">
-                      See the docs
-                    </Link>
-                  </div>
-                </div>
+              <div className="landing-pill inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--landing-text-muted)]">
+                How it works
+              </div>
+              <h2 className="landing-display mt-6 text-[3rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.6rem]">
+                Three steps to a working phone agent
+              </h2>
+              <p className="landing-body mt-4 text-[16px] leading-7 text-[var(--landing-text-muted)]">
+                No SDK integration, no custom infrastructure.
+              </p>
+            </motion.div>
 
-                <div className="grid gap-4 lg:grid-cols-[0.62fr_0.38fr] lg:items-stretch">
-                  <div className="rounded-[1.8rem] border border-white/10 bg-white/[0.06] p-6 sm:p-7">
-                    <MascotSignal className="h-28 w-28 text-[#f1b19d]" />
-                    <div className="landing-display mt-6 text-[2.1rem] leading-[0.97] tracking-[-0.04em] text-white">A brand cue that feels like Yapsolutely</div>
-                    <p className="landing-body mt-4 max-w-[28rem] text-[0.94rem] leading-7 text-white/64">
-                      Friendly enough to feel human, structured enough to feel operational. A simple signal mark gives the landing page more identity without turning it into a mascot parade.
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.15 }}
+              className="mt-10 grid gap-6 lg:grid-cols-3"
+            >
+              {howItWorks.map((step) => (
+                <motion.div key={step.number} variants={fadeUp} className="landing-card landing-card-hover p-6">
+                  <div className="landing-display text-[3rem] leading-none tracking-[-0.05em] text-[var(--landing-accent)]">{step.number}</div>
+                  <h3 className="landing-display mt-4 text-[1.75rem] leading-none tracking-[-0.03em] text-[var(--landing-text)]">
+                    {step.title}
+                  </h3>
+                  <p className="landing-body mt-3 text-[14px] leading-6 text-[var(--landing-text-muted)]">
+                    {step.description}
+                  </p>
+                  <div className="mt-6">{step.render()}</div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
+        <section className="landing-section" id="use-cases">
+          <div className="landing-container">
+            <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }}>
+              <h2 className="landing-display text-[3rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.6rem]">
+                Built for every inbound call scenario
+              </h2>
+            </motion.div>
+
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.1 }}
+              className="mt-8"
+            >
+              <div className="flex flex-wrap gap-x-6 gap-y-3 border-b border-[var(--landing-border)] pb-4">
+                {useCases.map((useCase) => {
+                  const active = activeUseCase === useCase.id;
+                  return (
+                    <button
+                      key={useCase.id}
+                      type="button"
+                      onClick={() => setActiveUseCase(useCase.id)}
+                      className={`landing-body relative cursor-pointer pb-2 text-[15px] font-medium transition-colors ${active ? "text-[var(--landing-text)]" : "text-[var(--landing-text-muted)] hover:text-[var(--landing-text)]"}`}
+                    >
+                      {useCase.tab}
+                      <span className={`absolute inset-x-0 -bottom-[17px] h-0.5 bg-[var(--landing-accent)] transition-opacity ${active ? "opacity-100" : "opacity-0"}`} />
+                    </button>
+                  );
+                })}
+              </div>
+
+              <motion.div
+                key={activeUseCaseData.id}
+                variants={fadeUp}
+                initial="hidden"
+                animate="show"
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="landing-card mt-8 p-6 sm:p-8"
+              >
+                <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+                  <div>
+                    <div className="landing-body text-[12px] font-semibold uppercase tracking-[0.18em] text-[var(--landing-accent)]">
+                      {activeUseCaseData.tab}
+                    </div>
+                    <h3 className="landing-display mt-4 text-[2.4rem] leading-[0.96] tracking-[-0.04em] text-[var(--landing-text)]">
+                      {activeUseCaseData.title}
+                    </h3>
+                    <p className="landing-body mt-4 max-w-[28rem] text-[15px] leading-7 text-[var(--landing-text-muted)]">
+                      {activeUseCaseData.description}
                     </p>
                   </div>
+                  <div>{activeUseCaseData.preview}</div>
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
 
-                  <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
-                    {[
-                      { icon: MicrophoneIcon, title: "Voice-first", copy: "Built for real phone conversations, not chatbot demos." },
-                      { icon: ShieldCheckIcon, title: "Reviewable", copy: "Transcripts and actions stay visible after every call." },
-                      { icon: ChartBarSquareIcon, title: "Operational", copy: "One workspace for agents, calls, numbers, and outcomes." },
-                    ].map((item) => {
-                      const Icon = item.icon;
-                      return (
-                        <div key={item.title} className="rounded-[1.6rem] border border-white/10 bg-white/[0.06] p-5">
-                          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-white/85">
-                            <Icon className="h-5 w-5" />
-                          </div>
-                          <div className="landing-display mt-5 text-[1.7rem] leading-[0.98] tracking-[-0.04em] text-white">{item.title}</div>
-                          <p className="landing-body mt-3 text-[0.92rem] leading-7 text-white/64">{item.copy}</p>
+        <section id="features" className="landing-section bg-[var(--landing-background-soft)]">
+          <div className="landing-container">
+            <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }} className="max-w-[760px]">
+              <h2 className="landing-display text-[3rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.6rem]">
+                Everything you need to deploy voice agents at scale
+              </h2>
+            </motion.div>
+
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.1 }}
+              className="mt-10 grid gap-4 lg:grid-cols-4"
+            >
+              {featureCards.map((feature) => {
+                const Icon = feature.icon;
+                const isWide = feature.type === "wide";
+                return (
+                  <motion.div
+                    key={feature.title}
+                    variants={fadeUp}
+                    className={`landing-card landing-card-hover p-6 ${isWide ? "lg:col-span-2" : "lg:col-span-1"}`}
+                  >
+                    <div className={`flex ${isWide ? "items-start justify-between gap-6" : "flex-col gap-5"}`}>
+                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--landing-background-soft)] text-[var(--landing-accent)]">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      {isWide ? (
+                        <div className="rounded-xl border border-[var(--landing-border)] bg-[var(--landing-background-soft)] px-4 py-3 text-right">
+                          <div className="landing-display text-[2.4rem] leading-none tracking-[-0.05em] text-[var(--landing-text)]">{feature.metric}</div>
+                          <div className="landing-body mt-1 text-[12px] text-[var(--landing-text-muted)]">{feature.caption}</div>
                         </div>
-                      );
-                    })}
-                  </div>
+                      ) : null}
+                    </div>
+                    <h3 className="landing-display mt-5 text-[18px] tracking-[-0.02em] text-[var(--landing-text)]">
+                      {feature.title}
+                    </h3>
+                    <p className="landing-body mt-3 text-[14px] leading-6 text-[var(--landing-text-muted)]">
+                      {feature.description}
+                    </p>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          </div>
+        </section>
+
+        <section className="bg-[var(--landing-dark)] py-10 text-[#F7F4EF] sm:py-12">
+          <div className="landing-container">
+            <div className="grid gap-8 text-center sm:grid-cols-3 sm:gap-0">
+              {[
+                ["<800ms", "Average voice response time"],
+                ["24/7", "Your agent never sleeps"],
+                ["100%", "Every word transcribed"],
+              ].map(([value, label], index, array) => (
+                <div key={label} className={`px-6 ${index < array.length - 1 ? "sm:border-r sm:border-white/10" : ""}`}>
+                  <div className="landing-display text-[3.5rem] leading-none tracking-[-0.05em] text-[#F7F4EF] sm:text-[56px]">{value}</div>
+                  <div className="landing-body mt-3 text-[14px] text-white/65">{label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="landing-section">
+          <div className="landing-container max-w-[900px]">
+            <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }}>
+              <h2 className="landing-display text-[3rem] leading-[0.95] tracking-[-0.05em] text-[var(--landing-text)] sm:text-[3.6rem]">
+                Frequently asked questions
+              </h2>
+            </motion.div>
+
+            <motion.div variants={staggerContainer} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.1 }} className="mt-8">
+              {faqItems.map((item) => {
+                const open = openFaq === item.question;
+                return (
+                  <motion.div key={item.question} variants={fadeUp} className="border-b border-[var(--landing-border)] py-5">
+                    <button
+                      type="button"
+                      onClick={() => setOpenFaq(open ? "" : item.question)}
+                      className="flex w-full cursor-pointer items-center justify-between gap-4 text-left"
+                    >
+                      <span className="landing-body text-[18px] font-medium text-[var(--landing-text)]">{item.question}</span>
+                      <span className="text-[var(--landing-text-muted)]">
+                        {open ? <MinusIcon className="h-5 w-5" /> : <PlusIcon className="h-5 w-5" />}
+                      </span>
+                    </button>
+                    <motion.div
+                      initial={false}
+                      animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
+                      transition={{ duration: 0.24, ease: "easeOut" }}
+                      className="overflow-hidden"
+                    >
+                      <p className="landing-body max-w-[720px] pt-4 text-[14px] leading-7 text-[var(--landing-text-muted)]">
+                        {item.answer}
+                      </p>
+                    </motion.div>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          </div>
+        </section>
+
+        <section className="bg-[var(--landing-dark)] py-14 text-[#F7F4EF] sm:py-20">
+          <div className="landing-container">
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.45 }}
+              className="grid gap-10 lg:grid-cols-[1fr_360px] lg:items-center"
+            >
+              <div>
+                <h2 className="landing-display max-w-[11ch] text-[3rem] leading-[0.94] tracking-[-0.05em] text-[#F7F4EF] sm:text-[48px]">
+                  Stop losing calls. Start closing them.
+                </h2>
+                <p className="landing-body mt-5 max-w-[34rem] text-[16px] leading-7 text-white/65">
+                  Every missed call is a missed opportunity. Deploy an AI voice agent in minutes.
+                </p>
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                  <Link href="/sign-up" className="landing-button-primary inline-flex items-center justify-center gap-2 px-6 py-3.5 landing-body text-[15px] font-semibold">
+                    Get started free
+                    <ArrowLongRightIcon className="h-5 w-5" />
+                  </Link>
+                  <Link href="/docs" className="inline-flex cursor-pointer items-center justify-center rounded-full border border-white/20 px-6 py-3.5 landing-body text-[15px] font-medium text-[#F7F4EF] transition hover:scale-[1.03] hover:border-white/40 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_16px_32px_-20px_rgba(217,95,59,0.35)]">
+                    See the docs
+                  </Link>
                 </div>
               </div>
+
+              <MascotIllustration />
             </motion.div>
           </div>
         </section>
@@ -1169,64 +704,21 @@ export default function RevisedLandingPage() {
 
       <footer className="border-t border-[var(--landing-border)] bg-[var(--landing-background-soft)] py-12">
         <div className="landing-container">
-          <div className="grid gap-10 md:grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr]">
+          <div className="grid gap-10 md:grid-cols-[1.3fr_0.8fr_0.8fr_0.8fr]">
             <div>
-              <Link href="/" className="flex items-center gap-3 cursor-pointer">
-                <Image src="/favicon.svg" alt="Yapsolutely" width={34} height={34} className="h-8 w-8 rounded-xl" />
-                <span className="landing-display text-[1.35rem] leading-none tracking-[-0.04em] text-[var(--landing-text)]">Yapsolutely</span>
-              </Link>
-              <p className="landing-body mt-4 max-w-[18rem] text-[0.94rem] leading-7 text-[var(--landing-text-muted)]">
-                AI voice agents that answer your phone, handle inbound calls, and give your team a cleaner operational layer.
+              <div className="landing-display text-[2rem] leading-none tracking-[-0.04em] text-[var(--landing-text)]">Yapsolutely</div>
+              <p className="landing-body mt-4 max-w-[18rem] text-[14px] leading-6 text-[var(--landing-text-muted)]">
+                AI voice agents that answer your phone.
               </p>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {[
-                  ["Docs", "/docs"],
-                  ["Support", "/support"],
-                  ["Pricing", "#pricing"],
-                ].map(([label, href]) => (
-                  <Link
-                    key={label}
-                    href={href}
-                    className="landing-body rounded-full border border-[var(--landing-border)] bg-white px-3 py-1.5 text-[0.82rem] font-medium text-[var(--landing-text)] transition hover:border-[var(--landing-accent)] hover:text-[var(--landing-accent)]"
-                  >
-                    {label}
-                  </Link>
-                ))}
-              </div>
             </div>
 
-            <FooterColumn
-              title="Product"
-              links={[
-                ["Features", "#features"],
-                ["Pricing", "/pricing"],
-                ["Changelog", "/changelog"],
-                ["Docs", "/docs"],
-                ["API", "/docs/api"],
-              ]}
-            />
-
-            <FooterColumn
-              title="Company"
-              links={[
-                ["About", "/about"],
-                ["Support", "/support"],
-                ["Compliance", "/compliance"],
-                ["Contact", "mailto:hello@yapsolutely.com"],
-              ]}
-            />
-
-            <FooterColumn
-              title="Legal"
-              links={[
-                ["Terms", "/terms"],
-                ["Privacy", "/privacy"],
-              ]}
-            />
+            {footerColumns.map((column) => (
+              <FooterColumn key={column.title} title={column.title} links={column.links} />
+            ))}
           </div>
 
-          <div className="mt-10 border-t border-[var(--landing-border)] pt-6 landing-body text-[0.85rem] text-[var(--landing-text-muted)]">
-            © {new Date().getFullYear()} Yapsolutely, Inc.
+          <div className="landing-body mt-10 border-t border-[var(--landing-border)] pt-6 text-[14px] text-[var(--landing-text-muted)]">
+            © 2026 Yapsolutely, Inc.
           </div>
         </div>
       </footer>
@@ -1234,43 +726,223 @@ export default function RevisedLandingPage() {
   );
 }
 
-function MascotSignal({ className = "" }: { className?: string }) {
+function TranscriptBubble({ speaker, copy, caller = false, compact = false }: { speaker: string; copy: string; caller?: boolean; compact?: boolean }) {
   return (
-    <svg viewBox="0 0 120 120" fill="none" className={className} aria-hidden="true">
-      <circle cx="60" cy="60" r="56" fill="currentColor" fillOpacity="0.12" />
-      <circle cx="60" cy="48" r="18" fill="currentColor" fillOpacity="0.9" />
-      <path
-        d="M34 89C38 73 48 65 60 65C72 65 82 73 86 89"
-        stroke="currentColor"
-        strokeWidth="10"
-        strokeLinecap="round"
-      />
-      <path d="M88 31C98 35 104 43 106 54" stroke="currentColor" strokeWidth="5" strokeLinecap="round" opacity="0.75" />
-      <path d="M95 23C108 28 116 39 118 53" stroke="currentColor" strokeWidth="4" strokeLinecap="round" opacity="0.5" />
-      <path d="M32 31C22 35 16 43 14 54" stroke="currentColor" strokeWidth="5" strokeLinecap="round" opacity="0.75" />
-      <path d="M25 23C12 28 4 39 2 53" stroke="currentColor" strokeWidth="4" strokeLinecap="round" opacity="0.5" />
-    </svg>
+    <div className={`rounded-xl border px-4 py-3 ${compact ? "border-[#E8E4DE] bg-[var(--landing-background-soft)]" : caller ? "border-[#E8E4DE] bg-white" : "border-[rgba(217,95,59,0.2)] bg-[#FDF5F2]"}`}>
+      <div className="landing-body text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--landing-text-muted)]">
+        {speaker}
+      </div>
+      <div className="landing-body mt-2 text-[14px] leading-6 text-[var(--landing-text)]">{copy}</div>
+    </div>
+  );
+}
+
+function PromptEditorSnippet() {
+  return (
+    <div className="rounded-xl border border-[var(--landing-border)] bg-[var(--landing-background-soft)] p-4">
+      <div className="flex items-center gap-2">
+        <span className="h-2 w-2 rounded-full bg-[var(--landing-accent)]" />
+        <span className="landing-body text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--landing-text-muted)]">Prompt editor</span>
+      </div>
+      <div className="mt-4 space-y-2 rounded-xl bg-white p-4">
+        {[
+          ["voice", "Warm and direct"],
+          ["greeting", "Thanks for calling Yapsolutely"],
+          ["transfer", "Escalate pricing objections"],
+        ].map(([label, value]) => (
+          <div key={label} className="flex items-center justify-between gap-3 border-b border-[var(--landing-border)] pb-2 last:border-b-0 last:pb-0">
+            <span className="landing-body text-[12px] font-medium text-[var(--landing-text-muted)]">{label}</span>
+            <span className="landing-body text-[12px] font-medium text-[var(--landing-text)]">{value}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PhoneAssignmentSnippet() {
+  return (
+    <div className="rounded-xl border border-[var(--landing-border)] bg-[var(--landing-background-soft)] p-4">
+      <div className="landing-body text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--landing-text-muted)]">Number inventory</div>
+      <div className="mt-4 space-y-3">
+        {[
+          ["+1 (415) 555-0142", "Inbound Sales"],
+          ["+1 (212) 555-0198", "Support Line"],
+          ["+1 (310) 555-0067", "After-hours"],
+        ].map(([number, agent]) => (
+          <div key={number} className="flex items-center justify-between rounded-xl border border-[var(--landing-border)] bg-white px-4 py-3">
+            <div>
+              <div className="landing-body text-[13px] font-medium text-[var(--landing-text)]">{number}</div>
+              <div className="landing-body mt-1 text-[11px] text-[var(--landing-text-muted)]">{agent}</div>
+            </div>
+            <CheckCircleIcon className="h-5 w-5 text-[var(--landing-accent)]" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TranscriptReviewSnippet() {
+  return (
+    <div className="rounded-xl border border-[var(--landing-border)] bg-[var(--landing-background-soft)] p-4">
+      <div className="landing-body text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--landing-text-muted)]">Call review</div>
+      <div className="mt-4 space-y-3 rounded-xl bg-white p-4">
+        <TranscriptBubble speaker="Agent" copy="I can help with that. Do you want the pricing for one location or multiple?" />
+        <TranscriptBubble speaker="Caller" copy="Multiple. We have five now and two more opening soon." caller />
+      </div>
+    </div>
+  );
+}
+
+function LeadScorePreview() {
+  return (
+    <div className="rounded-xl border border-[var(--landing-border)] bg-[var(--landing-background-soft)] p-4">
+      <div className="flex items-center justify-between rounded-xl border border-[var(--landing-border)] bg-white px-4 py-4">
+        <div>
+          <div className="landing-body text-[12px] font-semibold uppercase tracking-[0.16em] text-[var(--landing-text-muted)]">Inbound sales</div>
+          <div className="landing-body mt-2 text-[14px] font-medium text-[var(--landing-text)]">Karim Oumran • Enterprise demo</div>
+        </div>
+        <span className="rounded-full bg-[#F6EEE8] px-3 py-1 text-[12px] font-semibold text-[var(--landing-accent)]">Lead score 91</span>
+      </div>
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        {[["Budget", "Confirmed"], ["Urgency", "This month"], ["Fit", "Multi-site"]].map(([label, value]) => (
+          <div key={label} className="rounded-xl border border-[var(--landing-border)] bg-white px-4 py-3">
+            <div className="landing-body text-[11px] text-[var(--landing-text-muted)]">{label}</div>
+            <div className="landing-body mt-1 text-[13px] font-medium text-[var(--landing-text)]">{value}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function BookingCalendarPreview() {
+  return (
+    <div className="rounded-xl border border-[var(--landing-border)] bg-[var(--landing-background-soft)] p-4">
+      <div className="flex items-center gap-3">
+        <CalendarDaysIcon className="h-5 w-5 text-[var(--landing-accent)]" />
+        <div className="landing-body text-[12px] font-semibold uppercase tracking-[0.16em] text-[var(--landing-text-muted)]">Appointment booking</div>
+      </div>
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        {[
+          ["Wed", "2:00 PM"],
+          ["Thu", "10:30 AM"],
+          ["Fri", "1:15 PM"],
+        ].map(([day, slot]) => (
+          <div key={slot} className="rounded-xl border border-[var(--landing-border)] bg-white px-4 py-4 text-center">
+            <div className="landing-body text-[11px] text-[var(--landing-text-muted)]">{day}</div>
+            <div className="landing-display mt-2 text-[1.5rem] leading-none tracking-[-0.03em] text-[var(--landing-text)]">{slot}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SupportTranscriptPreview() {
+  return (
+    <div className="rounded-xl border border-[var(--landing-border)] bg-[var(--landing-background-soft)] p-4">
+      <div className="space-y-3 rounded-xl bg-white p-4">
+        <TranscriptBubble speaker="Caller" copy="I need help resetting access for my account." caller />
+        <TranscriptBubble speaker="Agent" copy="I can help with that. Let me verify your email address first." />
+      </div>
+    </div>
+  );
+}
+
+function QualificationPreview() {
+  return (
+    <div className="rounded-xl border border-[var(--landing-border)] bg-[var(--landing-background-soft)] p-4">
+      <div className="rounded-xl border border-[var(--landing-border)] bg-white p-4">
+        <div className="landing-body text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--landing-text-muted)]">Qualification scorecard</div>
+        <div className="mt-4 space-y-3">
+          {[["Locations", "5 active"], ["Timeline", "30 days"], ["Intent", "High"]].map(([label, value]) => (
+            <div key={label} className="flex items-center justify-between border-b border-[var(--landing-border)] pb-2 last:border-b-0 last:pb-0">
+              <span className="landing-body text-[12px] text-[var(--landing-text-muted)]">{label}</span>
+              <span className="landing-body text-[13px] font-medium text-[var(--landing-text)]">{value}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AfterHoursPreview() {
+  return (
+    <div className="rounded-xl border border-[var(--landing-border)] bg-[var(--landing-background-soft)] p-4">
+      <div className="space-y-3">
+        {[
+          ["10:42 PM", "Callback requested", "Priority"],
+          ["11:18 PM", "Quote needed", "Morning"],
+          ["12:06 AM", "Urgent support", "Escalate"],
+        ].map(([time, note, badge]) => (
+          <div key={time} className="flex items-center justify-between rounded-xl border border-[var(--landing-border)] bg-white px-4 py-3">
+            <div>
+              <div className="landing-body text-[12px] text-[var(--landing-text-muted)]">{time}</div>
+              <div className="landing-body mt-1 text-[13px] font-medium text-[var(--landing-text)]">{note}</div>
+            </div>
+            <span className="rounded-full bg-[#F6EEE8] px-3 py-1 text-[11px] font-semibold text-[var(--landing-accent)]">{badge}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MascotIllustration() {
+  return (
+    <div className="mx-auto w-full max-w-[320px] rounded-xl border border-white/10 bg-white/[0.03] p-6">
+      <svg viewBox="0 0 320 280" className="h-auto w-full" role="img" aria-label="Friendly Yapsolutely mascot">
+        <rect x="24" y="188" width="272" height="44" rx="18" fill="rgba(255,255,255,0.04)" />
+        <ellipse cx="160" cy="224" rx="86" ry="16" fill="rgba(217,95,59,0.18)" />
+        <rect x="129" y="118" width="62" height="82" rx="26" fill="#D95F3B" />
+        <circle cx="160" cy="92" r="34" fill="#F7F4EF" />
+        <circle cx="148" cy="89" r="4" fill="#141414" />
+        <circle cx="172" cy="89" r="4" fill="#141414" />
+        <path d="M146 104C149 109 154 112 160 112C166 112 171 109 174 104" stroke="#141414" strokeWidth="4" strokeLinecap="round" />
+        <rect x="114" y="138" width="14" height="54" rx="7" fill="#F7F4EF" />
+        <rect x="192" y="138" width="14" height="54" rx="7" fill="#F7F4EF" />
+        <rect x="141" y="198" width="14" height="36" rx="7" fill="#F7F4EF" />
+        <rect x="165" y="198" width="14" height="36" rx="7" fill="#F7F4EF" />
+        {[0, 1, 2, 3].map((bar, index) => (
+          <rect
+            key={bar}
+            x={220 + index * 14}
+            y={132 - index * 10}
+            width="8"
+            height={56 + index * 12}
+            rx="4"
+            fill={index % 2 === 0 ? "#D95F3B" : "#F7F4EF"}
+            opacity={0.95 - index * 0.12}
+          />
+        ))}
+        <path d="M207 154C214 148 223 145 231 145" stroke="#D95F3B" strokeWidth="4" strokeLinecap="round" opacity="0.7" />
+        <path d="M205 171C214 165 226 161 239 161" stroke="#F7F4EF" strokeWidth="4" strokeLinecap="round" opacity="0.7" />
+      </svg>
+    </div>
   );
 }
 
 function FooterColumn({ title, links }: { title: string; links: [string, string][] }) {
   return (
     <div>
-      <div className="landing-body text-[0.78rem] font-semibold uppercase tracking-[0.2em] text-[var(--landing-text-muted)]">{title}</div>
+      <div className="landing-body text-[12px] font-semibold uppercase tracking-[0.16em] text-[var(--landing-text-muted)]">{title}</div>
       <div className="mt-4 flex flex-col gap-3">
         {links.map(([label, href]) => {
-          const sharedClassName = "landing-body text-[0.95rem] font-medium text-[var(--landing-text)] transition hover:text-[var(--landing-accent)]";
+          const className = "landing-body cursor-pointer text-[14px] font-medium text-[var(--landing-text)] transition-colors hover:text-[var(--landing-accent)]";
 
           if (href.startsWith("mailto:")) {
             return (
-              <a key={label} href={href} className={sharedClassName}>
+              <a key={label} href={href} className={className}>
                 {label}
               </a>
             );
           }
 
           return (
-            <Link key={label} href={href} className={sharedClassName}>
+            <Link key={label} href={href} className={className}>
               {label}
             </Link>
           );
