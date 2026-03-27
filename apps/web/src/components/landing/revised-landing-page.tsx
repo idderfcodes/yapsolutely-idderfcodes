@@ -62,48 +62,6 @@ const heroStats = [
   },
 ];
 
-const positioningColumns = [
-  {
-    eyebrow: "Old Way",
-    title: "IVR",
-    description:
-      "Rigid phone trees keep callers trapped in button menus, disconnected handoffs, and low-context follow-up.",
-    points: [
-      "Press-based routing instead of natural conversation",
-      "Little visibility into what happened after the call",
-      "Disconnected telecom, notes, and follow-up tools",
-    ],
-    footer: "Feels robotic the moment call volume rises.",
-    highlighted: false,
-  },
-  {
-    eyebrow: "Almost There",
-    title: "AI Assistants (IVA)",
-    description:
-      "Smarter conversations help, but the operator workflow is often still fragmented across vendors and tabs.",
-    points: [
-      "Better voice UX, weaker deployment and review loop",
-      "Prompts, routing, and outcomes live in separate places",
-      "Teams still stitch together proof by hand",
-    ],
-    footer: "Smarter calls, but not a full operating system.",
-    highlighted: false,
-  },
-  {
-    eyebrow: "Why Yapsolutely",
-    title: "Yapsolutely",
-    description:
-      "Purpose-built for inbound AI phone operations — from build, to number assignment, to transcript-backed review.",
-    points: [
-      "Natural voice agents with real number routing built in",
-      "Transcript, actions, and outcomes captured in one workspace",
-      "Designed for teams that need proof, not just novelty",
-    ],
-    footer: "Build → Deploy → Monitor in one operator loop.",
-    highlighted: true,
-  },
-];
-
 const howItWorks = [
   {
     number: "01",
@@ -263,30 +221,6 @@ const useCases = [
     ],
     footer: "The queue is already organized by the time your team logs in.",
     preview: <AfterHoursCoveragePreview />,
-  },
-];
-
-const proofCards = [
-  {
-    eyebrow: "After-hours follow-up",
-    title: "What happened overnight is already organized by morning.",
-    description:
-      "The point is not a nice-sounding bot. The point is waking up to captured demand, routed urgency, and clean follow-up context instead of voicemail roulette.",
-    preview: <ProofQueuePreview />,
-  },
-  {
-    eyebrow: "Booking confirmation",
-    title: "Availability, booking, and confirmation stay in one visible flow.",
-    description:
-      "Operators can see what slot was offered, what the caller chose, and what follow-up was sent — all without digging through disconnected systems.",
-    preview: <ProofBookingPreview />,
-  },
-  {
-    eyebrow: "Call review",
-    title: "Every important moment stays reviewable after the call ends.",
-    description:
-      "Transcripts, actions, and outcomes give teams something concrete to audit, improve, and trust before they scale usage.",
-    preview: <ProofAuditPreview />,
   },
 ];
 
@@ -613,131 +547,6 @@ export default function RevisedLandingPage() {
             <BrandCarousel />
           </section>
 
-          <section className="landing-section pt-2 sm:pt-4">
-            <div className="landing-container">
-              <motion.div
-                variants={sectionReveal}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.12 }}
-                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                className="max-w-[46rem]"
-              >
-                <div className="landing-pill inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--color-accent-primary)]">
-                  Why Yapsolutely
-                </div>
-                <h2 className="landing-display landing-display-1 mt-6 text-[var(--color-text-primary)]">
-                  Built different. On purpose.
-                </h2>
-                <p className="landing-body landing-body-1-regular mt-4 max-w-[38rem] text-[var(--color-text-muted)]">
-                  Most phone systems optimize for routing. Some AI tools optimize for conversation. Yapsolutely is built for the full inbound operator loop — the call, the context, and the proof after it ends.
-                </p>
-              </motion.div>
-
-              <motion.div
-                variants={staggerContainer}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.12 }}
-                className="mt-10 grid gap-5 lg:grid-cols-3"
-              >
-                {positioningColumns.map((column) => (
-                  <motion.div key={column.title} variants={cardReveal}>
-                    <div
-                      className={cn(
-                        "h-full overflow-hidden rounded-[30px] border p-6 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)] sm:p-7",
-                        column.highlighted
-                          ? "border-[var(--color-dark-divider)] bg-[linear-gradient(155deg,var(--color-dark-section),var(--color-hero-right))] shadow-[0_32px_72px_-44px_rgba(20,20,20,0.48)]"
-                          : "border-[var(--color-border)] bg-[var(--color-bg)]",
-                      )}
-                    >
-                      <div className="flex items-start justify-between gap-4">
-                        <span
-                          className={cn(
-                            "landing-body rounded-full px-3 py-1 text-[11px] font-medium uppercase tracking-[0.14em]",
-                            column.highlighted
-                              ? "border border-[var(--color-dark-divider)] bg-[var(--color-badge-dark)] text-[var(--color-text-muted-on-dark)]"
-                              : "bg-[var(--color-bg-secondary)] text-[var(--color-text-muted)]",
-                          )}
-                        >
-                          {column.eyebrow}
-                        </span>
-
-                        {column.highlighted ? (
-                          <span className="landing-body rounded-full border border-[var(--color-overlay-accent-border)] bg-[var(--color-overlay-accent-medium)] px-3 py-1 text-[11px] font-medium text-[var(--color-accent-secondary)]">
-                            Recommended
-                          </span>
-                        ) : null}
-                      </div>
-
-                      <h3
-                        className={cn(
-                          "landing-display landing-display-2 mt-6",
-                          column.highlighted ? "text-[var(--color-text-on-dark)]" : "text-[var(--color-text-primary)]",
-                        )}
-                      >
-                        {column.title}
-                      </h3>
-
-                      <p
-                        className={cn(
-                          "landing-body landing-body-2-regular mt-4 min-h-[5.5rem]",
-                          column.highlighted ? "text-[var(--color-text-muted-on-dark)]" : "text-[var(--color-text-muted)]",
-                        )}
-                      >
-                        {column.description}
-                      </p>
-
-                      <div className="mt-6 space-y-3">
-                        {column.points.map((point) => (
-                          <div
-                            key={point}
-                            className={cn(
-                              "rounded-[18px] border px-4 py-3",
-                              column.highlighted
-                                ? "border-[var(--color-dark-divider)] bg-[var(--color-overlay-soft)]"
-                                : "border-[var(--color-border)] bg-[var(--color-bg-secondary)]",
-                            )}
-                          >
-                            <div className="flex items-start gap-3">
-                              <CheckCircleIcon
-                                className={cn(
-                                  "mt-0.5 h-5 w-5 shrink-0",
-                                  column.highlighted
-                                    ? "text-[var(--color-accent-secondary)]"
-                                    : "text-[var(--color-accent-primary)]",
-                                )}
-                              />
-                              <p
-                                className={cn(
-                                  "landing-body text-[13px] leading-6",
-                                  column.highlighted ? "text-[var(--color-text-on-dark)]" : "text-[var(--color-text-primary)]",
-                                )}
-                              >
-                                {point}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div
-                        className={cn(
-                          "landing-body mt-6 border-t pt-4 text-[12px] font-medium uppercase tracking-[0.16em]",
-                          column.highlighted
-                            ? "border-[var(--color-dark-divider)] text-[var(--color-accent-secondary)]"
-                            : "border-[var(--color-border)] text-[var(--color-text-muted)]",
-                        )}
-                      >
-                        {column.footer}
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </section>
-
           <section className="landing-section bg-[var(--color-bg)] pt-4">
             <div className="landing-container">
               <motion.div
@@ -1004,57 +813,6 @@ export default function RevisedLandingPage() {
 
           <LandingStatsBar />
 
-          <section className="landing-section pt-6 sm:pt-10">
-            <div className="landing-container">
-              <motion.div
-                variants={sectionReveal}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                className="max-w-[46rem]"
-              >
-                <div className="landing-pill inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--color-accent-primary)]">
-                  Proof
-                </div>
-                <h2 className="landing-display landing-display-1 mt-6 text-[var(--color-text-primary)]">
-                  Don&apos;t just take our word for it.
-                </h2>
-                <p className="landing-body landing-body-1-regular mt-4 max-w-[38rem] text-[var(--color-text-muted)]">
-                  Trust comes from what teams can verify: follow-up queues, booking outcomes, transcripts, and logged runtime actions that stay visible after every call.
-                </p>
-              </motion.div>
-
-              <motion.div
-                variants={staggerContainer}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.12 }}
-                className="mt-10 grid gap-5 lg:grid-cols-3"
-              >
-                {proofCards.map((card) => (
-                  <motion.div key={card.title} variants={cardReveal}>
-                    <div className="landing-card landing-card-hover h-full rounded-[30px] border border-[var(--color-border)] bg-[var(--color-bg)] p-6 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)] sm:p-7">
-                      <div className="landing-body text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--color-accent-primary)]">
-                        {card.eyebrow}
-                      </div>
-                      <h3 className="landing-display landing-display-3 mt-4 max-w-[13ch] text-[var(--color-text-primary)]">
-                        {card.title}
-                      </h3>
-                      <p className="landing-body landing-body-2-regular mt-4 text-[var(--color-text-muted)]">
-                        {card.description}
-                      </p>
-
-                      <div className="mt-6 rounded-[24px] border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-4">
-                        {card.preview}
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </section>
-
           <section className="landing-section bg-[var(--color-bg-secondary)] pt-4">
             <div className="landing-container">
               <motion.div
@@ -1284,13 +1042,15 @@ export default function RevisedLandingPage() {
             </div>
           </section>
 
-          <ScrollFAQ
-            data={faqItems.slice(0, 6).map((item) => ({
-              id: item.id,
-              question: item.question,
-              answer: item.answer,
-            }))}
-          />
+          <section className="bg-[var(--color-bg)] py-0">
+            <ScrollFAQ
+              data={faqItems.slice(0, 6).map((item) => ({
+                id: item.id,
+                question: item.question,
+                answer: item.answer,
+              }))}
+            />
+          </section>
 
           <section className="px-4 pb-10 sm:px-6 sm:pb-14">
             <div className="landing-container">
@@ -1823,67 +1583,6 @@ function AnalyticsMini() {
             <div key={index} className="flex-1 rounded-full bg-[var(--color-overlay-accent-soft)]" style={{ height: `${height}px` }} />
           ))}
         </div>
-      </div>
-    </div>
-  );
-}
-
-function ProofQueuePreview() {
-  return (
-    <div className="space-y-3">
-      {[
-        ["11:42 PM", "Installation request", "8 AM follow-up"],
-        ["12:08 AM", "Billing callback", "Route to finance"],
-        ["1:16 AM", "Urgent support", "Priority"],
-      ].map(([time, label, badge]) => (
-        <div key={`${time}-${label}`} className="flex items-center justify-between gap-3 rounded-[16px] border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3">
-          <div>
-            <div className="landing-body text-[11px] uppercase tracking-[0.14em] text-[var(--color-text-muted)]">{time}</div>
-            <div className="landing-body mt-1 text-[13px] text-[var(--color-text-primary)]">{label}</div>
-          </div>
-          <span className="landing-body rounded-full bg-[var(--color-bg-secondary)] px-3 py-1 text-[11px] font-medium text-[var(--color-accent-primary)]">
-            {badge}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function ProofBookingPreview() {
-  return (
-    <div className="space-y-3">
-      <div className="rounded-[16px] border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3">
-        <div className="landing-body text-[11px] uppercase tracking-[0.14em] text-[var(--color-text-muted)]">Selected slot</div>
-        <div className="landing-body mt-2 text-[13px] font-medium text-[var(--color-text-primary)]">Wednesday · 1:30 PM</div>
-      </div>
-      <div className="grid grid-cols-2 gap-3">
-        {[
-          ["Caller", "Sarah M."],
-          ["Status", "Confirmed"],
-        ].map(([label, value]) => (
-          <div key={label} className="rounded-[16px] border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3">
-            <div className="landing-body text-[11px] uppercase tracking-[0.14em] text-[var(--color-text-muted)]">{label}</div>
-            <div className="landing-body mt-2 text-[13px] text-[var(--color-text-primary)]">{value}</div>
-          </div>
-        ))}
-      </div>
-      <div className="rounded-[16px] border border-[rgba(238,48,58,0.18)] bg-[var(--color-bg-card-highlight)] px-4 py-3">
-        <div className="landing-body text-[11px] uppercase tracking-[0.14em] text-[var(--color-accent-primary)]">Next action</div>
-        <div className="landing-body mt-2 text-[13px] text-[var(--color-text-primary)]">Confirmation SMS queued and logged.</div>
-      </div>
-    </div>
-  );
-}
-
-function ProofAuditPreview() {
-  return (
-    <div className="space-y-3">
-      <TranscriptBubble speaker="Agent" copy="I can help with pricing, support, or booking. Which one should we handle first?" compact />
-      <TranscriptBubble speaker="Caller" copy="Pricing first — and we need a rollout before next month." caller />
-      <div className="rounded-[16px] border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3">
-        <div className="landing-body text-[11px] uppercase tracking-[0.14em] text-[var(--color-text-muted)]">Logged outcome</div>
-        <div className="landing-body mt-2 text-[13px] text-[var(--color-text-primary)]">Lead score saved · follow-up SMS sent · demo handoff queued</div>
       </div>
     </div>
   );
