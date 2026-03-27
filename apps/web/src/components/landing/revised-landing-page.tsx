@@ -36,6 +36,7 @@ import ScrollFAQ from "./ScrollFAQ";
 import AnimatedGradientText from "./AnimatedGradientText";
 import { ImageAutoSlider } from "@/components/ui/image-auto-slider";
 import { DottedSurface } from "@/components/ui/dotted-surface";
+import { BGPattern } from "@/components/ui/bg-pattern";
 import { cn } from "@/lib/utils";
 
 const marqueeLogos = [
@@ -749,7 +750,8 @@ export default function RevisedLandingPage() {
             </div>
           </section>
 
-          <section id="features" className="landing-section pt-4">
+          <section id="features" className="landing-section relative overflow-hidden pt-4">
+            <BGPattern variant="diagonal-stripes" size={48} fill="#ffffff" mask="fade-edges" className="opacity-[0.03]" />
             <div className="landing-container">
               <motion.div
                 variants={sectionReveal}
@@ -828,7 +830,8 @@ export default function RevisedLandingPage() {
 
           <LandingStatsBar />
 
-          <section className="landing-section bg-[var(--color-bg-secondary)] pt-4">
+          <section className="landing-section relative overflow-hidden bg-[var(--color-bg-secondary)] pt-4">
+            <BGPattern variant="diagonal-stripes" size={48} fill="#1a1a1a" mask="fade-y" className="opacity-[0.03]" />
             <div className="landing-container">
               <motion.div
                 variants={sectionReveal}
