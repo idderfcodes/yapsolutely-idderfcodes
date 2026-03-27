@@ -552,7 +552,7 @@ export default function RevisedLandingPage() {
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--color-accent-pop)] opacity-35" />
                     <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[var(--color-accent-pop)]" />
                   </span>
-                  <span className="landing-body ds-badge text-[var(--color-text-muted-on-dark)]">
+                  <span className="landing-body text-[13px] font-medium text-[var(--color-text-muted-on-dark)]">
                     Handling calls now
                   </span>
                 </motion.div>
@@ -591,7 +591,7 @@ export default function RevisedLandingPage() {
                 <motion.p
                   variants={cardReveal}
                   transition={{ duration: 0.42, delay: 0.24, ease: [0.22, 1, 0.36, 1] }}
-                  className="landing-body ds-caption mt-4 text-[var(--color-text-muted)]"
+                  className="landing-body mt-4 text-[12px] text-[var(--color-text-muted)]"
                 >
                   No credit card required. Free plan available.
                 </motion.p>

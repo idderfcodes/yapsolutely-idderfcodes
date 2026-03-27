@@ -1,6 +1,5 @@
 "use client";
 
-import Lenis from "lenis";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -30,26 +29,8 @@ export function ZoomParallax({
     offset: ["start start", "end end"],
   });
 
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.08, 0.16], [1, 0.45, 0]);
-  const titleY = useTransform(scrollYProgress, [0, 0.16], [0, -40]);
-
-  // Lenis smooth scroll — lerp 0.14 keeps page feel without lagging the scrub
-  useEffect(() => {
-    const lenis = new Lenis({ lerp: 0.14, smoothWheel: true });
-    let frameId = 0;
-
-    const raf = (time: number) => {
-      lenis.raf(time);
-      frameId = window.requestAnimationFrame(raf);
-    };
-
-    frameId = window.requestAnimationFrame(raf);
-
-    return () => {
-      window.cancelAnimationFrame(frameId);
-      lenis.destroy();
-    };
-  }, []);
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.05, 0.10], [1, 0.45, 0]);
+  const titleY = useTransform(scrollYProgress, [0, 0.10], [0, -40]);
 
   // Batch-preload all frames immediately so the browser queues them in order.
   // No artificial stagger — browser limits to ~6 concurrent, earliest frames
@@ -96,7 +77,7 @@ export function ZoomParallax({
   const currentFrame = framePaths[currentFrameIndex] ?? framePaths[0];
 
   return (
-    <div ref={containerRef} className={cn("relative h-[420vh] bg-[var(--color-dark-section)]", className)}>
+    <div ref={containerRef} className={cn("relative h-[600vh] bg-[var(--color-dark-section)]", className)}>
       <div className="sticky top-0 h-[100svh] overflow-hidden bg-[var(--color-dark-section)]">
         <img
           src={currentFrame}
