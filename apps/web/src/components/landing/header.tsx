@@ -2,56 +2,33 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
 import { MenuToggleIcon } from "@/components/ui/menu-toggle-icon";
 import { useScroll } from "@/components/ui/use-scroll";
 import { cn } from "@/lib/utils";
 
-const productLinks = [
-  {
-    label: "Voice Agents",
-    href: "/features/voice-agents",
-    description: "Configure voice, prompt, and call behavior",
-  },
-  {
-    label: "Phone Numbers",
-    href: "/features/phone-numbers",
-    description: "Assign real numbers to live agents",
-  },
-  {
-    label: "Transcripts",
-    href: "/features/transcripts",
-    description: "Review every conversation after the call",
-  },
-  {
-    label: "Call Analytics",
-    href: "/features/call-analytics",
-    description: "Track outcomes and performance clearly",
-  },
-];
-
 const links = [
+  {
+    label: "Features",
+    href: "#features",
+  },
   {
     label: "Pricing",
     href: "/pricing",
   },
   {
-    label: "Docs",
-    href: "/docs",
-  },
-  {
     label: "About",
     href: "/about",
+  },
+  {
+    label: "Docs",
+    href: "/docs",
   },
 ];
 
 export function Header() {
   const [open, setOpen] = React.useState(false);
-  const [productOpen, setProductOpen] = React.useState(false);
-  const [mobileProductOpen, setMobileProductOpen] = React.useState(false);
   const scrolled = useScroll(10);
-  const productMenuRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     if (open) {
@@ -65,123 +42,68 @@ export function Header() {
     };
   }, [open]);
 
-  React.useEffect(() => {
-    function handlePointerDown(event: MouseEvent) {
-      if (!productMenuRef.current?.contains(event.target as Node)) {
-        setProductOpen(false);
-      }
-    }
-
-    if (productOpen) {
-      document.addEventListener("mousedown", handlePointerDown);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handlePointerDown);
-    };
-  }, [productOpen]);
-
   return (
-    <header className="sticky top-0 z-50 w-full">
+    <header
+      className={cn(
+        "sticky top-0 z-50 w-full px-4 pt-4",
+      )}
+    >
       <nav
         className={cn(
-          "w-full transition-all duration-300 ease-out",
+          "mx-auto flex h-14 w-full max-w-[1200px] items-center justify-between rounded-full border px-4 transition-all duration-300 ease-out md:h-[60px] md:px-5",
           {
-            "border-b border-[var(--color-border)] bg-[var(--color-bg)]/90 backdrop-blur-md": scrolled || open,
-            "bg-transparent": !scrolled && !open,
+            "border-white/12 bg-[#111111]/92 shadow-[0_18px_48px_-30px_rgba(0,0,0,0.7)] backdrop-blur-xl":
+              scrolled || open,
+            "border-white/8 bg-[#111111]/72 backdrop-blur-md": !scrolled && !open,
           },
         )}
       >
-        <div className="mx-auto flex h-16 w-full max-w-[1200px] items-center justify-between px-4 sm:px-6">
+        <Link
+          href="/"
+          className="landing-display text-[2.1rem] leading-none tracking-[-0.05em] text-white transition-opacity hover:opacity-80"
+          aria-label="Yapsolutely home"
+        >
+          Yapsolutely
+        </Link>
+
+        <div className="hidden items-center gap-2 md:flex">
+          {links.map((link) => (
+            <Link
+              key={link.label}
+              className="landing-body inline-flex h-11 items-center rounded-full px-4 text-[clamp(13px,1vw,14px)] font-medium text-white/72 transition-colors duration-200 hover:text-white"
+              href={link.href}
+            >
+              {link.label}
+            </Link>
+          ))}
           <Link
-            href="/"
-            className="landing-display text-[1.85rem] font-medium leading-none tracking-[-0.03em] text-[var(--color-text-primary)] transition-opacity hover:opacity-85"
-            aria-label="Yapsolutely home"
+            href="/sign-in"
+            className="landing-body inline-flex h-11 items-center rounded-full border border-white/14 px-4 text-[clamp(13px,1vw,14px)] font-medium text-white transition-colors duration-200 hover:bg-white/6"
           >
-            Yapsolutely
+            Sign In
           </Link>
-
-          <div className="hidden items-center gap-1 lg:flex">
-            <div ref={productMenuRef} className="relative">
-              <button
-                type="button"
-                onClick={() => setProductOpen((current) => !current)}
-                className="landing-body inline-flex h-10 cursor-pointer items-center gap-1 rounded-full px-4 text-[14px] font-medium text-[var(--color-text-muted)] transition-colors duration-200 hover:text-[var(--color-text-primary)]"
-                aria-expanded={productOpen}
-              >
-                Product
-                <ChevronDownIcon
-                  className={cn(
-                    "h-4 w-4 transition-transform duration-200",
-                    productOpen && "rotate-180",
-                  )}
-                />
-              </button>
-
-              {productOpen ? (
-                <div className="absolute left-1/2 top-full z-20 mt-3 w-[360px] -translate-x-1/2 overflow-hidden rounded-[24px] border border-[var(--color-border)] bg-[var(--color-bg)] p-2 shadow-[0_22px_50px_-28px_rgba(20,20,20,0.22)]">
-                  <div className="grid gap-1">
-                    {productLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        onClick={() => setProductOpen(false)}
-                        className="rounded-[18px] px-4 py-3 transition-colors duration-200 hover:bg-[var(--color-bg-secondary)]"
-                      >
-                        <div className="landing-body text-[14px] font-medium text-[var(--color-text-primary)]">
-                          {link.label}
-                        </div>
-                        <div className="landing-body mt-1 text-[12px] text-[var(--color-text-muted)]">
-                          {link.description}
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-            </div>
-
-            {links.map((link) => (
-              <Link
-                key={link.label}
-                className="landing-body inline-flex h-10 cursor-pointer items-center rounded-full px-4 text-[14px] font-medium text-[var(--color-text-muted)] transition-colors duration-200 hover:text-[var(--color-text-primary)]"
-                href={link.href}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-
-          <div className="hidden items-center gap-2 lg:flex">
-            <Link
-              href="/sign-in"
-              className="landing-body inline-flex h-10 cursor-pointer items-center justify-center rounded-full border border-transparent px-4 text-[14px] font-medium text-[var(--color-text-primary)] transition-all duration-200 hover:scale-[1.03] hover:bg-[var(--color-bg-secondary)] hover:text-[var(--color-accent-primary)]"
-            >
-              Sign in
-            </Link>
-            <Link
-              href="/sign-up"
-              className="landing-body inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-[var(--color-accent-primary)] px-5 text-[14px] font-semibold text-[var(--color-text-on-dark)] transition-all duration-200 hover:scale-[1.03] hover:bg-[var(--color-accent-hover)] hover:shadow-[0_16px_34px_-16px_rgba(238,48,58,0.3)] active:bg-[var(--color-accent-deep)]"
-            >
-              Start building free
-            </Link>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setOpen(!open)}
-            className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-primary)] lg:hidden"
-            aria-label="Toggle menu"
-            aria-expanded={open}
+          <Link
+            href="/sign-up"
+            className="landing-body inline-flex h-11 items-center rounded-full bg-white px-4 text-[clamp(13px,1vw,15px)] font-medium text-[#111111] transition-transform duration-200 hover:scale-[1.02]"
           >
-            <MenuToggleIcon open={open} className="size-5" duration={300} />
-          </button>
+            Get Started
+          </Link>
         </div>
+
+        <button
+          type="button"
+          onClick={() => setOpen(!open)}
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/14 text-white md:hidden"
+          aria-label="Toggle menu"
+          aria-expanded={open}
+        >
+          <MenuToggleIcon open={open} className="size-5" duration={300} />
+        </button>
       </nav>
 
       <div
         className={cn(
-          "fixed inset-x-4 top-[4.85rem] z-50 overflow-hidden rounded-[28px] border border-[var(--color-border)] bg-[var(--color-bg)] shadow-[0_24px_56px_-28px_rgba(20,20,20,0.16)] backdrop-blur-xl lg:hidden",
+          "fixed inset-x-4 top-[4.75rem] z-50 overflow-hidden rounded-[28px] border border-white/10 bg-[#111111]/96 shadow-[0_24px_56px_-28px_rgba(0,0,0,0.76)] backdrop-blur-xl md:hidden",
           open ? "block" : "hidden",
         )}
       >
@@ -193,47 +115,10 @@ export function Header() {
           )}
         >
           <div className="grid gap-y-2">
-            <button
-              type="button"
-              onClick={() => setMobileProductOpen((current) => !current)}
-              className="landing-body flex cursor-pointer items-center justify-between rounded-2xl px-4 py-3 text-left text-[14px] font-medium text-[var(--color-text-muted)] transition-colors duration-200 hover:bg-[var(--color-bg-secondary)] hover:text-[var(--color-text-primary)]"
-            >
-              <span>Product</span>
-              <ChevronDownIcon
-                className={cn(
-                  "h-4 w-4 transition-transform duration-200",
-                  mobileProductOpen && "rotate-180",
-                )}
-              />
-            </button>
-
-            {mobileProductOpen ? (
-              <div className="grid gap-1 px-2 pb-2">
-                {productLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    className="rounded-[18px] px-4 py-3 transition-colors duration-200 hover:bg-[var(--color-bg-secondary)]"
-                    href={link.href}
-                    onClick={() => {
-                      setOpen(false);
-                      setMobileProductOpen(false);
-                    }}
-                  >
-                    <div className="landing-body text-[14px] font-medium text-[var(--color-text-primary)]">
-                      {link.label}
-                    </div>
-                    <div className="landing-body mt-1 text-[12px] text-[var(--color-text-muted)]">
-                      {link.description}
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            ) : null}
-
             {links.map((link) => (
               <Link
                 key={link.label}
-                className="landing-body flex cursor-pointer justify-start rounded-2xl px-4 py-3 text-[14px] font-medium text-[var(--color-text-muted)] transition-colors duration-200 hover:bg-[var(--color-bg-secondary)] hover:text-[var(--color-text-primary)]"
+                className="landing-body flex justify-start rounded-2xl px-4 py-3 text-[15px] font-medium text-white/78 transition-colors duration-200 hover:bg-white/6 hover:text-white"
                 href={link.href}
                 onClick={() => setOpen(false)}
               >
@@ -245,16 +130,16 @@ export function Header() {
             <Link
               href="/sign-in"
               onClick={() => setOpen(false)}
-              className="landing-body flex w-full cursor-pointer items-center justify-center rounded-full border border-[var(--color-border)] px-4 py-3 text-[14px] font-medium text-[var(--color-text-primary)] transition-all duration-200 hover:scale-[1.03] hover:border-[var(--color-text-primary)] hover:shadow-[0_14px_32px_-20px_rgba(20,20,20,0.12)]"
+              className="landing-body flex w-full items-center justify-center rounded-full border border-white/14 px-4 py-3 text-[15px] font-medium text-white transition-colors duration-200 hover:bg-white/6"
             >
-              Sign in
+              Sign In
             </Link>
             <Link
               href="/sign-up"
               onClick={() => setOpen(false)}
-              className="landing-body flex w-full cursor-pointer items-center justify-center rounded-full bg-[var(--color-accent-primary)] px-4 py-3 text-[14px] font-semibold text-[var(--color-text-on-dark)] transition-all duration-200 hover:scale-[1.03] hover:bg-[var(--color-accent-hover)] hover:shadow-[0_16px_34px_-16px_rgba(238,48,58,0.3)] active:bg-[var(--color-accent-deep)]"
+              className="landing-body flex w-full items-center justify-center rounded-full bg-white px-4 py-3 text-[15px] font-medium text-[#111111] transition-transform duration-200 hover:scale-[1.01]"
             >
-              Start building free
+              Get Started
             </Link>
           </div>
         </div>

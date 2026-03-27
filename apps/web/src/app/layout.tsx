@@ -59,8 +59,13 @@ const satoshi = localFont({
 const landingBody = localFont({
   src: [
     {
-      path: "./fonts/landing/inter-variable.ttf",
-      weight: "100 900",
+      path: "./fonts/landing/inter-400.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./fonts/landing/inter-500.ttf",
+      weight: "500",
       style: "normal",
     },
   ],

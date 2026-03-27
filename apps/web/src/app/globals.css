@@ -72,35 +72,20 @@
   --font-display: var(--font-general-sans), "General Sans", system-ui, sans-serif;
   --font-body-family: var(--font-satoshi), "Satoshi", system-ui, sans-serif;
 
-  --color-bg: #ffffff;
-  --color-bg-secondary: #f7f4ef;
-  --color-bg-card: #f0ede8;
-  --color-bg-card-highlight: #fff5f5;
-  --color-border: #e8e4de;
-  --color-text-primary: #141414;
-  --color-text-muted: #6b6860;
-  --color-text-on-dark: #f7f4ef;
-  --color-text-muted-on-dark: #9a9590;
-  --color-accent-deep: #b10032;
-  --color-accent-primary: #ee303a;
-  --color-accent-hover: #ff631e;
-  --color-accent-secondary: #ff7b30;
-  --color-accent-pop: #ffd101;
-  --color-hero-left: #141414;
-  --color-hero-right: #1a1a1a;
-  --color-dark-section: #141414;
-  --color-dark-divider: #2a2a2a;
-  --color-badge-dark: #1c1c1c;
-  --color-overlay-soft: color-mix(in srgb, var(--color-text-on-dark) 5%, transparent);
-  --color-overlay-medium: color-mix(in srgb, var(--color-text-on-dark) 8%, transparent);
-  --color-overlay-strong: color-mix(in srgb, var(--color-text-on-dark) 12%, transparent);
-  --color-overlay-dark: color-mix(in srgb, var(--color-dark-section) 18%, transparent);
-  --color-overlay-accent-soft: color-mix(in srgb, var(--color-accent-primary) 8%, transparent);
-  --color-overlay-accent-medium: color-mix(in srgb, var(--color-accent-primary) 14%, transparent);
-  --color-overlay-accent-border: color-mix(in srgb, var(--color-accent-primary) 24%, transparent);
-  --color-overlay-secondary-medium: color-mix(in srgb, var(--color-accent-secondary) 14%, transparent);
-  --color-overlay-pop-soft: color-mix(in srgb, var(--color-accent-pop) 18%, transparent);
-  --gradient-accent: linear-gradient(135deg, #ff7b30, #ee303a, #b10032);
+  --landing-background: #faf8f5;
+  --landing-background-soft: #ede8de;
+  --landing-text: #111110;
+  --landing-text-muted: #6a6760;
+  --landing-accent: #d95f3b;
+  --landing-border: #dfd9d0;
+  --landing-card: #e8e2d8;
+  --landing-dark: #0d0d0d;
+  --landing-hero-left: #0f0f0f;
+  --landing-hero-right: #161616;
+  --landing-text-on-dark: #f5f1eb;
+  --landing-text-muted-on-dark: #a8a09a;
+  --landing-stats-bg: #0d0d0d;
+  --landing-cta-bg: #0d0d0d;
 }
 
 .dark {
@@ -304,10 +289,6 @@
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
   }
-  @keyframes yap-gradient-pan {
-    0% { background-position: 0% center; }
-    100% { background-position: 200% center; }
-  }
 
   --animate-stagger-up: stagger-up 0.4s ease-out both;
   --animate-slide-in-right: slide-in-right 0.3s ease-out both;
@@ -386,12 +367,71 @@
   .prose-yap li { @apply font-body text-[0.82rem] text-text-body leading-[1.65]; }
   .prose-yap strong { @apply font-medium text-text-strong; }
 
-  .landing-shell {
-    background: var(--color-bg);
-    color: var(--color-text-primary);
+  /* ── Design System Type Scale (clamp-based, Bagoss + Inter) ─── */
+  .ds-h1 {
+    font-family: var(--font-landing-display), "Bagoss Condensed", system-ui, sans-serif;
+    font-size: clamp(40px, 5.5vw, 80px);
+    font-weight: 600;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+  }
+  .ds-h2 {
+    font-family: var(--font-landing-display), "Bagoss Condensed", system-ui, sans-serif;
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  .ds-h3 {
+    font-family: var(--font-landing-display), "Bagoss Condensed", system-ui, sans-serif;
+    font-size: clamp(20px, 2.5vw, 24px);
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .ds-stat {
+    font-family: var(--font-landing-display), "Bagoss Condensed", system-ui, sans-serif;
+    font-size: clamp(40px, 5vw, 64px);
+    font-weight: 600;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+  }
+  .ds-body {
     font-family: var(--font-landing-body), "Inter", system-ui, sans-serif;
-    font-feature-settings: "cv05", "cv11", "ss03";
-    font-optical-sizing: auto;
+    font-size: clamp(15px, 1.2vw, 18px);
+    font-weight: 400;
+    line-height: 1.6;
+  }
+  .ds-body-sm {
+    font-family: var(--font-landing-body), "Inter", system-ui, sans-serif;
+    font-size: clamp(13px, 0.95vw, 15px);
+    font-weight: 400;
+    line-height: 1.6;
+  }
+  .ds-btn {
+    font-family: var(--font-landing-body), "Inter", system-ui, sans-serif;
+    font-size: clamp(13px, 1vw, 15px);
+    font-weight: 500;
+    line-height: 1.0;
+  }
+  .ds-caption {
+    font-family: var(--font-landing-body), "Inter", system-ui, sans-serif;
+    font-size: clamp(11px, 0.9vw, 13px);
+    font-weight: 400;
+    line-height: 1.5;
+  }
+  .ds-badge {
+    font-family: var(--font-landing-body), "Inter", system-ui, sans-serif;
+    font-size: clamp(11px, 0.9vw, 13px);
+    font-weight: 500;
+    line-height: 1.0;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .landing-shell {
+    background: var(--landing-background);
+    color: var(--landing-text);
+    font-family: var(--font-landing-body), "Inter", system-ui, sans-serif;
   }
 
   .landing-shell h1,
@@ -401,198 +441,26 @@
   .landing-shell h5,
   .landing-shell h6 {
     font-family: var(--font-landing-display), "Bagoss Condensed", system-ui, sans-serif;
-    font-weight: 600;
-    line-height: 1.0;
-    letter-spacing: -0.015em;
+    font-weight: 500;
   }
 
   .landing-muted {
-    color: var(--color-text-muted);
+    color: var(--landing-text-muted);
   }
 
   .landing-display {
     font-family: var(--font-landing-display), "Bagoss Condensed", system-ui, sans-serif;
     font-weight: 600;
-    line-height: 1.0;
-    letter-spacing: -0.015em;
-    text-wrap: balance;
   }
 
   .landing-body {
     font-family: var(--font-landing-body), "Inter", system-ui, sans-serif;
     font-weight: 400;
-    letter-spacing: -0.005em;
-    text-wrap: pretty;
   }
 
   .landing-stat {
     font-family: var(--font-landing-display), "Bagoss Condensed", system-ui, sans-serif;
-    font-weight: 700;
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    line-height: 1.0;
-    letter-spacing: -0.02em;
-  }
-  /* Compact stat variants for preview cards where space is constrained */
-  .landing-stat-lg {
-    font-family: var(--font-landing-display), "Bagoss Condensed", system-ui, sans-serif;
-    font-weight: 700;
-    font-size: clamp(1.5rem, 2.5vw, 2.25rem);
-    line-height: 1.0;
-    letter-spacing: -0.02em;
-  }
-  .landing-stat-sm {
-    font-family: var(--font-landing-display), "Bagoss Condensed", system-ui, sans-serif;
-    font-weight: 700;
-    font-size: clamp(1.0rem, 1.5vw, 1.5rem);
-    line-height: 1.0;
-    letter-spacing: -0.02em;
-  }
-
-  .landing-product-editorial,
-  .landing-display-1,
-  .landing-display-2,
-  .landing-display-3 {
-    font-family: var(--font-landing-display), "Bagoss Condensed", system-ui, sans-serif;
     font-weight: 600;
-    line-height: 1.0;
-    letter-spacing: -0.02em;
-    text-wrap: balance;
-  }
-
-  .landing-product-editorial {
-    font-size: clamp(2.5rem, 6vw, 5.5rem);
-  }
-
-  .landing-display-1 {
-    font-size: clamp(2.5rem, 5.5vw, 5rem);
-    line-height: 1.0;
-    letter-spacing: -0.02em;
-  }
-
-  .landing-display-2 {
-    font-size: clamp(2rem, 4vw, 3.5rem);
-    line-height: 1.1;
-    letter-spacing: -0.01em;
-  }
-
-  .landing-display-3 {
-    font-size: clamp(1.5rem, 2vw, 2rem);
-    line-height: 1.2;
-    letter-spacing: 0;
-  }
-
-  .landing-display-4,
-  .landing-heading-1,
-  .landing-heading-2,
-  .landing-heading-3,
-  .landing-heading-4,
-  .landing-heading-5,
-  .landing-body-1-semibold,
-  .landing-body-1-regular,
-  .landing-body-2-semibold,
-  .landing-body-2-regular,
-  .landing-body-3-semibold,
-  .landing-body-3-regular,
-  .landing-link-1,
-  .landing-link-2,
-  .landing-link-3 {
-    font-family: var(--font-landing-body), "Inter", system-ui, sans-serif;
-    text-wrap: pretty;
-  }
-
-  .landing-display-4 {
-    font-size: clamp(2.625rem, 4.9vw, 4.875rem);
-    line-height: clamp(2.875rem, 5.4vw, 5.125rem);
-    letter-spacing: -0.03em;
-    font-weight: 600;
-  }
-
-  .landing-heading-1 {
-    font-size: clamp(2.3125rem, 3.8vw, 3.3125rem);
-    line-height: clamp(2.5625rem, 4.1vw, 3.5625rem);
-    letter-spacing: -0.03em;
-    font-weight: 600;
-  }
-
-  .landing-heading-2 {
-    font-size: clamp(1.75rem, 3.1vw, 2.75rem);
-    line-height: clamp(2rem, 3.2vw, 2.5rem);
-    letter-spacing: -0.024em;
-    font-weight: 600;
-  }
-
-  .landing-heading-3 {
-    font-size: clamp(1.5rem, 2.2vw, 1.875rem);
-    line-height: 2.125rem;
-    letter-spacing: -0.02em;
-    font-weight: 600;
-  }
-
-  .landing-heading-4 {
-    font-size: clamp(1.25rem, 1.95vw, 1.625rem);
-    line-height: clamp(1.75rem, 2.1vw, 2rem);
-    letter-spacing: -0.012em;
-    font-weight: 600;
-  }
-
-  .landing-heading-5 {
-    font-size: clamp(1.125rem, 1.15vw, 1.25rem);
-    line-height: clamp(1.625rem, 1.35vw, 1.75rem);
-    letter-spacing: 0;
-    font-weight: 600;
-  }
-
-  .landing-body-1-semibold,
-  .landing-link-1 {
-    font-size: clamp(1.125rem, 1.15vw, 1.25rem);
-    line-height: clamp(1.625rem, 1.35vw, 1.75rem);
-    letter-spacing: -0.005em;
-    font-weight: 600;
-  }
-
-  .landing-body-1-regular {
-    font-size: clamp(0.9375rem, 1.2vw, 1.125rem);
-    line-height: 1.6;
-    letter-spacing: 0.0025em;
-    font-weight: 400;
-  }
-
-  .landing-body-2-semibold,
-  .landing-link-2 {
-    font-size: clamp(1rem, 1.05vw, 1.125rem);
-    line-height: clamp(1.5rem, 1.3vw, 1.625rem);
-    letter-spacing: 0.0025em;
-    font-weight: 600;
-  }
-
-  .landing-body-2-regular {
-    font-size: clamp(0.875rem, 0.95vw, 1rem);
-    line-height: clamp(1.375rem, 1.15vw, 1.5rem);
-    letter-spacing: 0.011em;
-    font-weight: 400;
-  }
-
-  .landing-body-3-semibold,
-  .landing-link-3 {
-    font-size: clamp(0.875rem, 0.95vw, 1rem);
-    line-height: clamp(1.375rem, 1.15vw, 1.5rem);
-    letter-spacing: 0.011em;
-    font-weight: 600;
-  }
-
-  .landing-body-3-regular {
-    font-size: clamp(0.875rem, 0.95vw, 1rem);
-    line-height: clamp(1.375rem, 1.15vw, 1.5rem);
-    letter-spacing: 0.011em;
-    font-weight: 400;
-  }
-
-  .landing-link-1,
-  .landing-link-2,
-  .landing-link-3 {
-    text-decoration-line: underline;
-    text-decoration-thickness: 0.075em;
-    text-underline-offset: 0.18em;
   }
 
   .landing-container {
@@ -607,104 +475,86 @@
   }
 
   .landing-card {
-    border: 1px solid var(--color-border);
-    background: var(--color-bg-card);
+    border: 1px solid var(--landing-border);
+    background: var(--landing-card);
     border-radius: 12px;
-    box-shadow: 0 14px 34px -26px rgba(20, 20, 20, 0.16);
-    transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    box-shadow: 0 16px 44px -24px rgba(20, 20, 20, 0.2), 0 2px 8px -4px rgba(20, 20, 20, 0.07);
+    transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
   }
 
   .landing-card-soft {
-    border: 1px solid var(--color-border);
-    background: var(--color-bg-secondary);
+    border: 1px solid var(--landing-border);
+    background: var(--landing-card);
     border-radius: 12px;
     transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
   }
 
   .landing-card-hover:hover {
-    transform: translateY(-2px);
-    border-color: var(--color-accent-primary);
-    box-shadow: 0 18px 38px -26px rgba(238, 48, 58, 0.3);
-  }
-
-  .landing-card-hover-hot:hover {
-    transform: translateY(-2px);
-    border-color: var(--color-accent-hover);
-    box-shadow: 0 18px 38px -26px rgba(255, 99, 30, 0.3);
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--landing-accent) 44%, var(--landing-border));
+    box-shadow: 0 24px 52px -22px color-mix(in srgb, var(--landing-accent) 24%, rgba(20, 20, 20, 0.18)), 0 4px 12px -6px rgba(20, 20, 20, 0.08);
   }
 
   .landing-button-primary {
-    background: var(--color-accent-primary);
-    color: var(--color-text-on-dark);
+    background: var(--landing-accent);
+    color: white;
     border-radius: 9999px;
     transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
-    box-shadow: 0 12px 30px -16px rgba(238, 48, 58, 0.3);
+    box-shadow: 0 12px 30px -16px color-mix(in srgb, var(--landing-accent) 38%, rgba(20, 20, 20, 0.2));
     cursor: pointer;
   }
 
   .landing-button-primary:hover {
-    background: var(--color-accent-hover);
-    box-shadow: 0 16px 34px -16px rgba(255, 99, 30, 0.3);
+    background: color-mix(in srgb, var(--landing-accent) 88%, #000 12%);
+    box-shadow: 0 16px 34px -16px color-mix(in srgb, var(--landing-accent) 44%, transparent);
     transform: scale(1.03);
-  }
-
-  .landing-button-primary:active {
-    background: var(--color-accent-deep);
   }
 
   .landing-button-secondary {
     background: transparent;
-    color: var(--color-text-primary);
-    border: 1px solid var(--color-border);
+    color: var(--landing-text);
+    border: 1px solid var(--landing-border);
     border-radius: 9999px;
     transition: transform 160ms ease, border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
     cursor: pointer;
   }
 
   .landing-button-secondary:hover {
-    background: var(--color-bg-secondary);
-    border-color: var(--color-text-primary);
-    box-shadow: 0 14px 32px -20px rgba(20, 20, 20, 0.12);
+    background: var(--landing-background-soft);
+    border-color: color-mix(in srgb, var(--landing-accent) 28%, var(--landing-border));
+    box-shadow: 0 14px 32px -20px color-mix(in srgb, var(--landing-accent) 24%, transparent);
     transform: scale(1.03);
-  }
-
-  .landing-button-secondary:active {
-    background: var(--color-bg-card);
   }
 
   .landing-button-secondary-dark {
     background: transparent;
-    color: var(--color-text-on-dark);
-    border: 1px solid var(--color-text-on-dark);
+    color: var(--landing-text-on-dark);
+    border: 1px solid rgba(247, 244, 239, 0.14);
     border-radius: 9999px;
     transition: transform 160ms ease, border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
     cursor: pointer;
   }
 
   .landing-button-secondary-dark:hover {
-    background: var(--color-overlay-medium);
-    border-color: var(--color-text-on-dark);
-    box-shadow: 0 14px 32px -20px rgba(247, 244, 239, 0.3);
+    background: rgba(247, 244, 239, 0.08);
+    border-color: rgba(247, 244, 239, 0.24);
+    box-shadow: 0 14px 32px -20px rgba(0, 0, 0, 0.32);
     transform: scale(1.03);
   }
 
-  .landing-button-secondary-dark:active {
-    background: var(--color-overlay-strong);
-  }
-
   .landing-pill {
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--landing-border);
     border-radius: 9999px;
-    background: var(--color-bg-card);
-    font-size: clamp(0.6875rem, 0.9vw, 0.8125rem);
-    font-weight: 500;
-    letter-spacing: 0.05em;
+    background: color-mix(in srgb, var(--landing-background) 88%, var(--landing-background-soft));
   }
 
   @media (min-width: 640px) {
     .landing-container {
       padding-inline: 2rem;
     }
+  }
+
+  @media (min-width: 768px) {
     .landing-section {
       padding-block: 5rem;
     }
@@ -716,12 +566,6 @@
     }
     .landing-section {
       padding-block: 6rem;
-    }
-  }
-
-  @media (max-width: 640px) {
-    .landing-section {
-      padding-block: 4rem;
     }
   }
 }

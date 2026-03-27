@@ -9,34 +9,22 @@ const cards = [
     title: "Custom Agents",
     desc: "Your best employee - cloned. Build agents that sound exactly like your brand, handle objections like a pro, and never take a sick day.",
     visual: (
-      <div
-        className="relative flex h-full w-full items-center justify-center overflow-hidden"
-        style={{
-          backgroundImage:
-            "linear-gradient(135deg, color-mix(in srgb, var(--color-accent-deep) 28%, transparent), color-mix(in srgb, var(--color-accent-primary) 14%, transparent), transparent)",
-        }}
-      >
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 30% 40%, color-mix(in srgb, var(--color-accent-primary) 15%, transparent), transparent 60%)",
-          }}
-        />
+      <div className="relative w-full h-full bg-gradient-to-br from-purple-900/40 via-purple-800/20 to-transparent flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(168,85,247,0.15),transparent_60%)]" />
         {/* Agent avatar cluster */}
         <div className="relative flex items-center -space-x-3">
-          {["bg-[var(--color-accent-primary)]/80", "bg-[var(--color-accent-secondary)]/80", "bg-[var(--color-accent-deep)]/80"].map((bg, i) => (
-            <div key={i} className={`flex h-14 w-14 items-center justify-center rounded-full border-2 border-[var(--color-dark-section)] shadow-lg sm:h-16 sm:w-16 ${bg}`}>
-              <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[var(--color-text-on-dark)]/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          {["bg-purple-500/80", "bg-indigo-500/80", "bg-violet-500/80"].map((bg, i) => (
+            <div key={i} className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full ${bg} border-2 border-surface-dark flex items-center justify-center shadow-lg`}>
+              <svg className="w-6 h-6 sm:w-7 sm:h-7 text-white/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0" />
               </svg>
             </div>
           ))}
         </div>
         <div className="absolute bottom-4 left-4 right-4">
-          <div className="flex w-fit items-center gap-2 rounded-full bg-[var(--color-overlay-soft)] px-3 py-1.5">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--color-accent-secondary)]" />
-            <span className="font-mono text-[0.6rem] text-[var(--color-text-muted-on-dark)]">3 agents active</span>
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.06] w-fit">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[0.6rem] text-white/40 font-mono">3 agents active</span>
           </div>
         </div>
       </div>
@@ -46,35 +34,23 @@ const cards = [
     title: "Sub-second Responses",
     desc: "Callers can't tell it's AI. Our streaming STT + LLM + TTS pipeline responds faster than any human - under 800ms, every time.",
     visual: (
-      <div
-        className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden"
-        style={{
-          backgroundImage:
-            "linear-gradient(135deg, color-mix(in srgb, var(--color-accent-secondary) 24%, transparent), color-mix(in srgb, var(--color-accent-hover) 12%, transparent), transparent)",
-        }}
-      >
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 70% 30%, color-mix(in srgb, var(--color-accent-secondary) 12%, transparent), transparent 60%)",
-          }}
-        />
+      <div className="relative w-full h-full bg-gradient-to-br from-amber-900/30 via-orange-800/10 to-transparent flex flex-col items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(245,158,11,0.1),transparent_60%)]" />
         {/* Latency visualization */}
         <div className="relative flex flex-col items-center gap-3">
-          <div className="text-[2.5rem] sm:text-[3rem] font-bold leading-none tracking-tight text-[var(--color-text-on-dark)]">
-            &lt;800<span className="ml-0.5 text-[1.2rem] text-[var(--color-text-muted-on-dark)]">ms</span>
+          <div className="text-[2.5rem] sm:text-[3rem] font-bold text-white/80 tracking-tight leading-none">
+            &lt;800<span className="text-[1.2rem] text-white/40 ml-0.5">ms</span>
           </div>
           <div className="flex items-center gap-1">
             {[...Array(5)].map((_, i) => (
               <div
                 key={i}
-                className="w-1.5 rounded-full bg-[var(--color-accent-secondary)]/70"
+                className="w-1.5 rounded-full bg-amber-400/60"
                 style={{ height: `${12 + i * 6}px`, opacity: 0.4 + i * 0.15 }}
               />
             ))}
           </div>
-          <span className="font-body text-[0.6rem] text-[var(--color-text-muted-on-dark)]">voice response latency</span>
+          <span className="text-[0.6rem] text-white/30 font-body">voice response latency</span>
         </div>
       </div>
     ),
@@ -83,35 +59,23 @@ const cards = [
     title: "Full Audit Trail",
     desc: "Never wonder what happened on a call again. Every word transcribed, every event logged, every conversation reviewable from one place.",
     visual: (
-      <div
-        className="relative flex h-full w-full items-center justify-center overflow-hidden"
-        style={{
-          backgroundImage:
-            "linear-gradient(135deg, color-mix(in srgb, var(--color-accent-primary) 18%, transparent), color-mix(in srgb, var(--color-accent-secondary) 8%, transparent), transparent)",
-        }}
-      >
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 50% 60%, color-mix(in srgb, var(--color-accent-primary) 12%, transparent), transparent 60%)",
-          }}
-        />
+      <div className="relative w-full h-full bg-gradient-to-br from-emerald-900/30 via-teal-800/10 to-transparent flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_60%,rgba(16,185,129,0.1),transparent_60%)]" />
         {/* Transcript lines */}
         <div className="w-[85%] space-y-2.5">
           {[
-            { role: "Agent", text: "How can I help you today?", color: "text-[var(--color-accent-secondary)]/70" },
-            { role: "Caller", text: "I need to reschedule my appointment.", color: "text-[var(--color-text-muted-on-dark)]" },
-            { role: "Agent", text: "Of course, let me pull that up for you.", color: "text-[var(--color-accent-secondary)]/70" },
+            { role: "Agent", text: "How can I help you today?", color: "text-emerald-400/50" },
+            { role: "Caller", text: "I need to reschedule my appointment.", color: "text-white/30" },
+            { role: "Agent", text: "Of course, let me pull that up for you.", color: "text-emerald-400/50" },
           ].map((line, i) => (
             <div key={i} className="flex gap-2.5 items-start">
               <span className={`text-[0.55rem] font-mono ${line.color} shrink-0 w-8 mt-0.5`}>{line.role}</span>
-              <span className="font-body text-[0.7rem] leading-[1.5] text-[var(--color-text-muted-on-dark)]">{line.text}</span>
+              <span className="text-[0.7rem] text-white/35 leading-[1.5] font-body">{line.text}</span>
             </div>
           ))}
           <div className="flex items-center gap-1.5 ml-[42px] pt-1">
-            <span className="h-1 w-1 rounded-full bg-[var(--color-accent-secondary)]/60" />
-            <span className="font-body text-[0.5rem] text-[var(--color-text-muted-on-dark)]">100% transcribed</span>
+            <span className="w-1 h-1 rounded-full bg-emerald-400/40" />
+            <span className="text-[0.5rem] text-white/20 font-body">100% transcribed</span>
           </div>
         </div>
       </div>
@@ -194,7 +158,7 @@ function BenefitCard({ title, desc, visual }: (typeof cards)[number]) {
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative flex cursor-default select-none flex-col overflow-hidden rounded-2xl border border-[var(--color-dark-divider)] bg-[var(--color-dark-section)] transition-transform duration-300 ease-out will-change-transform hover:-translate-y-[2px] hover:border-[var(--color-accent-primary)] hover:shadow-[0_0_40px_rgba(238,48,58,0.08)]"
+      className="relative rounded-2xl border border-white/[0.06] bg-[hsl(0_0%_10%)] overflow-hidden transition-transform duration-300 ease-out cursor-default select-none will-change-transform hover:border-accent-purple-soft/30 hover:shadow-[0_0_40px_rgba(168,85,247,0.08)] flex flex-col"
     >
       {/* Visual / image area */}
       <div className="w-full h-[200px] sm:h-[220px]">
@@ -203,10 +167,10 @@ function BenefitCard({ title, desc, visual }: (typeof cards)[number]) {
 
       {/* Text content */}
       <div className="p-6 sm:p-7 flex-1 flex flex-col">
-        <h3 className="mb-3 text-[1.25rem] font-bold leading-[1.15] tracking-[-0.02em] text-[var(--color-text-on-dark)] sm:text-[1.4rem]">
+        <h3 className="text-[1.25rem] sm:text-[1.4rem] font-bold text-white leading-[1.15] tracking-[-0.02em] mb-3">
           {title}
         </h3>
-        <p className="font-body text-[0.82rem] leading-[1.65] text-[var(--color-text-muted-on-dark)]">
+        <p className="text-[0.82rem] text-white/45 leading-[1.65] font-body">
           {desc}
         </p>
       </div>
@@ -217,15 +181,15 @@ function BenefitCard({ title, desc, visual }: (typeof cards)[number]) {
 /* ── Section ── */
 const Benefits = () => {
   return (
-    <section className="relative overflow-hidden bg-[var(--color-dark-section)] px-5 py-16 sm:px-6 sm:py-28">
+    <section className="relative py-16 sm:py-28 px-5 sm:px-6 bg-surface-dark overflow-hidden">
       <div className="max-w-6xl mx-auto">
         {/* Heading */}
         <ScrollReveal variant="fade-up">
           <div className="text-center mb-14 sm:mb-20">
-            <span className="mb-5 block font-body text-[0.65rem] uppercase tracking-[0.25em] text-[var(--color-text-muted-on-dark)]">
+            <span className="font-body text-[0.65rem] text-white/40 uppercase tracking-[0.25em] block mb-5">
               Why Yapsolutely
             </span>
-            <h2 className="text-[1.6rem] font-semibold italic leading-[1.12] tracking-[-0.03em] text-[var(--color-text-on-dark)] sm:text-[2.8rem] lg:text-[3.4rem]">
+            <h2 className="text-[1.6rem] sm:text-[2.8rem] lg:text-[3.4rem] font-semibold tracking-[-0.03em] text-white/90 leading-[1.12] italic">
               Everything you need to deploy<br className="hidden sm:block" />{" "}
               voice agents at scale
             </h2>
@@ -247,7 +211,7 @@ const Benefits = () => {
         className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px]"
         style={{
           background:
-            "radial-gradient(ellipse at center bottom, color-mix(in srgb, var(--color-accent-primary) 6%, transparent) 0%, transparent 70%)",
+            "radial-gradient(ellipse at center bottom, rgba(168,85,247,0.05) 0%, transparent 70%)",
         }}
       />
     </section>
