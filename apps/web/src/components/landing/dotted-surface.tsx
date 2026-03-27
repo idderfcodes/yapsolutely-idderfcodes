@@ -21,6 +21,15 @@ function supportsWebGL() {
   }
 }
 
+function resolveThemeColor(input: string) {
+  if (typeof window === "undefined" || !input.startsWith("var(")) {
+    return input;
+  }
+
+  const token = input.slice(4, -1).trim();
+  return getComputedStyle(document.documentElement).getPropertyValue(token).trim() || input;
+}
+
 export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
   const { resolvedTheme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -75,7 +84,9 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
       const colors: number[] = [];
       geometry = new THREE.BufferGeometry();
       const pointColor = new THREE.Color(
-        resolvedTheme === "dark" ? "#d8d8d8" : "#d95f3b",
+        resolveThemeColor(
+          resolvedTheme === "dark" ? "var(--color-text-on-dark)" : "var(--color-accent-primary)",
+        ),
       );
 
       for (let ix = 0; ix < AMOUNT_X; ix += 1) {
@@ -187,7 +198,7 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
   }, [resolvedTheme]);
 
   const fallbackDotColor =
-    resolvedTheme === "dark" ? "rgba(216,216,216,0.18)" : "rgba(217,95,59,0.14)";
+    resolvedTheme === "dark" ? "var(--color-overlay-medium)" : "var(--color-overlay-accent-medium)";
 
   return (
     <>

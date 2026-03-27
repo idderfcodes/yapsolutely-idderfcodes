@@ -174,7 +174,7 @@ export const HeroButton = React.forwardRef<
       }}
       ref={ref}
       className={cn(
-        "group relative flex w-fit items-center rounded-full border border-[#84cc16] bg-gray-950/10 px-4 py-2 shadow-[0px_4px_24px_#84cc16] transition-colors hover:bg-slate-950/50",
+        "group relative flex w-fit items-center rounded-full border border-[var(--color-accent-primary)] bg-[var(--color-overlay-dark)] px-4 py-2 shadow-[0px_4px_24px_rgba(238,48,58,0.28)] transition-colors hover:bg-[var(--color-overlay-medium)]",
         className,
       )}
       {...props}

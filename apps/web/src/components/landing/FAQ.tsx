@@ -50,22 +50,22 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="border-b border-border-soft/40 last:border-b-0">
+    <div className="border-b border-[var(--color-border)] last:border-b-0">
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between py-5 text-left group"
       >
-        <span className="font-display text-[1rem] sm:text-[1.05rem] font-medium text-text-strong pr-4 group-hover:text-foreground transition-colors">
+        <span className="pr-4 font-display text-[1rem] font-medium text-[var(--color-text-primary)] transition-colors group-hover:text-[var(--color-accent-primary)] sm:text-[1.05rem]">
           {question}
         </span>
         <ChevronDown
-          className={`w-4.5 h-4.5 text-text-body shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={`h-4.5 w-4.5 shrink-0 text-[var(--color-text-muted)] transition-transform duration-200 ${open ? "rotate-180" : ""}`}
         />
       </button>
       <div
         className={`overflow-hidden transition-all duration-300 ${open ? "max-h-60 pb-5" : "max-h-0"}`}
       >
-        <p className="font-body text-body-md text-text-body leading-relaxed">
+        <p className="font-body text-body-md leading-relaxed text-[var(--color-text-muted)]">
           {answer}
         </p>
       </div>
@@ -78,10 +78,10 @@ const FAQ = () => {
     <section className="py-16 sm:py-20 px-5 sm:px-6">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="font-display text-[1.6rem] sm:text-[2rem] font-semibold tracking-[-0.03em] text-text-strong leading-[1.15] mb-3">
+          <h2 className="mb-3 font-display text-[1.6rem] font-semibold leading-[1.15] tracking-[-0.03em] text-[var(--color-text-primary)] sm:text-[2rem]">
             Frequently asked questions
           </h2>
-          <p className="font-body text-body-md text-text-body max-w-xl mx-auto">
+          <p className="mx-auto max-w-xl font-body text-body-md text-[var(--color-text-muted)]">
             Everything you need to know about building and deploying AI voice agents.
           </p>
         </div>

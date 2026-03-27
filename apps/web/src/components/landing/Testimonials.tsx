@@ -30,8 +30,8 @@ const Testimonials = () => {
       <div className="max-w-7xl mx-auto">
         <ScrollReveal variant="fade-up">
           <div className="text-center mb-14">
-            <span className="font-body text-[0.65rem] text-text-subtle/60 uppercase tracking-[0.2em] block mb-4">Use cases</span>
-            <h2 className="text-[2rem] sm:text-[2.75rem] font-semibold tracking-[-0.03em] text-foreground leading-[1.08]">
+            <span className="mb-4 block font-body text-[0.65rem] uppercase tracking-[0.2em] text-[var(--color-text-muted)]">Use cases</span>
+            <h2 className="text-[2rem] font-semibold leading-[1.08] tracking-[-0.03em] text-[var(--color-text-primary)] sm:text-[2.75rem]">
               Built for real business workflows
             </h2>
           </div>
@@ -40,16 +40,16 @@ const Testimonials = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {useCases.map((uc, i) => (
             <ScrollReveal key={uc.title} variant="fade-up" delay={i * 100} duration={500}>
-              <div className="bg-surface-panel rounded-2xl border border-border-soft/60 p-7 h-full flex flex-col">
-                <div className="w-10 h-10 rounded-xl bg-accent-purple/[0.06] flex items-center justify-center mb-5">
-                  <uc.icon className="w-5 h-5 text-accent-purple-soft" />
+              <div className="flex h-full flex-col rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg)] p-7">
+                <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-overlay-accent-soft)]">
+                  <uc.icon className="h-5 w-5 text-[var(--color-accent-primary)]" />
                 </div>
 
-                <h3 className="font-display text-[0.95rem] font-semibold text-text-strong mb-3">
+                <h3 className="mb-3 font-display text-[0.95rem] font-semibold text-[var(--color-text-primary)]">
                   {uc.title}
                 </h3>
 
-                <p className="font-body text-[0.88rem] text-text-body leading-[1.7] flex-1">
+                <p className="flex-1 font-body text-[0.88rem] leading-[1.7] text-[var(--color-text-muted)]">
                   {uc.description}
                 </p>
               </div>

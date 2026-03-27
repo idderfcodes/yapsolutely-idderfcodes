@@ -13,10 +13,10 @@ const TrustStrip = () => {
         <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-4 sm:gap-x-8">
           {capabilities.map((cap, i) => (
             <div key={cap.label} className="flex items-center gap-3">
-              {i > 0 && <span className="hidden sm:block w-px h-4 bg-border/40" />}
+              {i > 0 && <span className="hidden h-4 w-px bg-[var(--color-border)] sm:block" />}
               <div className="flex items-center gap-2">
-                <span className="font-display text-[0.7rem] font-medium text-text-body tracking-wide">{cap.detail}</span>
-                <span className="font-body text-[0.7rem] text-text-body">{cap.label}</span>
+                <span className="font-display text-[0.7rem] font-medium tracking-wide text-[var(--color-accent-secondary)]">{cap.detail}</span>
+                <span className="font-body text-[0.7rem] text-[var(--color-text-muted)]">{cap.label}</span>
               </div>
             </div>
           ))}

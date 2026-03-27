@@ -13,10 +13,10 @@ const StatsStrip = () => {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 sm:gap-6">
           {stats.map((stat) => (
             <div key={stat.label} className="text-center">
-              <div className="font-display text-[1.5rem] sm:text-[1.75rem] font-semibold tracking-[-0.03em] text-foreground mb-1">
+              <div className="mb-1 font-display text-[1.5rem] font-semibold tracking-[-0.03em] text-[var(--color-accent-secondary)] sm:text-[1.75rem]">
                 {stat.value}
               </div>
-              <div className="font-body text-[0.78rem] text-text-body">
+              <div className="font-body text-[0.78rem] text-[var(--color-text-muted)]">
                 {stat.label}
               </div>
             </div>

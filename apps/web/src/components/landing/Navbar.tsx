@@ -50,7 +50,7 @@ const Navbar = () => {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-background/80 backdrop-blur-2xl border-b border-border/30 shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
+          ? "bg-[var(--color-bg)] backdrop-blur-2xl border-b border-[var(--color-border)] shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
           : "bg-transparent"
       }`}
     >
@@ -60,7 +60,7 @@ const Navbar = () => {
           <div className="flex items-center gap-1">
             <Link
               href="/"
-              className="font-display text-[1.2rem] font-bold tracking-[-0.03em] text-foreground hover:opacity-80 transition-opacity mr-8"
+              className="font-display mr-8 text-[1.2rem] font-bold tracking-[-0.03em] text-[var(--color-text-primary)] transition-opacity hover:opacity-80"
             >
               <span className="flex items-center gap-2">
                 <Image src="/favicon.svg" alt="" width={28} height={28} className="w-7 h-7 rounded-lg" />
@@ -75,8 +75,8 @@ const Navbar = () => {
                   onClick={() => setProductOpen(!productOpen)}
                   className={`flex items-center gap-1 px-3 py-1.5 rounded-lg font-body text-[0.88rem] transition-all duration-150 ${
                     productOpen
-                      ? "text-foreground bg-surface-subtle/60"
-                      : "text-text-subtle hover:text-foreground hover:bg-surface-subtle/40"
+                      ? "bg-[var(--color-bg-secondary)] text-[var(--color-text-primary)]"
+                      : "text-[var(--color-text-muted)] hover:bg-[var(--color-bg-secondary)] hover:text-[var(--color-text-primary)]"
                   }`}
                 >
                   Product
@@ -84,37 +84,37 @@ const Navbar = () => {
                 </button>
 
                 {productOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-[440px] bg-background/95 backdrop-blur-2xl border border-border/40 rounded-2xl shadow-xl p-2 animate-slide-down">
+                  <div className="absolute top-full left-0 mt-2 w-[440px] rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg)] p-2 shadow-xl backdrop-blur-2xl animate-slide-down">
                     <div className="grid grid-cols-2 gap-0.5">
                       {productLinks.map((link) => (
                         <Link
                           key={link.href}
                           href={link.href}
                           onClick={() => setProductOpen(false)}
-                          className="flex items-start gap-3 rounded-xl p-3 hover:bg-surface-subtle/60 transition-colors group"
+                          className="group flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-[var(--color-bg-secondary)]"
                         >
-                          <div className="w-8 h-8 rounded-lg bg-foreground/[0.05] flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-foreground/[0.08] transition-colors">
-                            <link.icon className="w-4 h-4 text-text-body" />
+                          <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--color-overlay-accent-soft)] transition-colors group-hover:bg-[var(--color-overlay-accent-medium)]">
+                            <link.icon className="h-4 w-4 text-[var(--color-accent-primary)]" />
                           </div>
                           <div>
-                            <span className="font-display text-[0.82rem] font-semibold text-foreground block leading-tight">
+                            <span className="block font-display text-[0.82rem] font-semibold leading-tight text-[var(--color-text-primary)]">
                               {link.label}
                             </span>
-                            <span className="font-body text-[0.7rem] text-text-subtle leading-snug">
+                            <span className="font-body text-[0.7rem] leading-snug text-[var(--color-text-muted)]">
                               {link.description}
                             </span>
                           </div>
                         </Link>
                       ))}
                     </div>
-                    <div className="border-t border-border/30 mt-1 pt-1 px-1">
+                    <div className="mt-1 border-t border-[var(--color-border)] px-1 pt-1">
                       <Link
                         href="/pricing"
                         onClick={() => setProductOpen(false)}
-                        className="flex items-center justify-between rounded-lg px-3 py-2.5 hover:bg-surface-subtle/60 transition-colors group"
+                        className="group flex items-center justify-between rounded-lg px-3 py-2.5 transition-colors hover:bg-[var(--color-bg-secondary)]"
                       >
-                        <span className="font-body text-[0.78rem] text-text-subtle group-hover:text-foreground transition-colors">View all features &amp; pricing</span>
-                        <ArrowRight className="w-3.5 h-3.5 text-text-subtle/50 group-hover:text-foreground group-hover:translate-x-0.5 transition-all" />
+                        <span className="font-body text-[0.78rem] text-[var(--color-text-muted)] transition-colors group-hover:text-[var(--color-text-primary)]">View all features &amp; pricing</span>
+                        <ArrowRight className="h-3.5 w-3.5 text-[var(--color-text-muted)]/70 transition-all group-hover:translate-x-0.5 group-hover:text-[var(--color-text-primary)]" />
                       </Link>
                     </div>
                   </div>
@@ -125,7 +125,7 @@ const Navbar = () => {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="px-3 py-1.5 rounded-lg font-body text-[0.88rem] text-text-subtle hover:text-foreground hover:bg-surface-subtle/40 transition-all duration-150"
+                  className="rounded-lg px-3 py-1.5 font-body text-[0.88rem] text-[var(--color-text-muted)] transition-all duration-150 hover:bg-[var(--color-bg-secondary)] hover:text-[var(--color-text-primary)]"
                 >
                   {link.label}
                 </Link>
@@ -138,13 +138,13 @@ const Navbar = () => {
             <ThemeToggle />
             <Link
               href="/sign-in"
-              className="px-3 py-1.5 rounded-lg font-body text-[0.88rem] text-text-subtle hover:text-foreground hover:bg-surface-subtle/40 transition-all duration-150"
+              className="rounded-lg px-3 py-1.5 font-body text-[0.88rem] text-[var(--color-text-muted)] transition-all duration-150 hover:bg-[var(--color-bg-secondary)] hover:text-[var(--color-text-primary)]"
             >
               Sign in
             </Link>
             <Button
               size="default"
-              className="rounded-full font-display text-[0.85rem] font-medium bg-foreground text-background hover:bg-foreground/90 px-5 h-9 btn-press shadow-sm"
+              className="btn-press h-9 rounded-full bg-[var(--color-accent-primary)] px-5 font-display text-[0.85rem] font-medium text-[var(--color-text-on-dark)] shadow-sm hover:bg-[var(--color-accent-hover)]"
               asChild
             >
               <Link href="/sign-up">
@@ -157,24 +157,24 @@ const Navbar = () => {
           {/* Mobile toggle */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden p-2 rounded-lg hover:bg-surface-subtle/60 transition-colors"
+            className="rounded-lg p-2 transition-colors hover:bg-[var(--color-bg-secondary)] lg:hidden"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
           >
-            {mobileOpen ? <X className="w-5 h-5 text-foreground" /> : <Menu className="w-5 h-5 text-foreground" />}
+            {mobileOpen ? <X className="h-5 w-5 text-[var(--color-text-primary)]" /> : <Menu className="h-5 w-5 text-[var(--color-text-primary)]" />}
           </button>
         </div>
       </div>
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="lg:hidden bg-background/95 backdrop-blur-2xl border-b border-border/30 px-5 pb-5 pt-2 animate-slide-down">
+        <div className="animate-slide-down border-b border-[var(--color-border)] bg-[var(--color-bg)] px-5 pb-5 pt-2 backdrop-blur-2xl lg:hidden">
           <div className="flex flex-col gap-0.5 mb-4">
             <button
               onClick={() => setMobileProductOpen(!mobileProductOpen)}
-              className="font-body text-[0.95rem] text-text-body py-2.5 px-2 rounded-lg hover:bg-surface-subtle/40 flex items-center justify-between transition-colors"
+              className="flex items-center justify-between rounded-lg px-2 py-2.5 font-body text-[0.95rem] text-[var(--color-text-primary)] transition-colors hover:bg-[var(--color-bg-secondary)]"
             >
               Product
-              <ChevronDown className={`w-4 h-4 text-text-subtle transition-transform duration-200 ${mobileProductOpen ? "rotate-180" : ""}`} />
+              <ChevronDown className={`h-4 w-4 text-[var(--color-text-muted)] transition-transform duration-200 ${mobileProductOpen ? "rotate-180" : ""}`} />
             </button>
             {mobileProductOpen && (
               <div className="pl-2 pb-1 space-y-0.5">
@@ -183,12 +183,12 @@ const Navbar = () => {
                     key={link.href}
                     href={link.href}
                     onClick={() => { setMobileOpen(false); setMobileProductOpen(false); }}
-                    className="flex items-center gap-3 rounded-lg py-2.5 px-3 hover:bg-surface-subtle/60 transition-colors"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-[var(--color-bg-secondary)]"
                   >
-                    <link.icon className="w-4 h-4 text-text-subtle shrink-0" />
+                    <link.icon className="h-4 w-4 shrink-0 text-[var(--color-accent-primary)]" />
                     <div>
-                      <span className="font-body text-[0.85rem] text-text-body block leading-tight">{link.label}</span>
-                      <span className="font-body text-[0.65rem] text-text-subtle">{link.description}</span>
+                      <span className="block font-body text-[0.85rem] leading-tight text-[var(--color-text-primary)]">{link.label}</span>
+                      <span className="font-body text-[0.65rem] text-[var(--color-text-muted)]">{link.description}</span>
                     </div>
                   </Link>
                 ))}
@@ -200,25 +200,25 @@ const Navbar = () => {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="font-body text-[0.95rem] text-text-body py-2.5 px-2 rounded-lg hover:bg-surface-subtle/40 transition-colors"
+                className="rounded-lg px-2 py-2.5 font-body text-[0.95rem] text-[var(--color-text-primary)] transition-colors hover:bg-[var(--color-bg-secondary)]"
               >
                 {link.label}
               </Link>
             ))}
           </div>
 
-          <div className="border-t border-border/30 pt-4 flex flex-col gap-2">
+          <div className="flex flex-col gap-2 border-t border-[var(--color-border)] pt-4">
             <div className="flex items-center px-2 py-1.5">
               <ThemeToggle />
             </div>
             <Link
               href="/sign-in"
               onClick={() => setMobileOpen(false)}
-              className="font-body text-[0.88rem] text-text-subtle py-2.5 px-2 rounded-lg hover:bg-surface-subtle/40 transition-colors"
+              className="rounded-lg px-2 py-2.5 font-body text-[0.88rem] text-[var(--color-text-muted)] transition-colors hover:bg-[var(--color-bg-secondary)] hover:text-[var(--color-text-primary)]"
             >
               Sign in
             </Link>
-            <Button size="lg" className="rounded-full font-display text-[0.88rem] bg-foreground text-background hover:bg-foreground/90" asChild>
+            <Button size="lg" className="rounded-full bg-[var(--color-accent-primary)] font-display text-[0.88rem] text-[var(--color-text-on-dark)] hover:bg-[var(--color-accent-hover)]" asChild>
               <Link href="/sign-up" onClick={() => setMobileOpen(false)}>
                 Start building free
                 <ArrowRight className="w-3.5 h-3.5 ml-1" />

@@ -3,13 +3,13 @@ import localFont from "next/font/local";
 export const landingDisplayFont = localFont({
   src: [
     {
-      path: "../../app/fonts/landing/bagoss-condensed/BagossCondensedTRIAL-Medium.woff2",
-      weight: "500",
+      path: "../../app/fonts/landing/bagoss-condensed/BagossCondensedTRIAL-SemiBold.woff2",
+      weight: "600",
       style: "normal",
     },
     {
-      path: "../../app/fonts/landing/bagoss-condensed/BagossCondensedTRIAL-SemiBold.woff2",
-      weight: "600",
+      path: "../../app/fonts/landing/bagoss-condensed/BagossCondensedTRIAL-Bold.woff2",
+      weight: "700",
       style: "normal",
     },
   ],
