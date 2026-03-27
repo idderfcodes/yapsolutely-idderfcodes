@@ -35,6 +35,7 @@ import BrandCarousel from "./BrandCarousel";
 import ScrollFAQ from "./ScrollFAQ";
 import AnimatedGradientText from "./AnimatedGradientText";
 import { ImageAutoSlider } from "@/components/ui/image-auto-slider";
+import { DottedSurface } from "@/components/ui/dotted-surface";
 import { cn } from "@/lib/utils";
 
 const marqueeLogos = [
@@ -470,7 +471,8 @@ export default function RevisedLandingPage() {
 
         <main>
           <section className="-mt-16 pt-0">
-            <div className="flex min-h-[100svh] w-full flex-col bg-[#141414] pt-16">
+            <div className="relative flex min-h-[100svh] w-full flex-col overflow-hidden bg-[#141414] pt-16">
+              <DottedSurface />
               {/* Hero copy — centered */}
               <motion.div
                 initial="hidden"
