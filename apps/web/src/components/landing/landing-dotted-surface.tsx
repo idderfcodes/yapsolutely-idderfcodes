@@ -14,7 +14,7 @@ type LandingDottedSurfaceProps = {
 
 export function LandingDottedSurface({
   className = "",
-  pointColor = "#D95F3B",
+  pointColor = "#EE303A",
   fogColor = "#1A1A1A",
   pointOpacity = 0.34,
   pointSize = 5,

@@ -341,7 +341,7 @@ export default function RevisedLandingPage() {
                   initial="hidden"
                   animate="show"
                   transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                  className="max-w-none relative overflow-hidden bg-[radial-gradient(ellipse_at_top_left,#1c1209_0%,#0f0f0f_52%)] px-8 py-12 [transform-style:preserve-3d] sm:px-10 sm:py-14 lg:px-14 lg:py-16"
+                  className="max-w-none relative overflow-hidden bg-[radial-gradient(ellipse_at_top_left,#141414_0%,#141414_52%)] px-8 py-12 [transform-style:preserve-3d] sm:px-10 sm:py-14 lg:px-14 lg:py-16"
                 >
                   <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/6 px-4 py-2">
                     <span className="relative flex h-2.5 w-2.5">
@@ -866,7 +866,7 @@ function HeroShowcase({ showTexture }: { showTexture: boolean }) {
             pointSize={7}
           />
         ) : null}
-        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_left,rgba(217,95,59,0.12),transparent_38%),linear-gradient(180deg,rgba(26,26,26,0.02),rgba(20,20,20,0.08))]" />
+        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_left,rgba(238,48,58,0.12),transparent_38%),linear-gradient(180deg,rgba(26,26,26,0.02),rgba(20,20,20,0.08))]" />
         <div className="relative z-20 rounded-[28px] border border-white/8 bg-white/4 p-4 backdrop-blur-sm sm:p-5">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
@@ -1107,7 +1107,7 @@ function TranscriptBubble({
           ? "border-[var(--landing-border)] bg-[var(--landing-background-soft)]"
           : caller
             ? "border-[var(--landing-border)] bg-white"
-            : "border-[rgba(217,95,59,0.18)] bg-[#FDF5F2]"
+            : "border-[rgba(238,48,58,0.18)] bg-[#F7F4EF]"
       }`}
     >
       <div className="landing-body text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--landing-text-muted)]">
@@ -1217,7 +1217,7 @@ function AppointmentBookingPreview() {
         ))}
       </div>
 
-      <div className="mt-4 rounded-[18px] border border-[var(--landing-border)] bg-[#FDF5F2] px-4 py-3">
+      <div className="mt-4 rounded-[18px] border border-[var(--landing-border)] bg-[#F7F4EF] px-4 py-3">
         <div className="landing-body text-[11px] uppercase tracking-[0.14em] text-[var(--landing-accent)]">Confirmation</div>
         <div className="landing-body mt-2 text-[14px] text-[var(--landing-text)]">SMS confirmation queued after booking is complete.</div>
       </div>
@@ -1273,7 +1273,7 @@ function LeadQualificationPreview() {
         ))}
       </div>
 
-      <div className="mt-4 flex items-center justify-between rounded-[18px] border border-[var(--landing-border)] bg-[#FDF5F2] px-4 py-3">
+      <div className="mt-4 flex items-center justify-between rounded-[18px] border border-[var(--landing-border)] bg-[#F7F4EF] px-4 py-3">
         <span className="landing-body text-[13px] text-[var(--landing-text)]">Lead priority</span>
         <span className="landing-stat text-[1.6rem] leading-none tracking-[-0.04em] text-[var(--landing-accent)]">94</span>
       </div>
@@ -1322,18 +1322,18 @@ function MascotIllustration() {
         <div className="absolute inset-x-8 top-10 h-24 rounded-full bg-[color:color-mix(in_srgb,var(--landing-accent)_26%,transparent)] blur-3xl" />
         <svg viewBox="0 0 240 240" className="relative h-[220px] w-[220px]" role="img" aria-label="Yapsolutely mascot illustration">
           <circle cx="120" cy="120" r="98" fill="rgba(255,255,255,0.06)" stroke="rgba(247,244,239,0.12)" />
-          <circle cx="120" cy="88" r="36" fill="#D95F3B" />
+          <circle cx="120" cy="88" r="36" fill="#EE303A" />
           <circle cx="106" cy="82" r="4.5" fill="#141414" />
           <circle cx="134" cy="82" r="4.5" fill="#141414" />
           <path d="M106 98C112 105 128 105 134 98" stroke="#141414" strokeWidth="4" strokeLinecap="round" fill="none" />
           <rect x="84" y="126" width="72" height="58" rx="28" fill="#F7F4EF" opacity="0.96" />
-          <rect x="110" y="136" width="20" height="34" rx="10" fill="#D95F3B" />
+          <rect x="110" y="136" width="20" height="34" rx="10" fill="#EE303A" />
           <path d="M92 152C92 170 148 170 148 152" stroke="#141414" strokeWidth="4" strokeLinecap="round" fill="none" opacity="0.85" />
-          <path d="M168 92C182 98 188 110 188 122" stroke="#D95F3B" strokeWidth="6" strokeLinecap="round" fill="none" opacity="0.92" />
-          <path d="M181 80C200 90 210 108 210 126" stroke="#D95F3B" strokeWidth="6" strokeLinecap="round" fill="none" opacity="0.45" />
-          <path d="M72 92C58 98 52 110 52 122" stroke="#D95F3B" strokeWidth="6" strokeLinecap="round" fill="none" opacity="0.92" />
-          <path d="M59 80C40 90 30 108 30 126" stroke="#D95F3B" strokeWidth="6" strokeLinecap="round" fill="none" opacity="0.45" />
-          <circle cx="120" cy="198" r="8" fill="#D95F3B" opacity="0.9" />
+          <path d="M168 92C182 98 188 110 188 122" stroke="#EE303A" strokeWidth="6" strokeLinecap="round" fill="none" opacity="0.92" />
+          <path d="M181 80C200 90 210 108 210 126" stroke="#EE303A" strokeWidth="6" strokeLinecap="round" fill="none" opacity="0.45" />
+          <path d="M72 92C58 98 52 110 52 122" stroke="#EE303A" strokeWidth="6" strokeLinecap="round" fill="none" opacity="0.92" />
+          <path d="M59 80C40 90 30 108 30 126" stroke="#EE303A" strokeWidth="6" strokeLinecap="round" fill="none" opacity="0.45" />
+          <circle cx="120" cy="198" r="8" fill="#EE303A" opacity="0.9" />
         </svg>
       </div>
 
