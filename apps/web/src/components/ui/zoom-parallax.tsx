@@ -94,8 +94,8 @@ export function ZoomParallax({
   const currentFrame = framePaths[currentFrameIndex] ?? framePaths[0];
 
   return (
-    <div ref={containerRef} className={cn("relative h-[420vh] bg-[#141414]", className)}>
-      <div className="sticky top-0 h-[100svh] overflow-hidden bg-[#141414]">
+    <div ref={containerRef} className={cn("relative h-[420vh] bg-[#F7F4EF]", className)}>
+      <div className="sticky top-0 h-[100svh] overflow-hidden bg-[#F7F4EF]">
         <img
           src={currentFrame}
           alt={title}
@@ -103,8 +103,6 @@ export function ZoomParallax({
           fetchPriority="high"
           className="absolute inset-0 h-full w-full object-cover"
         />
-
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,20,20,0.52)_0%,rgba(20,20,20,0.12)_24%,rgba(20,20,20,0.12)_60%,rgba(20,20,20,0.58)_100%)]" />
 
         <motion.div
           style={{ opacity: titleOpacity, y: titleY }}
