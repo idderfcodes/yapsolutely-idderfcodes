@@ -1,7 +1,8 @@
 node_modules
 apps/web/node_modules
 apps/voice/node_modules
-apps/web/.next
+# .next is pre-built locally and shipped to VPS before docker build
+# apps/web/.next  <-- intentionally NOT excluded
 .git
 .github
 credentials
