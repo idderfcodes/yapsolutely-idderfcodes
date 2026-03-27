@@ -2,27 +2,27 @@
 
 import Lenis from "lenis";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useEffect, useRef } from "react";
-
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 type ZoomParallaxProps = {
-  videoSrc: string;
-  durationSeconds?: number;
+  framePaths: string[];
   label?: string;
   title?: string;
   className?: string;
 };
 
 export function ZoomParallax({
-  videoSrc,
-  durationSeconds = 6,
+  framePaths,
   label = "See it in action",
   title = "A call handled. In seconds.",
   className,
 }: ZoomParallaxProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const preloadTimeoutRef = useRef<number | null>(null);
+  const activeFrameRef = useRef(0);
+  const [currentFrameIndex, setCurrentFrameIndex] = useState(0);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
@@ -31,6 +31,7 @@ export function ZoomParallax({
   const titleOpacity = useTransform(scrollYProgress, [0, 0.08, 0.16], [1, 0.45, 0]);
   const titleY = useTransform(scrollYProgress, [0, 0.16], [0, -40]);
 
+  // Lenis smooth scroll
   useEffect(() => {
     const lenis = new Lenis({ lerp: 0.08, smoothWheel: true });
     let frameId = 0;
@@ -48,62 +49,86 @@ export function ZoomParallax({
     };
   }, []);
 
+  // Sequential preload of all frames
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) {
-      return;
-    }
+    if (!framePaths.length) return;
+    let cancelled = false;
 
-    const syncVideoTime = (progress: number) => {
-      if (video.readyState < 1) {
-        return;
-      }
+    const preloadFrame = (index: number) => {
+      if (cancelled || index >= framePaths.length) return;
 
-      const maxDuration = Number.isFinite(video.duration) && video.duration > 0
-        ? Math.min(video.duration, durationSeconds)
-        : durationSeconds;
-      const nextTime = Math.max(0, Math.min(maxDuration, progress * maxDuration));
+      const image = new window.Image();
+      image.decoding = "async";
+      image.loading = "eager";
 
-      if (Math.abs(video.currentTime - nextTime) > 0.025) {
-        video.currentTime = nextTime;
-      }
+      const scheduleNext = () => {
+        if (cancelled) return;
+        preloadTimeoutRef.current = window.setTimeout(
+          () => preloadFrame(index + 1),
+          index < 12 ? 16 : 48,
+        );
+      };
+
+      image.onload = scheduleNext;
+      image.onerror = scheduleNext;
+      image.src = framePaths[index];
     };
 
-    const handleLoadedMetadata = () => {
-      video.currentTime = 0;
-    };
+    preloadFrame(0);
 
-    video.addEventListener("loadedmetadata", handleLoadedMetadata);
-    const unsubscribe = scrollYProgress.on("change", syncVideoTime);
+    return () => {
+      cancelled = true;
+      if (preloadTimeoutRef.current) {
+        window.clearTimeout(preloadTimeoutRef.current);
+      }
+    };
+  }, [framePaths]);
+
+  // Scroll → frame sync
+  useEffect(() => {
+    if (!framePaths.length) return;
+
+    setCurrentFrameIndex(0);
+    activeFrameRef.current = 0;
+
+    const unsubscribe = scrollYProgress.on("change", (progress) => {
+      const nextFrameIndex = Math.max(
+        0,
+        Math.min(framePaths.length - 1, Math.round(progress * (framePaths.length - 1))),
+      );
+
+      if (nextFrameIndex !== activeFrameRef.current) {
+        activeFrameRef.current = nextFrameIndex;
+        setCurrentFrameIndex(nextFrameIndex);
+      }
+    });
 
     return () => {
       unsubscribe();
-      video.removeEventListener("loadedmetadata", handleLoadedMetadata);
     };
-  }, [durationSeconds, scrollYProgress]);
+  }, [framePaths, scrollYProgress]);
+
+  const currentFrame = framePaths[currentFrameIndex] ?? framePaths[0];
 
   return (
-    <div ref={containerRef} className={cn("relative h-[400vh] bg-[#141414]", className)}>
-      <div className="sticky top-0 h-screen overflow-hidden bg-[#141414]">
-        <video
-          ref={videoRef}
-          muted
-          playsInline
-          preload="auto"
-          aria-label={title}
+    <div ref={containerRef} className={cn("relative h-[420vh] bg-[#141414]", className)}>
+      <div className="sticky top-0 h-[100svh] overflow-hidden bg-[#141414]">
+        <img
+          src={currentFrame}
+          alt={title}
+          loading="eager"
+          fetchPriority="high"
           className="absolute inset-0 h-full w-full object-cover"
-        >
-          <source src={videoSrc} type="video/mp4" />
-        </video>
+        />
 
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,20,20,0.72)_0%,rgba(20,20,20,0.24)_24%,rgba(20,20,20,0.18)_58%,rgba(20,20,20,0.58)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,20,20,0.52)_0%,rgba(20,20,20,0.12)_24%,rgba(20,20,20,0.12)_60%,rgba(20,20,20,0.58)_100%)]" />
 
         <motion.div
           style={{ opacity: titleOpacity, y: titleY }}
           className="relative z-10 flex h-full items-start justify-center px-6 pt-[4.5rem] text-center sm:px-10 sm:pt-24"
         >
           <div className="mx-auto max-w-[42rem]">
-            <div className="landing-body inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[12px] font-medium text-[#6B6860] backdrop-blur-md">
+            <div className="landing-body inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[12px] font-medium text-[#D4CEC2] backdrop-blur-md">
               {label}
             </div>
             <h2 className="landing-display mt-6 text-[3rem] leading-[0.92] tracking-[-0.06em] text-[#F7F4EF] sm:text-[3.5rem] lg:text-[4rem]">

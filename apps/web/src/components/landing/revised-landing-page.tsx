@@ -653,10 +653,8 @@ export default function RevisedLandingPage() {
             </div>
           </section>
 
-          <section className="px-4 py-6 sm:px-6 sm:py-8">
-            <div className="landing-container">
-              <ZoomParallaxSection />
-            </div>
+          <section className="py-6 sm:py-8">
+            <ZoomParallaxSection />
           </section>
 
           <LandingStatsBar />
@@ -861,14 +859,14 @@ function HeroShowcase({ showTexture }: { showTexture: boolean }) {
       <div className="relative overflow-hidden rounded-[34px] border border-white/8 bg-[linear-gradient(145deg,rgba(26,26,26,0.96),rgba(20,20,20,0.98))] p-4 shadow-[0_32px_70px_-38px_rgba(0,0,0,0.4)] sm:p-5">
         {showTexture ? (
           <LandingDottedSurface
-            className="z-0 opacity-100"
-            pointColor="#D95F3B"
-            fogColor="#1A1A1A"
-            pointOpacity={0.34}
-            pointSize={5.5}
+            className="z-10 opacity-100"
+            pointColor="#000000"
+            fogColor="#F7F4EF"
+            pointOpacity={1}
+            pointSize={7}
           />
         ) : null}
-        <div className="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(circle_at_top_left,rgba(217,95,59,0.22),transparent_38%),linear-gradient(180deg,rgba(26,26,26,0.04),rgba(20,20,20,0.18))]" />
+        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_left,rgba(217,95,59,0.12),transparent_38%),linear-gradient(180deg,rgba(26,26,26,0.02),rgba(20,20,20,0.08))]" />
         <div className="relative z-20 rounded-[28px] border border-white/8 bg-white/4 p-4 backdrop-blur-sm sm:p-5">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
