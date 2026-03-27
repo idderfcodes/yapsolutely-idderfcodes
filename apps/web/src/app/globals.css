@@ -86,6 +86,31 @@
   --landing-text-muted-on-dark: #a8a09a;
   --landing-stats-bg: #0d0d0d;
   --landing-cta-bg: #0d0d0d;
+
+  /* Semantic aliases used across landing components (introduced in 00d6e95) */
+  --color-text-primary: var(--landing-text);
+  --color-text-muted: var(--landing-text-muted);
+  --color-text-on-dark: var(--landing-text-on-dark);
+  --color-text-muted-on-dark: var(--landing-text-muted-on-dark);
+  --color-bg: var(--landing-background);
+  --color-bg-card: var(--landing-card);
+  --color-bg-secondary: var(--landing-background-soft);
+  --color-accent-primary: #60a5fa;         /* blue-400 */
+  --color-accent-secondary: #4ade80;       /* emerald-400 */
+  --color-accent-pop: #fbbf24;             /* amber-400 */
+  --color-accent-deep: #f87171;            /* red-400 */
+  --color-accent-hover: #e8724c;           /* warm accent hover */
+  --color-dark-section: var(--landing-dark);
+  --color-dark-divider: rgba(255,255,255,0.08);
+  --color-badge-dark: rgba(255,255,255,0.06);
+  --color-overlay-soft: rgba(255,255,255,0.05);
+  --color-overlay-medium: rgba(255,255,255,0.10);
+  --color-overlay-strong: rgba(0,0,0,0.80);
+  --color-overlay-dark: rgba(0,0,0,0.65);
+  --color-overlay-accent-soft: rgba(168,85,247,0.06);     /* purple soft */
+  --color-overlay-accent-medium: rgba(248,113,113,0.15);  /* red medium */
+  --color-overlay-pop-soft: rgba(251,191,36,0.09);        /* amber soft */
+  --color-overlay-secondary-medium: rgba(74,222,128,0.15); /* green medium */
 }
 
 .dark {
