@@ -72,45 +72,70 @@
   --font-display: var(--font-general-sans), "General Sans", system-ui, sans-serif;
   --font-body-family: var(--font-satoshi), "Satoshi", system-ui, sans-serif;
 
-  --landing-background: #faf8f5;
-  --landing-background-soft: #ede8de;
-  --landing-text: #111110;
-  --landing-text-muted: #6a6760;
-  --landing-accent: #d95f3b;
-  --landing-border: #dfd9d0;
-  --landing-card: #e8e2d8;
-  --landing-dark: #0d0d0d;
-  --landing-hero-left: #0f0f0f;
-  --landing-hero-right: #161616;
-  --landing-text-on-dark: #f5f1eb;
-  --landing-text-muted-on-dark: #a8a09a;
-  --landing-stats-bg: #0d0d0d;
-  --landing-cta-bg: #0d0d0d;
+  /* === DESIGN SYSTEM COLORS (see DESIGN_SYSTEM.md) === */
 
-  /* Semantic aliases used across landing components (introduced in 00d6e95) */
-  --color-text-primary: var(--landing-text);
-  --color-text-muted: var(--landing-text-muted);
-  --color-text-on-dark: var(--landing-text-on-dark);
-  --color-text-muted-on-dark: var(--landing-text-muted-on-dark);
-  --color-bg: var(--landing-background);
-  --color-bg-card: var(--landing-card);
-  --color-bg-secondary: var(--landing-background-soft);
-  --color-accent-primary: #60a5fa;         /* blue-400 */
-  --color-accent-secondary: #4ade80;       /* emerald-400 */
-  --color-accent-pop: #fbbf24;             /* amber-400 */
-  --color-accent-deep: #f87171;            /* red-400 */
-  --color-accent-hover: #e8724c;           /* warm accent hover */
-  --color-dark-section: var(--landing-dark);
-  --color-dark-divider: rgba(255,255,255,0.08);
+  /* Light surfaces */
+  --landing-background: #FFFFFF;
+  --landing-background-soft: #F7F4EF;
+  --landing-card: #F0EDE8;
+  --landing-border: #E8E4DE;
+
+  /* Text */
+  --landing-text: #141414;
+  --landing-text-muted: #6B6860;
+  --landing-text-on-dark: #F7F4EF;
+  --landing-text-muted-on-dark: #9A9590;
+
+  /* Accent scale */
+  --landing-accent: #EE303A;           /* primary accent — was #d95f3b */
+  --landing-accent-hover: #FF631E;
+  --landing-accent-secondary: #FF7B30;
+  --landing-accent-pop: #FFD101;
+  --landing-accent-deep: #B10032;
+
+  /* Dark sections */
+  --landing-dark: #141414;
+  --landing-hero-left: #141414;
+  --landing-hero-right: #1A1A1A;
+  --landing-dark-divider: #2A2A2A;
+  --landing-stats-bg: #141414;
+  --landing-cta-bg: #141414;
+
+  /* Gradient */
+  --gradient-accent: linear-gradient(135deg, #FF7B30, #EE303A, #B10032);
+
+  /* Semantic aliases used across landing components */
+  --color-text-primary: #141414;
+  --color-text-muted: #6B6860;
+  --color-text-on-dark: #F7F4EF;
+  --color-text-muted-on-dark: #9A9590;
+  --color-bg: #FFFFFF;
+  --color-bg-secondary: #F7F4EF;
+  --color-bg-card: #F0EDE8;
+  --color-border: #E8E4DE;
+
+  /* Accent semantic aliases */
+  --color-accent-deep: #B10032;
+  --color-accent-primary: #EE303A;
+  --color-accent-hover: #FF631E;
+  --color-accent-secondary: #FF7B30;
+  --color-accent-pop: #FFD101;
+
+  /* Dark section aliases */
+  --color-dark-section: #141414;
+  --color-dark-secondary: #1A1A1A;
+  --color-dark-divider: #2A2A2A;
+
+  /* Overlay helpers */
   --color-badge-dark: rgba(255,255,255,0.06);
   --color-overlay-soft: rgba(255,255,255,0.05);
   --color-overlay-medium: rgba(255,255,255,0.10);
   --color-overlay-strong: rgba(0,0,0,0.80);
   --color-overlay-dark: rgba(0,0,0,0.65);
-  --color-overlay-accent-soft: rgba(168,85,247,0.06);     /* purple soft */
-  --color-overlay-accent-medium: rgba(248,113,113,0.15);  /* red medium */
-  --color-overlay-pop-soft: rgba(251,191,36,0.09);        /* amber soft */
-  --color-overlay-secondary-medium: rgba(74,222,128,0.15); /* green medium */
+  --color-overlay-accent-soft: rgba(238,48,58,0.06);       /* red-primary soft */
+  --color-overlay-accent-medium: rgba(238,48,58,0.15);     /* red-primary medium */
+  --color-overlay-pop-soft: rgba(255,209,1,0.10);          /* yellow soft */
+  --color-overlay-secondary-medium: rgba(255,123,48,0.15); /* orange medium */
 }
 
 .dark {
