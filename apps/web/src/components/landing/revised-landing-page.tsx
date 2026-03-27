@@ -474,76 +474,81 @@ export default function RevisedLandingPage() {
           <section className="-mt-16 pt-0">
             <div className="relative flex min-h-[100svh] w-full flex-col overflow-hidden bg-[#141414] pt-16">
               <DottedSurface />
-              {/* Hero copy — centered */}
-              <motion.div
-                initial="hidden"
-                animate="show"
-                variants={staggerContainer}
-                className="flex flex-col items-center px-6 pt-20 text-center sm:px-10 md:pt-24 lg:pt-32"
-              >
+              {/* Hero — split 2-column on lg, stacked on mobile */}
+              <div className="relative z-10 mx-auto grid w-full max-w-[1280px] grid-cols-1 items-center gap-12 px-6 pt-20 sm:px-10 md:pt-24 lg:grid-cols-2 lg:pt-32 lg:pb-16">
+                {/* Left column — copy */}
                 <motion.div
-                  variants={cardReveal}
-                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                  className="inline-flex w-fit items-center gap-3 rounded-full bg-[var(--color-badge-dark)] px-4 py-2"
+                  initial="hidden"
+                  animate="show"
+                  variants={staggerContainer}
+                  className="flex flex-col items-center text-center lg:items-start lg:text-left"
                 >
-                  <span className="relative flex h-2.5 w-2.5">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--color-accent-pop)] opacity-35" />
-                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[var(--color-accent-pop)]" />
-                  </span>
-                  <span className="landing-body text-[13px] font-medium text-[var(--color-text-muted-on-dark)]">
-                    Handling calls now
-                  </span>
+                  <motion.div
+                    variants={cardReveal}
+                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                    className="inline-flex w-fit items-center gap-3 rounded-full bg-[var(--color-badge-dark)] px-4 py-2"
+                  >
+                    <span className="relative flex h-2.5 w-2.5">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--color-accent-pop)] opacity-35" />
+                      <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[var(--color-accent-pop)]" />
+                    </span>
+                    <span className="landing-body text-[13px] font-medium text-[var(--color-text-muted-on-dark)]">
+                      Handling calls now
+                    </span>
+                  </motion.div>
+
+                  <motion.div variants={cardReveal} transition={{ duration: 0.5, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}>
+                    <HeroWordReveal />
+                  </motion.div>
+
+                  <motion.p
+                    variants={cardReveal}
+                    transition={{ duration: 0.48, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+                    className="landing-body landing-body-1-regular mt-6 max-w-[38rem] text-[var(--color-text-muted-on-dark)]"
+                  >
+                    Build voice agents, assign real phone numbers, handle inbound calls. One workspace.
+                  </motion.p>
+
+                  <motion.div
+                    variants={cardReveal}
+                    transition={{ duration: 0.48, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+                    className="mt-8 flex flex-col gap-3 sm:flex-row"
+                  >
+                    <Link
+                      href="/sign-up"
+                      className="landing-button-primary landing-body landing-body-2-semibold inline-flex min-h-[44px] items-center justify-center px-6 py-3"
+                    >
+                      Start building free
+                    </Link>
+                    <Link
+                      href="#how-it-works"
+                      className="landing-button-secondary-dark landing-body landing-body-2-semibold inline-flex min-h-[44px] items-center justify-center px-6 py-3"
+                    >
+                      See how it works
+                    </Link>
+                  </motion.div>
+
+                  <motion.p
+                    variants={cardReveal}
+                    transition={{ duration: 0.42, delay: 0.24, ease: [0.22, 1, 0.36, 1] }}
+                    className="landing-body mt-4 text-[12px] text-[var(--color-text-muted)]"
+                  >
+                    No credit card required. Free plan available.
+                  </motion.p>
                 </motion.div>
 
-                <motion.div variants={cardReveal} transition={{ duration: 0.5, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}>
-                  <HeroWordReveal />
-                </motion.div>
-
-                <motion.p
-                  variants={cardReveal}
-                  transition={{ duration: 0.48, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-                  className="landing-body landing-body-1-regular mt-6 max-w-[38rem] text-[var(--color-text-muted-on-dark)]"
-                >
-                  Build voice agents, assign real phone numbers, handle inbound calls. One workspace.
-                </motion.p>
-
+                {/* Right column — video in glowing card */}
                 <motion.div
-                  variants={cardReveal}
-                  transition={{ duration: 0.48, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
-                  className="mt-8 flex flex-col gap-3 sm:flex-row"
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  className="relative w-full"
                 >
-                  <Link
-                    href="/sign-up"
-                    className="landing-button-primary landing-body landing-body-2-semibold inline-flex min-h-[44px] items-center justify-center px-6 py-3"
-                  >
-                    Start building free
-                  </Link>
-                  <Link
-                    href="#how-it-works"
-                    className="landing-button-secondary-dark landing-body landing-body-2-semibold inline-flex min-h-[44px] items-center justify-center px-6 py-3"
-                  >
-                    See how it works
-                  </Link>
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-2 shadow-[0_0_60px_-12px_rgba(238,48,58,0.15)]">
+                    <HeroVideoPanel />
+                  </div>
                 </motion.div>
-
-                <motion.p
-                  variants={cardReveal}
-                  transition={{ duration: 0.42, delay: 0.24, ease: [0.22, 1, 0.36, 1] }}
-                  className="landing-body mt-4 text-[12px] text-[var(--color-text-muted)]"
-                >
-                  No credit card required. Free plan available.
-                </motion.p>
-              </motion.div>
-
-              {/* Hero video — full width below copy */}
-              <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                className="mx-auto mt-10 w-full max-w-[960px] px-6 pb-12 sm:mt-12 sm:px-10 md:mt-14 lg:mt-16"
-              >
-                <HeroVideoPanel />
-              </motion.div>
+              </div>
             </div>
           </section>
 
