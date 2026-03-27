@@ -5,8 +5,8 @@ type ZoomParallaxSectionProps = {
   className?: string;
 };
 
-const demoFramePaths = Array.from({ length: 92 }, (_, index) => {
-  const frameNumber = String(index * 2 + 1).padStart(3, "0");
+const demoFramePaths = Array.from({ length: 183 }, (_, index) => {
+  const frameNumber = String(index + 1).padStart(3, "0");
   return `/frame-sequence/demo/ezgif-frame-${frameNumber}.png`;
 });
 
