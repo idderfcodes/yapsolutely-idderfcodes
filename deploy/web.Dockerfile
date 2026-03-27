@@ -15,7 +15,10 @@ RUN npm ci --workspaces --include-workspace-root
 COPY . .
 
 RUN npm run db:generate -w apps/web
-RUN NODE_OPTIONS="--max-old-space-size=3072" npm run build -w apps/web
+
+# .next is pre-built locally and copied in via build context (avoids VPS OOM)
+# Run: build locally, then rsync apps/web/.next to VPS before docker compose build
+COPY apps/web/.next apps/web/.next
 
 EXPOSE 3000
 
