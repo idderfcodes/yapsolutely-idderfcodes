@@ -15,7 +15,7 @@ RUN npm ci --workspaces --include-workspace-root
 COPY . .
 
 RUN npm run db:generate -w apps/web
-RUN npm run build -w apps/web
+RUN NODE_OPTIONS="--max-old-space-size=3072" npm run build -w apps/web
 
 EXPOSE 3000
 
