@@ -466,11 +466,11 @@ export default function RevisedLandingPage() {
       <LandingBackdrop />
 
       <div className="relative z-10">
-        <Header />
+        <Header darkHero />
 
         <main>
-          <section className="pt-0">
-            <div className="flex min-h-[calc(100svh-4rem)] w-full flex-col bg-[#141414]">
+          <section className="-mt-16 pt-0">
+            <div className="flex min-h-[100svh] w-full flex-col bg-[#141414] pt-16">
               {/* Hero copy — centered */}
               <motion.div
                 initial="hidden"

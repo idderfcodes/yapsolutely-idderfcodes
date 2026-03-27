@@ -46,12 +46,15 @@ const links = [
   },
 ];
 
-export function Header() {
+export function Header({ darkHero = false }: { darkHero?: boolean }) {
   const [open, setOpen] = React.useState(false);
   const [productOpen, setProductOpen] = React.useState(false);
   const [mobileProductOpen, setMobileProductOpen] = React.useState(false);
   const scrolled = useScroll(10);
   const productMenuRef = React.useRef<HTMLDivElement>(null);
+
+  /* When darkHero is true and we haven't scrolled, use light-on-dark palette */
+  const atDarkTop = darkHero && !scrolled && !open;
 
   React.useEffect(() => {
     if (open) {
@@ -95,7 +98,10 @@ export function Header() {
         <div className="mx-auto flex h-16 w-full max-w-[1200px] items-center justify-between px-4 sm:px-6">
           <Link
             href="/"
-            className="landing-display text-[1.85rem] font-medium leading-none tracking-[-0.03em] text-[var(--color-text-primary)] transition-opacity hover:opacity-85"
+            className={cn(
+              "landing-display text-[1.85rem] font-medium leading-none tracking-[-0.03em] transition-colors duration-300 hover:opacity-85",
+              atDarkTop ? "text-[var(--color-text-on-dark)]" : "text-[var(--color-text-primary)]"
+            )}
             aria-label="Yapsolutely home"
           >
             Yapsolutely
@@ -106,7 +112,12 @@ export function Header() {
               <button
                 type="button"
                 onClick={() => setProductOpen((current) => !current)}
-                className="landing-body inline-flex h-10 cursor-pointer items-center gap-1 rounded-full px-4 text-[14px] font-medium text-[var(--color-text-muted)] transition-colors duration-200 hover:text-[var(--color-text-primary)]"
+                className={cn(
+                  "landing-body inline-flex h-10 cursor-pointer items-center gap-1 rounded-full px-4 text-[14px] font-medium transition-colors duration-300",
+                  atDarkTop
+                    ? "text-[var(--color-text-muted-on-dark)] hover:text-[var(--color-text-on-dark)]"
+                    : "text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
+                )}
                 aria-expanded={productOpen}
               >
                 Product
@@ -144,7 +155,12 @@ export function Header() {
             {links.map((link) => (
               <Link
                 key={link.label}
-                className="landing-body inline-flex h-10 cursor-pointer items-center rounded-full px-4 text-[14px] font-medium text-[var(--color-text-muted)] transition-colors duration-200 hover:text-[var(--color-text-primary)]"
+                className={cn(
+                  "landing-body inline-flex h-10 cursor-pointer items-center rounded-full px-4 text-[14px] font-medium transition-colors duration-300",
+                  atDarkTop
+                    ? "text-[var(--color-text-muted-on-dark)] hover:text-[var(--color-text-on-dark)]"
+                    : "text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
+                )}
                 href={link.href}
               >
                 {link.label}
@@ -155,7 +171,12 @@ export function Header() {
           <div className="hidden items-center gap-2 lg:flex">
             <Link
               href="/sign-in"
-              className="landing-body inline-flex h-10 cursor-pointer items-center justify-center rounded-full border border-transparent px-4 text-[14px] font-medium text-[var(--color-text-primary)] transition-all duration-200 hover:scale-[1.03] hover:bg-[var(--color-bg-secondary)] hover:text-[var(--color-accent-primary)]"
+              className={cn(
+                "landing-body inline-flex h-10 cursor-pointer items-center justify-center rounded-full border border-transparent px-4 text-[14px] font-medium transition-all duration-300 hover:scale-[1.03]",
+                atDarkTop
+                  ? "text-[var(--color-text-on-dark)] hover:bg-[var(--color-overlay-soft)] hover:text-[var(--color-accent-secondary)]"
+                  : "text-[var(--color-text-primary)] hover:bg-[var(--color-bg-secondary)] hover:text-[var(--color-accent-primary)]"
+              )}
             >
               Sign in
             </Link>
@@ -170,7 +191,12 @@ export function Header() {
           <button
             type="button"
             onClick={() => setOpen(!open)}
-            className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-primary)] lg:hidden"
+            className={cn(
+              "inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border lg:hidden transition-colors duration-300",
+              atDarkTop
+                ? "border-[var(--color-dark-divider)] text-[var(--color-text-on-dark)]"
+                : "border-[var(--color-border)] text-[var(--color-text-primary)]"
+            )}
             aria-label="Toggle menu"
             aria-expanded={open}
           >
