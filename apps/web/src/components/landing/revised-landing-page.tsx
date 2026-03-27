@@ -822,9 +822,7 @@ export default function RevisedLandingPage() {
             </div>
           </section>
 
-          <section className="overflow-hidden bg-[var(--color-dark-section)] py-0">
-            <ZoomParallaxSection />
-          </section>
+          <ZoomParallaxSection />
 
           <LandingStatsBar />
 
