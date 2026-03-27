@@ -31,9 +31,9 @@ export function ZoomParallax({
   const titleOpacity = useTransform(scrollYProgress, [0, 0.08, 0.16], [1, 0.45, 0]);
   const titleY = useTransform(scrollYProgress, [0, 0.16], [0, -40]);
 
-  // Lenis smooth scroll
+  // Lenis smooth scroll — lerp 0.14 keeps page feel without lagging the scrub
   useEffect(() => {
-    const lenis = new Lenis({ lerp: 0.08, smoothWheel: true });
+    const lenis = new Lenis({ lerp: 0.14, smoothWheel: true });
     let frameId = 0;
 
     const raf = (time: number) => {
@@ -49,38 +49,21 @@ export function ZoomParallax({
     };
   }, []);
 
-  // Sequential preload of all frames
+  // Batch-preload all frames immediately so the browser queues them in order.
+  // No artificial stagger — browser limits to ~6 concurrent, earliest frames
+  // arrive first, which is exactly what we need for scrubbing.
   useEffect(() => {
     if (!framePaths.length) return;
-    let cancelled = false;
-
-    const preloadFrame = (index: number) => {
-      if (cancelled || index >= framePaths.length) return;
-
-      const image = new window.Image();
-      image.decoding = "async";
-      image.loading = "eager";
-
-      const scheduleNext = () => {
-        if (cancelled) return;
-        preloadTimeoutRef.current = window.setTimeout(
-          () => preloadFrame(index + 1),
-          index < 12 ? 16 : 48,
-        );
-      };
-
-      image.onload = scheduleNext;
-      image.onerror = scheduleNext;
-      image.src = framePaths[index];
-    };
-
-    preloadFrame(0);
-
+    const images = framePaths.map((src) => {
+      const img = new window.Image();
+      img.decoding = "async";
+      img.src = src;
+      return img;
+    });
+    // keep images alive so the browser doesn't GC them before caching
+    preloadTimeoutRef.current = null;
     return () => {
-      cancelled = true;
-      if (preloadTimeoutRef.current) {
-        window.clearTimeout(preloadTimeoutRef.current);
-      }
+      images.forEach((img) => { img.src = ""; });
     };
   }, [framePaths]);
 
