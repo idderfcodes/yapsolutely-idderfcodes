@@ -23,19 +23,12 @@ import {
 
 import AnimatedTextCycle from "./animated-text-cycle";
 import { Header } from "./header";
+import { landingDisplayFont } from "./landing-font";
+import { ZoomParallaxSection } from "./zoom-parallax-section";
 
 const LandingDottedSurface = dynamic(
   () => import("./landing-dotted-surface").then((mod) => mod.LandingDottedSurface),
   { ssr: false },
-);
-
-const VideoScrollSection = dynamic(
-  () => import("./video-scroll-section").then((mod) => mod.VideoScrollSection),
-  {
-    loading: () => (
-      <div className="mt-10 h-[28rem] rounded-[34px] border border-[var(--landing-border)] bg-[var(--landing-background-soft)] shadow-[0_24px_60px_-38px_rgba(20,20,20,0.18)] sm:h-[34rem]" />
-    ),
-  },
 );
 
 const marqueeLogos = [
@@ -285,14 +278,14 @@ const revealFromRight = {
 
 const sectionReveal = {
   hidden: {
-    y: 42,
-    scale: 0.97,
-    clipPath: "inset(0 0 100% 0 round 28px)",
+    y: 32,
+    opacity: 0,
+    scale: 0.985,
   },
   show: {
     y: 0,
+    opacity: 1,
     scale: 1,
-    clipPath: "inset(0 0 0% 0 round 28px)",
   },
 };
 
@@ -316,7 +309,7 @@ export default function RevisedLandingPage() {
   const [showHeroTexture, setShowHeroTexture] = useState(false);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(min-width: 1024px) and (prefers-reduced-motion: no-preference)");
+    const mediaQuery = window.matchMedia("(min-width: 768px)");
 
     const syncTexturePreference = () => {
       setShowHeroTexture(mediaQuery.matches);
@@ -331,7 +324,9 @@ export default function RevisedLandingPage() {
   }, []);
 
   return (
-    <div className="landing-shell relative min-h-screen overflow-x-clip bg-[var(--landing-background)] text-[var(--landing-text)]">
+    <div
+      className={`${landingDisplayFont.variable} landing-shell relative min-h-screen overflow-x-clip bg-[var(--landing-background)] text-[var(--landing-text)]`}
+    >
       <LandingBackdrop />
 
       <div className="relative z-10">
@@ -405,39 +400,6 @@ export default function RevisedLandingPage() {
                 >
                   <HeroShowcase showTexture={showHeroTexture} />
                 </motion.div>
-              </div>
-            </div>
-          </section>
-
-          <section className="px-4 pb-6 sm:px-6 sm:pb-10">
-            <div className="landing-container">
-              <div className="overflow-hidden rounded-[34px] border border-white/8 bg-[var(--landing-stats-bg)] px-6 py-6 shadow-[0_30px_80px_-52px_rgba(20,20,20,0.5)] sm:px-8 sm:py-8">
-                <div className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center">
-                  <div>
-                    <div className="landing-body text-[12px] font-medium uppercase tracking-[0.18em] text-[var(--landing-text-muted-on-dark)]">
-                      Built for live phone operations
-                    </div>
-                    <h2 className="landing-display mt-4 max-w-[12ch] text-[2.8rem] leading-[0.94] tracking-[-0.05em] text-[var(--landing-text-on-dark)] sm:text-[3.6rem]">
-                      The metrics teams want before they trust AI on the line
-                    </h2>
-                  </div>
-
-                  <div className="grid gap-3 sm:grid-cols-3">
-                    {heroStats.map((stat) => (
-                      <div
-                        key={stat.label}
-                        className="rounded-[24px] border border-white/8 bg-white/6 px-5 py-5 backdrop-blur-sm transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.01]"
-                      >
-                        <div className="landing-stat text-[2.2rem] leading-none tracking-[-0.05em] text-[var(--landing-text-on-dark)]">
-                          {stat.value}
-                        </div>
-                        <div className="landing-body mt-2 text-[12px] leading-5 text-[var(--landing-text-muted-on-dark)]">
-                          {stat.label}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
               </div>
             </div>
           </section>
@@ -561,32 +523,6 @@ export default function RevisedLandingPage() {
                     ))}
                 </AnimatePresence>
               </motion.div>
-            </div>
-          </section>
-
-          <section className="px-4 py-6 sm:px-6 sm:py-8">
-            <div className="landing-container">
-              <VideoScrollSection
-                videoSrc="/videos/landing-demo.mp4"
-                poster="/hero-dashboard.png"
-                badge="Product walkthrough"
-                title="See the inbound call workflow unfold as you scroll"
-                description="This section uses your scroll-scale video pattern to show how Yapsolutely moves from agent setup to live call review."
-                points={[
-                  {
-                    title: "Build",
-                    description: "Define the prompt, voice, and escalation rules in one workspace.",
-                  },
-                  {
-                    title: "Deploy",
-                    description: "Attach a number and put the agent live without custom telecom work.",
-                  },
-                  {
-                    title: "Review",
-                    description: "Keep transcripts, actions, and outcomes visible after every call.",
-                  },
-                ]}
-              />
             </div>
           </section>
 
@@ -716,6 +652,14 @@ export default function RevisedLandingPage() {
               </motion.div>
             </div>
           </section>
+
+          <section className="px-4 py-6 sm:px-6 sm:py-8">
+            <div className="landing-container">
+              <ZoomParallaxSection />
+            </div>
+          </section>
+
+          <LandingStatsBar />
 
           <section id="faq" className="landing-section pt-4">
             <div className="landing-container max-w-[62rem]">
@@ -871,6 +815,43 @@ export default function RevisedLandingPage() {
   );
 }
 
+function LandingStatsBar() {
+  return (
+    <section className="px-4 pb-6 pt-2 sm:px-6 sm:pb-10 sm:pt-4">
+      <div className="landing-container">
+        <div className="overflow-hidden rounded-[34px] border border-white/8 bg-[var(--landing-stats-bg)] px-6 py-6 shadow-[0_30px_80px_-52px_rgba(20,20,20,0.5)] sm:px-8 sm:py-8">
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center">
+            <div>
+              <div className="landing-body text-[12px] font-medium uppercase tracking-[0.18em] text-[var(--landing-text-muted-on-dark)]">
+                Built for live phone operations
+              </div>
+              <h2 className="landing-display mt-4 max-w-[12ch] text-[2.8rem] leading-[0.94] tracking-[-0.05em] text-[var(--landing-text-on-dark)] sm:text-[3.6rem]">
+                The metrics teams want before they trust AI on the line
+              </h2>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              {heroStats.map((stat) => (
+                <div
+                  key={stat.label}
+                  className="rounded-[24px] border border-white/8 bg-white/6 px-5 py-5 backdrop-blur-sm transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.01]"
+                >
+                  <div className="landing-stat text-[2.2rem] leading-none tracking-[-0.05em] text-[var(--landing-text-on-dark)]">
+                    {stat.value}
+                  </div>
+                  <div className="landing-body mt-2 text-[12px] leading-5 text-[var(--landing-text-muted-on-dark)]">
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function HeroShowcase({ showTexture }: { showTexture: boolean }) {
   return (
     <div className="relative">
@@ -880,15 +861,15 @@ function HeroShowcase({ showTexture }: { showTexture: boolean }) {
       <div className="relative overflow-hidden rounded-[34px] border border-white/8 bg-[linear-gradient(145deg,rgba(26,26,26,0.96),rgba(20,20,20,0.98))] p-4 shadow-[0_32px_70px_-38px_rgba(0,0,0,0.4)] sm:p-5">
         {showTexture ? (
           <LandingDottedSurface
-            className="opacity-80"
+            className="z-0 opacity-100"
             pointColor="#D95F3B"
             fogColor="#1A1A1A"
-            pointOpacity={0.18}
-            pointSize={4.5}
+            pointOpacity={0.34}
+            pointSize={5.5}
           />
         ) : null}
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(217,95,59,0.16),transparent_34%),linear-gradient(180deg,rgba(26,26,26,0.04),rgba(20,20,20,0.22))]" />
-        <div className="rounded-[28px] border border-white/8 bg-white/4 p-4 backdrop-blur-sm sm:p-5">
+        <div className="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(circle_at_top_left,rgba(217,95,59,0.22),transparent_38%),linear-gradient(180deg,rgba(26,26,26,0.04),rgba(20,20,20,0.18))]" />
+        <div className="relative z-20 rounded-[28px] border border-white/8 bg-white/4 p-4 backdrop-blur-sm sm:p-5">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full bg-[#FFB4A3]" />

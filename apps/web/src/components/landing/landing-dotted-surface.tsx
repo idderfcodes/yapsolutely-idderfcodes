@@ -35,11 +35,17 @@ export function LandingDottedSurface({
     const height = Math.max(container.clientHeight, 1);
     const camera = new THREE.PerspectiveCamera(55, width / height, 1, 4000);
     camera.position.set(0, 240, 980);
+    camera.lookAt(0, 0, 0);
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.setSize(width, height);
     renderer.setClearColor(fogColor, 0);
+    renderer.domElement.style.position = "absolute";
+    renderer.domElement.style.inset = "0";
+    renderer.domElement.style.width = "100%";
+    renderer.domElement.style.height = "100%";
+    renderer.domElement.style.display = "block";
     container.appendChild(renderer.domElement);
 
     const compactLayout = width < 1200;
@@ -74,6 +80,8 @@ export function LandingDottedSurface({
     });
 
     const points = new THREE.Points(geometry, material);
+    points.rotation.x = -0.42;
+    points.position.y = -42;
     scene.add(points);
 
     let frameId = 0;
@@ -128,5 +136,5 @@ export function LandingDottedSurface({
     };
   }, [fogColor, pointColor, pointOpacity, pointSize, shouldReduceMotion]);
 
-  return <div ref={containerRef} className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`} />;
+  return <div ref={containerRef} className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`} aria-hidden="true" />;
 }
