@@ -125,6 +125,9 @@
   --color-dark-section: #141414;
   --color-dark-secondary: #1A1A1A;
   --color-dark-divider: #2A2A2A;
+  --color-hero-left: #141414;
+  --color-hero-right: #1a1a1a;
+  --color-bg-card-highlight: #fff5f5;
 
   /* Overlay helpers */
   --color-badge-dark: rgba(255,255,255,0.06);
@@ -134,6 +137,7 @@
   --color-overlay-dark: rgba(0,0,0,0.65);
   --color-overlay-accent-soft: rgba(238,48,58,0.06);       /* red-primary soft */
   --color-overlay-accent-medium: rgba(238,48,58,0.15);     /* red-primary medium */
+  --color-overlay-accent-border: color-mix(in srgb, var(--color-accent-primary) 24%, transparent);
   --color-overlay-pop-soft: rgba(255,209,1,0.10);          /* yellow soft */
   --color-overlay-secondary-medium: rgba(255,123,48,0.15); /* orange medium */
 }
@@ -503,14 +507,50 @@
     font-weight: 600;
   }
 
+  /* ── Landing typography size tiers (clamp-based) ─── */
+  .landing-display-1 {
+    font-size: clamp(32px, 4vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  .landing-display-2 {
+    font-size: clamp(20px, 2.5vw, 24px);
+    line-height: 1.2;
+  }
+  .landing-display-3 {
+    font-size: clamp(18px, 2vw, 22px);
+    line-height: 1.25;
+  }
+  .landing-hero-h1 {
+    font-size: clamp(40px, 5.5vw, 80px);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+  }
+
   .landing-body {
     font-family: var(--font-landing-body), "Inter", system-ui, sans-serif;
     font-weight: 400;
+  }
+  .landing-body-1-regular {
+    font-size: clamp(15px, 1.2vw, 18px);
+    line-height: 1.6;
+  }
+  .landing-body-2-regular {
+    font-size: clamp(13px, 0.95vw, 15px);
+    line-height: 1.6;
+  }
+  .landing-body-2-semibold {
+    font-size: clamp(13px, 1vw, 15px);
+    font-weight: 500;
+    line-height: 1.0;
   }
 
   .landing-stat {
     font-family: var(--font-landing-display), "Bagoss Condensed", system-ui, sans-serif;
     font-weight: 600;
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
   }
 
   .landing-container {

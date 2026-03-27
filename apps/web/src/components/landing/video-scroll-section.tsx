@@ -136,23 +136,23 @@ export function VideoScrollSection({
   );
 
   const showcaseCard = (
-    <div className="relative w-full overflow-hidden rounded-[28px] border border-[var(--landing-border)] bg-[var(--landing-hero-right)] shadow-[0_24px_60px_-34px_rgba(20,20,20,0.32)] sm:rounded-[34px] sm:shadow-[0_36px_80px_-42px_rgba(20,20,20,0.38)]">
-      <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-between gap-4 border-b border-white/10 bg-black/30 px-4 py-3 backdrop-blur-md sm:px-5">
+    <div className="relative w-full overflow-hidden rounded-[28px] border border-[var(--color-dark-divider)] bg-[var(--color-hero-right)] shadow-[0_24px_60px_-34px_rgba(20,20,20,0.32)] sm:rounded-[34px] sm:shadow-[0_36px_80px_-42px_rgba(20,20,20,0.38)]">
+      <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-between gap-4 border-b border-[var(--color-dark-divider)] bg-[var(--color-badge-dark)] px-4 py-3 backdrop-blur-md sm:px-5">
         <div>
-          <div className="landing-body text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--landing-text-muted-on-dark)]">
+          <div className="landing-body text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--color-text-muted-on-dark)]">
             Operator walkthrough
           </div>
-          <div className="landing-body mt-1 text-[13px] font-medium text-[var(--landing-text-on-dark)] sm:text-[14px]">
+          <div className="landing-body mt-1 text-[13px] font-medium text-[var(--color-text-on-dark)] sm:text-[14px]">
             Build, assign, and review in one workflow
           </div>
         </div>
 
-        <div className="hidden rounded-full border border-white/12 bg-white/8 px-3 py-1.5 landing-body text-[11px] font-medium text-[var(--landing-text-on-dark)] sm:block">
+        <div className="hidden rounded-full border border-[var(--color-dark-divider)] bg-[var(--color-overlay-medium)] px-3 py-1.5 landing-body text-[11px] font-medium text-[var(--color-text-on-dark)] sm:block">
           Live product view
         </div>
       </div>
 
-      <div className="relative aspect-[16/11] min-h-[320px] w-full bg-[var(--landing-hero-right)] sm:aspect-[16/9] sm:min-h-[540px]">
+      <div className="relative aspect-[16/11] min-h-[320px] w-full bg-[var(--color-hero-right)] sm:aspect-[16/9] sm:min-h-[540px]">
         {videoElement}
 
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,20,20,0.12)_0%,rgba(20,20,20,0.18)_30%,rgba(20,20,20,0.76)_100%)]" />
@@ -165,10 +165,10 @@ export function VideoScrollSection({
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
           <div className="max-w-[34rem]">
-            <h3 className="landing-display text-[2.1rem] leading-[0.94] tracking-[-0.06em] text-[var(--landing-text-on-dark)] sm:text-[4.4rem]">
+            <h3 className="landing-display text-[2.1rem] leading-[0.94] tracking-[-0.06em] text-[var(--color-text-on-dark)] sm:text-[4.4rem]">
               Watch the workflow expand as you scroll
             </h3>
-            <p className="landing-body mt-4 text-[15px] leading-7 text-[var(--landing-text-muted-on-dark)] sm:text-[17px]">
+            <p className="landing-body mt-4 text-[15px] leading-7 text-[var(--color-text-muted-on-dark)] sm:text-[17px]">
               See the product move from agent setup to live call review using the real landing walkthrough.
             </p>
           </div>
@@ -178,12 +178,12 @@ export function VideoScrollSection({
           {points.map((point) => (
             <div
               key={point.title}
-              className="rounded-[18px] border border-white/10 bg-black/34 px-4 py-4 backdrop-blur-md sm:rounded-[20px]"
+              className="rounded-[18px] border border-[var(--color-dark-divider)] bg-[var(--color-badge-dark)] px-4 py-4 backdrop-blur-md sm:rounded-[20px]"
             >
-              <div className="landing-body text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--landing-text-muted-on-dark)]">
+              <div className="landing-body text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--color-text-muted-on-dark)]">
                 {point.title}
               </div>
-              <div className="landing-body mt-2 text-[13px] leading-6 text-[var(--landing-text-on-dark)]">
+              <div className="landing-body mt-2 text-[13px] leading-6 text-[var(--color-text-on-dark)]">
                 {point.description}
               </div>
             </div>
@@ -196,13 +196,13 @@ export function VideoScrollSection({
   return (
     <section ref={sectionRef} className={className}>
       <div className="mx-auto max-w-[46rem] text-center">
-        <div className="landing-pill inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--landing-text-muted)]">
+        <div className="landing-pill inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--color-accent-primary)]">
           {badge}
         </div>
-        <h2 className="landing-display mt-6 text-[3rem] leading-[0.92] tracking-[-0.06em] text-[var(--landing-text)] sm:text-[4rem]">
+        <h2 className="landing-display mt-6 text-[3rem] leading-[0.92] tracking-[-0.06em] text-[var(--color-text-primary)] sm:text-[4rem]">
           {title}
         </h2>
-        <p className="landing-body mx-auto mt-4 max-w-[42rem] text-[16px] leading-7 text-[var(--landing-text-muted)]">
+        <p className="landing-body mx-auto mt-4 max-w-[42rem] text-[16px] leading-7 text-[var(--color-text-muted)]">
           {description}
         </p>
       </div>

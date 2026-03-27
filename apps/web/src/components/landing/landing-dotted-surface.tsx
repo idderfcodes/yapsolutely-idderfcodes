@@ -12,10 +12,19 @@ type LandingDottedSurfaceProps = {
   pointSize?: number;
 };
 
+function resolveThemeColor(input: string) {
+  if (typeof window === "undefined" || !input.startsWith("var(")) {
+    return input;
+  }
+
+  const token = input.slice(4, -1).trim();
+  return getComputedStyle(document.documentElement).getPropertyValue(token).trim() || input;
+}
+
 export function LandingDottedSurface({
   className = "",
-  pointColor = "#EE303A",
-  fogColor = "#1A1A1A",
+  pointColor = "var(--color-accent-primary)",
+  fogColor = "var(--color-hero-right)",
   pointOpacity = 0.34,
   pointSize = 5,
 }: LandingDottedSurfaceProps) {
@@ -28,8 +37,10 @@ export function LandingDottedSurface({
       return;
     }
 
+    const resolvedFogColor = resolveThemeColor(fogColor);
+    const resolvedPointColor = resolveThemeColor(pointColor);
     const scene = new THREE.Scene();
-    scene.fog = new THREE.Fog(fogColor, 600, 2200);
+    scene.fog = new THREE.Fog(resolvedFogColor, 600, 2200);
 
     const width = Math.max(container.clientWidth, 1);
     const height = Math.max(container.clientHeight, 1);
@@ -40,7 +51,7 @@ export function LandingDottedSurface({
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.setSize(width, height);
-    renderer.setClearColor(fogColor, 0);
+    renderer.setClearColor(resolvedFogColor, 0);
     renderer.domElement.style.position = "absolute";
     renderer.domElement.style.inset = "0";
     renderer.domElement.style.width = "100%";
@@ -55,7 +66,7 @@ export function LandingDottedSurface({
     const geometry = new THREE.BufferGeometry();
     const positions: number[] = [];
     const colors: number[] = [];
-    const dotColor = new THREE.Color(pointColor);
+    const dotColor = new THREE.Color(resolvedPointColor);
 
     for (let ix = 0; ix < amountX; ix++) {
       for (let iy = 0; iy < amountY; iy++) {
