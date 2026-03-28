@@ -795,6 +795,72 @@ export default function RevisedLandingPage() {
 
           <LandingStatsBar />
 
+          {/* Social proof */}
+          <section className="landing-section bg-[var(--color-bg)] py-16 sm:py-20">
+            <div className="landing-container">
+              <motion.div
+                variants={sectionReveal}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                className="text-center"
+              >
+                <div className="landing-pill mx-auto inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--color-accent-primary)]">
+                  Teams using Yapsolutely
+                </div>
+                <h2 className="landing-display landing-display-1 mx-auto mt-6 max-w-[16ch] text-[var(--color-text-primary)]">
+                  Built for ops teams that pick up the phone.
+                </h2>
+              </motion.div>
+
+              <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.1 }}
+                className="mx-auto mt-10 grid max-w-[1080px] gap-5 md:grid-cols-3"
+              >
+                {[
+                  {
+                    quote: "We replaced our after-hours voicemail in a day. Every overnight call now gets logged with a transcript and follow-up queue.",
+                    name: "Jordan M.",
+                    role: "Operations Lead",
+                    company: "Regional Health Group",
+                  },
+                  {
+                    quote: "The demo-to-live path was the fastest I've seen. We had a working inbound agent before the end of the first meeting.",
+                    name: "Priya S.",
+                    role: "Head of Sales",
+                    company: "Relay Commerce",
+                  },
+                  {
+                    quote: "Our support team finally has proof of what happened on every call. No more he-said-she-said — just transcripts and actions.",
+                    name: "Marcus T.",
+                    role: "CX Director",
+                    company: "Fieldwork Labs",
+                  },
+                ].map((testimonial) => (
+                  <motion.div key={testimonial.name} variants={cardReveal}>
+                    <div className="landing-card landing-card-hover flex h-full flex-col justify-between rounded-[28px] border border-[var(--color-border)] bg-[var(--color-bg)] p-6 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)]">
+                      <p className="landing-body landing-body-2-regular leading-7 text-[var(--color-text-primary)]">
+                        &ldquo;{testimonial.quote}&rdquo;
+                      </p>
+                      <div className="mt-6 border-t border-[var(--color-border)] pt-4">
+                        <div className="landing-body text-[14px] font-medium text-[var(--color-text-primary)]">
+                          {testimonial.name}
+                        </div>
+                        <div className="landing-body mt-1 text-[12px] text-[var(--color-text-muted)]">
+                          {testimonial.role} · {testimonial.company}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
+          </section>
+
           <section id="integrations" className="landing-section pt-4">
             <div className="landing-container">
               <motion.div
