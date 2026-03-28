@@ -669,6 +669,52 @@ export default function RevisedLandingPage() {
             </div>
           </section>
 
+          {/* Live demo video */}
+          <section className="landing-section bg-[var(--color-dark-section)] py-16 sm:py-20">
+            <div className="landing-container">
+              <motion.div
+                variants={sectionReveal}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                className="text-center"
+              >
+                <div className="landing-pill mx-auto inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--color-accent-primary)]">
+                  See it in action
+                </div>
+                <h2 className="landing-display landing-display-1 mx-auto mt-6 max-w-[16ch] text-[var(--color-text-on-dark)]">
+                  A real call, not a script.
+                </h2>
+                <p className="landing-body landing-body-1-regular mx-auto mt-4 max-w-[32rem] text-[var(--color-text-muted-on-dark)]">
+                  Watch the agent handle an inbound call with live transcription.
+                </p>
+              </motion.div>
+
+              <motion.div
+                variants={sectionReveal}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                className="mx-auto mt-10 max-w-[680px]"
+              >
+                <div className="overflow-hidden rounded-[24px] border border-[var(--color-dark-divider)] shadow-[0_32px_72px_-24px_rgba(0,0,0,0.5)]">
+                  <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    className="block w-full"
+                  >
+                    <source src="/videos/demo-transcript.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </motion.div>
+            </div>
+          </section>
+
           <section id="features" className="landing-section relative overflow-hidden pt-4">
             <BGPattern variant="diagonal-stripes" size={48} fill="#ffffff" mask="fade-edges" className="opacity-[0.03]" />
             <div className="landing-container">
