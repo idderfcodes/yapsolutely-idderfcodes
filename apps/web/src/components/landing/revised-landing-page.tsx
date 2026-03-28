@@ -52,15 +52,15 @@ const marqueeLogos = [
 const heroStats = [
   {
     value: "<800ms",
-    label: "Average voice response time",
+    label: "Response time",
   },
   {
     value: "24/7",
-    label: "Your agent never sleeps",
+    label: "Always on",
   },
   {
     value: "100%",
-    label: "Every word transcribed",
+    label: "Transcribed",
   },
 ];
 
@@ -70,7 +70,7 @@ const howItWorks = [
     eyebrow: "Build",
     title: "Define Your Agent",
     description:
-      "Set the voice, opening line, qualification logic, and routing rules before a single live caller hits the line.",
+      "Set the voice, prompt, and routing rules.",
     icon: SparklesIcon,
     signal: "Voice + prompt + routing",
     preview: <PromptFlowPreview />,
@@ -80,9 +80,9 @@ const howItWorks = [
     eyebrow: "Deploy",
     title: "Assign a Number and Go Live",
     description:
-      "Connect a real phone number, publish the agent, and route inbound calls without rebuilding telecom infrastructure.",
+      "Attach a real number and start taking calls.",
     icon: PhoneIcon,
-    signal: "Routing ready for live traffic",
+    signal: "Routing ready",
     preview: <NumberAssignmentPreview />,
   },
   {
@@ -90,7 +90,7 @@ const howItWorks = [
     eyebrow: "Monitor",
     title: "Review Every Call",
     description:
-      "Open transcripts, captured actions, and outcomes after every conversation so operators can tune what happens next.",
+      "Transcripts, actions, and outcomes after every call.",
     icon: ShieldCheckIcon,
     signal: "Transcript + audit trail",
     preview: <TranscriptReviewPreview />,
@@ -101,7 +101,7 @@ const featureTiles = [
   {
     title: "Sub-second Responses",
     description:
-      "Streaming STT, LLM, and TTS keep the voice loop fast enough that callers stay in the conversation instead of waiting through dead air.",
+      "Streaming STT, LLM, and TTS in one fast loop.",
     icon: BoltIcon,
     type: "wide",
     content: <LatencyPreview />,
@@ -109,7 +109,7 @@ const featureTiles = [
   {
     title: "Full Audit Trail",
     description:
-      "Every word is transcribed, every event is logged, and every follow-up stays visible after the call ends.",
+      "Every word transcribed, every event logged.",
     icon: ShieldCheckIcon,
     type: "wide",
     content: <AuditTrailPreview />,
@@ -117,7 +117,7 @@ const featureTiles = [
   {
     title: "Custom Agents",
     description:
-      "Tune prompt logic, voice settings, and first-message behavior for every use case.",
+      "Prompt, voice, and behavior per agent.",
     icon: SparklesIcon,
     type: "small",
     content: <AgentBuilderMini />,
@@ -125,7 +125,7 @@ const featureTiles = [
   {
     title: "Real Phone Numbers",
     description:
-      "Assign US and international numbers through Twilio-backed routing that maps directly to agents.",
+      "US and international numbers mapped to agents.",
     icon: PhoneIcon,
     type: "small",
     content: <PhoneNumbersMini />,
@@ -133,7 +133,7 @@ const featureTiles = [
   {
     title: "After-hours Coverage",
     description:
-      "Keep answering after close, capture context, and queue the right follow-ups for the next shift.",
+      "Capture demand after close, queue follow-ups.",
     icon: QueueListIcon,
     type: "small",
     content: <AfterHoursMini />,
@@ -141,7 +141,7 @@ const featureTiles = [
   {
     title: "Analytics Dashboard",
     description:
-      "Track outcomes, performance, and queue health in one operator view built for real call operations.",
+      "Outcomes, performance, and queue health in one view.",
     icon: ChartBarSquareIcon,
     type: "small",
     content: <AnalyticsMini />,
@@ -153,75 +153,75 @@ const useCases = [
     id: "sales",
     label: "Inbound Sales",
     eyebrow: "Sales workflow",
-    title: "Qualify leads, answer pricing, and book demos on the first call",
+    title: "Qualify, price, and book on the first ring",
     description:
-      "Use Yapsolutely to handle high-intent inbound calls, score opportunities, and route hot leads while the buying signal is still alive.",
+      "Score opportunities and route hot leads before the signal fades.",
     bullets: [
-      "Capture team size, urgency, and budget in one flow",
-      "Answer common pricing questions before a human joins",
-      "Book demos automatically when interest is high",
+      "Capture team size, urgency, and budget",
+      "Answer pricing questions automatically",
+      "Book demos when interest is high",
     ],
-    footer: "Lead score, booking outcome, and next-step proof stay attached to the call.",
+    footer: "Lead score + booking outcome attached to every call.",
     preview: <InboundSalesPreview />,
   },
   {
     id: "booking",
     label: "Appointment Booking",
     eyebrow: "Scheduling workflow",
-    title: "Confirm availability and lock appointment slots without back-and-forth",
+    title: "Lock slots without the back-and-forth",
     description:
-      "Let the voice agent confirm availability, collect contact details, and send the next-step confirmation while the caller is still on the line.",
+      "Confirm availability, collect details, and send confirmation on the call.",
     bullets: [
-      "Surface open slots in a structured booking flow",
-      "Capture name, date, and contact number in one pass",
-      "Send a confirmation text after the call ends",
+      "Surface open slots in a structured flow",
+      "Capture name, date, and contact in one pass",
+      "Send confirmation text after the call",
     ],
-    footer: "Availability, selection, and confirmation happen in one contained flow.",
+    footer: "One call, one confirmed booking.",
     preview: <AppointmentBookingPreview />,
   },
   {
     id: "support",
     label: "Customer Support",
     eyebrow: "Support workflow",
-    title: "Handle tier-one questions before escalating complex support calls",
+    title: "Resolve tier-one, escalate the rest",
     description:
-      "Resolve repetitive inbound support issues, keep the conversation on-script, and escalate only when the caller actually needs a person.",
+      "Handle repetitive issues on-script. Escalate only when needed.",
     bullets: [
-      "Answer FAQs using your approved workflow",
-      "Track unresolved issues and escalation moments clearly",
-      "Keep a transcript for every support interaction",
+      "Answer FAQs from your approved workflow",
+      "Track unresolved issues and escalations",
+      "Transcript for every interaction",
     ],
-    footer: "Support teams get a cleaner escalation path instead of another black-box bot.",
+    footer: "Cleaner escalation path, not another black-box bot.",
     preview: <CustomerSupportPreview />,
   },
   {
     id: "qualification",
     label: "Lead Qualification",
     eyebrow: "Qualification workflow",
-    title: "Screen intent, capture details, and route the strongest leads fast",
+    title: "Screen, score, and route in one call",
     description:
-      "Guide inbound callers through a qualification sequence, assign a clear lead score, and trigger the right follow-up while context is fresh.",
+      "Structured qualification with a clear lead score.",
     bullets: [
-      "Collect qualification answers in a structured flow",
-      "Score the lead based on fit and urgency",
-      "Push high-intent outcomes straight into the next step",
+      "Collect answers in a structured flow",
+      "Score on fit and urgency",
+      "Route high-intent leads instantly",
     ],
-    footer: "Qualification becomes structured data, not just a vague call summary.",
+    footer: "Structured data, not a vague call summary.",
     preview: <LeadQualificationPreview />,
   },
   {
     id: "after-hours",
     label: "After-hours Coverage",
     eyebrow: "Coverage workflow",
-    title: "Capture overnight demand instead of sending every caller to voicemail",
+    title: "Stop losing overnight calls to voicemail",
     description:
-      "Keep your lines open after close, collect the details that matter, and queue organized follow-ups for the next working block.",
+      "Keep lines open after close. Queue organized follow-ups.",
     bullets: [
-      "Catch calls after business hours with the same brand voice",
-      "Log follow-up tasks for morning triage",
-      "Stop losing demand to voicemail and missed opportunities",
+      "Same brand voice after business hours",
+      "Follow-up tasks ready for morning triage",
+      "No more missed opportunities",
     ],
-    footer: "The queue is already organized by the time your team logs in.",
+    footer: "Queue organized before your team logs in.",
     preview: <AfterHoursCoveragePreview />,
   },
 ];
@@ -233,11 +233,11 @@ const integrationStacks = [
     eyebrow: "Telephony layer",
     title: "Twilio",
     description:
-      "Number provisioning, inbound webhooks, and live audio handoff all start at the phone layer operators already expect.",
+      "Number provisioning, webhooks, and live audio handoff.",
     icon: PhoneIcon,
     points: [
-      "Real phone numbers mapped to agents in the workspace",
-      "Inbound call stream routing into the live runtime",
+      "Numbers mapped to agents",
+      "Inbound routing into the live runtime",
     ],
     badge: "Phone + routing",
   },
@@ -245,11 +245,11 @@ const integrationStacks = [
     eyebrow: "Speech layer",
     title: "Deepgram",
     description:
-      "Streaming speech-to-text and text-to-speech keep the call responsive enough to feel like an actual conversation, not a queued bot.",
+      "Streaming STT and TTS that feels like a real conversation.",
     icon: BoltIcon,
     points: [
-      "Real-time transcription and playback in one loop",
-      "Barge-in aware voice handling during live calls",
+      "Real-time transcription and playback",
+      "Barge-in aware voice handling",
     ],
     badge: "STT + TTS",
   },
@@ -257,11 +257,11 @@ const integrationStacks = [
     eyebrow: "Reasoning layer",
     title: "Anthropic",
     description:
-      "Claude powers the response loop, tool execution decisions, and the prompt behavior generated from your flow builder.",
+      "Claude powers replies, tool execution, and prompt behavior.",
     icon: CpuChipIcon,
     points: [
-      "Prompt-guided live replies with tool orchestration",
-      "Flow-generated instructions feed the same runtime",
+      "Prompt-guided replies with tool orchestration",
+      "Flow-generated instructions in the same runtime",
     ],
     badge: "LLM + tools",
   },
@@ -269,11 +269,11 @@ const integrationStacks = [
     eyebrow: "Product layer",
     title: "Next.js + Prisma",
     description:
-      "Calls, transcripts, actions, and reviewable metadata land back in the dashboard so teams can audit the full lifecycle after every conversation.",
+      "Calls, transcripts, and actions land in the dashboard.",
     icon: CircleStackIcon,
     points: [
-      "Persisted call records and timeline events",
-      "Transcript-backed operator review inside the workspace",
+      "Persisted call records and events",
+      "Transcript-backed operator review",
     ],
     badge: "App + data",
   },
@@ -486,10 +486,10 @@ export default function RevisedLandingPage() {
                   Use cases
                 </div>
                 <h2 className="landing-display landing-display-1 mt-6 text-[var(--color-text-primary)]">
-                  Built for every inbound call scenario
+                  Every inbound call scenario
                 </h2>
                 <p className="landing-body landing-body-1-regular mt-4 max-w-[38rem] text-[var(--color-text-muted)]">
-                  From first-touch sales to after-hours coverage, Yapsolutely gives teams a structured way to answer, qualify, book, and route calls without voicemail gaps.
+                  Sales, support, booking, qualification, after-hours.
                 </p>
               </motion.div>
 
@@ -600,10 +600,10 @@ export default function RevisedLandingPage() {
                   How it works
                 </div>
                 <h2 className="landing-display landing-display-1 mt-6 text-[var(--color-text-primary)]">
-                  Three steps to a working phone agent
+                  Three steps to a live agent
                 </h2>
                 <p className="landing-body landing-body-1-regular mt-4 max-w-[32rem] text-[var(--color-text-muted)]">
-                  Configure the agent, attach a number, and review transcripts and actions after every call.
+                  Configure. Attach a number. Review calls.
                 </p>
               </motion.div>
 
@@ -686,10 +686,10 @@ export default function RevisedLandingPage() {
                   Platform
                 </div>
                 <h2 className="landing-display landing-display-1 mt-6 text-[var(--color-text-primary)]">
-                  Everything you need to deploy voice agents at scale
+                  Voice agents at scale
                 </h2>
                 <p className="landing-body landing-body-1-regular mt-4 max-w-[36rem] text-[var(--color-text-muted)]">
-                  Build voice agents, assign real phone numbers, handle inbound calls. One workspace.
+                  Agents, numbers, calls. One workspace.
                 </p>
               </motion.div>
 
@@ -765,10 +765,10 @@ export default function RevisedLandingPage() {
                   Integrations
                 </div>
                 <h2 className="landing-display landing-display-1 mt-6 text-[var(--color-text-primary)]">
-                  The voice stack plugs into the product layer you actually operate.
+                  Four layers, fully wired.
                 </h2>
                 <p className="landing-body landing-body-1-regular mt-4 max-w-[39rem] text-[var(--color-text-muted)]">
-                  Yapsolutely is not a floating demo glued together with pretty screenshots. The telephony, speech, reasoning, and dashboard layers are wired together so the call and the proof loop stay in sync.
+                  Telephony, speech, reasoning, and dashboard — connected end to end.
                 </p>
               </motion.div>
 
@@ -794,10 +794,10 @@ export default function RevisedLandingPage() {
                       </div>
 
                       <h3 className="landing-display landing-display-2 mt-6 max-w-[12ch] text-[var(--color-text-on-dark)]">
-                        One call, four connected layers.
+                        One call, four layers.
                       </h3>
                       <p className="landing-body mt-4 max-w-[32rem] text-[14px] leading-7 text-[var(--color-text-muted-on-dark)]">
-                        The inbound call hits telephony, moves through speech and reasoning, then returns to the dashboard as something teams can review, measure, and improve.
+                        Telephony to dashboard in a single loop.
                       </p>
 
                       <div className="mt-6 rounded-[24px] border border-[var(--color-dark-divider)] bg-[var(--color-overlay-soft)] p-4 sm:p-5">
@@ -891,7 +891,7 @@ export default function RevisedLandingPage() {
                       />
                     </h2>
                     <p className="landing-body landing-body-1-regular mt-4 max-w-[34rem] text-[var(--color-text-muted-on-dark)]">
-                      Build the agent, attach the number, and review every conversation with transcripts, actions, and outcomes in one operator workspace.
+                      Build the agent, attach the number, review every call.
                     </p>
                     <div className="mt-5 flex flex-wrap gap-2.5">
                       {ctaSignalPills.map((pill) => (
@@ -919,7 +919,7 @@ export default function RevisedLandingPage() {
                       </Link>
                     </div>
                     <p className="landing-body mt-4 text-[12px] text-[var(--color-text-muted-on-dark)]">
-                      No fake proof. No buried transcripts. Just the full inbound workflow, wired together.
+                      Real transcripts. Real proof. Full workflow.
                     </p>
                   </div>
 
@@ -954,7 +954,7 @@ export default function RevisedLandingPage() {
                   </div>
                 </Link>
                 <p className="landing-body landing-body-2-regular mt-4 max-w-[20rem] text-[var(--color-text-muted)]">
-                  AI phone agents for inbound calls, phone routing, transcripts, and post-call review that teams can actually trust.
+                  AI phone agents for inbound calls, routing, and post-call review.
                 </p>
 
                 <div className="mt-5 flex flex-wrap gap-2.5">
@@ -988,7 +988,7 @@ export default function RevisedLandingPage() {
 
             <div className="landing-body mt-10 flex flex-col gap-3 border-t border-[var(--color-border)] pt-6 text-[14px] text-[var(--color-text-muted)] sm:flex-row sm:items-center sm:justify-between">
               <span>© 2026 Yapsolutely, Inc.</span>
-              <span>Built for real inbound call ops, not just demo theatrics.</span>
+              <span>Built for inbound call ops.</span>
             </div>
           </div>
         </footer>
@@ -1406,10 +1406,10 @@ function IntegrationFlowPreview() {
     <div className="space-y-4">
       <div className="grid gap-3 md:grid-cols-[repeat(4,minmax(0,1fr))]">
         {[
-          ["01", "Call enters", "Twilio number receives the inbound call"],
-          ["02", "Speech loop", "Deepgram transcribes and speaks back in stream"],
-          ["03", "Reasoning", "Anthropic drives replies and tool choices"],
-          ["04", "Proof lands", "Next.js + Prisma persist the call review trail"],
+          ["01", "Call enters", "Twilio receives the call"],
+          ["02", "Speech loop", "Deepgram transcribes and speaks"],
+          ["03", "Reasoning", "Anthropic drives replies"],
+          ["04", "Proof lands", "Prisma persists the trail"],
         ].map(([step, title, copy]) => (
           <div key={step} className="rounded-[18px] border border-[var(--color-dark-divider)] bg-[var(--color-overlay-soft)] px-4 py-4">
             <div className="landing-body text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--color-accent-secondary)]">
@@ -1698,7 +1698,7 @@ function MascotIllustration() {
           Always-on voice operator
         </div>
         <p className="landing-body mx-auto mt-3 max-w-[22rem] text-[14px] leading-6 text-[var(--color-text-on-dark)]">
-          A friendlier face for the product — built to suggest voice, responsiveness, and round-the-clock coverage without falling into generic SaaS clipart territory.
+          Always on, always listening.
         </p>
       </div>
     </div>
