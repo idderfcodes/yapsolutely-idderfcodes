@@ -128,7 +128,7 @@ export default function ScrollFAQ({
                   key={item.id}
                   value={item.id}
                   className={cn(
-                    "overflow-hidden rounded-[28px] border transition-all duration-300",
+                    "overflow-hidden rounded-[24px] border transition-all duration-300",
                     isOpen
                       ? "border-[var(--color-accent-primary)] bg-[var(--color-bg)] shadow-[0_24px_44px_-34px_rgba(238,48,58,0.18)]"
                       : "border-[var(--color-border)] bg-[var(--color-bg)]",

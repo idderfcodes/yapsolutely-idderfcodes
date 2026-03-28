@@ -136,7 +136,7 @@ export function VideoScrollSection({
   );
 
   const showcaseCard = (
-    <div className="relative w-full overflow-hidden rounded-[28px] border border-[var(--color-dark-divider)] bg-[var(--color-hero-right)] shadow-[0_24px_60px_-34px_rgba(20,20,20,0.32)] sm:rounded-[34px] sm:shadow-[0_36px_80px_-42px_rgba(20,20,20,0.38)]">
+    <div className="relative w-full overflow-hidden rounded-[24px] border border-[var(--color-dark-divider)] bg-[var(--color-hero-right)] shadow-[0_24px_60px_-34px_rgba(20,20,20,0.32)] sm:rounded-[24px] sm:shadow-[0_36px_80px_-42px_rgba(20,20,20,0.38)]">
       <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-between gap-4 border-b border-[var(--color-dark-divider)] bg-[var(--color-badge-dark)] px-4 py-3 backdrop-blur-md sm:px-5">
         <div>
           <div className="landing-body text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--color-text-muted-on-dark)]">
@@ -178,7 +178,7 @@ export function VideoScrollSection({
           {points.map((point) => (
             <div
               key={point.title}
-              className="rounded-[18px] border border-[var(--color-dark-divider)] bg-[var(--color-badge-dark)] px-4 py-4 backdrop-blur-md sm:rounded-[20px]"
+              className="rounded-[18px] border border-[var(--color-dark-divider)] bg-[var(--color-badge-dark)] px-4 py-4 backdrop-blur-md sm:rounded-[24px]"
             >
               <div className="landing-body text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--color-text-muted-on-dark)]">
                 {point.title}

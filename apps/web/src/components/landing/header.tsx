@@ -207,7 +207,7 @@ export function Header({ darkHero = false }: { darkHero?: boolean }) {
 
       <div
         className={cn(
-          "fixed inset-x-4 top-[4.85rem] z-50 overflow-hidden rounded-[28px] border border-[var(--color-border)] bg-[var(--color-bg)] shadow-[0_24px_56px_-28px_rgba(20,20,20,0.16)] backdrop-blur-xl lg:hidden",
+          "fixed inset-x-4 top-[4.85rem] z-50 overflow-hidden rounded-[24px] border border-[var(--color-border)] bg-[var(--color-bg)] shadow-[0_24px_56px_-28px_rgba(20,20,20,0.16)] backdrop-blur-xl lg:hidden",
           open ? "block" : "hidden",
         )}
       >

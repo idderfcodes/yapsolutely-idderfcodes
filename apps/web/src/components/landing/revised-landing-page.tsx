@@ -32,10 +32,13 @@ import {
 import { Header } from "./header";
 import { landingDisplayFont } from "./landing-font";
 import { ZoomParallaxSection } from "./zoom-parallax-section";
-import BrandCarousel from "./BrandCarousel";
 import AnimatedGradientText from "./AnimatedGradientText";
 import { DottedSurface } from "@/components/ui/dotted-surface";
 import { BGPattern } from "@/components/ui/bg-pattern";
+import VideoMasking from "@/components/ui/video-masking";
+import ImageReveal from "@/components/ui/image-reveal";
+import ImageAutoSlider from "@/components/ui/image-auto-slider";
+import AnimatedTestimonials from "@/components/ui/animated-testimonials";
 import { cn } from "@/lib/utils";
 
 const marqueeLogos = [
@@ -49,20 +52,6 @@ const marqueeLogos = [
   { file: "nodedotjs", label: "Node.js" },
 ];
 
-const heroStats = [
-  {
-    value: "<800ms",
-    label: "Response time",
-  },
-  {
-    value: "24/7",
-    label: "Always on",
-  },
-  {
-    value: "100%",
-    label: "Transcribed",
-  },
-];
 
 const howItWorks = [
   {
@@ -389,7 +378,23 @@ export default function RevisedLandingPage() {
         <main>
           <section className="-mt-16 pt-0">
             <div className="relative flex min-h-screen min-h-[100svh] w-full flex-col overflow-hidden bg-[#141414] pt-16">
-              <DottedSurface />
+              {/* Abstract dark hero background image */}
+              <div className="absolute inset-0 z-0">
+                <Image
+                  src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop"
+                  alt="Abstract background"
+                  fill
+                  className="object-cover opacity-30"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-[#141414]/40 via-[#141414]/80 to-[var(--color-bg)]" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#141414]/80 via-transparent to-[#141414]/80" />
+              </div>
+
+              {/* Optional: we can keep DottedSurface but make it very subtle, or remove. Let's keep it with low opacity by adding a wrapper */}
+              <div className="absolute inset-0 z-0 opacity-40">
+                <DottedSurface />
+              </div>
               {/* Hero — split 2-column on lg, stacked on mobile */}
               <div className="relative z-10 mx-auto grid w-full max-w-[1440px] grid-cols-1 items-center gap-6 px-4 pt-16 sm:gap-8 sm:px-10 md:pt-24 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10 lg:pt-32 lg:pb-16">
                 {/* Left column — copy */}
@@ -466,11 +471,7 @@ export default function RevisedLandingPage() {
             </div>
           </section>
 
-          <section className="pb-10 sm:pb-14">
-            <BrandCarousel />
-          </section>
-
-          <section className="landing-section bg-[var(--color-bg)] pt-4">
+                    <section id="how-it-works" className="landing-section bg-[var(--color-bg-secondary)] pt-8">
             <div className="landing-container">
               <motion.div
                 variants={sectionReveal}
@@ -478,18 +479,123 @@ export default function RevisedLandingPage() {
                 whileInView="show"
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                className="max-w-[48rem]"
+                className="max-w-[42rem]"
               >
                 <div className="landing-pill inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--color-accent-primary)]">
-                  Use cases
+                  How it works
                 </div>
                 <h2 className="landing-display landing-display-1 mt-6 text-[var(--color-text-primary)]">
-                  Every inbound call scenario
+                  Three steps to a live agent
                 </h2>
-                <p className="landing-body landing-body-1-regular mt-4 max-w-[38rem] text-[var(--color-text-muted)]">
-                  Sales, support, booking, qualification, after-hours.
+                <p className="landing-body landing-body-1-regular mt-4 max-w-[32rem] text-[var(--color-text-muted)]">
+                  Configure. Attach a number. Review calls.
                 </p>
               </motion.div>
+
+              <div className="relative mt-10">
+                <div className="pointer-events-none absolute left-[10%] right-[10%] top-7 hidden h-px lg:block">
+                  <div className="h-full w-full bg-gradient-to-r from-transparent via-[var(--color-accent-primary)]/35 to-transparent" />
+                </div>
+
+                <motion.div
+                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, amount: 0.12 }}
+                  className="grid gap-6 lg:grid-cols-3"
+                >
+                  {howItWorks.map((step) => {
+                    const Icon = step.icon;
+
+                    return (
+                      <motion.div key={step.number} variants={cardReveal}>
+                        <motion.div
+                          whileHover={{ y: -2 }}
+                          transition={{ duration: 0.28, ease: "easeOut" }}
+                          className="landing-card landing-card-hover relative h-full rounded-[22px] border border-[var(--color-border)] bg-[var(--color-bg)] p-5 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)] sm:rounded-[30px] sm:p-7"
+                        >
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="flex items-center gap-4">
+                              <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[rgba(217,95,59,0.18)] bg-[var(--color-overlay-accent-soft)] text-[var(--color-accent-primary)]">
+                                <span className="landing-display text-[1.7rem] leading-none tracking-[-0.06em]">
+                                  {step.number}
+                                </span>
+                              </div>
+
+                              <div>
+                                <div className="landing-body text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--color-accent-primary)]">
+                                  {step.eyebrow}
+                                </div>
+                                <div className="landing-body mt-1 text-[12px] text-[var(--color-text-muted)]">
+                                  {step.signal}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-bg-secondary)] text-[var(--color-accent-primary)]">
+                              <Icon className="h-5 w-5" />
+                            </div>
+                          </div>
+
+                          <h3 className="landing-display landing-display-3 mt-6 max-w-[12ch] text-[var(--color-text-primary)]">
+                            {step.title}
+                          </h3>
+                          <p className="landing-body landing-body-2-regular mt-3 max-w-[30rem] text-[var(--color-text-muted)]">
+                            {step.description}
+                          </p>
+
+                          <div className="mt-6 rounded-[24px] border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-4">
+                            {step.preview}
+                          </div>
+                        </motion.div>
+                      </motion.div>
+                    );
+                  })}
+                </motion.div>
+              </div>
+            </div>
+          
+              <div className="mt-10 sm:mt-20 flex justify-center w-full pb-20 relative z-10">
+                  <ImageReveal
+                    leftImage="https://images.unsplash.com/photo-1433838552652-f9a46b332c40?q=80&w=2070&auto=format&fit=crop"
+                    middleImage="https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=2070&auto=format&fit=crop"
+                    rightImage="https://images.unsplash.com/photo-1506744626753-1fa7673e4a9e?q=80&w=2070&auto=format&fit=crop"
+                  />
+              </div>
+</section>
+
+          <section className="landing-section bg-[var(--color-bg)] pt-4 pb-16">
+            <div className="landing-container">
+              <div className="flex flex-col items-center text-center">
+                <motion.div
+                  variants={sectionReveal}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                  className="max-w-[48rem] flex flex-col items-center"
+                >
+                  <div className="landing-pill inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--color-accent-primary)]">
+                    Use cases
+                  </div>
+                  <h2 className="landing-display landing-display-1 mt-6 text-[var(--color-text-primary)]">
+                    Every inbound call scenario
+                  </h2>
+                  <p className="landing-body landing-body-1-regular mt-4 max-w-[38rem] text-[var(--color-text-muted)]">
+                    Sales, support, booking, qualification, after-hours. Whether you need an intelligent front desk or a sophisticated routing agent, Yapsolutely adapts to your specific business flow.
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  variants={sectionReveal}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, amount: 0.1 }}
+                  className="w-full max-w-4xl mt-12 relative bg-transparent flex justify-center"
+                >
+                  <VideoMasking className="w-full h-auto" />
+                </motion.div>
+              </div>
 
               <motion.div
                 variants={sectionReveal}
@@ -584,7 +690,8 @@ export default function RevisedLandingPage() {
             </div>
           </section>
 
-          <section id="how-it-works" className="landing-section bg-[var(--color-bg-secondary)] pt-8">
+          {/* Bento Use Cases */}
+          <section className="landing-section bg-[var(--color-dark-secondary)] py-16 sm:py-24 border-t border-[var(--color-dark-divider)]">
             <div className="landing-container">
               <motion.div
                 variants={sectionReveal}
@@ -592,80 +699,76 @@ export default function RevisedLandingPage() {
                 whileInView="show"
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                className="max-w-[42rem]"
+                className="text-center"
               >
-                <div className="landing-pill inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--color-accent-primary)]">
-                  How it works
+                <div className="landing-pill mx-auto inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--color-accent-secondary)] border border-[var(--color-accent-secondary)] bg-transparent">
+                  More Use Cases
                 </div>
-                <h2 className="landing-display landing-display-1 mt-6 text-[var(--color-text-primary)]">
-                  Three steps to a live agent
+                <h2 className="landing-display landing-display-1 mx-auto mt-6 max-w-2xl text-[var(--color-text-on-dark)]">
+                  Flexibility for any workflow
                 </h2>
-                <p className="landing-body landing-body-1-regular mt-4 max-w-[32rem] text-[var(--color-text-muted)]">
-                  Configure. Attach a number. Review calls.
+                <p className="landing-body landing-body-1-regular mx-auto mt-4 max-w-[38rem] text-[var(--color-text-muted-on-dark)]">
+                  Quickly connect the pieces that matter to your distinct use case.
                 </p>
               </motion.div>
 
-              <div className="relative mt-10">
-                <div className="pointer-events-none absolute left-[10%] right-[10%] top-7 hidden h-px lg:block">
-                  <div className="h-full w-full bg-gradient-to-r from-transparent via-[var(--color-accent-primary)]/35 to-transparent" />
-                </div>
-
-                <motion.div
-                  variants={staggerContainer}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true, amount: 0.12 }}
-                  className="grid gap-6 lg:grid-cols-3"
-                >
-                  {howItWorks.map((step) => {
-                    const Icon = step.icon;
-
-                    return (
-                      <motion.div key={step.number} variants={cardReveal}>
-                        <motion.div
-                          whileHover={{ y: -2 }}
-                          transition={{ duration: 0.28, ease: "easeOut" }}
-                          className="landing-card landing-card-hover relative h-full rounded-[22px] border border-[var(--color-border)] bg-[var(--color-bg)] p-5 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)] sm:rounded-[30px] sm:p-7"
-                        >
-                          <div className="flex items-start justify-between gap-4">
-                            <div className="flex items-center gap-4">
-                              <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[rgba(217,95,59,0.18)] bg-[var(--color-overlay-accent-soft)] text-[var(--color-accent-primary)]">
-                                <span className="landing-display text-[1.7rem] leading-none tracking-[-0.06em]">
-                                  {step.number}
-                                </span>
-                              </div>
-
-                              <div>
-                                <div className="landing-body text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--color-accent-primary)]">
-                                  {step.eyebrow}
-                                </div>
-                                <div className="landing-body mt-1 text-[12px] text-[var(--color-text-muted)]">
-                                  {step.signal}
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-bg-secondary)] text-[var(--color-accent-primary)]">
-                              <Icon className="h-5 w-5" />
-                            </div>
-                          </div>
-
-                          <h3 className="landing-display landing-display-3 mt-6 max-w-[12ch] text-[var(--color-text-primary)]">
-                            {step.title}
-                          </h3>
-                          <p className="landing-body landing-body-2-regular mt-3 max-w-[30rem] text-[var(--color-text-muted)]">
-                            {step.description}
-                          </p>
-
-                          <div className="mt-6 rounded-[24px] border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-4">
-                            {step.preview}
-                          </div>
-                        </motion.div>
-                      </motion.div>
-                    );
-                  })}
+              <motion.div 
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.1 }}
+                className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-12 max-w-5xl mx-auto"
+              >
+                {/* Big Cell - 2 columns */}
+                <motion.div variants={sectionReveal} className="md:col-span-2 md:row-span-2 group relative overflow-hidden rounded-[24px] border border-[var(--color-dark-divider)] bg-[var(--color-dark-primary)] p-8 hover:border-[var(--color-accent-hover)] transition-all duration-300">
+                  <div className="relative z-10 flex flex-col h-full">
+                    <h3 className="landing-display text-2xl text-[var(--color-text-on-dark)] mb-2">Automated Fallback</h3>
+                    <p className="landing-body text-[var(--color-text-muted-on-dark)] leading-relaxed">
+                      Capture high-intent leads even when human agents are occupied. Call drops are automatically picked up by an active listener.
+                    </p>
+                    <div className="mt-8 flex-1 w-full bg-[var(--color-dark-secondary)] rounded-xl border border-[var(--color-dark-divider)] p-4 flex flex-col gap-3">
+                      <div className="h-8 w-3/4 bg-[var(--color-dark-divider)] rounded-md animate-pulse"></div>
+                      <div className="h-4 w-1/2 bg-[var(--color-dark-divider)] rounded-md"></div>
+                      <div className="h-4 w-5/6 bg-[var(--color-dark-divider)] rounded-md"></div>
+                    </div>
+                  </div>
                 </motion.div>
-              </div>
+
+                {/* Small Cell */}
+                <motion.div variants={sectionReveal} className="md:col-span-2 lg:col-span-1 group relative overflow-hidden rounded-[24px] border border-[var(--color-dark-divider)] bg-[var(--color-dark-primary)] p-6 hover:border-[var(--color-accent-hover)] transition-all duration-300">
+                  <h3 className="landing-display text-xl text-[var(--color-text-on-dark)] mb-2">Pre-qualify</h3>
+                  <p className="landing-body text-sm text-[var(--color-text-muted-on-dark)]">Ask mandatory filtering questions prior to routing.</p>
+                  <div className="mt-6 flex justify-between gap-2 overflow-hidden h-20">
+                     <div className="w-16 h-16 rounded-full border-2 border-[var(--color-accent-primary)] border-dashed opacity-50"></div>
+                     <div className="flex-1 border-t-2 border-[var(--color-dark-divider)] border-dotted mt-8"></div>
+                     <div className="w-16 h-16 rounded-full bg-[var(--color-accent-primary)] opacity-20"></div>
+                  </div>
+                </motion.div>
+
+                {/* Small Cell */}
+                <motion.div variants={sectionReveal} className="md:col-span-2 lg:col-span-1 group relative overflow-hidden rounded-[24px] border border-[var(--color-dark-divider)] bg-[var(--color-dark-primary)] p-6 hover:border-[var(--color-accent-hover)] transition-all duration-300">
+                  <h3 className="landing-display text-xl text-[var(--color-text-on-dark)] mb-2">CRM Sync</h3>
+                  <p className="landing-body text-sm text-[var(--color-text-muted-on-dark)]">Transcripts instantly drop into HubSpot or Salesforce.</p>
+                  <div className="mt-6 grid grid-cols-2 gap-2 h-20">
+                     <div className="bg-[var(--color-dark-secondary)] rounded-lg"></div>
+                     <div className="bg-[var(--color-dark-divider)] rounded-lg opacity-40"></div>
+                     <div className="bg-[var(--color-dark-divider)] rounded-lg opacity-40"></div>
+                     <div className="bg-[var(--color-dark-secondary)] rounded-lg"></div>
+                  </div>
+                </motion.div>
+
+                {/* Wide Cell */}
+                <motion.div variants={sectionReveal} className="md:col-span-2 row-span-1 group relative overflow-hidden rounded-[24px] border border-[var(--color-dark-divider)] bg-[var(--color-dark-primary)] p-8 hover:border-[var(--color-accent-hover)] transition-all duration-300 flex flex-col sm:flex-row items-center gap-6">
+                  <div className="flex-1">
+                    <h3 className="landing-display text-2xl text-[var(--color-text-on-dark)] mb-2">Dynamic Calendar Drops</h3>
+                    <p className="landing-body text-sm text-[var(--color-text-muted-on-dark)]">Book appointments into open slots in real-time, preventing double booking completely.</p>
+                  </div>
+                  <div className="w-full sm:w-1/3 h-24 bg-[var(--color-dark-secondary)] rounded-xl border border-[var(--color-dark-divider)] flex items-center justify-center">
+                    <div className="text-[var(--color-text-muted-on-dark)] font-mono text-[10px] tracking-widest">CAL_SYNC // 200 OK</div>
+                  </div>
+                </motion.div>
+
+              </motion.div>
             </div>
           </section>
 
@@ -776,324 +879,14 @@ export default function RevisedLandingPage() {
                 })}
               </motion.div>
             </div>
+            
+            <ImageAutoSlider />
           </section>
 
           <ZoomParallaxSection />
 
-          <LandingStatsBar />
+          <AnimatedTestimonials />
 
-          {/* Social proof */}
-          <section className="landing-section bg-[var(--color-bg)] py-16 sm:py-20">
-            <div className="landing-container">
-              <motion.div
-                variants={sectionReveal}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                className="text-center"
-              >
-                <div className="landing-pill mx-auto inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--color-accent-primary)]">
-                  Teams using Yapsolutely
-                </div>
-                <h2 className="landing-display landing-display-1 mx-auto mt-6 max-w-[16ch] text-[var(--color-text-primary)]">
-                  Built for ops teams that pick up the phone.
-                </h2>
-              </motion.div>
-
-              <motion.div
-                variants={staggerContainer}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.1 }}
-                className="mx-auto mt-10 grid max-w-[1080px] gap-4 sm:gap-5 md:grid-cols-3"
-              >
-                {[
-                  {
-                    quote: "We replaced our after-hours voicemail in a day. Every overnight call now gets logged with a transcript and follow-up queue.",
-                    name: "Jordan M.",
-                    role: "Operations Lead",
-                    company: "Regional Health Group",
-                  },
-                  {
-                    quote: "The demo-to-live path was the fastest I've seen. We had a working inbound agent before the end of the first meeting.",
-                    name: "Priya S.",
-                    role: "Head of Sales",
-                    company: "Relay Commerce",
-                  },
-                  {
-                    quote: "Our support team finally has proof of what happened on every call. No more he-said-she-said — just transcripts and actions.",
-                    name: "Marcus T.",
-                    role: "CX Director",
-                    company: "Fieldwork Labs",
-                  },
-                ].map((testimonial) => (
-                  <motion.div key={testimonial.name} variants={cardReveal}>
-                    <div className="landing-card landing-card-hover flex h-full flex-col justify-between rounded-[20px] border border-[var(--color-border)] bg-[var(--color-bg)] p-5 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)] sm:rounded-[28px] sm:p-6">
-                      <p className="landing-body landing-body-2-regular leading-7 text-[var(--color-text-primary)]">
-                        &ldquo;{testimonial.quote}&rdquo;
-                      </p>
-                      <div className="mt-6 border-t border-[var(--color-border)] pt-4">
-                        <div className="landing-body text-[14px] font-medium text-[var(--color-text-primary)]">
-                          {testimonial.name}
-                        </div>
-                        <div className="landing-body mt-1 text-[12px] text-[var(--color-text-muted)]">
-                          {testimonial.role} · {testimonial.company}
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </section>
-
-          <section id="integrations" className="landing-section pt-4">
-            <div className="landing-container">
-              <motion.div
-                variants={sectionReveal}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.18 }}
-                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                className="max-w-[48rem]"
-              >
-                <div className="landing-pill inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--color-accent-primary)]">
-                  Integrations
-                </div>
-                <h2 className="landing-display landing-display-1 mt-6 text-[var(--color-text-primary)]">
-                  Four layers, fully wired.
-                </h2>
-                <p className="landing-body landing-body-1-regular mt-4 max-w-[39rem] text-[var(--color-text-muted)]">
-                  Telephony, speech, reasoning, and dashboard — connected end to end.
-                </p>
-              </motion.div>
-
-              <motion.div
-                variants={staggerContainer}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.12 }}
-                className="mt-10 grid gap-4 sm:gap-5 lg:grid-cols-[minmax(0,1.05fr)_minmax(340px,0.95fr)]"
-              >
-                <motion.div variants={cardReveal}>
-                  <div className="relative overflow-hidden rounded-[22px] border border-[var(--color-dark-divider)] bg-[linear-gradient(155deg,var(--color-dark-section),var(--color-hero-right))] p-5 shadow-[0_32px_72px_-44px_rgba(20,20,20,0.48)] sm:rounded-[32px] sm:p-8">
-
-
-                    <div className="relative z-10">
-                      <div className="flex flex-wrap items-center gap-3">
-                        <span className="landing-body rounded-full border border-[var(--color-dark-divider)] bg-[var(--color-badge-dark)] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-[var(--color-text-muted-on-dark)]">
-                          Live system map
-                        </span>
-                        <span className="landing-body rounded-full border border-[var(--color-overlay-accent-border)] bg-[var(--color-overlay-accent-medium)] px-3 py-1 text-[11px] font-medium text-[var(--color-accent-secondary)]">
-                          Runtime + dashboard
-                        </span>
-                      </div>
-
-                      <h3 className="landing-display landing-display-2 mt-6 max-w-[12ch] text-[var(--color-text-on-dark)]">
-                        One call, four layers.
-                      </h3>
-                      <p className="landing-body mt-4 max-w-[32rem] text-[14px] leading-7 text-[var(--color-text-muted-on-dark)]">
-                        Telephony to dashboard in a single loop.
-                      </p>
-
-                      <div className="mt-6 rounded-[24px] border border-[var(--color-dark-divider)] bg-[var(--color-overlay-soft)] p-4 sm:p-5">
-                        <IntegrationFlowPreview />
-                      </div>
-
-                      <div className="mt-6 flex flex-wrap gap-2.5">
-                        {integrationPartners.map((partner) => (
-                          <span
-                            key={partner}
-                            className="landing-body rounded-full border border-[var(--color-dark-divider)] bg-[var(--color-overlay-soft)] px-3.5 py-2 text-[12px] font-medium text-[var(--color-text-on-dark)]"
-                          >
-                            {partner}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-
-                <div className="grid gap-5">
-                  {integrationStacks.map((stack) => {
-                    const Icon = stack.icon;
-
-                    return (
-                      <motion.div key={stack.title} variants={cardReveal}>
-                        <div className="landing-card landing-card-hover rounded-[28px] border border-[var(--color-border)] bg-[var(--color-bg)] p-6 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)]">
-                          <div className="flex items-start justify-between gap-4">
-                            <div>
-                              <div className="landing-body text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--color-accent-primary)]">
-                                {stack.eyebrow}
-                              </div>
-                              <h3 className="landing-display landing-display-3 mt-3 text-[var(--color-text-primary)]">
-                                {stack.title}
-                              </h3>
-                            </div>
-
-                            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--color-overlay-accent-soft)] text-[var(--color-accent-primary)]">
-                              <Icon className="h-5 w-5" />
-                            </div>
-                          </div>
-
-                          <p className="landing-body landing-body-2-regular mt-4 text-[var(--color-text-muted)]">
-                            {stack.description}
-                          </p>
-
-                          <div className="mt-5 space-y-3">
-                            {stack.points.map((point) => (
-                              <div key={point} className="flex items-start gap-3 rounded-[16px] bg-[var(--color-bg-secondary)] px-4 py-3">
-                                <CheckCircleIcon className="mt-0.5 h-4.5 w-4.5 shrink-0 text-[var(--color-accent-primary)]" />
-                                <p className="landing-body text-[13px] leading-6 text-[var(--color-text-primary)]">{point}</p>
-                              </div>
-                            ))}
-                          </div>
-
-                          <div className="landing-body mt-5 text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
-                            {stack.badge}
-                          </div>
-                        </div>
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              </motion.div>
-            </div>
-          </section>
-
-          {/* Pricing teaser */}
-          <section id="pricing" className="landing-section bg-[var(--color-bg)] py-16 sm:py-20">
-            <div className="landing-container">
-              <motion.div
-                variants={sectionReveal}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                className="text-center"
-              >
-                <div className="landing-pill mx-auto inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--color-accent-primary)]">
-                  Simple pricing
-                </div>
-                <h2 className="landing-display landing-display-1 mx-auto mt-6 max-w-[18ch] text-[var(--color-text-primary)]">
-                  One plan per stage of growth.
-                </h2>
-                <p className="landing-body landing-body-1-regular mx-auto mt-3 max-w-[38rem] text-[var(--color-text-secondary)]">
-                  Start free. Scale when you&rsquo;re ready.
-                </p>
-              </motion.div>
-
-              <motion.div
-                variants={staggerContainer}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.1 }}
-                className="mx-auto mt-10 grid max-w-[1080px] gap-4 sm:gap-5 md:grid-cols-3"
-              >
-                {[
-                  {
-                    tier: "Free",
-                    price: "$0",
-                    period: "forever",
-                    description: "Try the platform with a test number.",
-                    features: [
-                      "1 AI agent",
-                      "1 test phone number",
-                      "50 minutes / month",
-                      "Call logs & transcripts",
-                      "Community support",
-                    ],
-                    cta: "Get started",
-                    href: "/sign-up",
-                    highlight: false,
-                  },
-                  {
-                    tier: "Pro",
-                    price: "$49",
-                    period: "/ mo",
-                    description: "Go live with real numbers and full workflow.",
-                    features: [
-                      "Unlimited agents",
-                      "5 phone numbers included",
-                      "2,000 minutes / month",
-                      "Custom prompts & tools",
-                      "Priority support",
-                    ],
-                    cta: "Start free trial",
-                    href: "/sign-up",
-                    highlight: true,
-                  },
-                  {
-                    tier: "Enterprise",
-                    price: "Custom",
-                    period: "",
-                    description: "For teams with volume, compliance, or SLA needs.",
-                    features: [
-                      "Unlimited everything",
-                      "Dedicated numbers & SLA",
-                      "SSO & audit logs",
-                      "Custom integrations",
-                      "Dedicated account manager",
-                    ],
-                    cta: "Talk to sales",
-                    href: "/docs",
-                    highlight: false,
-                  },
-                ].map((plan) => (
-                  <motion.div key={plan.tier} variants={cardReveal}>
-                    <div
-                      className={`landing-card flex h-full flex-col rounded-[20px] border p-5 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)] sm:rounded-[28px] sm:p-6 ${
-                        plan.highlight
-                          ? "border-[var(--color-accent-primary)] bg-[var(--color-bg)] ring-1 ring-[var(--color-accent-primary)]"
-                          : "border-[var(--color-border)] bg-[var(--color-bg)]"
-                      }`}
-                    >
-                      {plan.highlight && (
-                        <div className="mb-4 -mt-1 self-start rounded-full bg-[var(--color-accent-primary)] px-3 py-1 text-[11px] font-semibold text-white">
-                          Most popular
-                        </div>
-                      )}
-                      <div className="landing-body text-[14px] font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
-                        {plan.tier}
-                      </div>
-                      <div className="mt-3 flex items-baseline gap-1">
-                        <span className="landing-display text-[36px] font-bold text-[var(--color-text-primary)]">
-                          {plan.price}
-                        </span>
-                        {plan.period && (
-                          <span className="landing-body text-[14px] text-[var(--color-text-muted)]">
-                            {plan.period}
-                          </span>
-                        )}
-                      </div>
-                      <p className="landing-body landing-body-2-regular mt-2 text-[var(--color-text-secondary)]">
-                        {plan.description}
-                      </p>
-                      <ul className="mt-5 flex-1 space-y-2.5">
-                        {plan.features.map((f) => (
-                          <li key={f} className="flex items-start gap-2 landing-body text-[13px] text-[var(--color-text-primary)]">
-                            <CheckIcon className="mt-0.5 h-4 w-4 flex-shrink-0 text-[var(--color-accent-primary)]" />
-                            {f}
-                          </li>
-                        ))}
-                      </ul>
-                      <Link
-                        href={plan.href}
-                        className={`mt-6 inline-flex items-center justify-center rounded-full px-5 py-3 landing-body text-[14px] font-semibold transition-all ${
-                          plan.highlight
-                            ? "landing-button-primary"
-                            : "landing-button-secondary"
-                        }`}
-                      >
-                        {plan.cta}
-                      </Link>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </section>
 
           <section className="px-4 pb-10 sm:px-6 sm:pb-14">
             <div className="landing-container">
@@ -1227,31 +1020,6 @@ export default function RevisedLandingPage() {
   );
 }
 
-function LandingStatsBar() {
-  return (
-    <section className="relative left-1/2 w-screen -translate-x-1/2 border-y border-[var(--color-dark-divider)] bg-[var(--color-dark-section)] px-4 py-8 sm:px-6 sm:py-10">
-      <div className="mx-auto flex w-full max-w-[1320px] flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-0">
-        {heroStats.map((stat, index) => (
-          <div
-            key={stat.label}
-            className={cn(
-              "flex flex-1 flex-col items-center justify-center px-6 py-4 text-center",
-              index < heroStats.length - 1 && "lg:border-r lg:border-[var(--color-dark-divider)]",
-            )}
-          >
-            <div className="landing-stat text-[var(--color-text-on-dark)]">
-              {stat.value}
-            </div>
-            <div className="landing-body mt-3 max-w-[16rem] text-[13px] leading-6 text-[var(--color-text-muted-on-dark)] sm:text-[14px]">
-              {stat.label}
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 function HeroWordReveal() {
   const words = ["AI", "agents", "that", "answer", "your", "phone"];
 
@@ -1356,8 +1124,8 @@ function HeroVideoPanel() {
           onClick={togglePlay}
           className="h-full w-full cursor-pointer object-cover"
         >
-          <source src="/videos/hero-demo.webm" type="video/webm" />
-          <source src="/videos/hero-demo.mp4" type="video/mp4" />
+          <source src="/videos/herosectionvideo.webm" type="video/webm" />
+          <source src="/videos/herosectionvideo.mp4" type="video/mp4" />
         </video>
       </div>
 
