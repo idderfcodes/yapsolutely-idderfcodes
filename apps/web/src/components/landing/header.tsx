@@ -34,7 +34,7 @@ const productLinks = [
 const links = [
   {
     label: "Pricing",
-    href: "/pricing",
+    href: "/#pricing",
   },
   {
     label: "Docs",

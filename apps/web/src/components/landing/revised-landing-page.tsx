@@ -323,7 +323,7 @@ const footerColumns = [
     title: "Product",
     links: [
       ["Features", "#features"],
-      ["Pricing", "/pricing"],
+      ["Pricing", "/#pricing"],
       ["Documentation", "/docs"],
       ["Changelog", "/changelog"],
     ] as [string, string][],
@@ -1656,7 +1656,7 @@ function IntegrationFlowPreview() {
 
       <div className="grid gap-3 sm:grid-cols-3">
         {[
-          ["&lt;800ms", "Average response time"],
+          ["<800ms", "Average response time"],
           ["Logged", "Transcript + events"],
           ["Reviewable", "Operator proof loop"],
         ].map(([value, label]) => (
