@@ -227,39 +227,7 @@ const useCases = [
   },
 ];
 
-const complianceFrameworks = [
-  {
-    title: "GDPR",
-    subtitle: "Privacy rights and data handling",
-    points: [
-      "Access, deletion, and export support",
-      "DPA availability on request",
-    ],
-  },
-  {
-    title: "CCPA / CPRA",
-    subtitle: "Consumer privacy controls",
-    points: [
-      "Disclosure and deletion rights supported",
-      "No sale of personal information",
-    ],
-  },
-  {
-    title: "TCPA",
-    subtitle: "Call-flow compliance posture",
-    points: [
-      "AI disclosure workflow guidance",
-      "Consent-based call handling support",
-    ],
-  },
-];
 
-const securityPractices = [
-  "Encrypted in transit and at rest",
-  "Role-based access and session-based authentication",
-  "Full call logs, transcript history, and system events",
-  "Dedicated compliance documentation at /compliance",
-];
 
 const integrationStacks = [
   {
@@ -835,119 +803,14 @@ export default function RevisedLandingPage() {
 
           <LandingStatsBar />
 
-          <section className="landing-section relative overflow-hidden bg-[var(--color-bg-secondary)] pt-4">
-            <BGPattern variant="diagonal-stripes" size={48} fill="#1a1a1a" mask="fade-y" className="opacity-[0.03]" />
-            <div className="landing-container">
-              <motion.div
-                variants={sectionReveal}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                className="max-w-[48rem]"
-              >
-                <div className="landing-pill inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--color-accent-primary)]">
-                  Security &amp; Compliance
-                </div>
-                <h2 className="landing-display landing-display-1 mt-6 text-[var(--color-text-primary)]">
-                  Built to support privacy, auditability, and trust.
-                </h2>
-                <p className="landing-body landing-body-1-regular mt-4 max-w-[38rem] text-[var(--color-text-muted)]">
-                  Yapsolutely is designed to give operators clear transcript history, auditable call events, and a compliance posture teams can review before they put AI on the line.
-                </p>
-              </motion.div>
-
-              <motion.div
-                variants={staggerContainer}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.12 }}
-                className="mt-10 grid gap-5 lg:grid-cols-[minmax(0,1.08fr)_minmax(320px,0.92fr)]"
-              >
-                <motion.div variants={cardReveal}>
-                  <div className="relative h-full overflow-hidden rounded-[32px] border border-[var(--color-dark-divider)] bg-[linear-gradient(155deg,var(--color-dark-section),var(--color-hero-right))] p-6 shadow-[0_32px_72px_-44px_rgba(20,20,20,0.48)] sm:p-8">
-                    <div className="absolute -left-10 top-10 h-32 w-32 rounded-full bg-[var(--color-overlay-accent-medium)] blur-3xl" />
-                    <div className="absolute bottom-0 right-0 h-36 w-36 rounded-full bg-[var(--color-overlay-secondary-medium)] blur-3xl" />
-
-                    <div className="relative z-10">
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[var(--color-dark-divider)] bg-[var(--color-overlay-soft)] text-[var(--color-accent-secondary)]">
-                          <ShieldCheckIcon className="h-5 w-5" />
-                        </div>
-                        <div>
-                          <div className="landing-body text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--color-text-muted-on-dark)]">
-                            Security practices
-                          </div>
-                          <div className="landing-body mt-1 text-[13px] text-[var(--color-text-on-dark)]">
-                            Visible controls for teams that need a real review loop.
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="mt-6 space-y-3">
-                        {securityPractices.map((practice) => (
-                          <div key={practice} className="flex items-start gap-3 rounded-[18px] border border-[var(--color-dark-divider)] bg-[var(--color-overlay-soft)] px-4 py-3">
-                            <CheckCircleIcon className="mt-0.5 h-5 w-5 shrink-0 text-[var(--color-accent-secondary)]" />
-                            <p className="landing-body text-[13px] leading-6 text-[var(--color-text-on-dark)]">{practice}</p>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="mt-6 rounded-[20px] border border-[var(--color-dark-divider)] bg-[var(--color-overlay-soft)] px-4 py-4">
-                        <div className="landing-body text-[11px] uppercase tracking-[0.16em] text-[var(--color-text-muted-on-dark)]">
-                          Live posture
-                        </div>
-                        <div className="landing-body mt-2 text-[14px] leading-6 text-[var(--color-text-on-dark)]">
-                          Compliance is not hidden in a PDF somewhere — operators can review public posture details and route deeper requests straight to the compliance page.
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-
-                <div className="grid gap-5">
-                  {complianceFrameworks.map((framework) => (
-                    <motion.div key={framework.title} variants={cardReveal}>
-                      <div className="landing-card landing-card-hover rounded-[28px] border border-[var(--color-border)] bg-[var(--color-bg)] p-6 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)]">
-                        <div className="flex items-start justify-between gap-4">
-                          <div>
-                            <div className="landing-display landing-display-3 text-[var(--color-text-primary)]">
-                              {framework.title}
-                            </div>
-                            <div className="landing-body mt-2 text-[13px] text-[var(--color-text-muted)]">
-                              {framework.subtitle}
-                            </div>
-                          </div>
-
-                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-overlay-accent-soft)] text-[var(--color-accent-primary)]">
-                            <ShieldCheckIcon className="h-4.5 w-4.5" />
-                          </div>
-                        </div>
-
-                        <div className="mt-5 space-y-3">
-                          {framework.points.map((point) => (
-                            <div key={point} className="flex items-start gap-3 rounded-[16px] bg-[var(--color-bg-secondary)] px-4 py-3">
-                              <CheckCircleIcon className="mt-0.5 h-4.5 w-4.5 shrink-0 text-[var(--color-accent-primary)]" />
-                              <p className="landing-body text-[13px] leading-6 text-[var(--color-text-primary)]">{point}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-
-                  <motion.div variants={cardReveal}>
-                    <Link
-                      href="/compliance"
-                      className="landing-body inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-[20px] border border-[var(--color-border)] bg-[var(--color-bg)] px-5 py-4 text-[14px] font-medium text-[var(--color-text-primary)] transition-all duration-200 hover:-translate-y-[1px] hover:border-[var(--color-accent-primary)] hover:text-[var(--color-accent-primary)]"
-                    >
-                      Explore full compliance details
-                      <ArrowLongRightIcon className="h-4.5 w-4.5" />
-                    </Link>
-                  </motion.div>
-                </div>
-              </motion.div>
-            </div>
+          <section className="bg-[var(--color-bg)] py-0">
+            <ScrollFAQ
+              data={faqItems.slice(0, 6).map((item) => ({
+                id: item.id,
+                question: item.question,
+                answer: item.answer,
+              }))}
+            />
           </section>
 
           <section id="integrations" className="landing-section pt-4">
@@ -1063,16 +926,6 @@ export default function RevisedLandingPage() {
                 </div>
               </motion.div>
             </div>
-          </section>
-
-          <section className="bg-[var(--color-bg)] py-0">
-            <ScrollFAQ
-              data={faqItems.slice(0, 6).map((item) => ({
-                id: item.id,
-                question: item.question,
-                answer: item.answer,
-              }))}
-            />
           </section>
 
           <section className="px-4 pb-10 sm:px-6 sm:pb-14">
