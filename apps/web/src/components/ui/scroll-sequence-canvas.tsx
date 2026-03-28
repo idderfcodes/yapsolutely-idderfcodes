@@ -42,8 +42,8 @@ export function ScrollSequenceCanvas({
     const iw = img.naturalWidth;
     const ih = img.naturalHeight;
 
-    // Contain-fit: show entire frame centered, no cropping
-    const scale = Math.min(cw / iw, ch / ih);
+    // Cover-fit: fill canvas completely, crop edges if needed
+    const scale = Math.max(cw / iw, ch / ih);
     const dw = iw * scale;
     const dh = ih * scale;
     const dx = (cw - dw) / 2;
@@ -135,7 +135,7 @@ export function ScrollSequenceCanvas({
       <canvas
         ref={canvasRef}
         className="absolute inset-0 h-full w-full"
-        style={{ display: "block", imageRendering: "auto" }}
+        style={{ display: "block", willChange: "contents" }}
       />
 
       {/* Invisible spacer to keep the pinned section at viewport height */}
