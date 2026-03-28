@@ -32,7 +32,6 @@ import { Header } from "./header";
 import { landingDisplayFont } from "./landing-font";
 import { ZoomParallaxSection } from "./zoom-parallax-section";
 import BrandCarousel from "./BrandCarousel";
-import ScrollFAQ from "./ScrollFAQ";
 import AnimatedGradientText from "./AnimatedGradientText";
 import { ImageAutoSlider } from "@/components/ui/image-auto-slider";
 import { DottedSurface } from "@/components/ui/dotted-surface";
@@ -316,57 +315,6 @@ const footerActionLinks = [
     label: "Contact",
     href: "mailto:hello@yapsolutely.com",
     icon: EnvelopeIcon,
-  },
-];
-
-const faqItems = [
-  {
-    id: "01",
-    question: "What is Yapsolutely?",
-    answer:
-      "Yapsolutely is an AI voice agent platform for inbound phone calls. You can build agents, assign real numbers, and review transcripts and outcomes from one workspace.",
-  },
-  {
-    id: "02",
-    question: "How fast can I launch my first agent?",
-    answer:
-      "You can configure the prompt, set the first message, attach a number, and publish in minutes. The workflow is designed to get an inbound agent live without custom telecom infrastructure work.",
-  },
-  {
-    id: "03",
-    question: "Can I review what happened after each call?",
-    answer:
-      "Yes. Calls include transcripts, timeline events, structured metadata, and tool outcomes so teams can review exactly what the agent said and did.",
-  },
-  {
-    id: "04",
-    question: "Which providers power the live runtime?",
-    answer:
-      "The current live stack uses Anthropic for language generation and Deepgram for speech-to-text and text-to-speech, with Twilio-backed phone routing for inbound calls.",
-  },
-  {
-    id: "05",
-    question: "Can I customize the voice and behavior?",
-    answer:
-      "Absolutely. Each agent can have its own system prompt, first message, voice setup, and operational rules for escalation, lead capture, and follow-up actions.",
-  },
-  {
-    id: "06",
-    question: "Is there a free plan?",
-    answer:
-      "Yes. You can start building without a credit card and upgrade when you need more volume, more agents, or deeper operations workflows.",
-  },
-  {
-    id: "07",
-    question: "What phone numbers are supported?",
-    answer:
-      "Yapsolutely is designed for real number assignment and inbound routing. You can map numbers to agents and make routing visible directly in the workspace.",
-  },
-  {
-    id: "08",
-    question: "Can I customize how my agent sounds?",
-    answer:
-      "Yes. Voice selection, first message, prompt behavior, and operational rules can all be tuned per agent so the experience matches the call scenario you are deploying for.",
   },
 ];
 
@@ -803,16 +751,6 @@ export default function RevisedLandingPage() {
 
           <LandingStatsBar />
 
-          <section className="bg-[var(--color-bg)] py-0">
-            <ScrollFAQ
-              data={faqItems.slice(0, 6).map((item) => ({
-                id: item.id,
-                question: item.question,
-                answer: item.answer,
-              }))}
-            />
-          </section>
-
           <section id="integrations" className="landing-section pt-4">
             <div className="landing-container">
               <motion.div
@@ -843,8 +781,7 @@ export default function RevisedLandingPage() {
               >
                 <motion.div variants={cardReveal}>
                   <div className="relative overflow-hidden rounded-[32px] border border-[var(--color-dark-divider)] bg-[linear-gradient(155deg,var(--color-dark-section),var(--color-hero-right))] p-6 shadow-[0_32px_72px_-44px_rgba(20,20,20,0.48)] sm:p-8">
-                    <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-[var(--color-overlay-accent-medium)] blur-3xl" />
-                    <div className="absolute bottom-0 left-0 h-36 w-36 rounded-full bg-[var(--color-overlay-secondary-medium)] blur-3xl" />
+
 
                     <div className="relative z-10">
                       <div className="flex flex-wrap items-center gap-3">
