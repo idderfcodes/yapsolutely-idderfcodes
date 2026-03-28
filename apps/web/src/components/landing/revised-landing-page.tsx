@@ -14,6 +14,7 @@ import {
   ChartBarSquareIcon,
   ChatBubbleBottomCenterTextIcon,
   CheckCircleIcon,
+  CheckIcon,
   CircleStackIcon,
   ClockIcon,
   CpuChipIcon,
@@ -971,6 +972,139 @@ export default function RevisedLandingPage() {
                     );
                   })}
                 </div>
+              </motion.div>
+            </div>
+          </section>
+
+          {/* Pricing teaser */}
+          <section id="pricing" className="landing-section bg-[var(--color-bg)] py-16 sm:py-20">
+            <div className="landing-container">
+              <motion.div
+                variants={sectionReveal}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                className="text-center"
+              >
+                <div className="landing-pill mx-auto inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--color-accent-primary)]">
+                  Simple pricing
+                </div>
+                <h2 className="landing-display landing-display-1 mx-auto mt-6 max-w-[18ch] text-[var(--color-text-primary)]">
+                  One plan per stage of growth.
+                </h2>
+                <p className="landing-body landing-body-1-regular mx-auto mt-3 max-w-[38rem] text-[var(--color-text-secondary)]">
+                  Start free. Scale when you&rsquo;re ready.
+                </p>
+              </motion.div>
+
+              <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.1 }}
+                className="mx-auto mt-10 grid max-w-[1080px] gap-5 md:grid-cols-3"
+              >
+                {[
+                  {
+                    tier: "Free",
+                    price: "$0",
+                    period: "forever",
+                    description: "Try the platform with a test number.",
+                    features: [
+                      "1 AI agent",
+                      "1 test phone number",
+                      "50 minutes / month",
+                      "Call logs & transcripts",
+                      "Community support",
+                    ],
+                    cta: "Get started",
+                    href: "/sign-up",
+                    highlight: false,
+                  },
+                  {
+                    tier: "Pro",
+                    price: "$49",
+                    period: "/ mo",
+                    description: "Go live with real numbers and full workflow.",
+                    features: [
+                      "Unlimited agents",
+                      "5 phone numbers included",
+                      "2,000 minutes / month",
+                      "Custom prompts & tools",
+                      "Priority support",
+                    ],
+                    cta: "Start free trial",
+                    href: "/sign-up",
+                    highlight: true,
+                  },
+                  {
+                    tier: "Enterprise",
+                    price: "Custom",
+                    period: "",
+                    description: "For teams with volume, compliance, or SLA needs.",
+                    features: [
+                      "Unlimited everything",
+                      "Dedicated numbers & SLA",
+                      "SSO & audit logs",
+                      "Custom integrations",
+                      "Dedicated account manager",
+                    ],
+                    cta: "Talk to sales",
+                    href: "/docs",
+                    highlight: false,
+                  },
+                ].map((plan) => (
+                  <motion.div key={plan.tier} variants={cardReveal}>
+                    <div
+                      className={`landing-card flex h-full flex-col rounded-[28px] border p-6 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)] ${
+                        plan.highlight
+                          ? "border-[var(--color-accent-primary)] bg-[var(--color-bg)] ring-1 ring-[var(--color-accent-primary)]"
+                          : "border-[var(--color-border)] bg-[var(--color-bg)]"
+                      }`}
+                    >
+                      {plan.highlight && (
+                        <div className="mb-4 -mt-1 self-start rounded-full bg-[var(--color-accent-primary)] px-3 py-1 text-[11px] font-semibold text-white">
+                          Most popular
+                        </div>
+                      )}
+                      <div className="landing-body text-[14px] font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
+                        {plan.tier}
+                      </div>
+                      <div className="mt-3 flex items-baseline gap-1">
+                        <span className="landing-display text-[36px] font-bold text-[var(--color-text-primary)]">
+                          {plan.price}
+                        </span>
+                        {plan.period && (
+                          <span className="landing-body text-[14px] text-[var(--color-text-muted)]">
+                            {plan.period}
+                          </span>
+                        )}
+                      </div>
+                      <p className="landing-body landing-body-2-regular mt-2 text-[var(--color-text-secondary)]">
+                        {plan.description}
+                      </p>
+                      <ul className="mt-5 flex-1 space-y-2.5">
+                        {plan.features.map((f) => (
+                          <li key={f} className="flex items-start gap-2 landing-body text-[13px] text-[var(--color-text-primary)]">
+                            <CheckIcon className="mt-0.5 h-4 w-4 flex-shrink-0 text-[var(--color-accent-primary)]" />
+                            {f}
+                          </li>
+                        ))}
+                      </ul>
+                      <Link
+                        href={plan.href}
+                        className={`mt-6 inline-flex items-center justify-center rounded-full px-5 py-3 landing-body text-[14px] font-semibold transition-all ${
+                          plan.highlight
+                            ? "landing-button-primary"
+                            : "landing-button-secondary"
+                        }`}
+                      >
+                        {plan.cta}
+                      </Link>
+                    </div>
+                  </motion.div>
+                ))}
               </motion.div>
             </div>
           </section>
