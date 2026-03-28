@@ -1,5 +1,14 @@
 {$WEB_HOST} {
   encode gzip zstd
+
+  # Long cache for static assets (videos, images, fonts, frame sequence)
+  @static path *.mp4 *.webm *.webp *.png *.jpg *.jpeg *.gif *.svg *.ico *.woff2 *.woff *.ttf
+  header @static Cache-Control "public, max-age=31536000, immutable"
+
+  # Medium cache for JS/CSS bundles (hashed filenames)
+  @bundles path /_next/static/*
+  header @bundles Cache-Control "public, max-age=31536000, immutable"
+
   reverse_proxy web:3000
 }
 

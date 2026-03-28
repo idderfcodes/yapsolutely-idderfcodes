@@ -708,6 +708,7 @@ export default function RevisedLandingPage() {
                     preload="none"
                     className="block w-full"
                   >
+                    <source src="/videos/demo-transcript.webm" type="video/webm" />
                     <source src="/videos/demo-transcript.mp4" type="video/mp4" />
                   </video>
                 </div>
@@ -1355,6 +1356,7 @@ function HeroVideoPanel() {
           onClick={togglePlay}
           className="h-full w-full cursor-pointer object-cover"
         >
+          <source src="/videos/hero-demo.webm" type="video/webm" />
           <source src="/videos/hero-demo.mp4" type="video/mp4" />
         </video>
       </div>
