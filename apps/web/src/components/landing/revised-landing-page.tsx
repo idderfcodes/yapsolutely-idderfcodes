@@ -391,7 +391,7 @@ export default function RevisedLandingPage() {
             <div className="relative flex min-h-[100svh] w-full flex-col overflow-hidden bg-[#141414] pt-16">
               <DottedSurface />
               {/* Hero — split 2-column on lg, stacked on mobile */}
-              <div className="relative z-10 mx-auto grid w-full max-w-[1280px] grid-cols-1 items-center gap-12 px-6 pt-20 sm:px-10 md:pt-24 lg:grid-cols-2 lg:pt-32 lg:pb-16">
+              <div className="relative z-10 mx-auto grid w-full max-w-[1440px] grid-cols-1 items-center gap-8 px-6 pt-20 sm:px-10 md:pt-24 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10 lg:pt-32 lg:pb-16">
                 {/* Left column — copy */}
                 <motion.div
                   initial="hidden"
@@ -453,16 +453,14 @@ export default function RevisedLandingPage() {
                   </motion.p>
                 </motion.div>
 
-                {/* Right column — video in glowing card */}
+                {/* Right column — video full-bleed */}
                 <motion.div
                   initial={{ opacity: 0, y: 24 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                  className="relative w-full"
+                  className="relative w-full lg:max-h-[80svh]"
                 >
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-2 shadow-[0_0_60px_-12px_rgba(238,48,58,0.15)]">
-                    <HeroVideoPanel />
-                  </div>
+                  <HeroVideoPanel />
                 </motion.div>
               </div>
             </div>
@@ -1098,7 +1096,7 @@ function HeroVideoPanel() {
 
   return (
     <motion.div
-      className="relative w-full overflow-hidden rounded-[20px] bg-[#11111198] shadow-[0_0_40px_rgba(0,0,0,0.5)] backdrop-blur-sm"
+      className="relative w-full overflow-hidden rounded-[16px]"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -1106,7 +1104,7 @@ function HeroVideoPanel() {
       onMouseLeave={() => setShowControls(false)}
     >
       {/* Video — landscape 16:9 */}
-      <div className="aspect-video w-full overflow-hidden bg-[var(--color-dark-section)]">
+      <div className="aspect-video w-full overflow-hidden">
         <video
           ref={videoRef}
           autoPlay
