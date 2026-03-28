@@ -7,7 +7,7 @@ type ZoomParallaxSectionProps = {
 
 const demoFramePaths = Array.from({ length: 183 }, (_, index) => {
   const frameNumber = String(index + 1).padStart(5, "0");
-  return `/frame-sequence/replacement/${frameNumber}.png`;
+  return `/frame-sequence/replacement/${frameNumber}.webp`;
 });
 
 export function ZoomParallaxSection({ className = "" }: ZoomParallaxSectionProps) {
