@@ -661,3 +661,17 @@
   line-height: 1.0;
   letter-spacing: -0.02em;
 }
+.landing-stat-lg {
+  font-family: var(--font-landing-display), "Bagoss Condensed", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(28px, 3.5vw, 42px);
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+}
+.landing-stat-sm {
+  font-family: var(--font-landing-display), "Bagoss Condensed", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(18px, 2vw, 24px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}

@@ -391,7 +391,7 @@ export default function RevisedLandingPage() {
             <div className="relative flex min-h-[100svh] w-full flex-col overflow-hidden bg-[#141414] pt-16">
               <DottedSurface />
               {/* Hero — split 2-column on lg, stacked on mobile */}
-              <div className="relative z-10 mx-auto grid w-full max-w-[1440px] grid-cols-1 items-center gap-8 px-6 pt-20 sm:px-10 md:pt-24 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10 lg:pt-32 lg:pb-16">
+              <div className="relative z-10 mx-auto grid w-full max-w-[1440px] grid-cols-1 items-center gap-6 px-4 pt-16 sm:gap-8 sm:px-10 md:pt-24 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10 lg:pt-32 lg:pb-16">
                 {/* Left column — copy */}
                 <motion.div
                   initial="hidden"
@@ -420,7 +420,7 @@ export default function RevisedLandingPage() {
                   <motion.p
                     variants={cardReveal}
                     transition={{ duration: 0.48, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-                    className="landing-body landing-body-1-regular mt-6 max-w-[38rem] text-[var(--color-text-muted-on-dark)]"
+                    className="landing-body landing-body-1-regular mt-4 max-w-[38rem] text-[var(--color-text-muted-on-dark)] sm:mt-6"
                   >
                     Build voice agents, assign real phone numbers, handle inbound calls. One workspace.
                   </motion.p>
@@ -428,7 +428,7 @@ export default function RevisedLandingPage() {
                   <motion.div
                     variants={cardReveal}
                     transition={{ duration: 0.48, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
-                    className="mt-8 flex flex-col gap-3 sm:flex-row"
+                    className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row"
                   >
                     <Link
                       href="/sign-up"
@@ -497,7 +497,7 @@ export default function RevisedLandingPage() {
                 whileInView="show"
                 viewport={{ once: true, amount: 0.1 }}
                 transition={{ duration: 0.58, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
-                className="mt-10 overflow-hidden rounded-[32px] border border-[var(--color-border)] bg-[var(--color-bg)] shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)]"
+                className="mt-10 overflow-hidden rounded-[20px] border border-[var(--color-border)] bg-[var(--color-bg)] shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)] sm:rounded-[32px]"
               >
                 <div className="overflow-x-auto border-b border-[var(--color-border)] px-5 py-3 sm:px-6">
                   <div className="flex min-w-max gap-6 sm:gap-7">
@@ -532,7 +532,7 @@ export default function RevisedLandingPage() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -12 }}
                     transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-                    className="grid gap-6 px-5 py-6 sm:px-6 sm:py-7 lg:grid-cols-[minmax(0,0.84fr)_minmax(0,1.16fr)] lg:items-center"
+                    className="grid gap-6 px-4 py-5 sm:px-6 sm:py-7 lg:grid-cols-[minmax(0,0.84fr)_minmax(0,1.16fr)] lg:items-center"
                   >
                     <div>
                       <div className="landing-pill inline-flex items-center px-3.5 py-1.5 landing-body text-[11px] font-medium text-[var(--color-accent-primary)]">
@@ -625,7 +625,7 @@ export default function RevisedLandingPage() {
                         <motion.div
                           whileHover={{ y: -2 }}
                           transition={{ duration: 0.28, ease: "easeOut" }}
-                          className="landing-card landing-card-hover relative h-full rounded-[30px] border border-[var(--color-border)] bg-[var(--color-bg)] p-6 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)] sm:p-7"
+                          className="landing-card landing-card-hover relative h-full rounded-[22px] border border-[var(--color-border)] bg-[var(--color-bg)] p-5 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)] sm:rounded-[30px] sm:p-7"
                         >
                           <div className="flex items-start justify-between gap-4">
                             <div className="flex items-center gap-4">
@@ -742,7 +742,7 @@ export default function RevisedLandingPage() {
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true, amount: 0.1 }}
-                className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4"
+                className="mt-10 grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-4"
               >
                 {featureTiles.map((tile) => {
                   const Icon = tile.icon;
@@ -756,7 +756,7 @@ export default function RevisedLandingPage() {
                       transition={{ duration: 0.28, ease: "easeOut" }}
                       className={wide ? "md:col-span-2 lg:col-span-2" : "lg:col-span-1"}
                     >
-                      <div className="landing-card landing-card-hover h-full rounded-[30px] border border-[var(--color-border)] bg-[var(--color-bg)] p-6 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)] transition-colors duration-200 hover:border-[var(--color-accent-primary)]">
+                      <div className="landing-card landing-card-hover h-full rounded-[22px] border border-[var(--color-border)] bg-[var(--color-bg)] p-5 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)] transition-colors duration-200 hover:border-[var(--color-accent-primary)] sm:rounded-[30px] sm:p-6">
                         <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-overlay-accent-soft)] text-[var(--color-accent-primary)]">
                           <Icon className="h-5 w-5" />
                         </div>
@@ -805,7 +805,7 @@ export default function RevisedLandingPage() {
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true, amount: 0.1 }}
-                className="mx-auto mt-10 grid max-w-[1080px] gap-5 md:grid-cols-3"
+                className="mx-auto mt-10 grid max-w-[1080px] gap-4 sm:gap-5 md:grid-cols-3"
               >
                 {[
                   {
@@ -828,7 +828,7 @@ export default function RevisedLandingPage() {
                   },
                 ].map((testimonial) => (
                   <motion.div key={testimonial.name} variants={cardReveal}>
-                    <div className="landing-card landing-card-hover flex h-full flex-col justify-between rounded-[28px] border border-[var(--color-border)] bg-[var(--color-bg)] p-6 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)]">
+                    <div className="landing-card landing-card-hover flex h-full flex-col justify-between rounded-[20px] border border-[var(--color-border)] bg-[var(--color-bg)] p-5 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)] sm:rounded-[28px] sm:p-6">
                       <p className="landing-body landing-body-2-regular leading-7 text-[var(--color-text-primary)]">
                         &ldquo;{testimonial.quote}&rdquo;
                       </p>
@@ -873,10 +873,10 @@ export default function RevisedLandingPage() {
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true, amount: 0.12 }}
-                className="mt-10 grid gap-5 lg:grid-cols-[minmax(0,1.05fr)_minmax(340px,0.95fr)]"
+                className="mt-10 grid gap-4 sm:gap-5 lg:grid-cols-[minmax(0,1.05fr)_minmax(340px,0.95fr)]"
               >
                 <motion.div variants={cardReveal}>
-                  <div className="relative overflow-hidden rounded-[32px] border border-[var(--color-dark-divider)] bg-[linear-gradient(155deg,var(--color-dark-section),var(--color-hero-right))] p-6 shadow-[0_32px_72px_-44px_rgba(20,20,20,0.48)] sm:p-8">
+                  <div className="relative overflow-hidden rounded-[22px] border border-[var(--color-dark-divider)] bg-[linear-gradient(155deg,var(--color-dark-section),var(--color-hero-right))] p-5 shadow-[0_32px_72px_-44px_rgba(20,20,20,0.48)] sm:rounded-[32px] sm:p-8">
 
 
                     <div className="relative z-10">
@@ -988,7 +988,7 @@ export default function RevisedLandingPage() {
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true, amount: 0.1 }}
-                className="mx-auto mt-10 grid max-w-[1080px] gap-5 md:grid-cols-3"
+                className="mx-auto mt-10 grid max-w-[1080px] gap-4 sm:gap-5 md:grid-cols-3"
               >
                 {[
                   {
@@ -1042,7 +1042,7 @@ export default function RevisedLandingPage() {
                 ].map((plan) => (
                   <motion.div key={plan.tier} variants={cardReveal}>
                     <div
-                      className={`landing-card flex h-full flex-col rounded-[28px] border p-6 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)] ${
+                      className={`landing-card flex h-full flex-col rounded-[20px] border p-5 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)] sm:rounded-[28px] sm:p-6 ${
                         plan.highlight
                           ? "border-[var(--color-accent-primary)] bg-[var(--color-bg)] ring-1 ring-[var(--color-accent-primary)]"
                           : "border-[var(--color-border)] bg-[var(--color-bg)]"
@@ -1103,7 +1103,7 @@ export default function RevisedLandingPage() {
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 whileHover={{ y: -2 }}
-                className="overflow-hidden rounded-[34px] border border-[var(--color-dark-divider)] bg-[var(--color-dark-section)] p-8 shadow-[0_28px_70px_-36px_rgba(20,20,20,0.4)] sm:p-10 lg:p-12"
+                className="overflow-hidden rounded-[22px] border border-[var(--color-dark-divider)] bg-[var(--color-dark-section)] p-5 shadow-[0_28px_70px_-36px_rgba(20,20,20,0.4)] sm:rounded-[34px] sm:p-10 lg:p-12"
               >
                 <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
                   <div>
@@ -1163,8 +1163,8 @@ export default function RevisedLandingPage() {
 
         <footer className="border-t border-[var(--color-border)] bg-[var(--color-bg-secondary)] py-12">
           <div className="landing-container">
-            <div className="grid gap-10 md:grid-cols-[1.35fr_0.85fr_0.85fr_0.85fr]">
-              <div>
+            <div className="grid gap-8 sm:gap-10 grid-cols-2 md:grid-cols-[1.35fr_0.85fr_0.85fr_0.85fr]">
+              <div className="col-span-2 md:col-span-1">
                 <Link href="/" className="inline-flex items-center gap-3 transition-opacity hover:opacity-85">
                   <Image
                     src="/favicon.svg"
@@ -1215,7 +1215,7 @@ export default function RevisedLandingPage() {
               ))}
             </div>
 
-            <div className="landing-body mt-10 flex flex-col gap-3 border-t border-[var(--color-border)] pt-6 text-[14px] text-[var(--color-text-muted)] sm:flex-row sm:items-center sm:justify-between">
+            <div className="landing-body mt-8 flex flex-col gap-3 border-t border-[var(--color-border)] pt-6 text-center text-[14px] text-[var(--color-text-muted)] sm:mt-10 sm:flex-row sm:items-center sm:justify-between sm:text-left">
               <span>© 2026 Yapsolutely, Inc.</span>
               <span>Built for inbound call ops.</span>
             </div>
@@ -1481,7 +1481,7 @@ function TranscriptReviewPreview() {
 function LatencyPreview() {
   return (
     <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_200px] lg:items-center">
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-3 gap-3">
         {[
           ["STT", "Live transcription"],
           ["LLM", "Fast turn generation"],
@@ -1513,7 +1513,7 @@ function LatencyPreview() {
 function AuditTrailPreview() {
   return (
     <div className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_180px] lg:items-center">
-      <div className="rounded-[18px] border border-[var(--color-border)] bg-[var(--color-bg)] p-4">
+      <div className="rounded-[14px] border border-[var(--color-border)] bg-[var(--color-bg)] p-3 sm:rounded-[18px] sm:p-4">
         <div className="landing-body text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
           Transcript timeline
         </div>
@@ -1633,7 +1633,7 @@ function AnalyticsMini() {
 function IntegrationFlowPreview() {
   return (
     <div className="space-y-4">
-      <div className="grid gap-3 md:grid-cols-[repeat(4,minmax(0,1fr))]">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-[repeat(4,minmax(0,1fr))]">
         {[
           ["01", "Call enters", "Twilio receives the call"],
           ["02", "Speech loop", "Deepgram transcribes and speaks"],
