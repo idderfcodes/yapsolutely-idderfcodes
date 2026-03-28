@@ -13,6 +13,28 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
     const container = containerRef.current;
     if (!container) return;
 
+    // Check WebGL availability before attempting to create renderer
+    const testCanvas = document.createElement("canvas");
+    const gl = testCanvas.getContext("webgl") || testCanvas.getContext("experimental-webgl");
+    if (!gl) {
+      // Fallback: CSS radial-gradient dot grid
+      container.style.backgroundImage =
+        "radial-gradient(circle, rgba(68,68,68,0.35) 1px, transparent 1px)";
+      container.style.backgroundSize = "32px 32px";
+      return;
+    }
+
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    } catch {
+      // WebGL context creation failed — use CSS fallback
+      container.style.backgroundImage =
+        "radial-gradient(circle, rgba(68,68,68,0.35) 1px, transparent 1px)";
+      container.style.backgroundSize = "32px 32px";
+      return;
+    }
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       60,
@@ -22,7 +44,6 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
     );
     camera.position.set(0, 400, 1200);
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);

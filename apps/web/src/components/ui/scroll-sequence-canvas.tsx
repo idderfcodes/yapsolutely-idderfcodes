@@ -139,7 +139,7 @@ export function ScrollSequenceCanvas({
       />
 
       {/* Invisible spacer to keep the pinned section at viewport height */}
-      <div className="relative h-[100svh]" />
+      <div className="relative h-screen h-[100svh]" />
     </div>
   );
 }

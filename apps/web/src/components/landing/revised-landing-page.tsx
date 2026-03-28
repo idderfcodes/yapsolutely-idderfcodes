@@ -388,7 +388,7 @@ export default function RevisedLandingPage() {
 
         <main>
           <section className="-mt-16 pt-0">
-            <div className="relative flex min-h-[100svh] w-full flex-col overflow-hidden bg-[#141414] pt-16">
+            <div className="relative flex min-h-screen min-h-[100svh] w-full flex-col overflow-hidden bg-[#141414] pt-16">
               <DottedSurface />
               {/* Hero — split 2-column on lg, stacked on mobile */}
               <div className="relative z-10 mx-auto grid w-full max-w-[1440px] grid-cols-1 items-center gap-6 px-4 pt-16 sm:gap-8 sm:px-10 md:pt-24 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10 lg:pt-32 lg:pb-16">
@@ -699,13 +699,13 @@ export default function RevisedLandingPage() {
                 transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
                 className="mx-auto mt-10 max-w-[680px]"
               >
-                <div className="overflow-hidden rounded-[24px] border border-[var(--color-dark-divider)] shadow-[0_32px_72px_-24px_rgba(0,0,0,0.5)]">
+                <div className="overflow-hidden rounded-[18px] border border-[var(--color-dark-divider)] shadow-[0_32px_72px_-24px_rgba(0,0,0,0.5)] sm:rounded-[24px]">
                   <video
                     autoPlay
                     muted
                     loop
                     playsInline
-                    preload="metadata"
+                    preload="none"
                     className="block w-full"
                   >
                     <source src="/videos/demo-transcript.mp4" type="video/mp4" />
@@ -1283,6 +1283,7 @@ function HeroVideoPanel() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [showControls, setShowControls] = useState(false);
+  const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const formatTime = (s: number) => {
     const m = Math.floor(s / 60);
@@ -1293,6 +1294,12 @@ function HeroVideoPanel() {
     if (!videoRef.current) return;
     if (isPlaying) { videoRef.current.pause(); } else { videoRef.current.play(); }
     setIsPlaying(!isPlaying);
+  };
+
+  const showControlsWithTimeout = () => {
+    setShowControls(true);
+    if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
+    hideTimeoutRef.current = setTimeout(() => setShowControls(false), 3000);
   };
 
   const handleTimeUpdate = () => {
@@ -1333,6 +1340,7 @@ function HeroVideoPanel() {
       transition={{ duration: 0.5 }}
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
+      onTouchStart={showControlsWithTimeout}
     >
       {/* Video — landscape 16:9 */}
       <div className="aspect-video w-full overflow-hidden">
@@ -1355,7 +1363,7 @@ function HeroVideoPanel() {
       <AnimatePresence>
         {showControls && (
           <motion.div
-            className="absolute bottom-0 left-0 right-0 mx-auto max-w-[90%] m-3 p-3 rounded-2xl bg-[#11111198] backdrop-blur-md"
+            className="absolute bottom-0 left-0 right-0 mx-auto max-w-[90%] m-3 p-3 rounded-2xl bg-[#11111198] backdrop-blur-md [-webkit-backdrop-filter:blur(12px)]"
             initial={{ y: 16, opacity: 0, filter: "blur(8px)" }}
             animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
             exit={{ y: 16, opacity: 0, filter: "blur(8px)" }}
