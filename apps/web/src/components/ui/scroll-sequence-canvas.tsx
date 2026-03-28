@@ -42,8 +42,8 @@ export function ScrollSequenceCanvas({
     const iw = img.naturalWidth;
     const ih = img.naturalHeight;
 
-    // Cover-fit: fill canvas without letter-boxing
-    const scale = Math.max(cw / iw, ch / ih);
+    // Contain-fit: show entire frame centered, no cropping
+    const scale = Math.min(cw / iw, ch / ih);
     const dw = iw * scale;
     const dh = ih * scale;
     const dx = (cw - dw) / 2;
@@ -59,14 +59,10 @@ export function ScrollSequenceCanvas({
   const resizeCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
     const dpr = Math.min(window.devicePixelRatio || 1, 3);
     const rect = canvas.getBoundingClientRect();
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;
-    if (ctx) {
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
     drawFrame(frameIndexRef.current.value);
   }, [drawFrame]);
 
