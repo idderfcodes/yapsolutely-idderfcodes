@@ -34,7 +34,6 @@ import { landingDisplayFont } from "./landing-font";
 import { ZoomParallaxSection } from "./zoom-parallax-section";
 import BrandCarousel from "./BrandCarousel";
 import AnimatedGradientText from "./AnimatedGradientText";
-import { ImageAutoSlider } from "@/components/ui/image-auto-slider";
 import { DottedSurface } from "@/components/ui/dotted-surface";
 import { BGPattern } from "@/components/ui/bg-pattern";
 import { cn } from "@/lib/utils";
@@ -774,20 +773,6 @@ export default function RevisedLandingPage() {
                     </motion.div>
                   );
                 })}
-              </motion.div>
-
-              <motion.div
-                variants={sectionReveal}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                className="mt-16"
-              >
-                <ImageAutoSlider
-                  duration={25}
-                  sizeClassName="w-56 h-40 md:w-72 md:h-52 lg:w-80 lg:h-56"
-                />
               </motion.div>
             </div>
           </section>
