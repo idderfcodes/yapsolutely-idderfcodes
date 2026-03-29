@@ -220,7 +220,7 @@ export function ScrollSequenceCanvas({
     >
       <div
         ref={stageRef}
-        className="sticky top-0 z-10 h-screen h-[100svh] overflow-hidden"
+        className="relative sticky top-0 z-10 h-screen h-[100svh] overflow-hidden"
       >
         <canvas
           ref={canvasRef}
