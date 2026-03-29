@@ -5,7 +5,6 @@ import Link from "next/link";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
 import { MenuToggleIcon } from "@/components/ui/menu-toggle-icon";
-import { useScroll } from "@/components/ui/use-scroll";
 import { cn } from "@/lib/utils";
 
 const productLinks = [
@@ -50,11 +49,10 @@ export function Header({ darkHero = false }: { darkHero?: boolean }) {
   const [open, setOpen] = React.useState(false);
   const [productOpen, setProductOpen] = React.useState(false);
   const [mobileProductOpen, setMobileProductOpen] = React.useState(false);
-  const scrolled = useScroll(10);
   const productMenuRef = React.useRef<HTMLDivElement>(null);
 
-  /* When darkHero is true and we haven't scrolled, use light-on-dark palette */
-  const atDarkTop = darkHero && !scrolled && !open;
+  /* When darkHero is true, keep the nav in the shared hero/video palette */
+  const atDarkTop = darkHero && !open;
 
   React.useEffect(() => {
     if (open) {
@@ -85,13 +83,13 @@ export function Header({ darkHero = false }: { darkHero?: boolean }) {
   }, [productOpen]);
 
   return (
-    <header className="sticky top-0 z-50 w-full">
+    <header className="relative z-50 w-full">
       <nav
         className={cn(
           "w-full transition-all duration-300 ease-out",
           {
-            "border-b border-[var(--color-border)] bg-[var(--color-bg)]/90 backdrop-blur-md": scrolled || open,
-            "bg-transparent": !scrolled && !open,
+            "border-b border-[var(--color-border)] bg-[var(--color-bg)]/80 backdrop-blur-xl shadow-[0_4px_24px_-12px_rgba(0,0,0,0.1)]": open,
+            "bg-transparent": !open,
           },
         )}
       >
@@ -99,12 +97,12 @@ export function Header({ darkHero = false }: { darkHero?: boolean }) {
           <Link
             href="/"
             className={cn(
-              "landing-display text-[1.85rem] font-medium leading-none tracking-[-0.03em] transition-colors duration-300 hover:opacity-85",
+              "landing-display text-[1.85rem] font-semibold leading-none tracking-[-0.03em] transition-colors duration-300 hover:opacity-85",
               atDarkTop ? "text-[var(--color-text-on-dark)]" : "text-[var(--color-text-primary)]"
             )}
-            aria-label="Yapsolutely home"
+            aria-label="yapsolutely home"
           >
-            Yapsolutely
+            yapsolutely
           </Link>
 
           <div className="hidden items-center gap-1 lg:flex">
@@ -130,8 +128,10 @@ export function Header({ darkHero = false }: { darkHero?: boolean }) {
               </button>
 
               {productOpen ? (
-                <div className="absolute left-1/2 top-full z-20 mt-3 w-[360px] -translate-x-1/2 overflow-hidden rounded-[24px] border border-[var(--color-border)] bg-[var(--color-bg)] p-2 shadow-[0_22px_50px_-28px_rgba(20,20,20,0.22)]">
-                  <div className="grid gap-1">
+                <div className="absolute left-1/2 top-full z-20 mt-3 w-[360px] -translate-x-1/2 overflow-hidden rounded-[24px] border border-[var(--color-border)] bg-[var(--color-bg)] p-2 shadow-[0_22px_50px_-28px_rgba(20,20,20,0.5)] animate-in fade-in zoom-in-95 duration-200">
+                  {/* Subtle inner top glow for depth */}
+                  <div className="absolute inset-0 z-0 pointer-events-none rounded-[24px] shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]" />
+                  <div className="relative z-10 grid gap-1">
                     {productLinks.map((link) => (
                       <Link
                         key={link.href}
@@ -182,9 +182,10 @@ export function Header({ darkHero = false }: { darkHero?: boolean }) {
             </Link>
             <Link
               href="/sign-up"
-              className="landing-body inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-[var(--color-accent-primary)] px-5 text-[14px] font-semibold text-[var(--color-text-on-dark)] transition-all duration-200 hover:scale-[1.03] hover:bg-[var(--color-accent-hover)] hover:shadow-[0_16px_34px_-16px_rgba(238,48,58,0.3)] active:bg-[var(--color-accent-deep)]"
+              className="landing-button-primary group relative overflow-hidden landing-body inline-flex h-10 cursor-pointer items-center justify-center px-6 text-[14px] font-semibold text-[var(--color-text-on-dark)]"
             >
-              Start building free
+              <span className="relative z-10">Start building free</span>
+              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
             </Link>
           </div>
 
@@ -278,7 +279,7 @@ export function Header({ darkHero = false }: { darkHero?: boolean }) {
             <Link
               href="/sign-up"
               onClick={() => setOpen(false)}
-              className="landing-body flex w-full cursor-pointer items-center justify-center rounded-full bg-[var(--color-accent-primary)] px-4 py-3 text-[14px] font-semibold text-[var(--color-text-on-dark)] transition-all duration-200 hover:scale-[1.03] hover:bg-[var(--color-accent-hover)] hover:shadow-[0_16px_34px_-16px_rgba(238,48,58,0.3)] active:bg-[var(--color-accent-deep)]"
+              className="landing-button-primary landing-body flex w-full cursor-pointer items-center justify-center px-4 py-3 text-[14px] font-semibold text-[var(--color-text-on-dark)]"
             >
               Start building free
             </Link>

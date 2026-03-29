@@ -1,26 +1,36 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import Image from "next/image";
 
-export default function ImageAutoSlider() {
+export default function ImageAutoSlider () {
   // Images for the infinite scroll - using Unsplash URLs
   const images = [
-    "https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://images.unsplash.com/photo-1472396961693-142e6e269027?q=80&w=2152&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://images.unsplash.com/photo-1505142468610-359e7d316be0?q=80&w=2126&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://images.unsplash.com/photo-1482881497185-d4a9ddbe4151?q=80&w=1965&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://plus.unsplash.com/premium_photo-1673264933212-d78737f38e48?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://plus.unsplash.com/premium_photo-1711434824963-ca894373272e?q=80&w=2030&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://plus.unsplash.com/premium_photo-1675705721263-0bbeec261c49?q=80&w=1940&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://images.unsplash.com/photo-1524799526615-766a9833dec0?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    "https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=75&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1472396961693-142e6e269027?q=75&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1505142468610-359e7d316be0?q=75&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1482881497185-d4a9ddbe4151?q=75&w=1200&auto=format&fit=crop",
+    "https://plus.unsplash.com/premium_photo-1673264933212-d78737f38e48?q=75&w=1200&auto=format&fit=crop",
+    "https://plus.unsplash.com/premium_photo-1711434824963-ca894373272e?q=75&w=1200&auto=format&fit=crop",
+    "https://plus.unsplash.com/premium_photo-1675705721263-0bbeec261c49?q=75&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1524799526615-766a9833dec0?q=75&w=1200&auto=format&fit=crop"
   ];
 
   // Duplicate images for seamless loop
   const duplicatedImages = [...images, ...images];
 
   return (
-    <div className="w-full mt-16 sm:mt-24 relative overflow-hidden flex flex-col items-center justify-center">
+    <>
       <style>{`
-        
+        @keyframes scroll-right {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+
+        .infinite-scroll {
+          animation: scroll-right 45s linear infinite;
+        }
 
         .scroll-container {
           mask: linear-gradient(
@@ -49,34 +59,34 @@ export default function ImageAutoSlider() {
         }
       `}</style>
       
-      {/* Scrolling images container */}
-      <div className="relative z-10 w-full flex items-center justify-center py-8">
-        <div className="scroll-container w-full max-w-[1400px]">
-          <motion.div
-            className="flex gap-6 w-max"
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{
-              repeat: Infinity,
-              ease: "linear",
-              duration: 40,
-            }}
-          >
-            {duplicatedImages.map((image, index) => (
-              <div
-                key={index}
-                className="image-item flex-shrink-0 w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-[24px] overflow-hidden shadow-[0_16px_40px_-30px_rgba(0,0,0,0.4)]"
-              >
-                <img
-                  src={image}
-                  alt={`Feature gallery image ${(index % images.length) + 1}`}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-            ))}
-                    </motion.div>
+      <div className="relative mt-8 flex w-full items-center justify-center overflow-hidden border-t border-[var(--color-dark-divider)] bg-[#0A0A0A] py-10 [content-visibility:auto] sm:mt-12 sm:py-16">
+        {/* Subtle top spotlight to blend from previous section */}
+        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-[var(--color-accent-primary)] opacity-[0.05] blur-[120px] pointer-events-none rounded-full" />
+        
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-screen pointer-events-none"></div>
+        
+        {/* Scrolling images container */}
+        <div className="relative z-10 flex w-full items-center justify-center py-4 sm:py-6">
+          <div className="scroll-container w-full max-w-6xl">
+            <div className="infinite-scroll flex w-max gap-3 sm:gap-6">
+              {duplicatedImages.map((image, index) => (
+                <div
+                  key={index}
+                  className="image-item relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-xl border border-[var(--color-dark-divider)] shadow-[0_24px_50px_-12px_rgba(0,0,0,0.6)] transition-all duration-500 hover:border-[var(--color-accent-primary)]/50 sm:h-44 sm:w-44 md:h-56 md:w-56 lg:h-72 lg:w-72"
+                >
+                  <Image
+                    src={image}
+                    alt={`Gallery image ${(index % images.length) + 1}`}
+                    fill
+                    sizes="(max-width: 640px) 128px, (max-width: 1024px) 224px, 288px"
+                    className="object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
-}
+};

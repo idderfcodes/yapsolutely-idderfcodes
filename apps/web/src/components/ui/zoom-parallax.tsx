@@ -54,6 +54,7 @@ export function ZoomParallax({
   useEffect(() => {
     if (!framePaths.length) return;
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentFrameIndex(0);
     activeFrameRef.current = 0;
 

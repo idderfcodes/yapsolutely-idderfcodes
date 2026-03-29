@@ -99,7 +99,7 @@ Must contain real values for the web app, including:
 
 Notes:
 
-- `DATABASE_URL` and `DIRECT_URL` are overridden by Compose to point at the internal `postgres` service
+- `DATABASE_URL` and `DATABASE_URL_UNPOOLED` are overridden by Compose to point at the internal `postgres` service
 - Supabase keys are no longer required for the current production demo path
 
 ### `deploy/.env.voice`

@@ -98,7 +98,7 @@ Keep this section only if you want Supabase for local/dev experiments or a futur
 ### Env vars to fill
 
 - `DATABASE_URL` (optional if using Supabase outside the current VPS stack)
-- `DIRECT_URL` (optional if using Supabase outside the current VPS stack)
+- `DATABASE_URL_UNPOOLED` (optional if using Supabase outside the current VPS stack)
 - `SUPABASE_URL` (optional)
 - `SUPABASE_ANON_KEY` (optional)
 - `SUPABASE_SERVICE_ROLE_KEY` (optional)
@@ -391,7 +391,7 @@ By the time you are done collecting credentials, we want these filled with real 
 - `AUTH_SECRET`
 - `RUNTIME_SHARED_SECRET`
 - `DATABASE_URL` (Compose overrides this to internal Postgres in production)
-- `DIRECT_URL` (Compose overrides this to internal Postgres in production)
+- `DATABASE_URL_UNPOOLED` (Compose overrides this to internal Postgres in production)
 - `SUPABASE_URL` (optional for the current production path)
 - `SUPABASE_ANON_KEY` (optional for the current production path)
 - `SUPABASE_SERVICE_ROLE_KEY` (optional for the current production path)

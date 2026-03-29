@@ -17,12 +17,17 @@ Use `plan/masterplan.md` as the canonical source of truth for execution status, 
 
 1. Copy `.env.example` to `.env` and fill in real provider credentials.
 2. Install dependencies from the repo root.
-3. Start the dashboard and voice runtime in separate terminals.
+3. Apply the Prisma schema from the repo root.
+4. Start the dashboard and voice runtime in separate terminals.
+
+The root workspace scripts automatically load the repo-root `.env` file for you.
 
 Useful workspace scripts:
 
 - `npm run dev:web` — start the Next.js dashboard
 - `npm run dev:voice` — start the voice runtime
+- `npm run db:generate:web` — generate the Prisma client using the root `.env`
+- `npm run db:push:web` — apply the Prisma schema using the root `.env`
 - `npm run lint` — lint the web app
 - `npm run build` — build the web app
 - `npm run check` — lint, then build

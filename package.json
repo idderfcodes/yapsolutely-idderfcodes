@@ -6,10 +6,12 @@
     "apps/*"
   ],
   "scripts": {
-    "dev:web": "npm run dev -w apps/web",
-    "dev:voice": "npm run dev -w apps/voice",
-    "build:web": "npm run build -w apps/web",
+    "dev:web": "node scripts/with-root-env.mjs npm run dev -w apps/web",
+    "dev:voice": "node scripts/with-root-env.mjs npm run dev -w apps/voice",
+    "build:web": "node scripts/with-root-env.mjs npm run build -w apps/web",
     "lint:web": "npm run lint -w apps/web",
+    "db:generate:web": "node scripts/with-root-env.mjs npm run db:generate -w apps/web",
+    "db:push:web": "node scripts/with-root-env.mjs npm run db:push -w apps/web",
     "deploy:prod": "bash scripts/deploy-production.sh",
     "preflight:prod": "node scripts/production-preflight.mjs",
     "smoke:prod": "node scripts/production-smoke.mjs",

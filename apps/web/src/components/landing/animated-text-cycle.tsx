@@ -10,18 +10,22 @@ interface AnimatedTextCycleProps {
   words: string[];
   interval?: number;
   className?: string;
+  pauseOnReducedMotion?: boolean;
 }
 
 export default function AnimatedTextCycle({
   words,
   interval = 5000,
   className = "",
+  pauseOnReducedMotion = true,
 }: AnimatedTextCycleProps) {
   const shouldReduceMotion = useReducedMotion();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const shouldPauseCycle = shouldReduceMotion && pauseOnReducedMotion;
+  const shouldAnimate = !shouldReduceMotion;
 
   useEffect(() => {
-    if (shouldReduceMotion || words.length <= 1) {
+    if (shouldPauseCycle || words.length <= 1) {
       return;
     }
 
@@ -30,7 +34,7 @@ export default function AnimatedTextCycle({
     }, interval);
 
     return () => window.clearInterval(timer);
-  }, [interval, shouldReduceMotion, words.length]);
+  }, [interval, shouldPauseCycle, words.length]);
 
   const longestWord = useMemo(
     () => words.reduce((longest, word) => (word.length > longest.length ? word : longest), words[0] ?? ""),
@@ -69,18 +73,24 @@ export default function AnimatedTextCycle({
         {longestWord}
       </span>
 
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.span
-          key={words[currentIndex]}
-          className={`col-start-1 row-start-1 inline-block whitespace-nowrap ${className}`}
-          variants={variants}
-          initial={shouldReduceMotion ? false : "hidden"}
-          animate="visible"
-          exit={shouldReduceMotion ? undefined : "exit"}
-        >
+      {shouldAnimate ? (
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.span
+            key={words[currentIndex]}
+            className={`col-start-1 row-start-1 inline-block whitespace-nowrap ${className}`}
+            variants={variants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
+            {words[currentIndex]}
+          </motion.span>
+        </AnimatePresence>
+      ) : (
+        <span className={`col-start-1 row-start-1 inline-block whitespace-nowrap ${className}`}>
           {words[currentIndex]}
-        </motion.span>
-      </AnimatePresence>
+        </span>
+      )}
     </span>
   );
 }

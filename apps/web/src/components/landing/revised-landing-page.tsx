@@ -1,11 +1,10 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useRef } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { Play, Pause, Volume2, Volume1, VolumeX } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Fragment, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import {
   ArrowTopRightOnSquareIcon,
   ArrowLongRightIcon,
@@ -30,16 +29,47 @@ import {
 } from "@heroicons/react/24/outline";
 
 import { Header } from "./header";
+import { BentoGridShowcase } from "./bento-grid-showcase";
 import { landingDisplayFont } from "./landing-font";
-import { ZoomParallaxSection } from "./zoom-parallax-section";
 import AnimatedGradientText from "./AnimatedGradientText";
-import { DottedSurface } from "@/components/ui/dotted-surface";
 import { BGPattern } from "@/components/ui/bg-pattern";
-import VideoMasking from "@/components/ui/video-masking";
-import ImageReveal from "@/components/ui/image-reveal";
-import ImageAutoSlider from "@/components/ui/image-auto-slider";
-import AnimatedTestimonials from "@/components/ui/animated-testimonials";
 import { cn } from "@/lib/utils";
+
+const LazyZoomParallaxSection = dynamic(
+  () => import("./zoom-parallax-section").then((mod) => mod.ZoomParallaxSection),
+  {
+    ssr: false,
+    loading: () => <SectionSkeleton className="h-[100svh] rounded-none bg-[var(--color-dark-section)]" />,
+  },
+);
+
+const LazySeeItInActionScrollSection = dynamic(
+  () => import("./see-it-in-action-scroll-section").then((mod) => mod.SeeItInActionScrollSection),
+  {
+    ssr: false,
+    loading: () => <SectionSkeleton className="h-[560px] sm:h-[760px]" />,
+  },
+);
+
+const LazyVideoMasking = dynamic(() => import("@/components/ui/video-masking"), {
+  ssr: false,
+  loading: () => <SectionSkeleton className="aspect-[1213/667] w-full rounded-[28px] sm:rounded-[32px]" />,
+});
+
+const LazyImageReveal = dynamic(() => import("@/components/ui/image-reveal"), {
+  ssr: false,
+  loading: () => <SectionSkeleton className="mx-auto h-[300px] w-full max-w-6xl rounded-[28px] sm:h-[460px] sm:rounded-[32px]" />,
+});
+
+const LazyImageAutoSlider = dynamic(() => import("@/components/ui/image-auto-slider"), {
+  ssr: false,
+  loading: () => <SectionSkeleton className="h-[220px] rounded-[24px] sm:h-[360px] sm:rounded-[28px]" />,
+});
+
+const LazyAnimatedTestimonials = dynamic(() => import("@/components/ui/animated-testimonials"), {
+  ssr: false,
+  loading: () => <SectionSkeleton className="h-[560px] rounded-[24px] sm:h-[660px] sm:rounded-[28px]" />,
+});
 
 const marqueeLogos = [
   { file: "twilio", label: "Twilio" },
@@ -83,57 +113,6 @@ const howItWorks = [
     icon: ShieldCheckIcon,
     signal: "Transcript + audit trail",
     preview: <TranscriptReviewPreview />,
-  },
-];
-
-const featureTiles = [
-  {
-    title: "Sub-second Responses",
-    description:
-      "Streaming STT, LLM, and TTS in one fast loop.",
-    icon: BoltIcon,
-    type: "wide",
-    content: <LatencyPreview />,
-  },
-  {
-    title: "Full Audit Trail",
-    description:
-      "Every word transcribed, every event logged.",
-    icon: ShieldCheckIcon,
-    type: "wide",
-    content: <AuditTrailPreview />,
-  },
-  {
-    title: "Custom Agents",
-    description:
-      "Prompt, voice, and behavior per agent.",
-    icon: SparklesIcon,
-    type: "small",
-    content: <AgentBuilderMini />,
-  },
-  {
-    title: "Real Phone Numbers",
-    description:
-      "US and international numbers mapped to agents.",
-    icon: PhoneIcon,
-    type: "small",
-    content: <PhoneNumbersMini />,
-  },
-  {
-    title: "After-hours Coverage",
-    description:
-      "Capture demand after close, queue follow-ups.",
-    icon: QueueListIcon,
-    type: "small",
-    content: <AfterHoursMini />,
-  },
-  {
-    title: "Analytics Dashboard",
-    description:
-      "Outcomes, performance, and queue health in one view.",
-    icon: ChartBarSquareIcon,
-    type: "small",
-    content: <AnalyticsMini />,
   },
 ];
 
@@ -215,6 +194,14 @@ const useCases = [
   },
 ];
 
+const moreUseCaseBenefits = [
+  "Speed up the line",
+  "Book more visits",
+  "Handle repeat questions",
+  "Catch after-hours demand",
+  "Keep staff on task",
+];
+
 
 
 const integrationStacks = [
@@ -282,6 +269,12 @@ const ctaSignalPills = [
   "Real phone numbers",
   "Transcript-backed review",
   "Built for inbound ops",
+];
+
+const ctaProofStats = [
+  { label: "Coverage", value: "24/7" },
+  { label: "Review", value: "Every call" },
+  { label: "Launch", value: "Fast" },
 ];
 
 const footerActionLinks = [
@@ -363,9 +356,6 @@ const staggerContainer = {
 };
 
 export default function RevisedLandingPage() {
-  const [activeUseCase, setActiveUseCase] = useState(useCases[0]?.id ?? "");
-  const selectedUseCase = useCases.find((useCase) => useCase.id === activeUseCase) ?? useCases[0];
-
   return (
     <div
       className={`${landingDisplayFont.variable} landing-shell relative min-h-screen w-full overflow-x-hidden bg-[var(--color-bg)] text-[var(--color-text-primary)]`}
@@ -373,37 +363,36 @@ export default function RevisedLandingPage() {
       <LandingBackdrop />
 
       <div className="relative z-10">
-        <Header darkHero />
-
         <main>
-          <section className="-mt-16 pt-0">
-            <div className="relative flex min-h-screen min-h-[100svh] w-full flex-col overflow-hidden bg-[#141414] pt-16">
-              {/* Abstract dark hero background image */}
+          <section className="bg-black pt-0">
+            <div className="relative flex min-h-screen min-h-[100svh] w-full flex-col overflow-hidden bg-black pt-16">
               <div className="absolute inset-0 z-0">
-                <Image
-                  src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop"
-                  alt="Abstract background"
-                  fill
-                  className="object-cover opacity-30"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-b from-[#141414]/40 via-[#141414]/80 to-[var(--color-bg)]" />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#141414]/80 via-transparent to-[#141414]/80" />
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  className="h-full w-full object-cover"
+                  aria-hidden="true"
+                >
+                  <source src="/videos/newHEROSECTION.webm" type="video/webm" />
+                  <source src="/videos/newHEROSECTION.mp4" type="video/mp4" />
+                </video>
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[46%] bg-gradient-to-b from-transparent via-black/28 to-[#050505]" />
               </div>
 
-              {/* Optional: we can keep DottedSurface but make it very subtle, or remove. Let's keep it with low opacity by adding a wrapper */}
-              <div className="absolute inset-0 z-0 opacity-40">
-                <DottedSurface />
-              </div>
-              {/* Hero — split 2-column on lg, stacked on mobile */}
-              <div className="relative z-10 mx-auto grid w-full max-w-[1440px] grid-cols-1 items-center gap-6 px-4 pt-16 sm:gap-8 sm:px-10 md:pt-24 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10 lg:pt-32 lg:pb-16">
-                {/* Left column — copy */}
+              <div className="relative z-10 flex min-h-screen min-h-[100svh] flex-col">
+                <Header darkHero />
+
+                <div className="mx-auto flex w-full max-w-[960px] flex-1 items-center justify-center px-4 pb-16 pt-10 sm:px-10 md:pt-14 lg:pb-20 lg:pt-16">
                 <motion.div
                   initial="hidden"
                   animate="show"
                   variants={staggerContainer}
-                  className="flex flex-col items-center text-center lg:items-start lg:text-left"
+                  className="relative mx-auto flex max-w-[44rem] flex-col items-center text-center"
                 >
+                  <div className="pointer-events-none absolute -left-20 top-20 z-0 h-[22rem] w-[22rem] rounded-full bg-[var(--color-accent-primary)] opacity-[0.08] blur-[80px]" />
                   <motion.div
                     variants={cardReveal}
                     transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
@@ -452,120 +441,112 @@ export default function RevisedLandingPage() {
                   <motion.p
                     variants={cardReveal}
                     transition={{ duration: 0.42, delay: 0.24, ease: [0.22, 1, 0.36, 1] }}
-                    className="landing-body mt-4 text-[12px] text-[var(--color-text-muted)]"
+                    className="landing-body mt-4 text-[12px] text-[var(--color-text-muted-on-dark)]"
                   >
                     No credit card required. Free plan available.
                   </motion.p>
                 </motion.div>
-
-                {/* Right column — video full-bleed */}
-                <motion.div
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                  className="relative w-full lg:max-h-[80svh]"
-                >
-                  <HeroVideoPanel />
-                </motion.div>
+                </div>
               </div>
             </div>
           </section>
 
-                    <section id="how-it-works" className="landing-section bg-[var(--color-bg-secondary)] pt-8">
-            <div className="landing-container">
+                    <section id="how-it-works" className="landing-section relative overflow-hidden bg-[#050505] pt-16 sm:pt-24">
+            <div className="pointer-events-none absolute inset-0 z-0">
+              <div className="absolute left-[20%] top-[-10%] h-[40rem] w-[40rem] rounded-full bg-[var(--color-accent-primary)] opacity-[0.03] blur-[120px]" />
+              <div className="absolute bottom-[-10%] right-[10%] h-[30rem] w-[30rem] rounded-full bg-[var(--color-accent-secondary)] opacity-[0.03] blur-[100px]" />
+            </div>
+            <div className="landing-container relative z-10">
               <motion.div
                 variants={sectionReveal}
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                className="max-w-[42rem]"
+                className="mx-auto max-w-[42rem] text-center"
               >
-                <div className="landing-pill inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--color-accent-primary)]">
+                <div className="landing-pill mx-auto inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--color-accent-primary)]">
                   How it works
                 </div>
-                <h2 className="landing-display landing-display-1 mt-6 text-[var(--color-text-primary)]">
-                  Three steps to a live agent
+                <h2 className="landing-display landing-display-1 mt-6 text-[var(--color-text-on-dark)]">
+                  <HowItWorksAnimatedText text="Three steps to a live agent" distance={24} />
                 </h2>
-                <p className="landing-body landing-body-1-regular mt-4 max-w-[32rem] text-[var(--color-text-muted)]">
+                <p className="landing-body landing-body-1-regular mx-auto mt-4 max-w-[32rem] text-[var(--color-text-muted-on-dark)]">
                   Configure. Attach a number. Review calls.
                 </p>
               </motion.div>
+            </div>
+          
+              <div className="relative z-10 mt-2 flex w-full justify-center pb-12 sm:mt-8 sm:pb-16">
+                <DeferredSection
+                  rootMargin="220px 0px"
+                  placeholder={<SectionSkeleton className="mx-auto h-[300px] w-full max-w-6xl rounded-[28px] sm:h-[460px] sm:rounded-[32px]" />}
+                >
+                  <LazyImageReveal
+                    leftImage="/images/how-it-works/1.png"
+                    middleImage="/images/how-it-works/2.png"
+                    rightImage="/images/how-it-works/3.png"
+                  />
+                </DeferredSection>
+              </div>
 
-              <div className="relative mt-10">
-                <div className="pointer-events-none absolute left-[10%] right-[10%] top-7 hidden h-px lg:block">
-                  <div className="h-full w-full bg-gradient-to-r from-transparent via-[var(--color-accent-primary)]/35 to-transparent" />
-                </div>
-
+              <div className="landing-container relative z-10 pb-16 sm:pb-20">
                 <motion.div
                   variants={staggerContainer}
                   initial="hidden"
                   whileInView="show"
-                  viewport={{ once: true, amount: 0.12 }}
-                  className="grid gap-6 lg:grid-cols-3"
+                  viewport={{ once: true, amount: 0.1 }}
+                  className="mx-auto grid max-w-6xl gap-4 md:grid-cols-3 md:gap-6"
                 >
-                  {howItWorks.map((step) => {
-                    const Icon = step.icon;
+                  {howItWorks.map((step, index) => {
+                    const alignmentClassName =
+                      index === 0
+                        ? "md:justify-self-start"
+                        : index === 1
+                          ? "md:justify-self-center"
+                          : "md:justify-self-end";
 
                     return (
-                      <motion.div key={step.number} variants={cardReveal}>
-                        <motion.div
-                          whileHover={{ y: -2 }}
-                          transition={{ duration: 0.28, ease: "easeOut" }}
-                          className="landing-card landing-card-hover relative h-full rounded-[22px] border border-[var(--color-border)] bg-[var(--color-bg)] p-5 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)] sm:rounded-[30px] sm:p-7"
-                        >
-                          <div className="flex items-start justify-between gap-4">
-                            <div className="flex items-center gap-4">
-                              <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[rgba(217,95,59,0.18)] bg-[var(--color-overlay-accent-soft)] text-[var(--color-accent-primary)]">
-                                <span className="landing-display text-[1.7rem] leading-none tracking-[-0.06em]">
-                                  {step.number}
-                                </span>
-                              </div>
-
-                              <div>
-                                <div className="landing-body text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--color-accent-primary)]">
-                                  {step.eyebrow}
-                                </div>
-                                <div className="landing-body mt-1 text-[12px] text-[var(--color-text-muted)]">
-                                  {step.signal}
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-bg-secondary)] text-[var(--color-accent-primary)]">
-                              <Icon className="h-5 w-5" />
-                            </div>
-                          </div>
-
-                          <h3 className="landing-display landing-display-3 mt-6 max-w-[12ch] text-[var(--color-text-primary)]">
-                            {step.title}
-                          </h3>
-                          <p className="landing-body landing-body-2-regular mt-3 max-w-[30rem] text-[var(--color-text-muted)]">
-                            {step.description}
-                          </p>
-
-                          <div className="mt-6 rounded-[24px] border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-4">
-                            {step.preview}
-                          </div>
-                        </motion.div>
-                      </motion.div>
+                      <motion.article
+                        key={step.number}
+                        variants={cardReveal}
+                        className={cn(
+                          "w-full rounded-[24px] border border-[var(--color-dark-divider)] bg-[rgba(255,255,255,0.02)] p-5 shadow-[0_22px_54px_-36px_rgba(0,0,0,0.65)] backdrop-blur-sm sm:p-6 md:max-w-[340px]",
+                          alignmentClassName,
+                        )}
+                      >
+                        <h3 className="landing-display text-[2rem] leading-[0.95] tracking-[-0.05em] text-[var(--color-text-on-dark)] sm:text-[2.2rem]">
+                          <HowItWorksAnimatedText text={step.title} distance={18} />
+                        </h3>
+                        <p className="landing-body mt-3 max-w-[26rem] text-[15px] leading-6 text-[var(--color-text-muted-on-dark)]">
+                          {step.description}
+                        </p>
+                      </motion.article>
                     );
                   })}
                 </motion.div>
               </div>
-            </div>
-          
-              <div className="mt-10 sm:mt-20 flex justify-center w-full pb-20 relative z-10">
-                  <ImageReveal
-                    leftImage="https://images.unsplash.com/photo-1433838552652-f9a46b332c40?q=80&w=2070&auto=format&fit=crop"
-                    middleImage="https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=2070&auto=format&fit=crop"
-                    rightImage="https://images.unsplash.com/photo-1506744626753-1fa7673e4a9e?q=80&w=2070&auto=format&fit=crop"
-                  />
-              </div>
+
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[15%] bg-gradient-to-b from-transparent via-[rgba(240,232,250,0.24)] to-[rgba(240,232,250,0.88)]" />
+
+              <div className="pointer-events-none absolute inset-x-0 bottom-[-4%] z-[1] h-[15%] bg-[radial-gradient(ellipse_at_center,rgba(240,232,250,0.95)_0%,rgba(240,232,250,0.5)_40%,transparent_76%)] blur-3xl" />
 </section>
 
-          <section className="landing-section bg-[var(--color-bg)] pt-4 pb-16">
-            <div className="landing-container">
+          <DeferredSection
+            rootMargin="260px 0px"
+            placeholder={<SectionSkeleton className="h-[100svh] rounded-none bg-[var(--color-dark-section)]" />}
+          >
+            <LazyZoomParallaxSection />
+          </DeferredSection>
+
+          <section className="landing-section relative overflow-hidden bg-black pt-4 pb-12 sm:pb-16">
+            {/* Ambient Background Grid */}
+            <div className="absolute inset-0 z-0 opacity-40 pointer-events-none">
+              <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-bg)] via-transparent to-[var(--color-bg)] z-10" />
+              <BGPattern variant="dots" size={24} fill="var(--color-text-muted)" className="opacity-[0.15]" />
+            </div>
+
+            <div className="landing-container relative z-10">
               <div className="flex flex-col items-center text-center">
                 <motion.div
                   variants={sectionReveal}
@@ -576,13 +557,18 @@ export default function RevisedLandingPage() {
                   className="max-w-[48rem] flex flex-col items-center"
                 >
                   <div className="landing-pill inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--color-accent-primary)]">
-                    Use cases
+                    Drive-thru AI agent
                   </div>
-                  <h2 className="landing-display landing-display-1 mt-6 text-[var(--color-text-primary)]">
-                    Every inbound call scenario
+                  <h2 className="landing-display landing-display-1 mt-6 text-[var(--color-text-on-dark)]">
+                    <AnimatedGradientText
+                      text="Drive-thru orders without slowing the line"
+                      gradientWordCount={2}
+                      gradientPosition="start"
+                      animationSpeed="normal"
+                    />
                   </h2>
-                  <p className="landing-body landing-body-1-regular mt-4 max-w-[38rem] text-[var(--color-text-muted)]">
-                    Sales, support, booking, qualification, after-hours. Whether you need an intelligent front desk or a sophisticated routing agent, Yapsolutely adapts to your specific business flow.
+                  <p className="landing-body landing-body-1-regular mt-4 max-w-[38rem] text-[var(--color-text-muted-on-dark)]">
+                    This demo shows Yapsolutely handling a drive-thru conversation in real time—greeting the customer, capturing the order, confirming modifiers, and keeping the handoff clean for staff.
                   </p>
                 </motion.div>
 
@@ -591,107 +577,26 @@ export default function RevisedLandingPage() {
                   initial="hidden"
                   whileInView="show"
                   viewport={{ once: true, amount: 0.1 }}
-                  className="w-full max-w-4xl mt-12 relative bg-transparent flex justify-center"
+                  className="relative mt-10 flex w-full max-w-4xl justify-center bg-transparent sm:mt-12"
                 >
-                  <VideoMasking className="w-full h-auto" />
+                  <div className="absolute inset-0 z-[-1] bg-[var(--color-accent-primary)] opacity-[0.08] blur-[120px] rounded-full transform scale-75" />
+                  <DeferredSection
+                    rootMargin="220px 0px"
+                    className="w-full"
+                    placeholder={<SectionSkeleton className="aspect-[1213/667] w-full rounded-[28px] sm:rounded-[32px]" />}
+                  >
+                    <LazyVideoMasking className="w-full h-auto" />
+                  </DeferredSection>
                 </motion.div>
               </div>
-
-              <motion.div
-                variants={sectionReveal}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.1 }}
-                transition={{ duration: 0.58, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
-                className="mt-10 overflow-hidden rounded-[20px] border border-[var(--color-border)] bg-[var(--color-bg)] shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)] sm:rounded-[32px]"
-              >
-                <div className="overflow-x-auto border-b border-[var(--color-border)] px-5 py-3 sm:px-6">
-                  <div className="flex min-w-max gap-6 sm:gap-7">
-                  {useCases.map((useCase) => {
-                    const active = activeUseCase === useCase.id;
-
-                    return (
-                      <button
-                        key={useCase.id}
-                        type="button"
-                        onClick={() => setActiveUseCase(useCase.id)}
-                        className={`landing-body relative cursor-pointer pb-2 text-[14px] font-medium transition-all duration-200 hover:text-[var(--color-text-primary)] ${
-                          active ? "text-[var(--color-text-primary)]" : "text-[var(--color-text-muted)]"
-                        }`}
-                      >
-                        {useCase.label}
-                        <span
-                          className={`absolute inset-x-0 -bottom-[1px] h-[2px] rounded-full bg-[var(--color-accent-primary)] transition-opacity duration-200 ${
-                            active ? "opacity-100" : "opacity-0"
-                          }`}
-                        />
-                      </button>
-                    );
-                  })}
-                  </div>
-                </div>
-
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={selectedUseCase.id}
-                    initial={{ opacity: 0, y: 18 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -12 }}
-                    transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-                    className="grid gap-6 px-4 py-5 sm:px-6 sm:py-7 lg:grid-cols-[minmax(0,0.84fr)_minmax(0,1.16fr)] lg:items-center"
-                  >
-                    <div>
-                      <div className="landing-pill inline-flex items-center px-3.5 py-1.5 landing-body text-[11px] font-medium text-[var(--color-accent-primary)]">
-                        {selectedUseCase.eyebrow}
-                      </div>
-
-                      <h3 className="landing-display landing-display-2 mt-5 max-w-[14ch] text-[var(--color-text-primary)]">
-                        {selectedUseCase.title}
-                      </h3>
-                      <p className="landing-body landing-body-1-regular mt-4 max-w-[32rem] text-[var(--color-text-muted)]">
-                        {selectedUseCase.description}
-                      </p>
-
-                      <div className="mt-6 space-y-3">
-                        {selectedUseCase.bullets.map((bullet) => (
-                          <div key={bullet} className="flex items-start gap-3 rounded-[18px] border border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-4 py-3">
-                            <CheckCircleIcon className="mt-0.5 h-5 w-5 shrink-0 text-[var(--color-accent-primary)]" />
-                            <p className="landing-body landing-body-2-regular text-[var(--color-text-primary)]">{bullet}</p>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="landing-body mt-6 border-t border-[var(--color-border)] pt-4 text-[12px] font-medium uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
-                        {selectedUseCase.footer}
-                      </div>
-                    </div>
-
-                    <div className="rounded-[26px] border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-4 sm:p-5">
-                      <div className="mb-4 flex items-center justify-between gap-3 border-b border-[var(--color-border)] pb-3">
-                        <div>
-                          <div className="landing-body text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
-                            Live example
-                          </div>
-                          <div className="landing-body mt-1 text-[13px] font-medium text-[var(--color-text-primary)]">
-                            {selectedUseCase.label}
-                          </div>
-                        </div>
-
-                        <span className="landing-body rounded-full bg-[var(--color-bg)] px-3 py-1 text-[11px] font-medium text-[var(--color-accent-primary)]">
-                          Mini preview
-                        </span>
-                      </div>
-
-                      {selectedUseCase.preview}
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-              </motion.div>
             </div>
           </section>
 
           {/* Bento Use Cases */}
-          <section className="landing-section bg-[var(--color-dark-secondary)] py-16 sm:py-24 border-t border-[var(--color-dark-divider)]">
+          <section className="landing-section relative bg-black py-12 sm:py-16">
+            <div className="absolute inset-0 z-0">
+              <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
+            </div>
             <div className="landing-container">
               <motion.div
                 variants={sectionReveal}
@@ -705,202 +610,108 @@ export default function RevisedLandingPage() {
                   More Use Cases
                 </div>
                 <h2 className="landing-display landing-display-1 mx-auto mt-6 max-w-2xl text-[var(--color-text-on-dark)]">
-                  Flexibility for any workflow
+                  <AnimatedGradientText
+                    text="Get more done with the same team"
+                    gradientWordCount={2}
+                    gradientPosition="end"
+                    animationSpeed="normal"
+                  />
                 </h2>
                 <p className="landing-body landing-body-1-regular mx-auto mt-4 max-w-[38rem] text-[var(--color-text-muted-on-dark)]">
-                  Quickly connect the pieces that matter to your distinct use case.
+                  Move faster, miss less, and stay available when the rush hits.
                 </p>
               </motion.div>
 
-              <motion.div 
-                variants={staggerContainer}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.1 }}
-                className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-12 max-w-5xl mx-auto"
-              >
-                {/* Big Cell - 2 columns */}
-                <motion.div variants={sectionReveal} className="md:col-span-2 md:row-span-2 group relative overflow-hidden rounded-[24px] border border-[var(--color-dark-divider)] bg-[var(--color-dark-primary)] p-8 hover:border-[var(--color-accent-hover)] transition-all duration-300">
-                  <div className="relative z-10 flex flex-col h-full">
-                    <h3 className="landing-display text-2xl text-[var(--color-text-on-dark)] mb-2">Automated Fallback</h3>
-                    <p className="landing-body text-[var(--color-text-muted-on-dark)] leading-relaxed">
-                      Capture high-intent leads even when human agents are occupied. Call drops are automatically picked up by an active listener.
-                    </p>
-                    <div className="mt-8 flex-1 w-full bg-[var(--color-dark-secondary)] rounded-xl border border-[var(--color-dark-divider)] p-4 flex flex-col gap-3">
-                      <div className="h-8 w-3/4 bg-[var(--color-dark-divider)] rounded-md animate-pulse"></div>
-                      <div className="h-4 w-1/2 bg-[var(--color-dark-divider)] rounded-md"></div>
-                      <div className="h-4 w-5/6 bg-[var(--color-dark-divider)] rounded-md"></div>
-                    </div>
-                  </div>
-                </motion.div>
-
-                {/* Small Cell */}
-                <motion.div variants={sectionReveal} className="md:col-span-2 lg:col-span-1 group relative overflow-hidden rounded-[24px] border border-[var(--color-dark-divider)] bg-[var(--color-dark-primary)] p-6 hover:border-[var(--color-accent-hover)] transition-all duration-300">
-                  <h3 className="landing-display text-xl text-[var(--color-text-on-dark)] mb-2">Pre-qualify</h3>
-                  <p className="landing-body text-sm text-[var(--color-text-muted-on-dark)]">Ask mandatory filtering questions prior to routing.</p>
-                  <div className="mt-6 flex justify-between gap-2 overflow-hidden h-20">
-                     <div className="w-16 h-16 rounded-full border-2 border-[var(--color-accent-primary)] border-dashed opacity-50"></div>
-                     <div className="flex-1 border-t-2 border-[var(--color-dark-divider)] border-dotted mt-8"></div>
-                     <div className="w-16 h-16 rounded-full bg-[var(--color-accent-primary)] opacity-20"></div>
-                  </div>
-                </motion.div>
-
-                {/* Small Cell */}
-                <motion.div variants={sectionReveal} className="md:col-span-2 lg:col-span-1 group relative overflow-hidden rounded-[24px] border border-[var(--color-dark-divider)] bg-[var(--color-dark-primary)] p-6 hover:border-[var(--color-accent-hover)] transition-all duration-300">
-                  <h3 className="landing-display text-xl text-[var(--color-text-on-dark)] mb-2">CRM Sync</h3>
-                  <p className="landing-body text-sm text-[var(--color-text-muted-on-dark)]">Transcripts instantly drop into HubSpot or Salesforce.</p>
-                  <div className="mt-6 grid grid-cols-2 gap-2 h-20">
-                     <div className="bg-[var(--color-dark-secondary)] rounded-lg"></div>
-                     <div className="bg-[var(--color-dark-divider)] rounded-lg opacity-40"></div>
-                     <div className="bg-[var(--color-dark-divider)] rounded-lg opacity-40"></div>
-                     <div className="bg-[var(--color-dark-secondary)] rounded-lg"></div>
-                  </div>
-                </motion.div>
-
-                {/* Wide Cell */}
-                <motion.div variants={sectionReveal} className="md:col-span-2 row-span-1 group relative overflow-hidden rounded-[24px] border border-[var(--color-dark-divider)] bg-[var(--color-dark-primary)] p-8 hover:border-[var(--color-accent-hover)] transition-all duration-300 flex flex-col sm:flex-row items-center gap-6">
-                  <div className="flex-1">
-                    <h3 className="landing-display text-2xl text-[var(--color-text-on-dark)] mb-2">Dynamic Calendar Drops</h3>
-                    <p className="landing-body text-sm text-[var(--color-text-muted-on-dark)]">Book appointments into open slots in real-time, preventing double booking completely.</p>
-                  </div>
-                  <div className="w-full sm:w-1/3 h-24 bg-[var(--color-dark-secondary)] rounded-xl border border-[var(--color-dark-divider)] flex items-center justify-center">
-                    <div className="text-[var(--color-text-muted-on-dark)] font-mono text-[10px] tracking-widest">CAL_SYNC // 200 OK</div>
-                  </div>
-                </motion.div>
-
-              </motion.div>
+              <div className="mx-auto mt-8 max-w-[68rem] sm:mt-10">
+                <BentoGridShowcase
+                  integration={<UseCaseLibraryCard items={moreUseCaseBenefits} activeItem="More done per shift" />}
+                  trackers={<UseCaseMessageCard eyebrow="Benefit-led" title="Less waiting. More completed orders." description="Customers get quick answers. Staff stay focused." />}
+                  statistic={<UseCaseBulletCard index="01" copy="Shorter queues in busy moments" />}
+                  focus={<UseCaseBulletCard index="02" copy="Fewer missed orders and callbacks" />}
+                  productivity={<UseCaseBulletCard index="03" copy="More coverage without more headcount" />}
+                  shortcuts={<UseCasePreviewCard label="Service stays smooth" footer="See the upside" preview={<MoreUseCasesImagePreview />} />}
+                />
+              </div>
             </div>
           </section>
 
-          {/* Live demo video */}
-          <section className="landing-section bg-[var(--color-dark-section)] py-16 sm:py-20">
-            <div className="landing-container">
+          <DeferredSection
+            rootMargin="320px 0px"
+            placeholder={<SectionSkeleton className="h-[560px] rounded-[24px] sm:h-[760px] sm:rounded-[28px]" />}
+          >
+            <LazySeeItInActionScrollSection />
+          </DeferredSection>
+
+          <section id="features" className="landing-section relative overflow-hidden bg-black pt-4">
+            <BGPattern variant="diagonal-stripes" size={48} fill="#ffffff" mask="fade-edges" className="opacity-[0.03]" />
+            <div className="landing-container relative z-10">
               <motion.div
                 variants={sectionReveal}
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                className="text-center"
+                className="mx-auto flex max-w-[46rem] flex-col items-center text-center"
               >
                 <div className="landing-pill mx-auto inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--color-accent-primary)]">
-                  See it in action
-                </div>
-                <h2 className="landing-display landing-display-1 mx-auto mt-6 max-w-[16ch] text-[var(--color-text-on-dark)]">
-                  A real call, not a script.
-                </h2>
-                <p className="landing-body landing-body-1-regular mx-auto mt-4 max-w-[32rem] text-[var(--color-text-muted-on-dark)]">
-                  Watch the agent handle an inbound call with live transcription.
-                </p>
-              </motion.div>
-
-              <motion.div
-                variants={sectionReveal}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.1 }}
-                transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-                className="mx-auto mt-10 max-w-[680px]"
-              >
-                <div className="overflow-hidden rounded-[18px] border border-[var(--color-dark-divider)] shadow-[0_32px_72px_-24px_rgba(0,0,0,0.5)] sm:rounded-[24px]">
-                  <video
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="none"
-                    className="block w-full"
-                  >
-                    <source src="/videos/demo-transcript.webm" type="video/webm" />
-                    <source src="/videos/demo-transcript.mp4" type="video/mp4" />
-                  </video>
-                </div>
-              </motion.div>
-            </div>
-          </section>
-
-          <section id="features" className="landing-section relative overflow-hidden pt-4">
-            <BGPattern variant="diagonal-stripes" size={48} fill="#ffffff" mask="fade-edges" className="opacity-[0.03]" />
-            <div className="landing-container">
-              <motion.div
-                variants={sectionReveal}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                className="max-w-[46rem]"
-              >
-                <div className="landing-pill inline-flex items-center px-4 py-2 landing-body text-[12px] font-medium text-[var(--color-accent-primary)]">
                   Platform
                 </div>
-                <h2 className="landing-display landing-display-1 mt-6 text-[var(--color-text-primary)]">
-                  Voice agents at scale
+                <h2 className="landing-display landing-display-1 mt-6 text-[var(--color-text-on-dark)]">
+                  <AnimatedGradientText
+                    text="Voice agents at scale"
+                    gradientWordCount={2}
+                    gradientPosition="start"
+                    animationSpeed="normal"
+                  />
                 </h2>
-                <p className="landing-body landing-body-1-regular mt-4 max-w-[36rem] text-[var(--color-text-muted)]">
+                <p className="landing-body landing-body-1-regular mx-auto mt-4 max-w-[36rem] text-[var(--color-text-muted-on-dark)]">
                   Agents, numbers, calls. One workspace.
                 </p>
               </motion.div>
 
               <motion.div
-                variants={staggerContainer}
+                variants={sectionReveal}
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true, amount: 0.1 }}
-                className="mt-10 grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-4"
+                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                className="mt-8 sm:mt-10"
               >
-                {featureTiles.map((tile) => {
-                  const Icon = tile.icon;
-                  const wide = tile.type === "wide";
-
-                  return (
-                    <motion.div
-                      key={tile.title}
-                      variants={cardReveal}
-                      whileHover={{ y: -2 }}
-                      transition={{ duration: 0.28, ease: "easeOut" }}
-                      className={wide ? "md:col-span-2 lg:col-span-2" : "lg:col-span-1"}
-                    >
-                      <div className="landing-card landing-card-hover h-full rounded-[22px] border border-[var(--color-border)] bg-[var(--color-bg)] p-5 shadow-[0_24px_44px_-34px_rgba(20,20,20,0.14)] transition-colors duration-200 hover:border-[var(--color-accent-primary)] sm:rounded-[30px] sm:p-6">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-overlay-accent-soft)] text-[var(--color-accent-primary)]">
-                          <Icon className="h-5 w-5" />
-                        </div>
-                        <h3 className="landing-display landing-display-3 mt-6 text-[var(--color-text-primary)]">
-                          {tile.title}
-                        </h3>
-                        <p className="landing-body mt-3 max-w-[40rem] text-[14px] leading-6 text-[var(--color-text-muted)]">
-                          {tile.description}
-                        </p>
-                        <div className="mt-6 rounded-[24px] border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-4">
-                          {tile.content}
-                        </div>
-                      </div>
-                    </motion.div>
-                  );
-                })}
+                <DeferredSection
+                  rootMargin="180px 0px"
+                  placeholder={<SectionSkeleton className="h-[220px] rounded-[24px] sm:h-[360px] sm:rounded-[28px]" />}
+                >
+                  <LazyImageAutoSlider />
+                </DeferredSection>
               </motion.div>
             </div>
-            
-            <ImageAutoSlider />
           </section>
 
-          <ZoomParallaxSection />
+          <DeferredSection
+            rootMargin="260px 0px"
+            placeholder={<SectionSkeleton className="h-[560px] rounded-[24px] sm:h-[660px] sm:rounded-[28px]" />}
+          >
+            <LazyAnimatedTestimonials />
+          </DeferredSection>
 
-          <AnimatedTestimonials />
 
-
-          <section className="px-4 pb-10 sm:px-6 sm:pb-14">
-            <div className="landing-container">
+          <section className="bg-black px-4 pb-10 sm:px-6 sm:pb-14">
+            <div className="landing-container relative">
               <motion.div
                 variants={sectionReveal}
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={{ y: -2 }}
-                className="overflow-hidden rounded-[22px] border border-[var(--color-dark-divider)] bg-[var(--color-dark-section)] p-5 shadow-[0_28px_70px_-36px_rgba(20,20,20,0.4)] sm:rounded-[34px] sm:p-10 lg:p-12"
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ y: -4, scale: 1.01 }}
+                className="group relative overflow-hidden rounded-[22px] border border-[var(--color-dark-divider)] bg-[#0c0c0c] p-5 shadow-[0_28px_70px_-36px_rgba(20,20,20,0.6)] hover:border-[var(--color-accent-primary)]/40 hover:shadow-[0_40px_80px_-20px_rgba(255,123,48,0.2)] transition-all duration-700 sm:rounded-[34px] sm:p-10 lg:p-12"
               >
-                <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
-                  <div>
+                {/* Glowing orb behind the CTA content */}
+                <div className="absolute top-0 right-1/4 -translate-y-1/2 w-[600px] h-[600px] bg-[var(--color-accent-primary)] opacity-0 group-hover:opacity-[0.08] blur-[120px] pointer-events-none rounded-full transition-opacity duration-1000" />
+                {/* Noise overlay */}
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-screen pointer-events-none"></div>
+                <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-12">
+                  <div className="max-w-[35rem]">
                     <div className="inline-flex items-center rounded-full border border-[var(--color-dark-divider)] bg-[var(--color-badge-dark)] px-4 py-2 landing-body text-[12px] font-medium text-[var(--color-text-muted-on-dark)]">
                       Go live faster
                     </div>
@@ -916,7 +727,7 @@ export default function RevisedLandingPage() {
                     <p className="landing-body landing-body-1-regular mt-4 max-w-[34rem] text-[var(--color-text-muted-on-dark)]">
                       Build the agent, attach the number, review every call.
                     </p>
-                    <div className="mt-5 flex flex-wrap gap-2.5">
+                    <div className="mt-5 flex max-w-[34rem] flex-wrap gap-2.5">
                       {ctaSignalPills.map((pill) => (
                         <span
                           key={pill}
@@ -929,10 +740,10 @@ export default function RevisedLandingPage() {
                     <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                       <Link
                         href="/sign-up"
-                        className="landing-button-primary landing-body landing-body-2-semibold inline-flex items-center justify-center gap-2 px-6 py-3.5"
+                        className="landing-button-primary landing-body landing-body-2-semibold relative overflow-hidden group/btn inline-flex items-center justify-center gap-2 px-8 py-4 transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(255,123,48,0.4)]"
                       >
-                        Get started free
-                        <ArrowLongRightIcon className="h-5 w-5" />
+                        <span className="relative z-10 flex items-center gap-2">Get started free <ArrowLongRightIcon className="h-5 w-5 transition-transform group-hover/btn:translate-x-1" /></span>
+                        <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 group-hover/btn:translate-x-full" />
                       </Link>
                       <Link
                         href="/docs"
@@ -941,82 +752,192 @@ export default function RevisedLandingPage() {
                         Read the docs
                       </Link>
                     </div>
+                    <div className="mt-6 grid max-w-[30rem] gap-3 sm:grid-cols-3">
+                      {ctaProofStats.map((item) => (
+                        <div
+                          key={item.label}
+                          className="rounded-[18px] border border-[var(--color-dark-divider)] bg-white/[0.03] px-4 py-3"
+                        >
+                          <div className="landing-body text-[10px] font-medium uppercase tracking-[0.16em] text-[var(--color-text-muted-on-dark)]">
+                            {item.label}
+                          </div>
+                          <div className="landing-body mt-2 text-[13px] font-medium text-[var(--color-text-on-dark)]">
+                            {item.value}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                     <p className="landing-body mt-4 text-[12px] text-[var(--color-text-muted-on-dark)]">
                       Real transcripts. Real proof. Full workflow.
                     </p>
                   </div>
 
-                  <div className="mx-auto w-full max-w-[320px] rounded-[30px] border border-[var(--color-dark-divider)] bg-[var(--color-overlay-soft)] p-5 shadow-[0_22px_42px_-32px_rgba(0,0,0,0.32)] backdrop-blur-sm">
-                    <MascotIllustration />
-                  </div>
+                  <CtaImagePanel />
                 </div>
               </motion.div>
             </div>
           </section>
         </main>
 
-        <footer className="border-t border-[var(--color-border)] bg-[var(--color-bg-secondary)] py-12">
+        <footer className="relative overflow-hidden bg-[#050505] py-16 sm:py-20">
+          {/* Subtle noise and glow for the footer */}
+          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-screen pointer-events-none"></div>
+          <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-[var(--color-accent-primary)] opacity-[0.02] blur-[100px] pointer-events-none rounded-full" />
           <div className="landing-container">
-            <div className="grid gap-8 sm:gap-10 grid-cols-2 md:grid-cols-[1.35fr_0.85fr_0.85fr_0.85fr]">
-              <div className="col-span-2 md:col-span-1">
-                <Link href="/" className="inline-flex items-center gap-3 transition-opacity hover:opacity-85">
-                  <Image
-                    src="/favicon.svg"
-                    alt="Yapsolutely logo"
-                    width={40}
-                    height={40}
-                    className="h-10 w-10 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] object-cover"
-                  />
-                  <div>
-                    <div className="landing-display landing-display-3 text-[var(--color-text-primary)]">
-                      Yapsolutely
-                    </div>
-                    <div className="landing-body mt-1 text-[12px] uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
+            <div className="rounded-[28px] border border-[var(--color-dark-divider)] bg-white/[0.02] p-6 shadow-[0_28px_72px_-48px_rgba(0,0,0,0.7)] backdrop-blur-sm sm:rounded-[34px] sm:p-8 lg:p-10">
+              <div className="grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1.8fr)] lg:gap-14">
+                <div className="max-w-[24rem]">
+                  <Link href="/" className="group inline-flex flex-col transition-opacity hover:opacity-100">
+                    <span className="landing-display text-[2rem] leading-none tracking-[-0.04em] text-[var(--color-text-on-dark)]">
+                      yapsolutely
+                    </span>
+                    <span className="landing-body mt-2 text-[12px] uppercase tracking-[0.18em] text-[var(--color-text-muted-on-dark)]">
                       AI voice operations
-                    </div>
-                  </div>
-                </Link>
-                <p className="landing-body landing-body-2-regular mt-4 max-w-[20rem] text-[var(--color-text-muted)]">
-                  AI phone agents for inbound calls, routing, and post-call review.
-                </p>
+                    </span>
+                  </Link>
 
-                <div className="mt-5 flex flex-wrap gap-2.5">
-                  {footerActionLinks.map((link) => {
-                    const Icon = link.icon;
-                    const commonClassName = "landing-body inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-bg)] px-3.5 py-2 text-[12px] font-medium text-[var(--color-text-primary)] transition-all duration-200 hover:-translate-y-[1px] hover:border-[var(--color-accent-primary)] hover:text-[var(--color-accent-primary)]";
+                  <p className="relative z-10 landing-body landing-body-2-regular mt-5 max-w-[22rem] text-[var(--color-text-muted-on-dark)]">
+                    AI phone agents for inbound calls, routing, and post-call review.
+                  </p>
 
-                    if (link.href.startsWith("mailto:")) {
+                  <div className="mt-6 flex flex-wrap gap-2.5">
+                    {footerActionLinks.map((link) => {
+                      const Icon = link.icon;
+                      const commonClassName = "landing-body group/link inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[#0A0A0A] px-3.5 py-2 text-[12px] font-medium text-[var(--color-text-muted-on-dark)] transition-all duration-300 hover:-translate-y-[2px] hover:border-[var(--color-accent-primary)]/50 hover:bg-[#111] hover:text-[var(--color-text-on-dark)] hover:shadow-[0_0_12px_rgba(255,123,48,0.15)]";
+
+                      if (link.href.startsWith("mailto:")) {
+                        return (
+                          <a key={link.label} href={link.href} className={commonClassName}>
+                            <Icon className="h-4 w-4 transition-colors duration-300 group-hover/link:text-[var(--color-accent-primary)]" />
+                            {link.label}
+                          </a>
+                        );
+                      }
+
                       return (
-                        <a key={link.label} href={link.href} className={commonClassName}>
-                          <Icon className="h-4 w-4" />
+                        <Link key={link.label} href={link.href} className={commonClassName}>
+                          <Icon className="h-4 w-4 transition-colors duration-300 group-hover/link:text-[var(--color-accent-primary)]" />
                           {link.label}
-                        </a>
+                        </Link>
                       );
-                    }
+                    })}
+                  </div>
+                </div>
 
-                    return (
-                      <Link key={link.label} href={link.href} className={commonClassName}>
-                        <Icon className="h-4 w-4" />
-                        {link.label}
-                      </Link>
-                    );
-                  })}
+                <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                  {footerColumns.map((column) => (
+                    <FooterColumn key={column.title} title={column.title} links={column.links} />
+                  ))}
                 </div>
               </div>
 
-              {footerColumns.map((column) => (
-                <FooterColumn key={column.title} title={column.title} links={column.links} />
-              ))}
-            </div>
-
-            <div className="landing-body mt-8 flex flex-col gap-3 border-t border-[var(--color-border)] pt-6 text-center text-[14px] text-[var(--color-text-muted)] sm:mt-10 sm:flex-row sm:items-center sm:justify-between sm:text-left">
-              <span>© 2026 Yapsolutely, Inc.</span>
+              <div className="relative z-10 landing-body mt-10 flex flex-col gap-3 border-t border-[var(--color-dark-divider)] pt-6 text-center text-[13px] text-[var(--color-text-muted-on-dark)] sm:mt-12 sm:flex-row sm:items-center sm:justify-between sm:text-left">
+                <span>© 2026 yapsolutely, Inc.</span>
               <span>Built for inbound call ops.</span>
+              </div>
             </div>
           </div>
         </footer>
       </div>
     </div>
+  );
+}
+
+type HowItWorksAnimatedCharacterProps = {
+  char: string;
+  index: number;
+  centerIndex: number;
+  scrollYProgress: MotionValue<number>;
+  distance: number;
+};
+
+function HowItWorksAnimatedCharacter({
+  char,
+  index,
+  centerIndex,
+  scrollYProgress,
+  distance,
+}: HowItWorksAnimatedCharacterProps) {
+  const isSpace = char === " ";
+  const distanceFromCenter = index - centerIndex;
+
+  const x = useTransform(scrollYProgress, [0, 0.5], [distanceFromCenter * distance, 0]);
+  const y = useTransform(scrollYProgress, [0, 0.5], [Math.abs(distanceFromCenter) * 16, 0]);
+  const rotateX = useTransform(scrollYProgress, [0, 0.5], [distanceFromCenter * 18, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 0.16, 0.5], [0, 0.55, 1]);
+
+  return (
+    <motion.span
+      className={cn("inline-block will-change-transform", isSpace && "w-[0.3em]")}
+      style={{ x, y, rotateX, opacity }}
+    >
+      {isSpace ? "\u00A0" : char}
+    </motion.span>
+  );
+}
+
+function HowItWorksAnimatedText({
+  text,
+  distance = 22,
+}: {
+  text: string;
+  distance?: number;
+}) {
+  const containerRef = useRef<HTMLSpanElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start 0.92", "center 0.55"],
+  });
+
+  const characters = Array.from(text);
+  const centerIndex = Math.floor(characters.length / 2);
+  let currentCharacterIndex = 0;
+
+  return (
+    <span ref={containerRef} className="inline whitespace-normal [perspective:700px]">
+      {text.split(" ").map((word, wordIndex, words) => {
+        const wordCharacters = Array.from(word);
+        const wordNode = (
+          <span key={`word-${wordIndex}-${word}`} className="inline-block whitespace-nowrap">
+            {wordCharacters.map((char) => {
+              const characterIndex = currentCharacterIndex;
+              currentCharacterIndex += 1;
+
+              return (
+                <HowItWorksAnimatedCharacter
+                  key={`char-${wordIndex}-${characterIndex}-${char}`}
+                  char={char}
+                  index={characterIndex}
+                  centerIndex={centerIndex}
+                  scrollYProgress={scrollYProgress}
+                  distance={distance}
+                />
+              );
+            })}
+          </span>
+        );
+
+        if (wordIndex === words.length - 1) {
+          return wordNode;
+        }
+
+        const spaceIndex = currentCharacterIndex;
+        currentCharacterIndex += 1;
+
+        return (
+          <Fragment key={`fragment-${wordIndex}-${word}`}>
+            {wordNode}
+            <HowItWorksAnimatedCharacter
+              char=" "
+              index={spaceIndex}
+              centerIndex={centerIndex}
+              scrollYProgress={scrollYProgress}
+              distance={distance}
+            />
+          </Fragment>
+        );
+      })}
+    </span>
   );
 }
 
@@ -1040,160 +961,6 @@ function HeroWordReveal() {
         </motion.span>
       ))}
     </h1>
-  );
-}
-
-function HeroVideoPanel() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(1);
-  const [progress, setProgress] = useState(0);
-  const [isMuted, setIsMuted] = useState(true);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [showControls, setShowControls] = useState(false);
-  const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const formatTime = (s: number) => {
-    const m = Math.floor(s / 60);
-    return `${m}:${Math.floor(s % 60).toString().padStart(2, "0")}`;
-  };
-
-  const togglePlay = () => {
-    if (!videoRef.current) return;
-    if (isPlaying) { videoRef.current.pause(); } else { videoRef.current.play(); }
-    setIsPlaying(!isPlaying);
-  };
-
-  const showControlsWithTimeout = () => {
-    setShowControls(true);
-    if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
-    hideTimeoutRef.current = setTimeout(() => setShowControls(false), 3000);
-  };
-
-  const handleTimeUpdate = () => {
-    if (!videoRef.current) return;
-    const p = (videoRef.current.currentTime / videoRef.current.duration) * 100;
-    setProgress(isFinite(p) ? p : 0);
-    setCurrentTime(videoRef.current.currentTime);
-    setDuration(videoRef.current.duration);
-  };
-
-  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!videoRef.current?.duration) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const pct = (e.clientX - rect.left) / rect.width;
-    videoRef.current.currentTime = pct * videoRef.current.duration;
-    setProgress(pct * 100);
-  };
-
-  const handleVolumeChange = (val: number) => {
-    if (!videoRef.current) return;
-    videoRef.current.volume = val / 100;
-    setVolume(val / 100);
-    setIsMuted(val === 0);
-  };
-
-  const toggleMute = () => {
-    if (!videoRef.current) return;
-    videoRef.current.muted = !isMuted;
-    setIsMuted(!isMuted);
-    if (!isMuted) { setVolume(0); } else { setVolume(1); videoRef.current.volume = 1; }
-  };
-
-  return (
-    <motion.div
-      className="relative w-full overflow-hidden rounded-[16px]"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      onMouseEnter={() => setShowControls(true)}
-      onMouseLeave={() => setShowControls(false)}
-      onTouchStart={showControlsWithTimeout}
-    >
-      {/* Video — landscape 16:9 */}
-      <div className="aspect-video w-full overflow-hidden">
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          onTimeUpdate={handleTimeUpdate}
-          onClick={togglePlay}
-          className="h-full w-full cursor-pointer object-cover"
-        >
-          <source src="/videos/herosectionvideo.webm" type="video/webm" />
-          <source src="/videos/herosectionvideo.mp4" type="video/mp4" />
-        </video>
-      </div>
-
-      {/* Controls overlay */}
-      <AnimatePresence>
-        {showControls && (
-          <motion.div
-            className="absolute bottom-0 left-0 right-0 mx-auto max-w-[90%] m-3 p-3 rounded-2xl bg-[#11111198] backdrop-blur-md [-webkit-backdrop-filter:blur(12px)]"
-            initial={{ y: 16, opacity: 0, filter: "blur(8px)" }}
-            animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-            exit={{ y: 16, opacity: 0, filter: "blur(8px)" }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-          >
-            {/* Progress bar */}
-            <div
-              className="relative mb-2.5 h-1 w-full cursor-pointer rounded-full bg-[rgba(255,255,255,0.2)]"
-              onClick={handleSeek}
-            >
-              <div
-                className="absolute left-0 top-0 h-full rounded-full bg-[var(--color-text-on-dark)] transition-all"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-
-            {/* Controls row */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1">
-                <Button
-                  onClick={togglePlay}
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 text-[var(--color-text-on-dark)] hover:bg-[rgba(255,255,255,0.1)] hover:text-[var(--color-text-on-dark)]"
-                >
-                  {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-                </Button>
-
-                <Button
-                  onClick={toggleMute}
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 text-[var(--color-text-on-dark)] hover:bg-[rgba(255,255,255,0.1)] hover:text-[var(--color-text-on-dark)]"
-                >
-                  {isMuted ? <VolumeX className="h-4 w-4" /> : volume > 0.5 ? <Volume2 className="h-4 w-4" /> : <Volume1 className="h-4 w-4" />}
-                </Button>
-
-                {/* Volume slider */}
-                <div
-                  className="relative h-1 w-16 cursor-pointer rounded-full bg-[rgba(255,255,255,0.2)]"
-                  onClick={(e) => {
-                    const rect = e.currentTarget.getBoundingClientRect();
-                    handleVolumeChange(((e.clientX - rect.left) / rect.width) * 100);
-                  }}
-                >
-                  <div
-                    className="absolute left-0 top-0 h-full rounded-full bg-[var(--color-text-on-dark)]"
-                    style={{ width: `${isMuted ? 0 : volume * 100}%` }}
-                  />
-                </div>
-
-                <span className="landing-body ml-1 text-[11px] text-[var(--color-text-muted-on-dark)]">
-                  {formatTime(currentTime)} / {formatTime(duration)}
-                </span>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
   );
 }
 
@@ -1256,158 +1023,6 @@ function TranscriptReviewPreview() {
   );
 }
 
-function LatencyPreview() {
-  return (
-    <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_200px] lg:items-center">
-      <div className="grid grid-cols-3 gap-3">
-        {[
-          ["STT", "Live transcription"],
-          ["LLM", "Fast turn generation"],
-          ["TTS", "Playback in stream"],
-        ].map(([label, description]) => (
-          <div key={label} className="rounded-[18px] border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-4">
-            <div className="landing-body text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
-              {label}
-            </div>
-            <div className="landing-body mt-2 text-[13px] leading-6 text-[var(--color-text-primary)]">
-              {description}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="overflow-hidden rounded-[20px] border border-[rgba(217,95,59,0.18)] bg-[var(--color-bg)] px-5 py-5 text-center">
-        <div className="landing-stat-lg leading-none tracking-[-0.05em] text-[var(--color-accent-primary)]">
-          &lt;800ms
-        </div>
-        <div className="landing-body mt-2 text-[12px] font-medium uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
-          Callers can&apos;t tell it&apos;s AI
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function AuditTrailPreview() {
-  return (
-    <div className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_180px] lg:items-center">
-      <div className="rounded-[14px] border border-[var(--color-border)] bg-[var(--color-bg)] p-3 sm:rounded-[18px] sm:p-4">
-        <div className="landing-body text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
-          Transcript timeline
-        </div>
-        <div className="mt-4 space-y-3">
-          <TranscriptBubble speaker="Agent" copy="Thanks for calling — are you looking for support, pricing, or a demo?" compact />
-          <TranscriptBubble speaker="Caller" copy="Pricing, and we need a launch before next month." caller />
-          <TranscriptBubble speaker="Action" copy="Lead score 91 · follow-up SMS queued · demo booked" compact />
-        </div>
-      </div>
-
-      <div className="space-y-3">
-        {[
-          ["100%", "Every word transcribed"],
-          ["Logged", "Every event recorded"],
-        ].map(([value, label]) => (
-          <div key={label} className="overflow-hidden rounded-[18px] border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-4 text-center">
-            <div className="landing-stat-lg leading-none tracking-[-0.05em] text-[var(--color-text-primary)]">
-              {value}
-            </div>
-            <div className="landing-body mt-2 text-[11px] uppercase tracking-[0.14em] text-[var(--color-text-muted)]">
-              {label}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function AgentBuilderMini() {
-  return (
-    <div className="space-y-3">
-      {[
-        ["Voice", "Warm · Confident"],
-        ["First message", "Thanks for calling Yapsolutely..."],
-        ["Fallback", "Transfer on pricing objection"],
-      ].map(([label, value]) => (
-        <div key={label} className="rounded-[16px] border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3">
-          <div className="landing-body text-[11px] uppercase tracking-[0.14em] text-[var(--color-text-muted)]">{label}</div>
-          <div className="landing-body mt-1 text-[13px] text-[var(--color-text-primary)]">{value}</div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function PhoneNumbersMini() {
-  return (
-    <div className="space-y-3">
-      {[
-        ["+1 (415) 555-0142", "Inbound Sales"],
-        ["+44 20 7946 0018", "Front Desk"],
-        ["+61 2 5550 0121", "After-hours"],
-      ].map(([number, agent]) => (
-        <div key={number} className="flex items-center justify-between rounded-[16px] border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3">
-          <div>
-            <div className="landing-body text-[13px] font-medium text-[var(--color-text-primary)]">{number}</div>
-            <div className="landing-body mt-1 text-[11px] text-[var(--color-text-muted)]">{agent}</div>
-          </div>
-          <PhoneIcon className="h-4 w-4 text-[var(--color-accent-primary)]" />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function AfterHoursMini() {
-  return (
-    <div className="space-y-3">
-      {[
-        ["11:42 PM", "Installation request"],
-        ["12:08 AM", "Billing callback"],
-        ["1:16 AM", "Urgent support"],
-      ].map(([time, label]) => (
-        <div key={`${time}-${label}`} className="flex items-center justify-between rounded-[16px] border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3">
-          <div>
-            <div className="landing-body text-[11px] uppercase tracking-[0.14em] text-[var(--color-text-muted)]">{time}</div>
-            <div className="landing-body mt-1 text-[13px] text-[var(--color-text-primary)]">{label}</div>
-          </div>
-          <span className="landing-body rounded-full bg-[var(--color-bg-secondary)] px-2.5 py-1 text-[11px] font-medium text-[var(--color-accent-primary)]">
-            Queued
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function AnalyticsMini() {
-  return (
-    <div className="space-y-3">
-      <div className="grid grid-cols-3 gap-2">
-        {[
-          ["47", "Calls"],
-          ["11", "Booked"],
-          ["94%", "Resolved"],
-        ].map(([value, label]) => (
-          <div key={label} className="min-w-0 overflow-hidden rounded-[16px] border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-3 text-center">
-            <div className="landing-stat-sm leading-none tracking-[-0.04em] text-[var(--color-text-primary)]">{value}</div>
-            <div className="landing-body mt-1 text-[10px] uppercase tracking-[0.14em] text-[var(--color-text-muted)]">{label}</div>
-          </div>
-        ))}
-      </div>
-
-      <div className="rounded-[16px] border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3">
-        <div className="landing-body text-[11px] uppercase tracking-[0.14em] text-[var(--color-text-muted)]">Performance trend</div>
-        <div className="mt-3 flex items-end gap-2">
-          {[42, 58, 50, 71, 64, 82].map((height, index) => (
-            <div key={index} className="flex-1 rounded-full bg-[var(--color-overlay-accent-soft)]" style={{ height: `${height}px` }} />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function IntegrationFlowPreview() {
   return (
     <div className="space-y-4">
@@ -1452,6 +1067,217 @@ function IntegrationFlowPreview() {
   );
 }
 
+function UseCaseLibraryCard({ items, activeItem }: { items: string[]; activeItem: string }) {
+  return (
+    <div className="group relative h-full overflow-hidden rounded-[24px] border border-[var(--color-dark-divider)] bg-[var(--color-dark-primary)] p-5 shadow-[0_28px_72px_-44px_rgba(0,0,0,0.8)] sm:p-6">
+      <div className="pointer-events-none absolute inset-0 rounded-[24px] bg-gradient-to-br from-[var(--color-accent-primary)]/0 to-[var(--color-accent-primary)]/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+      <div className="relative z-10 flex h-full flex-col">
+        <div className="landing-body text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--color-text-muted-on-dark)]">
+          Benefits stack
+        </div>
+        <h3 className="landing-display mt-3 text-[1.65rem] leading-[0.95] text-[var(--color-text-on-dark)] sm:text-[2rem]">
+          {activeItem}
+        </h3>
+        <div className="mt-4 space-y-2.5">
+          {items.map((item) => {
+            const active = item === activeItem;
+
+            return (
+              <div
+                key={item}
+                className={cn(
+                  "rounded-[16px] border px-3.5 py-2.5 transition-colors",
+                  active
+                    ? "border-[var(--color-accent-primary)]/50 bg-[rgba(255,99,30,0.12)]"
+                    : "border-[var(--color-dark-divider)] bg-white/[0.03]",
+                )}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span
+                    className={cn(
+                      "landing-body text-[13px] font-medium",
+                      active ? "text-[var(--color-text-on-dark)]" : "text-[var(--color-text-muted-on-dark)]",
+                    )}
+                  >
+                    {item}
+                  </span>
+                  {active ? <CheckIcon className="h-4 w-4 text-[var(--color-accent-primary)]" /> : null}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MoreUseCasesImagePreview() {
+  return (
+    <div className="space-y-3">
+      <div className="overflow-hidden rounded-[18px] border border-[var(--color-border)] bg-[var(--color-bg-secondary)]">
+        <div className="relative h-36 w-full sm:h-44">
+          <Image
+            src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80"
+            alt="Busy restaurant service interior"
+            fill
+            sizes="(max-width: 640px) 100vw, 420px"
+            className="object-cover"
+          />
+        </div>
+        <div className="p-4">
+          <div className="landing-body text-[10px] font-medium uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
+            Busy shift, calmer service
+          </div>
+          <p className="landing-body mt-2 text-[13px] leading-6 text-[var(--color-text-primary)]">
+            Keep orders moving, keep staff focused, and stay consistent through the rush.
+          </p>
+        </div>
+      </div>
+
+      <div className="grid gap-2 sm:grid-cols-3">
+        {[
+          "Faster lines",
+          "Fewer misses",
+          "More covered hours",
+        ].map((item) => (
+          <div
+            key={item}
+            className="rounded-[14px] border border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-3 py-3 text-center"
+          >
+            <div className="landing-body text-[11px] font-medium text-[var(--color-text-primary)]">{item}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function UseCaseMessageCard({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="group relative h-full overflow-hidden rounded-[24px] border border-[var(--color-dark-divider)] bg-[var(--color-dark-primary)] p-5 shadow-[0_28px_72px_-44px_rgba(0,0,0,0.8)] sm:p-6">
+      <div className="pointer-events-none absolute inset-0 rounded-[24px] bg-gradient-to-br from-[var(--color-accent-primary)]/0 to-[var(--color-accent-primary)]/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+      <div className="relative z-10">
+        <div className="landing-body text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--color-accent-primary)]">
+          {eyebrow}
+        </div>
+        <h3 className="landing-display mt-3 text-[1.65rem] leading-[0.95] text-[var(--color-text-on-dark)] sm:text-[1.95rem]">
+          {title}
+        </h3>
+        <p className="landing-body mt-3 text-[14px] leading-6 text-[var(--color-text-muted-on-dark)]">
+          {description}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function UseCaseBulletCard({ index, copy }: { index: string; copy: string }) {
+  return (
+    <div className="group relative flex h-full overflow-hidden rounded-[24px] border border-[var(--color-dark-divider)] bg-[var(--color-dark-primary)] p-5 shadow-[0_28px_72px_-44px_rgba(0,0,0,0.8)]">
+      <div className="pointer-events-none absolute inset-0 rounded-[24px] bg-gradient-to-br from-[var(--color-accent-primary)]/0 to-[var(--color-accent-primary)]/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+      <div className="relative z-10 flex flex-col justify-between gap-4">
+        <div className="flex h-9 w-9 items-center justify-center rounded-2xl border border-[var(--color-dark-divider)] bg-white/[0.03] text-[var(--color-accent-primary)]">
+          <span className="landing-body text-[12px] font-medium uppercase tracking-[0.16em]">{index}</span>
+        </div>
+        <p className="landing-body text-[14px] leading-6 text-[var(--color-text-on-dark)]">
+          {copy}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function UseCasePreviewCard({
+  label,
+  footer,
+  preview,
+}: {
+  label: string;
+  footer: string;
+  preview: ReactNode;
+}) {
+  return (
+    <div className="group relative h-full overflow-hidden rounded-[24px] border border-[var(--color-dark-divider)] bg-[var(--color-dark-primary)] p-5 shadow-[0_28px_72px_-44px_rgba(0,0,0,0.8)] sm:p-6">
+      <div className="pointer-events-none absolute inset-0 rounded-[24px] bg-gradient-to-br from-[var(--color-accent-primary)]/0 to-[var(--color-accent-primary)]/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+      <div className="relative z-10">
+        <div className="landing-body text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--color-text-muted-on-dark)]">
+          {footer}
+        </div>
+
+        <div className="mt-4 rounded-[24px] border border-[var(--color-dark-divider)] bg-white/[0.03] p-3.5 sm:p-4">
+          <div className="mb-3 flex items-center justify-between gap-3 border-b border-[var(--color-dark-divider)] pb-2.5">
+            <div>
+              <div className="landing-body text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--color-text-muted-on-dark)]">
+                Live example
+              </div>
+              <div className="landing-body mt-1 text-[13px] font-medium text-[var(--color-text-on-dark)]">
+                {label}
+              </div>
+            </div>
+
+            <span className="landing-body rounded-full border border-[var(--color-dark-divider)] bg-white/[0.03] px-3 py-1 text-[11px] font-medium text-[var(--color-accent-primary)]">
+              Mini preview
+            </span>
+          </div>
+
+          {preview}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function InboundSalesCompactPreview() {
+  return (
+    <div className="rounded-[18px] border border-[var(--color-border)] bg-[var(--color-bg)] p-3.5 shadow-[0_18px_34px_-28px_rgba(20,20,20,0.12)] sm:p-4">
+      <div className="flex items-center justify-between gap-3 border-b border-[var(--color-border)] pb-2.5">
+        <div>
+          <div className="landing-body text-[10px] font-medium uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
+            Live inbound call
+          </div>
+          <div className="landing-body mt-1 text-[12px] font-medium text-[var(--color-text-primary)]">Qualified lead</div>
+        </div>
+        <span className="landing-body rounded-full bg-[var(--color-overlay-accent-medium)] px-2.5 py-1 text-[10px] font-medium text-[var(--color-accent-primary)]">
+          Lead score 91
+        </span>
+      </div>
+
+      <div className="mt-3 space-y-3">
+        <div className="rounded-[16px] border border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-3 py-3">
+          <div className="landing-body text-[10px] font-medium uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
+            Caller intent
+          </div>
+          <div className="landing-body mt-2 text-[13px] leading-6 text-[var(--color-text-primary)]">
+            &ldquo;We need a demo for five locations and want pricing this week.&rdquo;
+          </div>
+        </div>
+
+        <div className="grid gap-2 sm:grid-cols-3">
+          {[
+            ["Team", "5 sites"],
+            ["Urgency", "This week"],
+            ["Booked", "Tomorrow"],
+          ].map(([label, value]) => (
+            <div key={label} className="rounded-[14px] bg-[var(--color-bg-secondary)] px-3 py-3 text-center">
+              <div className="landing-body text-[10px] uppercase tracking-[0.14em] text-[var(--color-text-muted)]">{label}</div>
+              <div className="landing-body mt-1.5 text-[12px] font-medium text-[var(--color-text-primary)]">{value}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function TranscriptBubble({
   speaker,
   copy,
@@ -1484,13 +1310,13 @@ function TranscriptBubble({
 function FooterColumn({ title, links }: { title: string; links: [string, string][] }) {
   return (
     <div>
-      <div className="landing-body text-[12px] font-medium uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
+      <div className="landing-body text-[12px] font-medium uppercase tracking-[0.16em] text-[var(--color-text-muted-on-dark)]">
         {title}
       </div>
       <div className="mt-4 flex flex-col gap-3">
         {links.map(([label, href]) => {
           const className =
-            "landing-body cursor-pointer text-[14px] font-medium text-[var(--color-text-primary)] transition-all duration-200 hover:scale-[1.02] hover:text-[var(--color-accent-primary)]";
+            "landing-body cursor-pointer text-[14px] font-medium text-[var(--color-text-on-dark)] transition-all duration-200 hover:scale-[1.02] hover:text-[var(--color-accent-primary)]";
 
           if (href.startsWith("mailto:")) {
             return (
@@ -1678,37 +1504,119 @@ function AfterHoursCoveragePreview() {
   );
 }
 
-function MascotIllustration() {
+function CtaImagePanel() {
   return (
-    <div className="text-center">
-      <div className="relative mx-auto flex w-full max-w-[240px] items-center justify-center">
-        <div className="absolute inset-x-8 top-10 h-24 rounded-full bg-[var(--color-overlay-accent-medium)] blur-3xl" />
-        <svg viewBox="0 0 240 240" className="relative h-[220px] w-[220px]" role="img" aria-label="Yapsolutely mascot illustration">
-          <circle cx="120" cy="120" r="98" fill="var(--color-overlay-soft)" stroke="var(--color-overlay-medium)" />
-          <circle cx="120" cy="88" r="36" fill="var(--color-accent-primary)" />
-          <circle cx="106" cy="82" r="4.5" fill="var(--color-text-primary)" />
-          <circle cx="134" cy="82" r="4.5" fill="var(--color-text-primary)" />
-          <path d="M106 98C112 105 128 105 134 98" stroke="var(--color-text-primary)" strokeWidth="4" strokeLinecap="round" fill="none" />
-          <rect x="84" y="126" width="72" height="58" rx="28" fill="var(--color-text-on-dark)" opacity="0.96" />
-          <rect x="110" y="136" width="20" height="34" rx="10" fill="var(--color-accent-primary)" />
-          <path d="M92 152C92 170 148 170 148 152" stroke="var(--color-text-primary)" strokeWidth="4" strokeLinecap="round" fill="none" opacity="0.85" />
-          <path d="M168 92C182 98 188 110 188 122" stroke="var(--color-accent-primary)" strokeWidth="6" strokeLinecap="round" fill="none" opacity="0.92" />
-          <path d="M181 80C200 90 210 108 210 126" stroke="var(--color-accent-primary)" strokeWidth="6" strokeLinecap="round" fill="none" opacity="0.45" />
-          <path d="M72 92C58 98 52 110 52 122" stroke="var(--color-accent-primary)" strokeWidth="6" strokeLinecap="round" fill="none" opacity="0.92" />
-          <path d="M59 80C40 90 30 108 30 126" stroke="var(--color-accent-primary)" strokeWidth="6" strokeLinecap="round" fill="none" opacity="0.45" />
-          <circle cx="120" cy="198" r="8" fill="var(--color-accent-primary)" opacity="0.9" />
-        </svg>
-      </div>
-
-      <div className="mt-2">
-        <div className="landing-body text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--color-text-muted-on-dark)]">
-          Always-on voice operator
+    <div className="relative mx-auto w-full max-w-[340px]">
+      <div className="pointer-events-none absolute inset-6 rounded-[32px] bg-[var(--color-accent-primary)] opacity-[0.12] blur-3xl" />
+      <div className="relative overflow-hidden rounded-[30px] border border-[var(--color-dark-divider)] bg-[var(--color-overlay-soft)] shadow-[0_24px_50px_-32px_rgba(0,0,0,0.45)] backdrop-blur-sm">
+        <div className="relative aspect-[0.92] overflow-hidden">
+          <Image
+            src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80"
+            alt="Professional operator handling customer conversations from a modern workspace"
+            fill
+            sizes="(min-width: 1024px) 340px, 90vw"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/38 to-black/8" />
+          <div className="absolute left-4 top-4 inline-flex items-center rounded-full border border-white/10 bg-black/45 px-3 py-1.5 backdrop-blur-md">
+            <span className="landing-body text-[11px] font-medium uppercase tracking-[0.16em] text-white/80">
+              Inbound calls covered
+            </span>
+          </div>
+          <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
+            <div className="rounded-[22px] border border-white/10 bg-black/50 p-4 backdrop-blur-md">
+              <div className="landing-body text-[10px] font-medium uppercase tracking-[0.16em] text-[var(--color-accent-primary)]">
+                Online-sourced proof panel
+              </div>
+              <p className="landing-body mt-2 text-[14px] leading-6 text-[var(--color-text-on-dark)]">
+                Give every caller a fast first response, even when your team is slammed.
+              </p>
+            </div>
+          </div>
         </div>
-        <p className="landing-body mx-auto mt-3 max-w-[22rem] text-[14px] leading-6 text-[var(--color-text-on-dark)]">
-          Always on, always listening.
-        </p>
+
+        <div className="grid grid-cols-3 gap-3 border-t border-[var(--color-dark-divider)] bg-black/40 p-4">
+          {ctaProofStats.map((item) => (
+            <div key={item.label} className="rounded-[16px] border border-white/8 bg-white/[0.03] px-3 py-3 text-center">
+              <div className="landing-body text-[10px] uppercase tracking-[0.14em] text-[var(--color-text-muted-on-dark)]">
+                {item.label}
+              </div>
+              <div className="landing-body mt-1.5 text-[12px] font-medium text-[var(--color-text-on-dark)]">
+                {item.value}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
+  );
+}
+
+type DeferredSectionProps = {
+  children: ReactNode;
+  placeholder: ReactNode;
+  rootMargin?: string;
+  className?: string;
+};
+
+function DeferredSection({
+  children,
+  placeholder,
+  rootMargin = "240px 0px",
+  className,
+}: DeferredSectionProps) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [shouldRender, setShouldRender] = useState(false);
+
+  useEffect(() => {
+    if (shouldRender) {
+      return;
+    }
+
+    const element = containerRef.current;
+
+    if (!element || typeof IntersectionObserver === "undefined") {
+      setShouldRender(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setShouldRender(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin },
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [rootMargin, shouldRender]);
+
+  const deferredStyle = !shouldRender
+    ? ({ contentVisibility: "auto" } as CSSProperties)
+    : undefined;
+
+  return (
+    <div ref={containerRef} className={className} style={deferredStyle}>
+      {shouldRender ? children : placeholder}
+    </div>
+  );
+}
+
+function SectionSkeleton({ className }: { className?: string }) {
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        "w-full animate-pulse rounded-[28px] border border-white/6 bg-white/[0.03] shadow-[0_24px_60px_-40px_rgba(0,0,0,0.55)]",
+        className,
+      )}
+    />
   );
 }
 

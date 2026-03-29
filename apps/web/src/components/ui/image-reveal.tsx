@@ -35,7 +35,7 @@ export default function ImageReveal({ leftImage, middleImage, rightImage }: Imag
         initial: { rotate: 0, x: 0, y: 0 },
         animate: {
             rotate: -8,
-            x: isMobile ? -140 : -320,
+            x: isMobile ? -165 : -390,
             y: 10,
             transition: {
                 type: "spring" as const,
@@ -45,7 +45,7 @@ export default function ImageReveal({ leftImage, middleImage, rightImage }: Imag
         },
         hover: {
             rotate: 1,
-            x: isMobile ? -150 : -340,
+            x: isMobile ? -175 : -410,
             y: 0,
             transition: {
                 type: "spring" as const,
@@ -83,7 +83,7 @@ export default function ImageReveal({ leftImage, middleImage, rightImage }: Imag
         initial: { rotate: 0, x: 0, y: 0 },
         animate: {
             rotate: -6,
-            x: isMobile ? 140 : 340,
+            x: isMobile ? 165 : 410,
             y: 20,
             transition: {
                 type: "spring" as const,
@@ -93,7 +93,7 @@ export default function ImageReveal({ leftImage, middleImage, rightImage }: Imag
         },
         hover: {
             rotate: 3,
-            x: isMobile ? 150 : 360,
+            x: isMobile ? 175 : 430,
             y: 10,
             transition: {
                 type: "spring" as const,
@@ -105,14 +105,14 @@ export default function ImageReveal({ leftImage, middleImage, rightImage }: Imag
 
     return (
         <motion.div
-            className="relative flex items-center justify-center w-full max-w-5xl h-[300px] sm:h-[450px] my-12"
+            className="relative mt-0 mb-6 flex h-[300px] w-full max-w-6xl items-center justify-center sm:mb-8 sm:h-[460px]"
             variants={containerVariants}
             initial="initial"
             animate="animate"
         >
             {/* Left Image - Lowest z-index */}
             <motion.div
-                className="absolute w-[240px] h-[240px] sm:w-[320px] sm:h-[320px] origin-bottom-right overflow-hidden rounded-2xl shadow-2xl bg-white border border-[var(--color-border)]"
+                className="absolute h-[280px] w-[280px] origin-bottom-right overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white shadow-2xl sm:h-[400px] sm:w-[400px]"
                 variants={leftImageVariants}
                 whileHover="hover"
                 animate="animate"
@@ -127,7 +127,7 @@ export default function ImageReveal({ leftImage, middleImage, rightImage }: Imag
 
             {/* Middle Image - Middle z-index */}
             <motion.div
-                className="absolute w-[240px] h-[240px] sm:w-[320px] sm:h-[320px] origin-bottom-left overflow-hidden rounded-2xl shadow-2xl bg-white border border-[var(--color-border)]"
+                className="absolute h-[280px] w-[280px] origin-bottom-left overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white shadow-2xl sm:h-[400px] sm:w-[400px]"
                 variants={middleImageVariants}
                 whileHover="hover"
                 animate="animate"
@@ -142,7 +142,7 @@ export default function ImageReveal({ leftImage, middleImage, rightImage }: Imag
 
             {/* Right Image - Highest z-index */}
             <motion.div
-                className="absolute w-[240px] h-[240px] sm:w-[320px] sm:h-[320px] origin-bottom-right overflow-hidden rounded-2xl shadow-2xl bg-white border border-[var(--color-border)]"
+                className="absolute h-[280px] w-[280px] origin-bottom-right overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white shadow-2xl sm:h-[400px] sm:w-[400px]"
                 variants={rightImageVariants}
                 whileHover="hover"
                 animate="animate"

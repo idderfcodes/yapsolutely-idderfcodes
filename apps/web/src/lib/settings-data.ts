@@ -122,6 +122,17 @@ function buildCheck(key: string, label: string, detail: string): SettingCheck {
   };
 }
 
+function buildAliasCheck(keys: string[], label: string, detail: string): SettingCheck {
+  const matchedKey = keys.find((key) => hasRealValue(process.env[key]));
+
+  return {
+    key: matchedKey ?? keys[0],
+    label,
+    status: matchedKey ? "configured" : "missing",
+    detail,
+  };
+}
+
 async function probeRuntimeHealth(voiceBaseUrl: string) {
   if (!hasRealValue(voiceBaseUrl)) {
     return {
@@ -281,7 +292,11 @@ export async function getSettingsReadiness(options: ReadinessOptions = {}): Prom
       description: "Supabase/Postgres connection values needed for Prisma-backed production data.",
       checks: [
         buildCheck("DATABASE_URL", "Database URL", "Primary Postgres connection string."),
-        buildCheck("DIRECT_URL", "Direct URL", "Direct connection string for Prisma operations."),
+        buildAliasCheck(
+          ["DATABASE_URL_UNPOOLED", "DIRECT_URL"],
+          "Database URL (unpooled)",
+          "Unpooled/direct connection string used by Prisma operations.",
+        ),
         buildCheck("SUPABASE_URL", "Supabase URL", "Project base URL for Supabase services."),
         buildCheck("SUPABASE_ANON_KEY", "Supabase anon key", "Public anon key for web-side integration."),
         buildCheck(
