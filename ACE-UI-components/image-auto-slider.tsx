@@ -37,7 +37,7 @@ export const Component = () => {
         }
 
         .infinite-scroll {
-          animation: scroll-right 20s linear infinite;
+          animation: scroll-right 45s linear infinite;
         }
 
         .scroll-container {
@@ -67,9 +67,11 @@ export const Component = () => {
         }
       `}</style>
       
-      <div className="w-full min-h-screen bg-black relative overflow-hidden flex items-center justify-center">
-        {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/90 to-black z-0" />
+      <div className="w-full relative overflow-hidden flex items-center justify-center py-20 mt-16 border-t border-[var(--color-dark-divider)] bg-[#0A0A0A]">
+        {/* Subtle top spotlight to blend from previous section */}
+        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-[var(--color-accent-primary)] opacity-[0.05] blur-[120px] pointer-events-none rounded-full" />
+        
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-screen pointer-events-none"></div>
         
         {/* Scrolling images container */}
         <div className="relative z-10 w-full flex items-center justify-center py-8">
@@ -78,7 +80,7 @@ export const Component = () => {
               {duplicatedImages.map((image, index) => (
                 <div
                   key={index}
-                  className="image-item flex-shrink-0 w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 rounded-xl overflow-hidden shadow-2xl"
+                  className="image-item flex-shrink-0 w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 rounded-xl overflow-hidden shadow-[0_24px_50px_-12px_rgba(0,0,0,0.6)] border border-[var(--color-dark-divider)] hover:border-[var(--color-accent-primary)]/50 transition-all duration-500"
                 >
                   <img
                     src={image}
@@ -92,8 +94,8 @@ export const Component = () => {
           </div>
         </div>
         
-        {/* Bottom gradient overlay */}
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black to-transparent z-20" />
+        
+        
       </div>
     </>
   );

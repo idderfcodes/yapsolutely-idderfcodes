@@ -119,7 +119,10 @@ export default async function RootLayout({
       className={`${generalSans.variable} ${satoshi.variable} ${landingBody.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full bg-[var(--background)] text-[var(--foreground)]">
+      <body
+        className="min-h-full bg-[var(--background)] text-[var(--foreground)]"
+        suppressHydrationWarning
+      >
         <ThemeProvider>
           <UserProvider user={session}>
             <TooltipProvider delayDuration={300}>

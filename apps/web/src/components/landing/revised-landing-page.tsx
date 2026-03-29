@@ -31,17 +31,10 @@ import {
 import { Header } from "./header";
 import { BentoGridShowcase } from "./bento-grid-showcase";
 import { landingDisplayFont } from "./landing-font";
+import { ZoomParallaxSection } from "./zoom-parallax-section";
 import AnimatedGradientText from "./AnimatedGradientText";
 import { BGPattern } from "@/components/ui/bg-pattern";
 import { cn } from "@/lib/utils";
-
-const LazyZoomParallaxSection = dynamic(
-  () => import("./zoom-parallax-section").then((mod) => mod.ZoomParallaxSection),
-  {
-    ssr: false,
-    loading: () => <SectionSkeleton className="h-[100svh] rounded-none bg-[var(--color-dark-section)]" />,
-  },
-);
 
 const LazySeeItInActionScrollSection = dynamic(
   () => import("./see-it-in-action-scroll-section").then((mod) => mod.SeeItInActionScrollSection),
@@ -51,7 +44,7 @@ const LazySeeItInActionScrollSection = dynamic(
   },
 );
 
-const LazyVideoMasking = dynamic(() => import("@/components/ui/video-masking"), {
+const LazyVideoPlayer = dynamic(() => import("@/components/ui/video-player"), {
   ssr: false,
   loading: () => <SectionSkeleton className="aspect-[1213/667] w-full rounded-[28px] sm:rounded-[32px]" />,
 });
@@ -507,21 +500,20 @@ export default function RevisedLandingPage() {
                           : "md:justify-self-end";
 
                     return (
-                      <motion.article
+                      <article
                         key={step.number}
-                        variants={cardReveal}
                         className={cn(
                           "w-full rounded-[24px] border border-[var(--color-dark-divider)] bg-[rgba(255,255,255,0.02)] p-5 shadow-[0_22px_54px_-36px_rgba(0,0,0,0.65)] backdrop-blur-sm sm:p-6 md:max-w-[340px]",
                           alignmentClassName,
                         )}
                       >
                         <h3 className="landing-display text-[2rem] leading-[0.95] tracking-[-0.05em] text-[var(--color-text-on-dark)] sm:text-[2.2rem]">
-                          <HowItWorksAnimatedText text={step.title} distance={18} />
+                          {step.title}
                         </h3>
                         <p className="landing-body mt-3 max-w-[26rem] text-[15px] leading-6 text-[var(--color-text-muted-on-dark)]">
                           {step.description}
                         </p>
-                      </motion.article>
+                      </article>
                     );
                   })}
                 </motion.div>
@@ -532,12 +524,7 @@ export default function RevisedLandingPage() {
               <div className="pointer-events-none absolute inset-x-0 bottom-[-4%] z-[1] h-[15%] bg-[radial-gradient(ellipse_at_center,rgba(240,232,250,0.95)_0%,rgba(240,232,250,0.5)_40%,transparent_76%)] blur-3xl" />
 </section>
 
-          <DeferredSection
-            rootMargin="260px 0px"
-            placeholder={<SectionSkeleton className="h-[100svh] rounded-none bg-[var(--color-dark-section)]" />}
-          >
-            <LazyZoomParallaxSection />
-          </DeferredSection>
+          <ZoomParallaxSection />
 
           <section className="landing-section relative overflow-hidden bg-black pt-4 pb-12 sm:pb-16">
             {/* Ambient Background Grid */}
@@ -585,7 +572,16 @@ export default function RevisedLandingPage() {
                     className="w-full"
                     placeholder={<SectionSkeleton className="aspect-[1213/667] w-full rounded-[28px] sm:rounded-[32px]" />}
                   >
-                    <LazyVideoMasking className="w-full h-auto" />
+                    <LazyVideoPlayer
+                      src="/videos/hero-demo.webm"
+                      label="Drive-thru AI agent demo"
+                      autoPlay
+                      loop
+                      muted
+                      preload="metadata"
+                      className="w-full rounded-[28px] border border-white/10 bg-[#11111198] shadow-[0_18px_48px_-18px_rgba(0,0,0,0.55)] backdrop-blur-sm sm:rounded-[32px]"
+                      videoClassName="aspect-[1213/667] w-full rounded-[28px] object-cover sm:rounded-[32px]"
+                    />
                   </DeferredSection>
                 </motion.div>
               </div>
@@ -637,7 +633,7 @@ export default function RevisedLandingPage() {
 
           <DeferredSection
             rootMargin="320px 0px"
-            placeholder={<SectionSkeleton className="h-[560px] rounded-[24px] sm:h-[760px] sm:rounded-[28px]" />}
+            placeholder={<SectionSkeleton className="h-[900px] rounded-[24px] sm:h-[980px] lg:h-[760px] sm:rounded-[28px]" />}
           >
             <LazySeeItInActionScrollSection />
           </DeferredSection>
@@ -894,7 +890,7 @@ function HowItWorksAnimatedText({
   let currentCharacterIndex = 0;
 
   return (
-    <span ref={containerRef} className="inline whitespace-normal [perspective:700px]">
+    <span ref={containerRef} className="relative inline whitespace-normal [perspective:700px]">
       {text.split(" ").map((word, wordIndex, words) => {
         const wordCharacters = Array.from(word);
         const wordNode = (

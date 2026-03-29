@@ -6,7 +6,7 @@ type ZoomParallaxSectionProps = {
 };
 
 const demoFrameCount = 159;
-const demoScrollHeights = Math.max(12, Math.ceil(demoFrameCount / 14));
+const demoScrollHeights = 3.5;
 
 const demoFramePaths = Array.from({ length: demoFrameCount }, (_, index) => {
   const frameNumber = String(index + 1).padStart(5, "0");
@@ -20,6 +20,7 @@ export function ZoomParallaxSection({ className = "" }: ZoomParallaxSectionProps
         framePaths={demoFramePaths}
         scrollHeights={demoScrollHeights}
         scrub={true}
+        className="isolate"
       />
     </div>
   );

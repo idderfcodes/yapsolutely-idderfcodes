@@ -24,10 +24,12 @@ export function ScrollSequenceCanvas({
   className,
 }: ScrollSequenceCanvasProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const loadedFramesRef = useRef<boolean[]>([]);
   const frameIndexRef = useRef({ value: 0 });
+  const sectionHeight = `${Math.max(1, scrollHeights + 1) * 100}svh`;
 
   const getRenderableFrameIndex = useCallback((index: number) => {
     if (loadedFramesRef.current[index]) {
@@ -56,7 +58,12 @@ export function ScrollSequenceCanvas({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const renderableIndex = getRenderableFrameIndex(index);
+    const safeIndex = Math.max(
+      0,
+      Math.min(framePaths.length - 1, Math.round(index)),
+    );
+
+    const renderableIndex = getRenderableFrameIndex(safeIndex);
     if (renderableIndex < 0) return;
 
     const img = imagesRef.current[renderableIndex];
@@ -82,13 +89,15 @@ export function ScrollSequenceCanvas({
 
   /** Resize canvas to match device pixel ratio for sharp rendering */
   const resizeCanvas = useCallback(() => {
+    const stage = stageRef.current;
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    const dpr = Math.min(window.devicePixelRatio || 1, 3);
-    const rect = canvas.getBoundingClientRect();
+    if (!stage || !canvas) return;
+    const maxDpr = window.innerWidth < 768 ? 1.5 : 2;
+    const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
+    const rect = stage.getBoundingClientRect();
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;
-    drawFrame(frameIndexRef.current.value);
+    drawFrame(Math.round(frameIndexRef.current.value));
   }, [drawFrame]);
 
   useEffect(() => {
@@ -100,7 +109,8 @@ export function ScrollSequenceCanvas({
     const images: HTMLImageElement[] = framePaths.map((_, index) => {
       const img = new Image();
       img.decoding = "async";
-      if (index < 12) {
+      img.loading = "eager";
+      if (index < 32) {
         img.fetchPriority = "high";
       }
       return img;
@@ -168,13 +178,14 @@ export function ScrollSequenceCanvas({
       scrollTrigger: {
         trigger: section,
         start: "top top",
-        end: () => `+=${window.innerHeight * scrollHeights}`,
-        pin: true,
-        pinSpacing: true,
+        end: "bottom bottom",
         scrub,
         fastScrollEnd: false,
-        anticipatePin: 1,
+        refreshPriority: 1,
         invalidateOnRefresh: true,
+        onRefresh: () => {
+          drawFrame(Math.round(frameObj.value));
+        },
       },
     });
 
@@ -204,17 +215,19 @@ export function ScrollSequenceCanvas({
   return (
     <div
       ref={sectionRef}
-      className={`relative w-full bg-[var(--color-dark-section)] ${className ?? ""}`}
+      className={`relative isolate z-10 w-full overflow-hidden bg-[var(--color-dark-section)] ${className ?? ""}`}
+      style={{ height: sectionHeight }}
     >
-      {/* Canvas fills the viewport while pinned */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 h-full w-full"
-        style={{ display: "block", willChange: "contents" }}
-      />
-
-      {/* Invisible spacer to keep the pinned section at viewport height */}
-      <div className="relative h-screen h-[100svh]" />
+      <div
+        ref={stageRef}
+        className="sticky top-0 z-10 h-screen h-[100svh] overflow-hidden"
+      >
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 z-0 h-full w-full"
+          style={{ display: "block", willChange: "contents" }}
+        />
+      </div>
     </div>
   );
 }
