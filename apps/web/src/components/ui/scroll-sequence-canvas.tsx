@@ -168,7 +168,8 @@ export function ScrollSequenceCanvas({
 
     // --- 3. GSAP ScrollTrigger ---
     const section = sectionRef.current;
-    if (!section) return;
+    const stage = stageRef.current;
+    if (!section || !stage) return;
 
     const frameObj = frameIndexRef.current;
     const lastFrame = framePaths.length - 1;
@@ -178,9 +179,12 @@ export function ScrollSequenceCanvas({
       scrollTrigger: {
         trigger: section,
         start: "top top",
-        end: "bottom bottom",
+        end: () => `+=${window.innerHeight * scrollHeights}`,
+        pin: stage,
+        pinSpacing: false,
         scrub,
         fastScrollEnd: false,
+        anticipatePin: 1,
         refreshPriority: 1,
         invalidateOnRefresh: true,
         onRefresh: () => {
@@ -220,7 +224,7 @@ export function ScrollSequenceCanvas({
     >
       <div
         ref={stageRef}
-        className="relative sticky top-0 z-10 h-screen h-[100svh] overflow-hidden"
+        className="relative z-10 h-screen h-[100svh] overflow-hidden"
       >
         <canvas
           ref={canvasRef}
