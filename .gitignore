@@ -34,3 +34,5 @@ march-24.md
 25.md
 25th-10pm.md
 font/
+.vercel
+.env*.local

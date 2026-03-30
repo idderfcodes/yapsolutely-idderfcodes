@@ -103,15 +103,22 @@ export function ScrollSequenceCanvas({
   useEffect(() => {
     if (!framePaths.length) return;
 
+    const eagerFrameCount = Math.min(framePaths.length, 32);
+    let isDisposed = false;
+    let idleCallbackId: number | null = null;
+    let timeoutId: number | null = null;
+
     // --- 1. Preload all frames ---
     loadedFramesRef.current = new Array(framePaths.length).fill(false);
 
     const images: HTMLImageElement[] = framePaths.map((_, index) => {
       const img = new Image();
       img.decoding = "async";
-      img.loading = "eager";
-      if (index < 32) {
+      img.loading = index < eagerFrameCount ? "eager" : "lazy";
+      if (index < eagerFrameCount) {
         img.fetchPriority = "high";
+      } else {
+        img.fetchPriority = "low";
       }
       return img;
     });
@@ -148,6 +155,17 @@ export function ScrollSequenceCanvas({
       }
     };
 
+    const loadFrame = (index: number) => {
+      const img = images[index];
+      if (!img) return;
+
+      img.src = framePaths[index] ?? "";
+
+      if (img.complete) {
+        settleFrame(index, img.naturalWidth > 0);
+      }
+    };
+
     images.forEach((img, index) => {
       img.onload = () => {
         settleFrame(index, true);
@@ -155,12 +173,45 @@ export function ScrollSequenceCanvas({
       img.onerror = () => {
         settleFrame(index, false);
       };
-      img.src = framePaths[index] ?? "";
-
-      if (img.complete) {
-        settleFrame(index, img.naturalWidth > 0);
-      }
     });
+
+    for (let index = 0; index < eagerFrameCount; index += 1) {
+      loadFrame(index);
+    }
+
+    let nextFrameIndex = eagerFrameCount;
+
+    const queueRemainingFrames = () => {
+      if (isDisposed || nextFrameIndex >= images.length) {
+        return;
+      }
+
+      const pump = () => {
+        if (isDisposed) {
+          return;
+        }
+
+        const batchEnd = Math.min(nextFrameIndex + 8, images.length);
+
+        for (; nextFrameIndex < batchEnd; nextFrameIndex += 1) {
+          loadFrame(nextFrameIndex);
+        }
+
+        if (nextFrameIndex >= images.length) {
+          return;
+        }
+
+        if (typeof window.requestIdleCallback === "function") {
+          idleCallbackId = window.requestIdleCallback(pump, { timeout: 220 });
+        } else {
+          timeoutId = window.setTimeout(pump, 48);
+        }
+      };
+
+      pump();
+    };
+
+    queueRemainingFrames();
 
     // --- 2. Resize observer ---
     window.addEventListener("resize", resizeCanvas);
@@ -187,6 +238,18 @@ export function ScrollSequenceCanvas({
         anticipatePin: 1,
         refreshPriority: 1,
         invalidateOnRefresh: true,
+        onEnter: () => {
+          drawFrame(0);
+        },
+        onEnterBack: () => {
+          drawFrame(lastFrame);
+        },
+        onLeave: () => {
+          drawFrame(lastFrame);
+        },
+        onLeaveBack: () => {
+          drawFrame(0);
+        },
         onRefresh: () => {
           drawFrame(Math.round(frameObj.value));
         },
@@ -203,6 +266,13 @@ export function ScrollSequenceCanvas({
     });
 
     return () => {
+      isDisposed = true;
+      if (idleCallbackId !== null && typeof window.cancelIdleCallback === "function") {
+        window.cancelIdleCallback(idleCallbackId);
+      }
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId);
+      }
       window.removeEventListener("resize", resizeCanvas);
       tl.kill();
       ScrollTrigger.getAll().forEach((st) => {

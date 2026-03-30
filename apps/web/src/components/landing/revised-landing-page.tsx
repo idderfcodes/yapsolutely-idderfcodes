@@ -31,6 +31,7 @@ import {
 import { Header } from "./header";
 import { BentoGridShowcase } from "./bento-grid-showcase";
 import { landingDisplayFont } from "./landing-font";
+import { getLandingMediaProfile, type HeroVideoTier } from "./landing-media-profile";
 import { ZoomParallaxSection } from "./zoom-parallax-section";
 import AnimatedGradientText from "./AnimatedGradientText";
 import { BGPattern } from "@/components/ui/bg-pattern";
@@ -360,18 +361,7 @@ export default function RevisedLandingPage() {
           <section className="bg-black pt-0">
             <div className="relative flex min-h-screen min-h-[100svh] w-full flex-col overflow-hidden bg-black pt-16">
               <div className="absolute inset-0 z-0">
-                <video
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="metadata"
-                  className="h-full w-full object-cover"
-                  aria-hidden="true"
-                >
-                  <source src="/videos/newHEROSECTION.webm" type="video/webm" />
-                  <source src="/videos/newHEROSECTION.mp4" type="video/mp4" />
-                </video>
+                <HeroBackgroundVideo />
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[46%] bg-gradient-to-b from-transparent via-black/28 to-[#050505]" />
               </div>
 
@@ -957,6 +947,46 @@ function HeroWordReveal() {
         </motion.span>
       ))}
     </h1>
+  );
+}
+
+function HeroBackgroundVideo() {
+  const [heroTier, setHeroTier] = useState<HeroVideoTier>("1080");
+
+  useEffect(() => {
+    const updateHeroTier = () => {
+      setHeroTier(getLandingMediaProfile(window).heroTier);
+    };
+
+    updateHeroTier();
+    window.addEventListener("resize", updateHeroTier);
+
+    return () => {
+      window.removeEventListener("resize", updateHeroTier);
+    };
+  }, []);
+
+  const heroSrc =
+    heroTier === "2160"
+      ? "/videos/newHEROSECTION.mp4"
+      : heroTier === "1440"
+        ? "/videos/newHEROSECTION-1440.mp4"
+        : "/videos/newHEROSECTION-1080.mp4";
+
+  return (
+    <video
+      key={heroSrc}
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      poster="/videos/newHEROSECTION-poster.webp"
+      className="h-full w-full object-cover"
+      aria-hidden="true"
+    >
+      <source src={heroSrc} type="video/mp4" />
+    </video>
   );
 }
 
