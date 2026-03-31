@@ -27,8 +27,6 @@ const VideoMasking = React.forwardRef<HTMLElement, ComponentProps>(
         muted
         loop
         playsInline
-        preload="none"
-        aria-hidden="true"
         className="absolute inset-0 w-full h-full object-cover opacity-100"
       >
         <source src="/videos/hero-demo.webm" type="video/webm" />
